@@ -1,6 +1,6 @@
 const express = require('express');
 const sequelize = require('sequelize');
-const teamController = require("../nodeMVC/controllers/teamController")
+const teamController = require("./controllers/team.controller")
 const app = express();
 const port = 3001;
 
