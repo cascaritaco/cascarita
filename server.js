@@ -1,4 +1,5 @@
 const express = require('express');
+const sequelize = reuire('sequelize');
 const app = express();
 const port = 3001;
 
