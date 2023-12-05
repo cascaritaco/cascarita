@@ -3,7 +3,7 @@ const express = require('express');
 const sequelize = require('sequelize');
 const teamController = require("./controllers/team.controller")
 const app = express();
-const port = 3001;
+const port = process.env.HTTP_PORT || 3001;
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
