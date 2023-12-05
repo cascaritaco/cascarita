@@ -1,8 +1,11 @@
+const path = require('path');
 const express = require('express');
 const sequelize = require('sequelize');
 const teamController = require("./controllers/team.controller")
 const app = express();
 const port = 3001;
+
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
