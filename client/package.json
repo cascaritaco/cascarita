@@ -1,8 +1,8 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "cascarita-client",
+  "version": "0.0.1",
   "private": true,
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:80",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
     "@testing-library/jest-dom": "^5.17.0",
