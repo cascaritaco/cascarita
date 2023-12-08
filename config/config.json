@@ -9,7 +9,7 @@
   "staging": {
     "username": "staging",
     "password": "cascarita2023!",
-    "database": "test_db",
+    "database": "ebdb",
     "host": "awseb-e-ismrimxiv2-stack-awsebrdsdatabase-3kjgpageucrn.ctxji11ur79e.us-east-2.rds.amazonaws.com",
     "port": 3306,
     "dialect": "mysql"
