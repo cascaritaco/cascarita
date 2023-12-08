@@ -9,8 +9,8 @@ app.set('port', process.env.PORT || 80)
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 function init() {
-  app.get('/', (req, res) => {
-    res.send('Hello, World!');
+  app.get('*', function(req, res) {
+    res.sendFile('index.html', {root: path.join(__dirname, 'client', 'build')});
   });
 
   app.post('/create/:name', teamController.createTeam);

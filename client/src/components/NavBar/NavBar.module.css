@@ -1,0 +1,19 @@
+/* NavBar.module.css */
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.navbar {
+    @apply bg-blue-500 p-4;
+}
+  
+.navbar-brand {
+    @apply text-white font-bold text-lg;
+}
+
+.navbar-link {
+    @apply text-white mx-2 hover:underline;
+}
+  
+  /* You can add more styles for responsiveness or customization */
