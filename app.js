@@ -1,10 +1,7 @@
-//hello I am here
 const path = require('path');
 const express = require('express');
 const sequelize = require('sequelize');
 const teamController = require("./controllers/team.controller")
-//TODO: this here
-const dotenv = require('dotenv').config({ path: '/var/app/current/.env' })
 const http = require('http');
 
 const app = express();
