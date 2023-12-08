@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const sequelize = require('sequelize');
 const teamController = require("./controllers/team.controller")
-const http = require('http')2;
+const http = require('http');
 
 const app = express();
 app.set('port', process.env.PORT || 80)
