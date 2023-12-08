@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "sequelize:migrate": "npx sequelize db:migrate" 
   },
   "dependencies": {
     "express": "^4.18.2",
