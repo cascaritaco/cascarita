@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const sequelize = require('sequelize');
 const teamController = require("./controllers/team.controller")
+const dotenv = require('dotenv').config()
 const http = require('http');
 
 const app = express();
