@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +14,12 @@
     "express": "^4.18.2",
     "mysql2": "^3.6.5",
     "sequelize": "^6.35.1",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "sequelize-mock": "^0.10.2",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.0.1"
   }
 }

@@ -1,22 +1,22 @@
 const { Team } = require("./../models");
 
-async function createTeam(req, res) {
-    const { name } = req.params;
-    console.log({name});
-    
-    let m = Team.logMessage('Testing logMessage method in Team model');
-    Team.logMessage('Testing logMessage method in Team model');
+const TeamController = function(){
 
+  var createTeam = async function(req, res){
+    const { name } = req.params;
     const newTeam = {
       name: name,
     };
-    let data = await Team.create(newTeam);
+    const data = await Team.create(newTeam);
     return res.status(201).json({
         success: true,
         data: data
     })
+  }
+
+  return {
+    createTeam, 
+  }
 }
-  
-module.exports = {
-  createTeam,
-};
+
+module.exports = TeamController();

@@ -1,6 +1,6 @@
 const express = require('express');
 const sequelize = require('sequelize');
-const teamController = require("./controllers/team.controller")
+const TeamController = require("./controllers/team.controller")
 const app = express();
 const port = 3001;
 
@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('/create/:name', teamController.createTeam);
+app.post('/create/:name', TeamController.createTeam);
 
 app.get('/create/:name', (req, res) => {
   res.send('GET request received for creating a team with name ' + req.params.name);

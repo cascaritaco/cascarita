@@ -26,3 +26,38 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Team;
 };
+
+// describe("createMovie", () => {
+//   it("should create a new movie", async () => {
+//     // Mock request body
+//     const movie = {
+//       title: "The Matrix",
+//       releaseDate: "1999-03-31",
+//       duration: 136,
+//     };
+    
+//     // Queue the result for the Movie.build method
+//     Movie.$queueResult(Movie.build(movie));
+
+//     // Call the createMovie controller method
+//     const response = await createMovie({ body: movie });
+
+//     // Assertions
+//     expect(response.status).toBe(201);
+//     expect(response.body.title).toBe(movie.title);
+//     expect(response.body.releaseDate).toBe(movie.releaseDate);
+//     expect(response.body.duration).toBe(movie.duration);
+//   });
+
+//   it("should return 400 if request body is invalid", async () => {
+//     // Invalid request body
+//     const movie = { title: "The Matrix", duration: 136 };
+
+//     // Call the createMovie controller method
+//     const response = await createMovie({ body: movie });
+
+//     // Assertions
+//     expect(response.status).toBe(400);
+//     expect(response.body.error).toBeDefined();
+//   });
+// });
