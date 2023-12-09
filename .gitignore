@@ -1,4 +1,5 @@
 # Node.js
+# client/node_modules/
 node_modules/
 npm-debug.log
 
@@ -10,4 +11,9 @@ logs/
 *.log
 
 # Environment variables
-.env
+# .env
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
