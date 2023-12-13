@@ -1,5 +1,6 @@
 "use strict";
 const  { User } = require("./../models");
+const passport = require("passport");
 
 const UserController = function(){
 
@@ -22,8 +23,24 @@ const UserController = function(){
         })
     }
 
+    var logInUser = function(req, res, next){
+        passport.authenticate('local', (err, user, info) => {
+            if (err) {
+              return res.status(500).json({ error: 'Internal Server Error' });
+            }
+        
+            if (!user) {
+              return res.status(401).json({ error: 'Incorrect Credentials' });
+            }
+        
+            const welcomeMessage = `Welcome, ${user.firstName} ${user.lastName}`;
+            res.json({ message: welcomeMessage });
+          })(req, res, next);
+    }
+
     return{
         registerUser,
+        logInUser,
     }
 }
 
