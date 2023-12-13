@@ -8,6 +8,8 @@ const RoleController = require("./controllers/role.controller")
 const session = require('express-session');
 const passport = require('./config/passport');
 const UserRoutes = require('./routes/user.routes');
+const RoleRoutes = require("./routes/role.routes");
+const GroupRoutes = require("./routes/group.routes");
 const bodyParser = require('body-parser');
 
 const http = require('http');
@@ -27,6 +29,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/user', UserRoutes); 
+app.use('/role', RoleRoutes);
+app.use('/group', GroupRoutes);
 
 function init() {
   app.get('*', function(req, res) {
@@ -34,8 +38,6 @@ function init() {
   });  
 
   app.post('/create/:name', teamController.createTeam);
-  app.post('/newgroup', GroupController.createGroup);
-  app.post('/newrole', RoleController.createRole);
 
   http.createServer(app).listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));
