@@ -1,14 +1,8 @@
 # Node.js
-# client/node_modules/
-node_modules/
-npm-debug.log
+node_modules
 
 # macOS
 .DS_Store
-
-# Logs
-logs/
-*.log
 
 # Environment variables
 # .env
@@ -17,3 +11,6 @@ logs/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Webpack
+dist
