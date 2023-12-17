@@ -28,9 +28,11 @@ jobs:
       - name: Webpack Build
         run: npm run build
 
-      - name: Start Application and Test Connection
-        run: |
-          npm run start & \
-          timeout 60s bash -c \
-          'curl -s -o /dev/null -w "%{http_code}" http://localhost:80'
-          'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:80)" != "200" ]]; do sleep 5; done'
+      - name: Start the app
+        run: npm run start &
+
+      - name: Wait for the app to start
+        run: sleep 10
+
+      - name: Check if the app is up
+        run: curl -I http://localhost:80
