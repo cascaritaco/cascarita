@@ -1,4 +1,4 @@
-name: 🚀 Deploy Staging
+name: 🚀 Staging CI/CD
 on:
   pull_request:
     branches:

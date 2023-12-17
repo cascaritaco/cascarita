@@ -18,7 +18,10 @@
     "**/server/*",
     "webpack.config.js",
     "**/client/tailwind.config.js",
-    "**/client/postcss.config.js"
+    "**/client/postcss.config.js",
+    "babel.config.js",
+    "jest.config.js",
+    "jest.setup.js"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
