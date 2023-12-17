@@ -1,0 +1,44 @@
+name: 🎯 Main CI
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Eslint Checks
+        run: npm run eslint
+
+      - name: Jest Tests
+        run: npm run test
+
+      - name: Webpack Build
+        run: npm run build
+
+      - name: Start the app
+        run: npm run start > app_output.log 2>&1 &
+        env:
+          PORT: 3000
+
+      - name: Wait for the app to start
+        run: sleep 10
+
+      - name: Display logs
+        run: |
+          echo "Application logs: $(cat app_output.log)"
+
+      - name: Check if the app is up
+        run: curl -I http://127.0.0.1:3000
