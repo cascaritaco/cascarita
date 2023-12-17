@@ -4,6 +4,7 @@ const sequelize = require("sequelize");
 const teamController = require("./controllers/team.controller");
 const http = require("http");
 const router = express.Router();
+require("dotenv").config();
 
 const app = express();
 app.set("port", process.env.PORT || 80);

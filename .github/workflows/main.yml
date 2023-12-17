@@ -30,6 +30,8 @@ jobs:
 
       - name: Start the app
         run: npm run start > app_output.log 2>&1 &
+        env:
+          PORT: 3000
 
       - name: Wait for the app to start
         run: sleep 10
@@ -39,4 +41,4 @@ jobs:
           echo "Application logs: $(cat app_output.log)"
 
       - name: Check if the app is up
-        run: curl -I http://127.0.0.1:80
+        run: curl -I http://127.0.0.1:3000
