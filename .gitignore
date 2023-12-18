@@ -13,7 +13,7 @@ node_modules
 !.elasticbeanstalk/*.global.yml
 
 # Webpack
-dist
+# dist
 
 # Jest
 coverage
