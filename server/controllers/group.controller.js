@@ -9,12 +9,22 @@ const GroupController = function(){
             name: req.body.name,
         }
 
-        const result = await Group.create(newGroup);
+        try {
+            await Group.build(newGroup).validate();
+            const result = await Group.create(newGroup);
 
-        return res.status(201).json({
-            success: true,
-            data: result
-        })
+            return res.status(201).json({
+                success: true,
+                data: result
+            });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+    }
+
+    var _checkUniqueGroupName = async function (inputGroupName) {
+        const existingGroupName = await Group.findOne({where: {name: inputGroupName}})
+        return !existingGroupName;
     }
 
     return{

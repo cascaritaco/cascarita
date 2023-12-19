@@ -18,18 +18,12 @@ const UserController = function(){
 
         try {
             await User.build(newUser).validate();
-
-            const isEmailUnique = await _checkUniqueEmail(newUser.email);
-            if (!isEmailUnique) {
-                return res.status(400).json({ error: 'Email already exists' });
-            }
-
             const result = await User.create(newUser);
 
-        return res.status(201).json({
-            success: true,
-            data: result
-        });
+            return res.status(201).json({
+                success: true,
+                data: result
+            });
         } catch (error) {
             return res.status(400).json({ error: error.message });
         }
@@ -49,15 +43,9 @@ const UserController = function(){
           })(req, res, next);
     }
 
-    var _checkUniqueEmail = async function (inputEmail) {
-        const existingUser = await User.findOne({where: {email: inputEmail}})
-        return !existingUser;
-    }
-
     return{
         registerUser,
         logInUser,
-        _checkUniqueEmail
     }
 }
 

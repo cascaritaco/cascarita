@@ -9,12 +9,17 @@ const RoleController = function(){
             role_type: req.body.role_type,
         }
 
-        const result = await Role.create(newRole);
+        try {
+            await Role.build(newRole).validate();
+            const result = await Role.create(newRole);
 
-        return res.status(201).json({
-            success: true,
-            data: result
-        })
+            return res.status(201).json({
+                success: true,
+                data: result
+            });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     return{
