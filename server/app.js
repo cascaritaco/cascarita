@@ -5,11 +5,18 @@ const teamController = require("./controllers/team.controller");
 const http = require("http");
 const router = express.Router();
 require("dotenv").config();
+const bodyParser = require("body-parser");
+const GroupRoutes = require("./routes/group.routes");
+const RoleRoutes = require("./routes/role.routes");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
 app.use(express.static(path.join(__dirname, "../dist")));
 app.use("/api", router);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/group', GroupRoutes);
+app.use('/role', RoleRoutes);
 
 function init() {
   app.get("*", function (req, res) {
