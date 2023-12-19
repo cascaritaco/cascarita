@@ -16,15 +16,15 @@ const GroupController = function () {
         data: result,
       });
     } catch (error) {
-      return res.status(400).json({ error: error.message });
-    }
-  };
+      const validationErrors = error.errors?.map((err) => ({
+        field: err.path,
+        message: err.message,
+      }));
 
-  var _checkUniqueGroupName = async function (inputGroupName) {
-    const existingGroupName = await Group.findOne({
-      where: { name: inputGroupName },
-    });
-    return !existingGroupName;
+      return res
+        .status(400)
+        .json({ error: "Validation error", details: validationErrors });
+    }
   };
 
   return {
