@@ -15,3 +15,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+:root {
+  --blue: #3b82f6;
+  --gray: #c5c8cb;
+  --dark-gray: #8d8f90;
+}
+
+h4 {
+  color: var(--dark-gray);
+}
+
+.container {
+  margin: 20px auto;
+}
+
+.login-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.login-row {
+  display: block;
+  margin-top: 15px;
+}
+
+.login-row input {
+  display: block;
+  border: 1px solid var(--gray);
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+.btn {
+  background-color: var(--blue);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  margin-top: 30px;
+}
