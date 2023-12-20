@@ -1,4 +1,40 @@
+import { useState } from "react";
+
+interface TeamResponse {
+  message: string;
+}
+
 const Login = () => {
+  const [inputUsername, setUsername] = useState("");
+  const [inputPassword, setPassword] = useState("");
+  const [responseData, setResponseData] = useState<TeamResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchUserData = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(`api/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: inputUsername,
+          password: inputPassword,
+        }),
+      });
+      console.log(response);
+      const result = await response.json();
+      console.log(result);
+      setResponseData(result);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container">
       <div className="login-container">
@@ -7,15 +43,27 @@ const Login = () => {
 
         <div className="login-row">
           <label htmlFor="username"> Username </label>
-          <input type="text" id="username" />
+          <input
+            onChange={(e) => setUsername(e.target.value)}
+            type="text"
+            id="username"
+          />
         </div>
 
         <div className="login-row">
           <label htmlFor="password"> Password </label>
-          <input type="password" id="password" />
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            id="password"
+          />
         </div>
 
-        <button className="btn"> Submit </button>
+        <button onClick={fetchUserData} disabled={loading} className="btn">
+          Submit
+        </button>
+        {loading && <p> Loading... </p>}
+        {responseData && <p>{responseData.message}</p>}
       </div>
     </div>
   );
