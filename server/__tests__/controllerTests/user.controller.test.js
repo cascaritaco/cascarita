@@ -4,7 +4,6 @@ const request = require("supertest");
 const UserController = require("../../controllers/user.controller");
 const { User } = require("../../models");
 const passport = require("passport");
-const MockStrategy = require("passport-mock-strategy");
 
 jest.mock("../../models", () => ({
   User: {
@@ -185,9 +184,11 @@ describe("registerUser", () => {
 });
 
 describe("logInUser", () => {
-  it("should log in a user and return a welcome message", async () => {
+  it("should return a welcome message for an authenticated user", async () => {
     const req = {
-      body: {
+      user: {
+        firstName: "Leo",
+        lastName: "Messi",
         username: "user@gmail.com",
         password: "testpassword",
       },
@@ -198,23 +199,25 @@ describe("logInUser", () => {
       status: jest.fn().mockReturnThis(),
     };
 
-    const next = jest.fn();
-
-    const user = {
-      id: 1,
-      firstName: "Leo",
-      lastName: "Messi",
-    };
-
-    passport._strategies = {};
-    passport.authenticate.mockImplementation((strategy, callback) => {
-      callback(null, user, null);
-    });
-
-    await UserController.logInUser(req, res, next);
+    await UserController.logInUser(req, res);
 
     expect(res.json).toHaveBeenCalledWith({ message: "Welcome, Leo Messi" });
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should return a error message for an UNauthenticated user", async () => {
+    const req = {
+      user: null,
+    };
+
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+    };
+
+    await UserController.logInUser(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ message: "Unauthorized" });
+    expect(res.status).toHaveBeenCalledWith(401);
   });
 });

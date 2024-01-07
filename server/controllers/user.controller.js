@@ -36,10 +36,10 @@ const UserController = function () {
 
   var logInUser = function (req, res) {
     if (!req.user) {
-      return res.status(401).json({ message: "Incorrect Credentials" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
     const welcomeMessage = `Welcome, ${req.user.firstName} ${req.user.lastName}`;
-    res.status(200).json({ message: welcomeMessage });
+    res.status(201).json({ message: welcomeMessage });
   };
 
   return {
