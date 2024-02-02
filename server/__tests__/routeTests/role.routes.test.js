@@ -28,4 +28,33 @@ describe("Role Routes", () => {
       data: { role_type: "admin" },
     });
   });
+
+  it("should handle POST /create with null role_type", async () => {
+    RoleController.createRole.mockImplementation((req, res) => {
+      res.status(400).json({
+        error: "Validation Error",
+        details: [
+          {
+            field: "role_type",
+            message: "notNull Violation: Role.role_type cannot be null",
+          },
+        ],
+      });
+    });
+
+    const response = await request(app)
+      .post("/role/create")
+      .send({ role_type: null });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Validation Error",
+      details: [
+        {
+          field: "role_type",
+          message: "notNull Violation: Role.role_type cannot be null",
+        },
+      ],
+    });
+  });
 });
