@@ -34,18 +34,12 @@ const UserController = function () {
     }
   };
 
-  var logInUser = function (req, res, next) {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
-
-      if (!user) {
-        return res.status(401).json({ error: "Incorrect Credentials" });
-      }
-      const welcomeMessage = `Welcome, ${user.firstName} ${user.lastName}`;
-      res.json({ message: welcomeMessage });
-    })(req, res, next);
+  var logInUser = function (req, res) {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const welcomeMessage = `Welcome, ${req.user.firstName} ${req.user.lastName}`;
+    res.status(201).json({ message: welcomeMessage });
   };
 
   return {
