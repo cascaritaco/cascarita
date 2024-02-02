@@ -13,6 +13,9 @@ const NavBar = () => {
             <a role="about" href="/about" className={styles["navbar-link"]}>
               About
             </a>
+            <a role="login" href="/login" className={styles["navbar-link"]}>
+              Login
+            </a>
           </div>
         </div>
       </div>
