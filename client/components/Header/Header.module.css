@@ -1,0 +1,21 @@
+/* Header.module.css */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Style for mobile views
+@media (max-width: 768px) { */
+.logo {
+  width: 100px; /* Set the width as needed */
+  height: 120px;
+  display: block;
+  margin: 0 auto;
+  padding-top: 15px;
+  scale: 0.7;
+}
+
+.logo-container {
+  background-color: #f1f1f1;
+}
+/* } */

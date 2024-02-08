@@ -1,17 +1,17 @@
 import styles from "./NavBar.module.css";
 
+// TODO: Change the style behind the Nav Bar to show which one is selected
 const NavBar = () => {
   return (
-    <nav className={styles.navbar}>
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <div className={styles["navbar-brand"]}>Cascarita</div>
-          <div className="flex">
-            <a role="home" href="/" className={styles["navbar-link"]}>
-              Home
+    <nav className={styles.nav}>
+      <div>
+        <div>
+          <div>
+            <a role="home" href="/">
+              Standings
             </a>
-            <a role="about" href="/about" className={styles["navbar-link"]}>
-              About
+            <a role="matches" href="/matches">
+              Matches
             </a>
           </div>
         </div>

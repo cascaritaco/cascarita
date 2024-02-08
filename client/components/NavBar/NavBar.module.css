@@ -4,16 +4,37 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-.navbar {
-  @apply bg-blue-500 p-4;
+nav {
+  background-color: #4238d5; /* Set the background color */
 }
 
-.navbar-brand {
-  @apply text-white font-bold text-lg;
+/* Center and space the links */
+nav > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45px; /* Ensure the NavBar takes the full height of its container */
 }
 
-.navbar-link {
-  @apply text-white mx-2 hover:underline;
+/* Add spacing between the links */
+nav a {
+  margin: 0 15px; /* Adjust the margin as needed for spacing */
+  color: white; /* Set the text color */
+  text-decoration: none; /* Remove underlines from links */
+  font-size: 16px; /* Set the font size */
+  padding: 80px;
+  transition: color 0.3s; /* Smooth transition for color change */
+}
+
+/* Hover styles */
+nav a:hover {
+  color: black; /* Change the text color on hover */
+}
+
+/* Active state background color */
+nav a.active {
+  background-color: #61dafb; /* Set the active state background color */
+  border-radius: 5px; /* Optional: Add border-radius for rounded corners */
 }
 
 /* You can add more styles for responsiveness or customization */

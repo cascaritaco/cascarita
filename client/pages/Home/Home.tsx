@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { TeamStandingsTable } from "../../components/TeamStandingsTable/TeamStandingsTable";
+import styles from "./Home.module.css";
 
 export type Team = {
   team_name: string;
@@ -38,11 +39,10 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Here</h1>
       {data && (
-        <div>
-          <h1>{data.league}</h1>
-          <h2>{data.division}</h2>
+        <div className={styles["title-container"]}>
+          <h1 className={styles["league-title"]}>{data.league}</h1>
+          <h2 className={styles["division-subtitle"]}>{data.division}</h2>
           <TeamStandingsTable data={data.teams} />
         </div>
       )}
