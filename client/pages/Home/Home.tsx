@@ -13,14 +13,14 @@ export type Team = {
   points: number;
 };
 
-export interface MockData {
+export interface Standing {
   league: string;
   division: string;
   teams: Team[];
 }
 
 const Home = () => {
-  const [data, setData] = useState<MockData | null>(null);
+  const [data, setData] = useState<Standing | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -28,7 +28,7 @@ const Home = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/mockdata");
+      const response = await fetch("/api/mockdata/standings");
       const result = await response.json();
       console.log(response, result);
       setData(result.data);

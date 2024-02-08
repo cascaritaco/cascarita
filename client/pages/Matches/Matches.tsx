@@ -1,35 +1,43 @@
-// import React, { useState } from "react";
-
+import { useEffect, useState } from "react";
 import MatchCard from "../../components/MatchCard/MatchCard";
 
+export type Game = {
+  home_team: string;
+  away_team: string;
+  date: string;
+  time: string;
+  home_team_score: number | null;
+  away_team_score: number | null;
+  location: string;
+  finished: boolean;
+};
+
+export interface Match {
+  matches: Game[];
+}
+
 const Matches = () => {
-  //   const [data, setData] = useState<MockData | null>(null);
+  const [data, setData] = useState<Match | null>(null);
 
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch("/api/mockdata");
-  //       const result = await response.json();
-  //       console.log(response, result);
-  //       setData(result.data);
-  //     } catch (error) {
-  //       console.error("Error fetching mock data:", error);
-  //     }
-  //   };
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/mockdata/matches");
+      const result = await response.json();
+      console.log(response, result);
+      setData(result.data);
+    } catch (error) {
+      console.error("Error fetching mock data:", error);
+    }
+  };
 
   return (
     <div>
-      <MatchCard
-        awayTeam="Team A"
-        homeTeam="Team B"
-        time="12:00 PM"
-        score="2-1"
-        location="Stadium XYZ"
-      />
-      {/* Add more EventCard instances as needed */}
+      {data &&
+        data.matches.map((d, index) => <MatchCard data={d} key={index} />)}
     </div>
   );
 };

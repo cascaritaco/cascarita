@@ -2,11 +2,18 @@
 
 const express = require("express");
 const router = express.Router();
-const data = require("./data.json");
+const standingsData = require("./../data/standings_data.json");
+const matchesData = require("./../data/matches_data.json");
 
-router.get("/", (req, res) => {
+router.get("/standings", (req, res) => {
   return res.status(200).json({
-    data: data,
+    data: standingsData,
+  });
+});
+
+router.get("/matches", (req, res) => {
+  return res.status(200).json({
+    data: matchesData,
   });
 });
 
