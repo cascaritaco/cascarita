@@ -1,0 +1,49 @@
+/* TeamStandingsTable.module.css */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Optional: If you're using Tailwind CSS, you can use its utility classes */
+.table-container {
+  /* Optional: Center the table on the page */
+  margin: auto;
+  max-width: 800px; /* Adjust the maximum width as needed */
+}
+
+/* Style the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px; /* Adjust as needed */
+  overflow-x: auto; /* Add horizontal scroll for small screens */
+}
+
+/* Style the table headers */
+th {
+  background-color: #f2f2f2; /* Light gray background */
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Bottom border for separation */
+}
+
+/* Style the table rows */
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Bottom border for separation */
+}
+
+/* Optional: Add hover effect on rows */
+tr:hover {
+  background-color: #f5f5f5; /* Lighter gray background on hover */
+}
+
+/* Optional: Add responsive styles for smaller screens using media queries */
+@media (max-width: 600px) {
+  th,
+  td {
+    padding: 8px;
+  }
+}
+
+/* You can add more styles for responsiveness or customization */

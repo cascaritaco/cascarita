@@ -6,10 +6,12 @@ const teamController = require("./controllers/team.controller");
 const http = require("http");
 const router = express.Router();
 require("dotenv").config();
+
 const bodyParser = require("body-parser");
 const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
+const MockDataRoutes = require("./routes/mockdata.routes");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
@@ -29,6 +31,7 @@ app.use(passport.session());
 app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
+router.use("/mockdata", MockDataRoutes);
 
 function init() {
   app.get("*", function (req, res) {

@@ -1,0 +1,54 @@
+{
+  "matches": [
+    {
+      "home_team": "Team A",
+      "away_team": "Team B",
+      "date": "2-24-2024",
+      "time": "12:00pm",
+      "home_team_score": null,
+      "away_team_score": null,
+      "location": "Stadium A",
+      "finished": false
+    },
+    {
+      "home_team": "Team C",
+      "away_team": "Team D",
+      "date": "2-23-2024",
+      "time": "1:00pm",
+      "home_team_score": null,
+      "away_team_score": null,
+      "location": "Stadium A",
+      "finished": false
+    },
+    {
+      "home_team": "Team E",
+      "away_team": "Team F",
+      "date": "2-22-2024",
+      "time": "2:00pm",
+      "home_team_score": null,
+      "away_team_score": null,
+      "location": "Stadium B",
+      "finished": false
+    },
+    {
+      "home_team": "Team C",
+      "away_team": "Team A",
+      "date": "2-20-2024",
+      "time": "10:00am",
+      "home_team_score": 4,
+      "away_team_score": 4,
+      "location": "Stadium B",
+      "finished": true
+    },
+    {
+      "home_team": "Team B",
+      "away_team": "Team D",
+      "date": "2-20-2024",
+      "time": "11:00am",
+      "home_team_score": 1,
+      "away_team_score": 4,
+      "location": "Stadium B",
+      "finished": true
+    }
+  ]
+}

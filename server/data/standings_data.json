@@ -1,0 +1,36 @@
+{
+  "league": "Mock League",
+  "division": "Mock Division",
+  "teams": [
+    {
+      "team_name": "Manchester",
+      "position": 1,
+      "played": 23,
+      "won": 15,
+      "drawn": 6,
+      "lost": 2,
+      "gd": 30,
+      "points": 51
+    },
+    {
+      "team_name": "Liverpool",
+      "position": 2,
+      "played": 23,
+      "won": 14,
+      "drawn": 7,
+      "lost": 2,
+      "gd": 25,
+      "points": 49
+    },
+    {
+      "team_name": "Barcelona",
+      "position": 20,
+      "played": 23,
+      "won": 5,
+      "drawn": 9,
+      "lost": 9,
+      "gd": -5,
+      "points": 24
+    }
+  ]
+}
