@@ -19,7 +19,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ data }) => {
         {data.date} @ {data.time}
       </p>
       <p>{data.location}</p>
-      {data.finished == true && (
+      {data.finished && (
         <p>
           Final Score: {data.home_team_score} - {data.away_team_score}
         </p>

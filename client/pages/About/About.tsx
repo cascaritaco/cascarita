@@ -23,7 +23,6 @@ const About = () => {
         },
         // body: JSON.stringify({ input: inputText }),
       });
-      console.log(response);
       const result = await response.json();
       setResponseData(result.data);
 

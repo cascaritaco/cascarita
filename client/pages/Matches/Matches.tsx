@@ -27,7 +27,6 @@ const Matches = () => {
     try {
       const response = await fetch("/api/mockdata/matches");
       const result = await response.json();
-      console.log(response, result);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching mock data:", error);

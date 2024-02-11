@@ -30,7 +30,6 @@ const Home = () => {
     try {
       const response = await fetch("/api/mockdata/standings");
       const result = await response.json();
-      console.log(response, result);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching mock data:", error);

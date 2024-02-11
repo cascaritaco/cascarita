@@ -4,8 +4,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* Style for mobile views
-@media (max-width: 768px) { */
+/* Style for mobile views */
 .logo {
   width: 100px; /* Set the width as needed */
   height: 120px;
@@ -18,4 +17,3 @@
 .logo-container {
   background-color: #f1f1f1;
 }
-/* } */
