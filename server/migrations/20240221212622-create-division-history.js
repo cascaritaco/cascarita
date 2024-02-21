@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Leagues", {
+    await queryInterface.createTable("DivisionHistories", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -23,10 +23,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      description: {
-        allowNull: true,
-        type: Sequelize.TEXT,
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -38,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Leagues");
+    await queryInterface.dropTable("DivisionHistories");
   },
 };
