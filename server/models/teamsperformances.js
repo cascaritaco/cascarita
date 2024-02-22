@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Games extends Model {
+  class TeamsPerformances extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,70 +9,54 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Games.belongsTo(models.Session, { foreignKey: "session_id" });
-      Games.belongsTo(models.Team, { foreignKey: "away_team_id" });
-      Games.belongsTo(models.Team, { foreignKey: "home_team_id" });
-      Games.belongsTo(models.GameStatus, { foreignKey: "game_status_id" });
-      Games.belongsTo(models.Fields, { foreignKey: "field_id" });
-      Games.belongsTo(models.User, { foreignKey: "created_by_id" });
-      Games.belongsTo(models.User, { foreignKey: "updated_by_id" });
+      TeamsPerformances.belongsTo(models.TeamsSession, {
+        foreignKey: "team_session_id",
+      });
     }
   }
-  Games.init(
+  TeamsPerformances.init(
     {
-      session_id: {
+      team_session_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      game_date: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      game_time: {
-        type: DataTypes.TIME,
-        allowNull: false,
-      },
-      away_team_id: {
+      games_played: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      away_team_goals: {
+      wins: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      home_team_id: {
+      losses: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      home_team_goals: {
+      draws: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      winner_id: {
+      goals_against: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      loser_id: {
+      goals_for: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      draw: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
-      game_status_id: {
+      goals_differential: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      field_id: {
+      table_position: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "Games",
+      modelName: "TeamsPerformances",
     }
   );
-  return Games;
+  return TeamsPerformances;
 };
