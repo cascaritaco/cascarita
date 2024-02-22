@@ -2,16 +2,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Seasons", {
+    await queryInterface.createTable("SeasonHistories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
+      group_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Groups",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       start_date: {
         type: Sequelize.DATE,
@@ -25,16 +35,6 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: true,
       },
-      group_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Groups",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -46,6 +46,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Seasons");
+    await queryInterface.dropTable("SeasonHistories");
   },
 };

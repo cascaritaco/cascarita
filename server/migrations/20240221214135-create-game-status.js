@@ -2,30 +2,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Leagues", {
+    await queryInterface.createTable("GameStatuses", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      group_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Groups",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
-      name: {
-        allowNull: false,
+      status: {
         type: Sequelize.STRING,
-      },
-      description: {
-        allowNull: true,
-        type: Sequelize.TEXT,
       },
       created_at: {
         allowNull: false,
@@ -38,6 +23,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Leagues");
+    await queryInterface.dropTable("GameStatuses");
   },
 };
