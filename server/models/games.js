@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   Games.init(
     {
       session_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Sessions",
@@ -31,15 +31,15 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       game_date: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       game_time: {
-        type: Sequelize.TIME,
+        type: DataTypes.TIME,
         allowNull: false,
       },
       away_team_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Teams",
@@ -49,11 +49,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       away_team_goals: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       home_team_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Teams",
@@ -63,23 +63,23 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       home_team_goals: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       winner_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       loser_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       draw: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
       game_status_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "GameStatuses",
@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       field_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Fields",
@@ -99,7 +99,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       created_by_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Users",
@@ -109,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       updated_by_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Users",
