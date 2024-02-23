@@ -38,6 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Season",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
   return Season;

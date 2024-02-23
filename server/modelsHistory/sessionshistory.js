@@ -1,37 +1,40 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class LeagueHistory extends Model {
+  class SessionsHistory extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      LeagueHistory.belongsTo(models.Group, { foreignKey: "group_id" });
+      // define association here
+      SessionsHistory.belongsTo(models.Division, { foreignKey: "division_id" });
+      SessionsHistory.belongsTo(models.Season, { foreignKey: "season_id" });
+      SessionsHistory.belongsTo(models.League, { foreignKey: "league_id" });
     }
   }
-  LeagueHistory.init(
+  SessionsHistory.init(
     {
-      group_id: {
+      division_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      name: {
-        type: DataTypes.STRING,
+      season_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: true,
+      league_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "LeagueHistory",
+      modelName: "SessionsHistory",
       createdAt: "created_at",
       updatedAt: "updated_at",
     }
   );
-  return LeagueHistory;
+  return SessionsHistory;
 };

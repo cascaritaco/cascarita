@@ -33,6 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "FieldsHistory",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
   return FieldsHistory;

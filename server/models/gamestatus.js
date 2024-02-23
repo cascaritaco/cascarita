@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "GameStatus",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
   return GameStatus;

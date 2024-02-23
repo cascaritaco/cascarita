@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class TeamsSession extends Model {
+  class TeamsDivisions extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,27 +9,39 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      TeamsSession.belongsTo(models.Session, { foreignKey: "session_id" });
-      TeamsSession.belongsTo(models.Team, { foreignKey: "team_id" });
+      TeamsDivisions.belongsTo(models.Team, { foreignKey: "team_id" });
+      TeamsDivisions.belongsTo(models.Division, { foreignKey: "division_id" });
     }
   }
-  TeamsSession.init(
+  TeamsDivisions.init(
     {
-      session_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       team_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Teams",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      division_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Divisions",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
     },
     {
       sequelize,
-      modelName: "TeamsSession",
+      modelName: "TeamsDivisions",
       createdAt: "created_at",
       updatedAt: "updated_at",
     }
   );
-  return TeamsSession;
+  return TeamsDivisions;
 };

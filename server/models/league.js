@@ -30,6 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "League",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
   return League;

@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Division extends Model {
     /**
@@ -15,16 +15,19 @@ module.exports = (sequelize, DataTypes) => {
     {
       group_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     },
     {
-    sequelize,
-    modelName: 'Division',
-  });
+      sequelize,
+      modelName: "Division",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
   return Division;
 };
