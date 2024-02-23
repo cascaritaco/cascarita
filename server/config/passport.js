@@ -29,10 +29,10 @@ passport.serializeUser((user, done) => {
   done(null, {
     id: user.id,
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    groupId: user.groupId,
-    roleId: user.roleId,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    group_id: user.group_id,
+    role_id: user.role_id,
   });
 });
 

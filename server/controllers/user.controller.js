@@ -6,12 +6,12 @@ const passport = require("passport");
 const UserController = function () {
   var registerUser = async function (req, res) {
     const newUser = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
       email: req.body.email,
       password: req.body.password,
-      groupId: req.body.groupId,
-      roleId: req.body.roleId,
+      group_id: req.body.group_id,
+      role_id: req.body.role_id,
     };
 
     try {
@@ -38,7 +38,7 @@ const UserController = function () {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const welcomeMessage = `Welcome, ${req.user.firstName} ${req.user.lastName}`;
+    const welcomeMessage = `Welcome, ${req.user.first_name} ${req.user.last_name}`;
     res.status(201).json({ message: welcomeMessage });
   };
 
