@@ -16,11 +16,14 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
       },
     },
     {
       sequelize,
       modelName: "Group",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
   return Group;

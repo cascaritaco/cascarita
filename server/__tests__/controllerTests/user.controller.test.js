@@ -27,22 +27,22 @@ describe("registerUser", () => {
     User.build.mockReturnValueOnce({ validate: validateMock });
 
     User.create.mockResolvedValueOnce({
-      firstName: "Leo",
-      lastName: "Messi",
+      first_name: "Leo",
+      last_name: "Messi",
       email: "user@gmail.com",
       password: "testPassword",
-      groupId: 1,
-      roleId: 1,
+      group_id: 1,
+      role_id: 1,
     });
 
     const req = {
       body: {
-        firstName: "Leo",
-        lastName: "Messi",
+        first_name: "Leo",
+        last_name: "Messi",
         email: "user@gmail.com",
         password: "testPassword",
-        groupId: 1,
-        roleId: 1,
+        group_id: 1,
+        role_id: 1,
       },
     };
 
@@ -55,24 +55,24 @@ describe("registerUser", () => {
 
     expect(validateMock).toHaveBeenCalled();
     expect(User.create).toHaveBeenCalledWith({
-      firstName: "Leo",
-      lastName: "Messi",
+      first_name: "Leo",
+      last_name: "Messi",
       email: "user@gmail.com",
       password: "testPassword",
-      groupId: 1,
-      roleId: 1,
+      group_id: 1,
+      role_id: 1,
     });
 
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
       success: true,
       data: {
-        firstName: "Leo",
-        lastName: "Messi",
+        first_name: "Leo",
+        last_name: "Messi",
         email: "user@gmail.com",
         password: "testPassword",
-        groupId: 1,
-        roleId: 1,
+        group_id: 1,
+        role_id: 1,
       },
     });
   });
@@ -98,12 +98,12 @@ describe("registerUser", () => {
 
     const req = {
       body: {
-        firstName: "Leo",
-        lastName: "Messi",
+        first_name: "Leo",
+        last_name: "Messi",
         email: "user@gmail.com",
         password: "testPassword",
-        groupId: 1,
-        roleId: 1,
+        group_id: 1,
+        role_id: 1,
       },
     };
 
@@ -128,12 +128,12 @@ describe("registerUser", () => {
   });
 
   it.each([
-    ["firstName", null, "notNull Violation: User.firstName cannot be null"],
-    ["lastName", null, "notNull Violation: User.lastName cannot be null"],
+    ["first_name", null, "notNull Violation: User.first_name cannot be null"],
+    ["last_name", null, "notNull Violation: User.last_name cannot be null"],
     ["password", null, "notNull Violation: User.password cannot be null"],
     ["email", null, "notNull Violation: User.email cannot be null"],
-    ["groupId", null, "notNull Violation: User.groupId cannot be null"],
-    ["roleId", null, "notNull Violation: User.roleId cannot be null"],
+    ["group_id", null, "notNull Violation: User.group_id cannot be null"],
+    ["role_id", null, "notNull Violation: User.role_id cannot be null"],
   ])(
     "should handle error when %s is null",
     async (fieldName, nullValue, expectedErrorMessage) => {
@@ -151,12 +151,12 @@ describe("registerUser", () => {
 
       const req = {
         body: {
-          firstName: fieldName === "firstName" ? nullValue : "Leo",
-          lastName: fieldName === "lastName" ? nullValue : "Messi",
+          first_name: fieldName === "first_name" ? nullValue : "Leo",
+          last_name: fieldName === "last_name" ? nullValue : "Messi",
           email: fieldName === "email" ? nullValue : "user@example.com",
           password: fieldName === "password" ? nullValue : "testPassword",
-          groupId: fieldName === "groupId" ? nullValue : 1,
-          roleId: fieldName === "roleId" ? nullValue : 1,
+          group_id: fieldName === "group_id" ? nullValue : 1,
+          role_id: fieldName === "role_id" ? nullValue : 1,
         },
       };
 
@@ -187,8 +187,8 @@ describe("logInUser", () => {
   it("should return a welcome message for an authenticated user", async () => {
     const req = {
       user: {
-        firstName: "Leo",
-        lastName: "Messi",
+        first_name: "Leo",
+        last_name: "Messi",
         username: "user@gmail.com",
         password: "testpassword",
       },

@@ -1,17 +1,18 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Team extends Model {
+  class Fields extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Team.belongsTo(models.Group, { foreignKey: "group_id" });
+      // define association here
+      Fields.belongsTo(models.Group, { foreignKey: "group_id" });
     }
   }
-  Team.init(
+  Fields.init(
     {
       group_id: {
         type: DataTypes.INTEGER,
@@ -21,17 +22,25 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      team_logo: {
+      address: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      length: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+      },
+      width: {
+        type: DataTypes.FLOAT,
         allowNull: true,
       },
     },
     {
       sequelize,
-      modelName: "Team",
+      modelName: "Fields",
       createdAt: "created_at",
       updatedAt: "updated_at",
     }
   );
-  return Team;
+  return Fields;
 };
