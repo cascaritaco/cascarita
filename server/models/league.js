@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      League.belongsTo(models.Group, { foreignKey: "groupId" });
+      League.belongsTo(models.Group, { foreignKey: "group_id" });
     }
   }
   League.init(
     {
-      groupId: {
+      group_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
