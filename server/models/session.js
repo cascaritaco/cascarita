@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Session extends Model {
     /**
@@ -8,28 +8,32 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Session.belongsTo(models.Division, { foreignKey: "division_id" });
-      Session.belongsTo(models.Season, { foreignKey: "season_id" });
-      Session.belongsTo(models.League, { foreignKey: "league_id" });
+      Session.hasMany(models.Division, { foreignKey: "division_id" });
+      Session.hasMany(models.Season, { foreignKey: "season_id" });
+      Session.hasMany(models.League, { foreignKey: "league_id" });
     }
   }
-  Session.init({
-    division_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    season_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    league_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
+  Session.init(
+    {
+      division_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      season_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      league_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
-    sequelize,
-    modelName: 'Session',
-  });
+      sequelize,
+      modelName: "Session",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
   return Session;
 };

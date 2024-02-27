@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      SessionsHistory.belongsTo(models.Division, { foreignKey: "division_id" });
-      SessionsHistory.belongsTo(models.Season, { foreignKey: "season_id" });
-      SessionsHistory.belongsTo(models.League, { foreignKey: "league_id" });
+      SessionsHistory.hasMany(models.Division, { foreignKey: "division_id" });
+      SessionsHistory.hasMany(models.Season, { foreignKey: "season_id" });
+      SessionsHistory.hasMany(models.League, { foreignKey: "league_id" });
     }
   }
   SessionsHistory.init(

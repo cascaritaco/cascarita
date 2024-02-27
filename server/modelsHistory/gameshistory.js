@@ -9,13 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Games.belongsTo(models.Session, { foreignKey: "session_id" });
-      Games.belongsTo(models.Team, { foreignKey: "away_team_id" });
-      Games.belongsTo(models.Team, { foreignKey: "home_team_id" });
-      Games.belongsTo(models.GameStatus, { foreignKey: "game_status_id" });
-      Games.belongsTo(models.Fields, { foreignKey: "field_id" });
-      Games.belongsTo(models.User, { foreignKey: "created_by_id" });
-      Games.belongsTo(models.User, { foreignKey: "updated_by_id" });
+      GamesHistory.belongsTo(models.Session, { foreignKey: "session_id" });
+      GamesHistory.belongsTo(models.Team, { foreignKey: "away_team_id" });
+      GamesHistory.belongsTo(models.Team, { foreignKey: "home_team_id" });
+      GamesHistory.belongsTo(models.GameStatus, {
+        foreignKey: "game_status_id",
+      });
+      GamesHistory.belongsTo(models.Fields, { foreignKey: "field_id" });
+      GamesHistory.hasMany(models.User, { foreignKey: "created_by_id" });
+      GamesHistory.hasMany(models.User, { foreignKey: "updated_by_id" });
     }
   }
   GamesHistory.init(

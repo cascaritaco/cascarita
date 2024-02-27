@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      TeamsSession.hasMany(models.Session, { foreignKey: "session_id" });
-      TeamsSession.hasMany(models.Team, { foreignKey: "team_id" });
+      TeamsSessionHistory.hasMany(models.Session, { foreignKey: "session_id" });
+      TeamsSessionHistory.hasMany(models.Team, { foreignKey: "team_id" });
     }
   }
   TeamsSessionHistory.init(

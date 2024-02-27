@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       Games.belongsTo(models.Team, { foreignKey: "home_team_id" });
       Games.belongsTo(models.GameStatus, { foreignKey: "game_status_id" });
       Games.belongsTo(models.Fields, { foreignKey: "field_id" });
-      Games.belongsTo(models.User, { foreignKey: "created_by_id" });
-      Games.belongsTo(models.User, { foreignKey: "updated_by_id" });
+      Games.hasMany(models.User, { foreignKey: "created_by_id" });
+      Games.hasMany(models.User, { foreignKey: "updated_by_id" });
     }
   }
   Games.init(
