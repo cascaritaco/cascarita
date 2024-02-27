@@ -9,10 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      FieldsHistory.belongsTo(models.Group, { foreignKey: "group_id" });
     }
   }
   FieldsHistory.init(
     {
+      group_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
