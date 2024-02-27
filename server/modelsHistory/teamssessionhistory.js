@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class TeamsSession extends Model {
+  class TeamsSessionHistory extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       TeamsSession.hasMany(models.Team, { foreignKey: "team_id" });
     }
   }
-  TeamsSession.init(
+  TeamsSessionHistory.init(
     {
       session_id: {
         type: DataTypes.INTEGER,
@@ -26,10 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "TeamsSession",
+      modelName: "TeamsSessionHistory",
       createdAt: "created_at",
       updatedAt: "updated_at",
     }
   );
-  return TeamsSession;
+  return TeamsSessionHistory;
 };
