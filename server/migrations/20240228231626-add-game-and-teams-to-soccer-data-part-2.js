@@ -14,14 +14,18 @@ module.exports = {
       }
     );
 
+    console.log("AAAAA 1");
+
     const groupId = groups[0].id;
+
+    console.log(typeof groupId);
 
     const imageURL = "fake.url.com";
 
     const users = await queryInterface.sequelize.query(
-      "SELECT id FROM `Users` WHERE name = ?",
+      "SELECT id FROM `Users` WHERE first_name = ?",
       {
-        replacements: ["Saul Messi"],
+        replacements: ["Saul"],
         type: Sequelize.QueryTypes.SELECT,
       }
     );
@@ -56,13 +60,14 @@ module.exports = {
       "premier-league-team-2015-file.json"
     );
 
-    let teams = fs.readFileSync(filePath, "utf-8");
+    let teamsString = fs.readFileSync(filePath, "utf-8");
+    let teams = JSON.parse(teamsString);
 
     for (let i = 0; i < teams.length; i++) {
       teams[i].group_id = groupId;
       teams[i].updated_at = new Date();
       teams[i].created_at = new Date();
-      teams[i].team_log = imageURL;
+      teams[i].team_logo = imageURL;
     }
 
     await queryInterface.bulkInsert("Teams", teams, {});

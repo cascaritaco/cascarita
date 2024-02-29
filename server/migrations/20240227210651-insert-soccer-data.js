@@ -4,6 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     // Insert a record into the `Groups` table
+
     await queryInterface.bulkInsert("Groups", [
       {
         name: "The FA (Football Federation)",
@@ -120,8 +121,8 @@ module.exports = {
     // Insert a record into the `Users` table using the groupId as foreign key and roleId as hardcoded value
     await queryInterface.bulkInsert("Users", [
       {
-        firstName: "Saul",
-        lastName: "Messi",
+        first_name: "Saul",
+        last_name: "Messi",
         email: "supercoolsaul@cool.com",
         password: "saul",
         group_id: groupId,
