@@ -1,4 +1,6 @@
 "use strict";
+const fs = require("fs");
+const path = require("path");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -45,6 +47,25 @@ module.exports = {
     );
 
     const fieldsId = fields[0].id;
+
+    const filePath = path.join(
+      __dirname,
+      "..",
+      "mockData",
+      "england",
+      "premier-league-team-2015-file.json"
+    );
+
+    let teams = fs.readFileSync(filePath, "utf-8");
+
+    for (let i = 0; i < teams.length; i++) {
+      teams[i].group_id = groupId;
+      teams[i].updated_at = new Date();
+      teams[i].created_at = new Date();
+      teams[i].team_log = imageURL;
+    }
+
+    await queryInterface.bulkInsert("Teams", teams, {});
   },
 
   async down(queryInterface, Sequelize) {

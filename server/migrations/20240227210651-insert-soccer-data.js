@@ -1,5 +1,4 @@
 "use strict";
-const axios = require("axios");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -68,7 +67,6 @@ module.exports = {
     );
 
     const seasonId = seasons[0].id; // Get the ID of the inserted Season
-
     // Insert a record into the `Leagues` table using the groupId as foreign key
     await queryInterface.bulkInsert("Leagues", [
       {
@@ -89,7 +87,6 @@ module.exports = {
     );
 
     const leagueId = leagues[0].id; // Get the ID of the inserted League
-
     // Insert a record into the `Sessions` table using the leagueId, divisionId, and seasonId as foreign keys
     await queryInterface.bulkInsert("Sessions", [
       {
