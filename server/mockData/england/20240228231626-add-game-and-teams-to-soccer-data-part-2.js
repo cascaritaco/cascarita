@@ -5,7 +5,6 @@ const path = require("path");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Fetch the ID of the inserted Group
     const groups = await queryInterface.sequelize.query(
       "SELECT id FROM `Groups` WHERE name = ?",
       {
@@ -14,11 +13,7 @@ module.exports = {
       }
     );
 
-    console.log("AAAAA 1");
-
     const groupId = groups[0].id;
-
-    console.log(typeof groupId);
 
     const imageURL = "fake.url.com";
 
@@ -73,12 +68,5 @@ module.exports = {
     await queryInterface.bulkInsert("Teams", teams, {});
   },
 
-  async down(queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-  },
+  async down(queryInterface, Sequelize) {},
 };
