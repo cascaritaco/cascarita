@@ -12,4 +12,6 @@ router.post("/createGame", GameController.createGame);
 
 router.post("/updateGame", GameController.updateGame);
 
+router.delete("/deleteGame", GameController.deleteGame);
+
 module.exports = router;

@@ -133,11 +133,31 @@ const GameController = function () {
     }
   };
 
+  var deleteGame = async function (req, res) {
+    try {
+      let deletedGame = await Games.destroy({
+        where: {
+          id: req.body.id,
+        },
+      });
+
+      if (deletedGame === 0) {
+        return res
+          .status(404)
+          .json({ error: "No game found with the given ID" });
+      }
+      return res.status(200).json();
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to delete game" });
+    }
+  };
+
   return {
     getGamesBySessionId,
     getGamesByTeamId,
     createGame,
     updateGame,
+    deleteGame,
   };
 };
 
