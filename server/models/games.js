@@ -67,6 +67,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      created_by_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      updated_by_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       field_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
