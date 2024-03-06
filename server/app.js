@@ -12,6 +12,7 @@ const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
+const GameRoutes = require("./routes/game.routes");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
@@ -32,6 +33,7 @@ app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
 app.use("/player", PlayerRoutes);
+app.use("/game", GameRoutes);
 app.use(csrf()); //
 
 function init() {
