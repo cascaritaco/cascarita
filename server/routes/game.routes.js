@@ -10,4 +10,6 @@ router.get("/getByTeam", GameController.getGamesByTeamId);
 
 router.post("/createGame", GameController.createGame);
 
+router.post("/updateGame", GameController.updateGame);
+
 module.exports = router;

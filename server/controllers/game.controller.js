@@ -91,10 +91,53 @@ const GameController = function () {
     }
   };
 
+  var updateGame = async function (req, res) {
+    try {
+      let currentGame = await Games.findOne({
+        where: {
+          id: req.body.id,
+        },
+      });
+
+      if (!currentGame) {
+        return res.status(500).json({ error: "No Game Found" });
+      }
+
+      currentGame.session_id = req.body.session_id || currentGame.session_id;
+      currentGame.game_date = req.body.game_date || currentGame.game_date;
+      currentGame.game_time = req.body.game_time || currentGame.game_time;
+      currentGame.away_team_id =
+        req.body.away_team_id || currentGame.away_team_id;
+      currentGame.away_team_goals =
+        req.body.away_team_goals || currentGame.away_team_goals;
+      currentGame.home_team_id =
+        req.body.home_team_id || currentGame.home_team_id;
+      currentGame.home_team_goals =
+        req.body.home_team_goals || currentGame.home_team_goals;
+      currentGame.winner_id = req.body.winner_id || currentGame.winner_id;
+      currentGame.loser_id = req.body.loser_id || currentGame.loser_id;
+      currentGame.draw = req.body.draw || currentGame.draw;
+      currentGame.game_status_id =
+        req.body.game_status_id || currentGame.game_status_id;
+      currentGame.field_id = req.body.field_id || currentGame.field_id;
+      currentGame.updated_by_id =
+        req.body.updated_by_id || currentGame.updated_by_id;
+      currentGame.created_by_id =
+        req.body.created_by_id || currentGame.created_by_id;
+
+      await currentGame.save();
+
+      return res.status(200).json({ success: true, data: currentGame });
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to Update Game" });
+    }
+  };
+
   return {
     getGamesBySessionId,
     getGamesByTeamId,
     createGame,
+    updateGame,
   };
 };
 
