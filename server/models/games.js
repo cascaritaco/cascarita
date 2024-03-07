@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Games.belongsTo(models.Session, { foreignKey: "session_id" });
+      Games.belongsTo(models.Session, {
+        foreignKey: "session_id",
+        targetKey: "id",
+      });
       Games.belongsTo(models.Team, { foreignKey: "away_team_id" });
       Games.belongsTo(models.Team, { foreignKey: "home_team_id" });
       Games.belongsTo(models.GameStatus, { foreignKey: "game_status_id" });
@@ -61,6 +64,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       game_status_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      created_by_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      updated_by_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

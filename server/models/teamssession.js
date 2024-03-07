@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      TeamsSession.hasMany(models.Session, { foreignKey: "session_id" });
+      TeamsSession.belongsTo(models.Session, {
+        foreignKey: "session_id",
+        targetKey: "id",
+      });
       TeamsSession.hasMany(models.Team, { foreignKey: "team_id" });
     }
   }
