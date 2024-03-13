@@ -1,0 +1,19 @@
+/* Dashboard.module.css */
+
+.dash {
+  display: flex;
+}
+
+/* Set background color for the entire page */
+body {
+  margin-left: 240px;
+  padding: 0;
+  background-color: #f1f1f1; /* Replace with your desired background color */
+}
+
+/* Set background color for the area inside SideNav */
+.main {
+  flex-grow: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
