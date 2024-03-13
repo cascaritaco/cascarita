@@ -2,76 +2,76 @@
 
 /* Style for the side navigation bar */
 .sidenav {
-  font-family: "Poppins";
-  font-weight: 500;
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  background-color: #fff;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  padding-top: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+    font-family: "Poppins";
+    font-weight: 500;
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    background-color: #fff;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 /* Style for the navigation links */
 .sidenav a {
-  padding: 15px 20px;
-  text-decoration: none;
-  font-size: 16px;
-  display: block;
-  transition: 0.3s;
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    transition: 0.3s;
 }
 
 /* Hover effect for the navigation links */
 .sidenav a:hover {
-  background-color: #555; /* You can change the hover background color */
+    background-color: #555; /* You can change the hover background color */
 }
 
 /* Main content area */
 .main {
-  margin-left: 250px;
-  padding: 20px;
+    margin-left: 250px;
+    padding: 20px;
 }
 
 /* Style for buttons inside the navigation bar */
 .sidenav button {
-  font-size: 16px;
-  color: black; /* You can change the button text color */
-  margin-bottom: 6px;
-  cursor: pointer;
-  display: block;
-  text-align: left;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #f1f1f1; /* Set the color of the bottom border */
-  background-color: white; /* Set the background color to transparent */
-  padding: 8px 16px; /* Adjust padding as needed */
+    font-size: 16px;
+    color: black; /* You can change the button text color */
+    margin-bottom: 6px;
+    cursor: pointer;
+    display: block;
+    text-align: left;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #f1f1f1; /* Set the color of the bottom border */
+    background-color: white; /* Set the background color to transparent */
+    padding: 8px 16px; /* Adjust padding as needed */
 }
 
 /* Hover effect for the buttons */
 .sidenav button:hover {
-  background-color: #f1f1f1; /* You can change the hover button background color */
+    background-color: #f1f1f1; /* You can change the hover button background color */
 }
 
 .logo {
-  scale: 2;
+    scale: 2;
 }
 
 .logo-text {
-  font-size: 20px;
-  padding-left: 25px;
+    font-size: 20px;
+    padding-left: 25px;
 }
 
 .logo-con {
-  height: 80px;
-  margin-bottom: 20px;
-  border: none;
-  border-bottom: 1px solid #f1f1f1; /* Set the color of the bottom border */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  padding-left: 16%;
+    height: 80px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #f1f1f1; /* Set the color of the bottom border */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding-left: 16%;
 }
