@@ -21,7 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      unique: {
+        args: ["group_id"],
+        msg: "Division name must be unique within a Group",
     },
+  },
     {
       sequelize,
       modelName: "Division",
