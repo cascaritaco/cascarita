@@ -25,6 +25,8 @@ export default function SideNav() {
       </div>
       <button>Home</button>
       <button>Users</button>
+      <button>Team</button>
+      <button>League</button>
       <button>Calendar</button>
       <button>Settings</button>
     </div>
