@@ -6,6 +6,7 @@
 
 /* Set background color for the area inside SideNav */
 .main {
+  margin-left: 240px;
   flex-grow: 1;
   padding: 20px;
   box-sizing: border-box;

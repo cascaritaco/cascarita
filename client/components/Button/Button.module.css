@@ -1,0 +1,51 @@
+/* styles.css */
+.primary-button {
+  /* Styles for normal-sized button */
+  background-color: #170cb4;
+  color: #fff;
+  border-radius: 7px;
+  /* ... */
+}
+
+.primary-button:active {
+  background-color: #4238d5;
+}
+
+.secondary-button {
+  /* Styles for normal-sized button */
+  background-color: transparent;
+  color: #4238d5;
+  border-radius: 7px;
+  border: 1.5px solid #4238d5; /* 1px solid border with black color */
+  /* color: #4238d5; */
+  /* ... */
+}
+
+.small {
+  /* Styles for small-sized button */
+  font-size: 12px;
+  padding: 8px 12px;
+  /* ... */
+}
+
+.medium {
+  /* Styles for medium-sized button */
+  font-size: 14px;
+  padding: 10px 16px;
+  /* ... */
+}
+
+.large {
+  /* Styles for large-sized button */
+  font-size: 16px;
+  height: 40px;
+  width: 100px;
+  /* ... */
+}
+
+.xlarge {
+  /* Styles for extra-large-sized button */
+  font-size: 18px;
+  padding: 14px 24px;
+  /* ... */
+}
