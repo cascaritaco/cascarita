@@ -1,0 +1,42 @@
+/* SideNav.module.css */
+
+.team-modal {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  background-color: white;
+  border: 2px solid rgb(240, 240, 240);
+  box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
+  border-radius: 12px;
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+  top: 120px;
+  left: 45%;
+  padding: 20px;
+}
+
+.team-modal-header {
+  font-weight: 700;
+  font-size: 24px;
+  text-align: left;
+}
+
+.team-modal-subheader {
+  font-weight: 600;
+  font-size: 16px;
+  padding-right: 20px;
+  width: 70%;
+}
+
+.team-modal-text-container {
+  display: flex;
+  justify-content: center;
+  align-items: CENTER;
+}
+
+.team-modal-button-container {
+  display: flex;
+  justify-content: right;
+}
