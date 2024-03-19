@@ -1,5 +1,6 @@
 const validator = require("validator");
 const { Division } = require('../models');
+const { DivisionHistory } = require('../modelsHistory');
 
 const divisionController = {
     // Create a new division
@@ -33,22 +34,24 @@ const divisionController = {
         }
     },
 
-    // Archive a division by updating its status
-    async archive(req, res) {
+
+    // Archive a division by GroupID
+    async archiveByGroupId(req, res) {
         try {
-            const { id } = req.params;
-            const division = await Division.findByPk(id);
+            const { groupId } = req.params;
 
-            if (!division) {
-                return res.status(404).json({ error: 'Division not found' });
+            // Find divisions by GroupID
+            const divisions = await Division.findAll({ where: { group_id: groupId } });
+
+            // Archive divisions and store in DivisionHistory
+            for (const division of divisions) {
+                await division.update({ archived: true });
+                await DivisionHistory.create({ division_id: division.id, archived_at: new Date() });
             }
-
-            // Update division status to archived
-            await division.update({ archived: true });
 
             return res.status(200).json({ message: 'Division archived successfully' });
         } catch (error) {
-            console.error('Error archiving division:', error);
+            console.error('Error archiving division by Group ID:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     },
@@ -100,7 +103,7 @@ const divisionController = {
 
             return res.status(200).json(divisions);
         } catch (error) {
-            console.error('Error getting divisions by group id:', error);
+            console.error('Error getting division by group id:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     },
@@ -109,11 +112,16 @@ const divisionController = {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const division = await Division.findByPk(id);
 
+            // Find the division to delete
+            const division = await Division.findByPk(id);
             if (!division) {
                 return res.status(404).json({ error: 'Division not found' });
             }
+
+            // Archive the division before deletion
+            await division.update({ archived: true });
+            await DivisionHistory.create({ division_id: division.id, archived_at: new Date() });
 
             // Delete the division
             await division.destroy();
