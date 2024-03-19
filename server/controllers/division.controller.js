@@ -132,6 +132,37 @@ const divisionController = {
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
+    // Get deleted divisions by GroupID from DivisionsHistory
+    async getDeletedDivisionsByGroupId(req, res) {
+        try {
+            const { groupId } = req.params;
+
+            // Find deleted divisions from DivisionsHistory by GroupID
+            const deletedDivisions = await DivisionHistory.findAll({
+                where: { group_id: groupId },
+                attributes: ['division_id', 'archived_at'], // Specify which attributes to include in the result
+                include: [
+                    {
+                        model: Division, // Include Division model
+                        as: 'division', // Alias for the association
+                        attributes: ['id', 'name'], // Specify attributes to include from Division
+                        include: [
+                            {
+                                model: Group, // Include Group model associated with Division
+                                as: 'group', // Alias for the association
+                                attributes: ['id', 'name'], // Specify attributes to include from Group
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            return res.status(200).json(deletedDivisions);
+        } catch (error) {
+            console.error('Error getting deleted divisions by Group ID:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
 };
 
 module.exports = divisionController;
