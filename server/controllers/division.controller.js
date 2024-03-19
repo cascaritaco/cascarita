@@ -131,7 +131,7 @@ const divisionController = {
             console.error('Error deleting division:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    }
+    },
     // Get deleted divisions by GroupID from DivisionsHistory
     async getDeletedDivisionsByGroupId(req, res) {
         try {
