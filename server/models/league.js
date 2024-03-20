@@ -9,7 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      League.belongsTo(models.Group, { foreignKey: "group_id" });
+      League.belongsTo(models.Group, {
+        foreignKey: "group_id",
+        targetKey: "id",
+      });
+      // WIP
+      League.hasMany(models.Session, {
+        foreignKey: "league_id",
+        sourceKey: "id",
+      });
     }
   }
   League.init(
