@@ -15,6 +15,7 @@ const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
 const LeagueRoutes = require("./routes/league.routes");
+
 const Middlewares = require("./middlewares");
 
 const app = express();
@@ -32,6 +33,7 @@ router.use(
     saveUninitialized: true,
   })
 );
+
 router.use(passport.initialize());
 router.use(passport.session());
 router.use("/group", GroupRoutes);
@@ -40,7 +42,6 @@ router.use("/user", UserRoutes);
 router.use("/player", PlayerRoutes);
 router.use("/league", LeagueRoutes);
 router.use(csrf());
-
 
 function init() {
   router.get("*", function (req, res) {

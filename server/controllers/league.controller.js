@@ -43,7 +43,6 @@ const LeagueController = function () {
 
     try {
       await isNameUniqueWithinGroup(newLeague.group_id, newLeague.name);
-
       await League.build(newLeague).validate();
       const result = await League.create(newLeague);
 
@@ -52,13 +51,6 @@ const LeagueController = function () {
         data: result,
       });
     } catch (error) {
-      // const validationErrors = error.errors?.map((err) => ({
-      //   field: err.path,
-      //   message: err.message,
-      // }
-      // ));
-      
-      // return res.status(500).json({ error });
       next(error);
     }
   };
