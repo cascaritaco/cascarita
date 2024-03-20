@@ -4,9 +4,7 @@ const { League } = require("../models");
 
 const LeagueController = function () {
   var getLeagueByGroupId = async function (req, res, next) {
-    const groupId = req.params['id'];
-
-    console.log(groupId);
+    const groupId = req.params["id"];
 
     try {
       const result = await League.findAll({
@@ -14,6 +12,10 @@ const LeagueController = function () {
           group_id: groupId,
         },
       });
+
+      if (Object.keys(result).length === 0) {
+        throw new Error("Group with given ID has no leagues or not found");
+      }
 
       return res.status(200).json({
         success: true,
@@ -33,16 +35,13 @@ const LeagueController = function () {
     });
 
     if (leagueFound) {
-      throw { field: "name", message: "name is not unique" };
+      throw new Error("name is not unique");
     }
   };
 
   var createLeague = async function (req, res, next) {
-    const newLeague = {
-      group_id: req.body.group_id,
-      name: req.body.name,
-      description: req.body.description,
-    };
+    const { group_id, name, description } = req.body;
+    const newLeague = { group_id, name, description };
 
     try {
       await isNameUniqueWithinGroup(newLeague.group_id, newLeague.name);
@@ -62,15 +61,14 @@ const LeagueController = function () {
     try {
       let currentLeague = await League.findOne({
         where: {
-          id: req.params['id'],
+          id: req.params["id"],
         },
       });
 
       if (!currentLeague) {
-        throw { field: "name", message: "League with given ID was not found" };
+        throw new Error("League with given ID was not found");
       }
 
-      currentLeague.group_id = req.body.group_id || currentLeague.group_id;
       currentLeague.name = req.body.name || currentLeague.name;
       currentLeague.description = req.body.description || currentLeague.description;
 
@@ -88,62 +86,19 @@ const LeagueController = function () {
     try {
       let deletedLeague = await League.destroy({
         where: {
-          id: req.params['id'],
+          id: req.params["id"],
         },
       });
 
       if (deletedLeague === 0) {
-        return res
-          .status(500)
-          .json({ error: "No league found with the given ID" });
-      }
-      return res.status(200).json({ success: true, message: "Delete league successfully" });
-    } catch (error) {
-      next(error)
-    }
-  };
-
-  var updateLeague = async function (req, res) {
-    try {
-      let currentLeague = await League.findOne({
-        where: {
-          id: req.body.id,
-        },
-      });
-
-      if (!currentLeague) {
-        return res.status(500).json({ error: "No League Found" });
+        throw new Error("No league found with the given ID");
       }
 
-      currentLeague.group_id = req.body.group_id || currentLeague.group_id;
-      currentLeague.name = req.body.name || currentLeague.name;
-      currentLeague.description =
-        req.body.description || currentLeague.description;
-
-      await currentLeague.save();
-
-      return res.status(200).json({ success: true, data: currentLeague });
+      return res
+        .status(204)
+        .json({ success: true, message: "Delete league successfully" });
     } catch (error) {
-      return res.status(500).json({ error: "Failed to update League" });
-    }
-  };
-
-  var deleteLeague = async function (req, res) {
-    try {
-      let deletedLeague = await League.destroy({
-        where: {
-          id: req.body.id,
-        },
-      });
-
-      if (deletedLeague === 0) {
-        return res
-          .status(404)
-          .json({ error: "No league found with the given ID" });
-      }
-      return res.status(200).json();
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to delete league" });
+      next(error);
     }
   };
 

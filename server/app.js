@@ -19,6 +19,7 @@ const Middlewares = require("./middlewares");
 const LeagueRoutes = require("./routes/league.routes");
 
 const Middlewares = require("./middlewares");
+const LeagueRoutes = require("./routes/league.routes");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
