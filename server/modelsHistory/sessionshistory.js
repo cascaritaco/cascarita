@@ -9,9 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      SessionsHistory.hasMany(models.Division, { foreignKey: "division_id" });
-      SessionsHistory.hasMany(models.Season, { foreignKey: "season_id" });
-      SessionsHistory.hasMany(models.League, { foreignKey: "league_id" });
+      //
+      // TODO FIX ASSOCIATIONS TO BE HISTORY TABLES
+      //
+      // SessionsHistory.hasMany(models.Division, { foreignKey: "division_id" });
+      // SessionsHistory.hasMany(models.Season, { foreignKey: "season_id" });
+      // SessionsHistory.hasMany(models.League, { foreignKey: "league_id" });
     }
   }
   SessionsHistory.init(
