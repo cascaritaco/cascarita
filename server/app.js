@@ -12,6 +12,7 @@ const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
+const TeamRoutes = require("./routes/team.routes");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
@@ -32,14 +33,13 @@ app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
 app.use("/player", PlayerRoutes);
-app.use(csrf()); //
+app.use("/team", TeamRoutes);
+app.use(csrf());
 
 function init() {
   app.get("*", function (req, res) {
     res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
   });
-
-  router.post("/create/:name", teamController.createTeam);
 
   http.createServer(app).listen(app.get("port"), function () {
     console.log("Express server listening on port " + app.get("port"));
