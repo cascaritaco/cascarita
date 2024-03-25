@@ -12,6 +12,7 @@ const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
+const { errorHandler } = require("./middlewares");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
@@ -32,7 +33,10 @@ app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
 app.use("/player", PlayerRoutes);
-app.use(csrf()); //
+app.use(csrf());
+
+// Keep the error handler as the last middleware used by Express.
+app.use(errorHandler);
 
 function init() {
   app.get("*", function (req, res) {
