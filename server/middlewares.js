@@ -8,7 +8,7 @@
  * call.
  * 
  * @returns An error object with a `message` and `stack` property. The message
- * describes the error and the stack will display a stacktrace depnding on the
+ * describes the error and the stack will display a stacktrace depending on the
  * environment.
  */
 function errorHandler(err, req, res, next) {
