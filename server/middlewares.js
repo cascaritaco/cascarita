@@ -1,4 +1,9 @@
 /**
+ * Contains definitions for middleware functions. These functions should not be
+ * called explicitly, since they will be called automatically by Express.
+ */
+const Middlewares = {
+  /**
  * A middleware function to handle errors.
  * 
  * @param {Error} err The error type.
@@ -11,18 +16,17 @@
  * describes the error and the stack will display a stacktrace depending on the
  * environment.
  */
-function errorHandler(err, req, res, next) {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-  res.status(statusCode);
-
-  const responseBody = {
-    message: err.message,
-    stack: process.env.NODE_ENV === "production" ? "[hidden]" : err.stack,
-  };
-  console.error("Error: ", responseBody);
-  res.json(responseBody);
+  errorHandler(err, _req, res, _next) {
+    const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+    res.status(statusCode);
+  
+    const responseBody = {
+      message: err.message,
+      stack: process.env.NODE_ENV === "production" ? "[hidden]" : err.stack,
+    };
+    console.error("Error: ", responseBody);
+    res.json(responseBody);
+  },
 }
 
-module.exports = {
-  errorHandler,
-};
+module.exports = Middlewares;
