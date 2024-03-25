@@ -15,7 +15,7 @@ const TeamController = function () {
 
       return res.status(201).json({
         success: true,
-        data: data,
+        data: result,
       });
     } catch (error) {
       const validationErrors = error.errors?.map((err) => ({

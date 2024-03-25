@@ -33,7 +33,7 @@ app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
 app.use("/player", PlayerRoutes);
-app.use("/team", TeamRoutes);
+app.use("/api/team", TeamRoutes);
 app.use(csrf());
 
 function init() {
