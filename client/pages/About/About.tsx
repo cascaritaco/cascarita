@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-
-interface TeamResponse {
-  id: number;
-  group_id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-}
+import { createTeam } from "./../../api/apiService";
+import { TeamResponse } from "./../../api/types";
 
 const About = () => {
   const [group_id, setGroupId] = useState("");
@@ -14,47 +8,9 @@ const About = () => {
   const [responseData, setResponseData] = useState<TeamResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-
-      const response = await fetch(`/api/team/create`, {
-        method: "POST",
-        body: JSON.stringify({ group_id, name }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response);
-      const result = await response.json();
-      setResponseData(result.data);
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    }
+  const handleTeamData = async () => {
+    createTeam(group_id, name, setLoading, setResponseData);
   };
-
-  //   try {
-  //     setLoading(true);
-
-  //     const response = await fetch(`/api/create`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ group_id, name }), // Send group_id and name in the request body
-  //     });
-  //     const result = await response.json();
-  //     setResponseData(result);
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <div>
@@ -74,7 +30,7 @@ const About = () => {
           onChange={(e) => setName(e.target.value)}
         />
       </label>
-      <button onClick={fetchData} disabled={loading}>
+      <button onClick={handleTeamData} disabled={loading}>
         Fetch Data
       </button>
       {loading && <p>Loading...</p>}
