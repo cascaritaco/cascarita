@@ -5,13 +5,16 @@ const passport = require("./config/passport");
 const teamController = require("./controllers/team.controller");
 const http = require("http");
 const router = express.Router();
-const csrf = require("csurf"); //
+const csrf = require("csurf");
+
 require("dotenv").config();
+
 const bodyParser = require("body-parser");
 const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
+const Middlewares = require("./middlewares");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
@@ -32,7 +35,10 @@ app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
 app.use("/player", PlayerRoutes);
-app.use(csrf()); //
+app.use(csrf());
+
+// Keep the error handler as the last middleware used by Express.
+app.use(Middlewares.errorHandler);
 
 function init() {
   app.get("*", function (req, res) {
