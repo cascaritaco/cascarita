@@ -1,10 +1,10 @@
+"use strict";
 const validator = require("validator");
-const { Division } = require('../models');
+const { Division, Group } = require('../models');
 const { DivisionHistory } = require('../modelsHistory');
 
-const divisionController = {
-    // Create a new division
-    async create(req, res) {
+const DivisionController = function () {
+    var create = async function (req, res) {
         try {
             // Extract division data from the request body
             const { group_id, name } = req.body;
@@ -32,11 +32,9 @@ const divisionController = {
             console.error('Error creating division:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    },
+    };
 
-
-    // Archive a division by GroupID
-    async archiveByGroupId(req, res) {
+    var archiveByGroupId = async function (req, res) {
         try {
             const { groupId } = req.params;
 
@@ -54,10 +52,9 @@ const divisionController = {
             console.error('Error archiving division by Group ID:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    },
+    };
 
-    // Update a division
-    async update(req, res) {
+    var update = async function (req, res) {
         try {
             const { id } = req.params;
             const { group_id, name } = req.body;
@@ -67,7 +64,7 @@ const divisionController = {
                 return res.status(400).json({ error: 'Invalid group ID' });
             }
             if (!validator.isLength(name, { min: 1, max: 100 })) {
-                return res.status(400).json({ error: 'Division name must be between 1 and 100 characters' });
+                return res.status(400).json({ error: 'Division name must not be null' });
             }
 
             // Check if the division exists
@@ -82,7 +79,6 @@ const divisionController = {
                     return res.status(400).json({ error: 'Division name is already taken.' });
                 }
             }            
-            
 
             // Update the division
             await division.update({ group_id, name });
@@ -93,10 +89,9 @@ const divisionController = {
             console.error('Error updating division:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    },
+    };
 
-    // Get divisions by group id
-    async getByGroupId(req, res) {
+    var getByGroupId = async function (req, res) {
         try {
             const { groupId } = req.params;
             const divisions = await Division.findAll({ where: { group_id: groupId } });
@@ -106,10 +101,9 @@ const divisionController = {
             console.error('Error getting division by group id:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    },
+    };
 
-    // Delete a division
-    async delete(req, res) {
+    var deleteDivision = async function (req, res) {
         try {
             const { id } = req.params;
 
@@ -131,9 +125,9 @@ const divisionController = {
             console.error('Error deleting division:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    },
-    // Get deleted divisions by GroupID from DivisionsHistory
-    async getDeletedDivisionsByGroupId(req, res) {
+    };
+
+    var getDeletedDivisionsByGroupId = async function (req, res) {
         try {
             const { groupId } = req.params;
 
@@ -162,7 +156,16 @@ const divisionController = {
             console.error('Error getting deleted divisions by Group ID:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    }
+    };
+
+    return {
+        create,
+        archiveByGroupId,
+        update,
+        getByGroupId,
+        delete: deleteDivision,
+        getDeletedDivisionsByGroupId
+    };
 };
 
-module.exports = divisionController;
+module.exports = DivisionController();
