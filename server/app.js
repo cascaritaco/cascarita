@@ -14,6 +14,7 @@ const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
+const SeasonRoutes = require("./routes/season.routes");
 const Middlewares = require("./middlewares");
 
 const app = express();
@@ -35,6 +36,7 @@ app.use("/group", GroupRoutes);
 app.use("/role", RoleRoutes);
 app.use("/user", UserRoutes);
 app.use("/player", PlayerRoutes);
+app.use("/season", SeasonRoutes);
 app.use(csrf());
 
 // Keep the error handler as the last middleware used by Express.

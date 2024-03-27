@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Session.hasMany(models.Division, { foreignKey: "division_id" });
-      Session.hasMany(models.Season, { foreignKey: "season_id" });
       Session.hasMany(models.League, { foreignKey: "league_id" });
     }
   }
@@ -33,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Session",
       createdAt: "created_at",
       updatedAt: "updated_at",
-    }
+    },
   );
   return Session;
 };
