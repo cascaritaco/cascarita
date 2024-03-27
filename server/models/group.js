@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Group.hasMany(models.Division, {
+        foreignKey: "group_id",
+        sourceKey: "id",
+      });
     }
   }
   Group.init(
