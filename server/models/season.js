@@ -36,12 +36,11 @@ module.exports = (sequelize, DataTypes) => {
             if (startDate > endDate) {
               throw new Error("start_date must be before end_date.");
             }
-          }
+          },
         },
       },
       is_active: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
         defaultValue: false,
       },
       group_id: {

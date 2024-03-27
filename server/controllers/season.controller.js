@@ -12,8 +12,8 @@ const { NextFunction } = require("express");
  */
 const SeasonController = {
   /**
-   * Retrieves all the seasons in the database. Results be filtered using query
-   * string parameters.
+   * Retrieves all the seasons in the database. Results may be filtered using
+   * query string parameters.
    *
    * @param {Request} req The Express request object. An optional query string
    * is accepted to narrow search results.
@@ -26,13 +26,32 @@ const SeasonController = {
    */
   async getAllSeasons(req, res, next) {
     try {
-      const query = filterNullEntries(req.query)
-      // TODO: Validate the query. All values are strings but some should be
-      //       numbers, booleans, etc.
-      const seasons = await Season.findAll({
-        where: query !== undefined ? query : {},
-      });
-      res.json(seasons);
+      const { query } = req;
+      const whereClause = {};
+
+      for (const key in query) {
+        if (Season.rawAttributes[key]) {
+          const dataType = Season.rawAttributes[key].type.constructor.key;
+          let parsedValue = query[key];
+
+          if (dataType === "INTEGER" || dataType === "BIGINT") {
+            parsedValue = parseInt(parsedValue, 10);
+          } else if (
+            dataType === "FLOAT" ||
+            dataType === "DOUBLE" ||
+            dataType === "REAL"
+          ) {
+            parsedValue = parseFloat(parsedValue);
+          } else if (dataType === "BOOLEAN") {
+            parsedValue = parsedValue.toLowerCase() === "true";
+          }
+
+          whereClause[key] = parsedValue;
+        }
+      }
+
+      const seasons = await Season.findAll({ where: whereClause });
+      return res.json(seasons);
     } catch (error) {
       next(error);
     }
@@ -45,19 +64,21 @@ const SeasonController = {
    * @param {Response} res The Express response object.
    * @param {NextFunction} next The Express next function to call.
    *
-   * @returns {Promise<any>} A promise that resolves with a single season. If a
+   * @returns {Promise<any>} A promise that resolves to a single season. If a
    * malformed `id` is provided, a status code of 400 will be returned with an
-   * error message.
+   * error message. Returns an error and a status code of 404 if no season
+   * exists with the `id` specified.
    */
   async getSeason(req, res, next) {
     try {
       const id = req.params.id;
       if (id === undefined) {
+        res.status(400);
         throw new Error("expected season id in request parameters.");
       }
       const season = await Season.findByPk(id);
       if (season === null) {
-        res.status(400);
+        res.status(404);
         throw new Error(`no such season with id ${id}.`);
       }
       res.json(season);
@@ -75,11 +96,9 @@ const SeasonController = {
    * call.
    *
    * @returns {Promise<any>} A promise that resolves to the newly created
-   * season. If the season is successfully created, a success message with a
-   * status code of 201 is sent in the response body. If the request body is
-   * missing or malformed, a 400 status code is sent in the response body.
-   * If an error occurs during the creation process, an error message with a
-   * status code of 500 will be returned.
+   * season. If the season is successfully created, a status code of 201 is
+   * sent. If the request body is missing or malformed, an error message with
+   * a 400 status code is sent in the response body.
    */
   async createSeason(req, res, next) {
     try {
@@ -89,13 +108,11 @@ const SeasonController = {
         end_date: req.body.end_date,
         is_active: req.body.is_active,
         group_id: req.body.group_id,
-        created_at: req.body.created_at,
-        updated_at: req.body.updated_at,
       };
-      // TODO: Validate the request body
       const season = await Season.create(requestBody);
       res.status(201).json(season);
     } catch (error) {
+      res.status(400);
       next(error);
     }
   },
@@ -110,23 +127,27 @@ const SeasonController = {
    * @param {NextFunction} next The Express next function to
    * call.
    *
-   * @returns {Promise<any>} An empty promise. If the season is successfully
-   * updated, the updated season object is sent in the response with a 200
-   * status code. If the request body is missing or malformed, or if the season
-   * ID is missing or invalid, an error message with a 400 status code is sent
+   * @returns {Promise<any>} An promise that resolves to the updated season.
+   * If the request body is missing or malformed, or if the season `id` is
+   * missing or invalid, an error message with a 400 status code is sent
    * in the response body.
    */
   async updateSeason(req, res, next) {
     const { id } = req.params;
-    const updatedSeasonData = req.body;
     try {
       if (id === undefined) {
-        res.status(400)
-        throw new Error(`expected id path parameter.`)
+        res.status(400);
+        throw new Error(`expected id path parameter.`);
       }
-      // TODO: Validate the request body
-      const updatedSeason = { id: Number(id), ...updatedSeasonData };
-      return res.status(200).json(updatedSeason);
+
+      const season = await Season.findByPk(id);
+      if (season === null) {
+        res.status(404);
+        throw new Error(`no such season with id ${id}.`);
+      }
+
+      const updatedSeasonData = await season.update(req.body);
+      return res.json(updatedSeasonData);
     } catch (error) {
       next(error);
     }
@@ -150,30 +171,19 @@ const SeasonController = {
     const { id } = req.params;
     try {
       if (id === undefined) {
-        res.status(400)
-        throw new Error(`expected id path parameter.`)
+        res.status(400);
+        throw new Error(`expected id path parameter.`);
       }
       Season.destroy({
         where: {
           id: id,
-        }
+        },
       });
-      res.status(204).json()
+      res.status(204).json();
     } catch (error) {
       next(error);
     }
   },
 };
-
-function filterNullEntries(oldObject) {
-  const newObject = {};
-  for (const key in oldObject) {
-    if (oldObject[key] !== null) {
-      newObject[key] = oldObject[key];
-    }
-  }
-  return newObject;
-}
-
 
 module.exports = SeasonController;
