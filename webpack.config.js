@@ -22,6 +22,11 @@ module.exports = {
         include: path.resolve(__dirname, "client"),
         use: ["style-loader", "css-loader", "postcss-loader"],
       },
+      {
+        test: /\.svg$/,
+        enforce: "pre",
+        loader: require.resolve("@svgr/webpack"),
+      },
     ],
   },
   plugins: [

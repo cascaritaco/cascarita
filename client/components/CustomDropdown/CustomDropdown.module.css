@@ -1,0 +1,28 @@
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.dropdown-label {
+  font-weight: 600;
+  padding-right: 10px;
+}
+
+.dropdown-options {
+  height: 35px;
+  border-radius: 2px;
+  border: 1.5px solid #f1f1f1; /* 1px solid border with black color */
+}
+
+.dropdown-small {
+  width: 50px;
+}
+
+.dropdown-medium {
+  width: 150px;
+}
+
+.dropdown-large {
+  width: 250px;
+}
