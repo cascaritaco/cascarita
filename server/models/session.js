@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "league_id",
         targetKey: "id",
       });
+      Session.hasMany(models.League, { foreignKey: "league_id" });
     }
   }
   Session.init(

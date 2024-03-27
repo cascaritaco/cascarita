@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       is_active: {
         type: DataTypes.BOOLEAN,
+        allowNull: true,
         defaultValue: false,
       },
       group_id: {
