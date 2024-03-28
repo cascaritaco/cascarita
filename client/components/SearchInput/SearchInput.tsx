@@ -14,7 +14,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ search, onSearch }) => {
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key == "Enter") {
       onSearch(e.currentTarget.value);
-      console.log(search);
     }
   };
 
@@ -24,6 +23,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ search, onSearch }) => {
       <input
         type="text"
         placeholder="Search for..."
+        value={search}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
