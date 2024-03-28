@@ -1,0 +1,11 @@
+.dash {
+  display: flex;
+}
+
+/* Set background color for the area inside SideNav */
+.main {
+  flex-grow: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-left: 250px;
+}
