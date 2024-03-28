@@ -1,17 +1,5 @@
 /* SideNav.module.css */
 
-input {
-  margin-bottom: 8px;
-  font-weight: normal;
-  font-size: 14px;
-  background-color: #f1f1f1;
-  padding-left: 30px;
-  height: 40px;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #d3d3d3; /* Set the color of the bottom border */
-}
-
 /* Style for the side navigation bar */
 .sidenav {
   font-family: "Poppins";
@@ -66,19 +54,6 @@ input {
 /* Hover effect for the buttons */
 .sidenav button:hover {
   background-color: #f1f1f1; /* You can change the hover button background color */
-}
-
-.input-icons i {
-  position: absolute;
-  display: flex;
-  padding-left: 7px;
-  padding-top: 10px;
-  height: 50px;
-}
-
-.input-icons {
-  margin-bottom: 10px;
-  position: relative;
 }
 
 .logo {
