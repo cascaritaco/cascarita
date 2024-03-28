@@ -9,7 +9,14 @@ const About = () => {
   const [loading, setLoading] = useState(false);
 
   const handleTeamData = async () => {
-    createTeam(group_id, name, setLoading, setResponseData);
+    setLoading(true);
+    try {
+      const data = await createTeam(group_id, name);
+      setResponseData(data);
+    } catch (error) {
+      console.log("Error fetching data: ", error);
+    }
+    setLoading(false);
   };
 
   return (
@@ -31,19 +38,10 @@ const About = () => {
         />
       </label>
       <button onClick={handleTeamData} disabled={loading}>
-        Fetch Data
+        {" "}
+        Fetch Data{" "}
       </button>
-      {loading && <p>Loading...</p>}
-      {responseData && (
-        <div>
-          <h2>Response Data:</h2>
-          <p>id: {responseData.id}</p>
-          <p>groupId: {responseData.group_id}</p>
-          <p>name: {responseData.name}</p>
-          <p>created at: {responseData.created_at}</p>
-          <p>updated at: {responseData.updated_at}</p>
-        </div>
-      )}
+      {responseData && <p> Data has been sent! </p>}
     </div>
   );
 };

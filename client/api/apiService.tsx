@@ -1,12 +1,8 @@
 import { TeamResponse } from "./types";
-
-export const createTeam = async (
+const createTeam = async (
   group_id: string,
-  name: string,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setResponseData: React.Dispatch<React.SetStateAction<TeamResponse | null>>
-): Promise<void> => {
-  setLoading(true);
+  name: string
+): Promise<TeamResponse> => {
   try {
     const response = await fetch(`/api/team/create`, {
       method: "POST",
@@ -16,9 +12,11 @@ export const createTeam = async (
       },
     });
     const result = await response.json();
-    setResponseData(result.data);
+    return result.data;
   } catch (error) {
     console.error("Error fetching data:", error);
+    throw error;
   }
-  setLoading(false);
 };
+
+export { createTeam };
