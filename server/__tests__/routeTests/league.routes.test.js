@@ -42,6 +42,7 @@ describe("League Routes", () => {
     await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
     const response = await request(app)
+<<<<<<< HEAD
       .post("/league/")
       .send({ group_id: groupM.id, name: "Salinas" });
 
