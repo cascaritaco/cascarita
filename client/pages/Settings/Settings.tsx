@@ -1,11 +1,11 @@
 import Layout from "../../components/Layout/Layout";
 
-const Home = () => {
+const Settings = () => {
   return (
     <Layout>
-      <p>Home</p>
+      <p>Settings</p>
     </Layout>
   );
 };
 
-export default Home;
+export default Settings;
