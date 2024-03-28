@@ -1,8 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
-interface NavButtonProps {
-  label: string;
-}
+import { NavButtonProps } from "./types";
 
 const NavButton: React.FC<NavButtonProps> = ({ label }) => {
   const navigate = useNavigate();

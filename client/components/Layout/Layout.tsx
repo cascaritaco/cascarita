@@ -1,9 +1,6 @@
 import SideNav from "../SideNav/SideNav";
 import styles from "./Layout.module.css";
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
+import { LayoutProps } from "./types";
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
