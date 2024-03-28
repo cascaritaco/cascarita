@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: {
+          args: ["group_id"],
+          msg: "Division name must be unique within a Group",
+        },
       },
-      unique: {
-        args: ["group_id"],
-        msg: "Division name must be unique within a Group",
-    },
   },
     {
       sequelize,
