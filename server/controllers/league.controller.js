@@ -21,6 +21,19 @@ const LeagueController = function () {
     }
   };
 
+  var isNameUniqueWithinGroup = async function (groupId, leagueName) {
+    let leagueFound = await League.findOne({
+      where: {
+        group_id: groupId,
+        name: leagueName,
+      },
+    });
+
+    if (leagueFound) {
+      throw { field: "name", message: "name is not unique" };
+    }
+  };
+
   var createLeague = async function (req, res) {
     const newLeague = {
       group_id: req.body.group_id,
@@ -29,6 +42,8 @@ const LeagueController = function () {
     };
 
     try {
+      await isNameUniqueWithinGroup(newLeague.group_id, newLeague.name);
+
       await League.build(newLeague).validate();
       const result = await League.create(newLeague);
 
@@ -42,9 +57,7 @@ const LeagueController = function () {
         message: err.message,
       }));
 
-      return res
-        .status(400)
-        .json({ error: "Validation error", details: validationErrors });
+      return res.status(400).json({ error });
     }
   };
 
