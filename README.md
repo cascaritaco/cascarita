@@ -52,6 +52,15 @@ npm install
 
 ### Running Commands
 
+### 0. (Optional) Using Docker
+
+If you haven't done so, please download [Docker Desktop](https://www.docker.com/products/docker-desktop/), and start the Docker daemon, then run:
+
+```bash
+docker build -t cascarita .
+docker run -d -p 3000:3000 cascarita
+```
+
 #### 1. Start the Development Server
 
 To run the project locally, use the following command:
