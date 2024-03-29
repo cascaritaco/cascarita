@@ -1,17 +1,20 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
-import NavBar from "./components/NavBar/NavBar";
+import Users from "./pages/Users/Users";
+import Calendar from "./pages/Calendar/Calendar";
+import Settings from "./pages/Settings/Settings";
 
 const App = () => {
   return (
-    <>
-      <NavBar />
+    <div>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
-    </>
+    </div>
   );
 };
 
