@@ -17,34 +17,36 @@ const PlayerRoutes = require("./routes/player.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const Middlewares = require("./middlewares");
 const LeagueRoutes = require("./routes/league.routes");
+const Middlewares = require("./middlewares");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
 app.use(express.static(path.join(__dirname, "../dist")));
 app.use("/api", router);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
+app.use(Middlewares.errorHandler);
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(
   session({
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
-  })
+  }),
 );
-app.use(passport.initialize());
-app.use(passport.session());
-app.use("/group", GroupRoutes);
-app.use("/role", RoleRoutes);
-app.use("/user", UserRoutes);
-app.use("/player", PlayerRoutes);
-app.use("/season", SeasonRoutes);
-app.use(csrf());
 
-// Keep the error handler as the last middleware used by Express.
-app.use(Middlewares.errorHandler);
+router.use(passport.initialize());
+router.use(passport.session());
+router.use("/group", GroupRoutes);
+router.use("/role", RoleRoutes);
+router.use("/user", UserRoutes);
+router.use("/player", PlayerRoutes);
+router.use("/season", SeasonRoutes);
+router.use("/league", LeagueRoutes);
+router.use(csrf());
 
 function init() {
-  app.get("*", function (req, res) {
+  router.get("*", function (req, res) {
     res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
   });
 
