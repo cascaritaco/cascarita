@@ -13,8 +13,6 @@ const testDb = require("../../models");
 describe("League Routes", () => {
 
   beforeEach(async () => {
-    // Start a transaction before each test
-    //currentTransaction = await testDb.sequelize.transaction();
     await testDb.Group.sync();
     await testDb.League.sync();
   });
