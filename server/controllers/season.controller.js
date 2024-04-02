@@ -71,15 +71,15 @@ const SeasonController = {
    */
   async getSeason(req, res, next) {
     try {
-      const id = req.params.id;
-      if (id === undefined) {
+      const { id } = req.params;
+      if (!id || isNaN(id)) {
         res.status(400);
-        throw new Error("expected season id in request parameters.");
+        throw new Error("expected season id in request parameters");
       }
       const season = await Season.findByPk(id);
-      if (season === null) {
+      if (!season) {
         res.status(404);
-        throw new Error(`no such season with id ${id}.`);
+        throw new Error(`no such season with id ${id}`);
       }
       res.json(season);
     } catch (error) {
@@ -135,15 +135,14 @@ const SeasonController = {
   async updateSeason(req, res, next) {
     const { id } = req.params;
     try {
-      if (id === undefined) {
+      if (!id || isNaN(id)) {
         res.status(400);
-        throw new Error(`expected id path parameter.`);
+        throw new Error("expected season id in request parameters");
       }
-
       const season = await Season.findByPk(id);
-      if (season === null) {
+      if (!season) {
         res.status(404);
-        throw new Error(`no such season with id ${id}.`);
+        throw new Error(`no such season with id ${id}`);
       }
 
       const updatedSeasonData = await season.update(req.body);
@@ -162,23 +161,25 @@ const SeasonController = {
    * call.
    *
    * @returns {Promise<any>} An empty promise. If the season is successfully
-   * deleted, a 204 status code is sent in the response body. If the season ID
-   * is missing or malformed, an error message with a 400 status code is sent
-   * in the response body. Nothing happens when attempting to delete a season
-   * that does not exist.
+   * deleted, a 204 status code is sent in the response body. Responds with a
+   * 400 if missing the season `id` and with a 404 if no season exists with
+   * the `id` sent.
    */
   async deleteSeason(req, res, next) {
     const { id } = req.params;
     try {
-      if (id === undefined) {
+      if (!id || isNaN(id)) {
         res.status(400);
-        throw new Error(`expected id path parameter.`);
+        throw new Error("expected season id in request parameters");
       }
-      Season.destroy({
-        where: {
-          id: id,
-        },
-      });
+
+      const season = await Season.findByPk(id);
+      if (!season) {
+        res.status(404);
+        throw new Error(`no such season with id ${id}`);
+      }
+
+      await season.destroy();
       res.status(204).json();
     } catch (error) {
       next(error);
