@@ -3,13 +3,14 @@
 const request = require("supertest");
 const express = require("express");
 const LeagueRoutes = require("../../routes/league.routes");
+const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
 app.use("/league", LeagueRoutes);
+app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
 describe("League Routes", () => {
-  let currentTransaction;
 
   beforeEach(async () => {
     // Start a transaction before each test
@@ -22,7 +23,7 @@ describe("League Routes", () => {
     const groupM = await testDb.Group.create({ name: "Salinas" });
 
     const response = await request(app)
-      .post("/league/create")
+      .post("/league/")
       .send({ group_id: groupM.id, name: "SOMOS" });
 
     expect(response.status).toBe(201);
@@ -33,23 +34,26 @@ describe("League Routes", () => {
   });
 
   it("should not create if name is not unique POST /create", async () => {
+
+    let next = jest.fn();
+
     const groupM = await testDb.Group.create({ name: "Saul's Group" });
 
     await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
     const response = await request(app)
-      .post("/league/create")
+      .post("/league/")
       .send({ group_id: groupM.id, name: "Salinas" });
 
-    expect(response.status).toBe(400);
-    // expect(response.body).toContain({
-    //   error: { field: "name", message: "name is not unique" },
-    // });
+    expect(response.status).toBe(500);
+    expect(response.body).toMatchObject({
+      message: "name is not unique",
+    });
   });
 
   afterEach(async () => {
-    await testDb.Group.destroy({ where: {} });
     await testDb.League.destroy({ where: {} });
+    await testDb.Group.destroy({ where: {} });
   });
 
   afterAll(async () => {
