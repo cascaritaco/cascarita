@@ -14,12 +14,8 @@ const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
-const SeasonRoutes = require("./routes/season.routes");
-const Middlewares = require("./middlewares");
 const LeagueRoutes = require("./routes/league.routes");
-
 const Middlewares = require("./middlewares");
-const LeagueRoutes = require("./routes/league.routes");
 
 const app = express();
 app.set("port", process.env.PORT || 80);
@@ -43,7 +39,6 @@ router.use("/group", GroupRoutes);
 router.use("/role", RoleRoutes);
 router.use("/user", UserRoutes);
 router.use("/player", PlayerRoutes);
-router.use("/season", SeasonRoutes);
 router.use("/league", LeagueRoutes);
 router.use(csrf());
 
