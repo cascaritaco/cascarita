@@ -189,6 +189,7 @@ const SeasonController = {
         res.status(404);
         throw new Error(`no season found for it ${id}`);
       }
+
       await season.destroy();
       res.status(204).json();
     } catch (error) {
