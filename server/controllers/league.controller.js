@@ -34,7 +34,7 @@ const LeagueController = function () {
     }
   };
 
-  var createLeague = async function (req, res) {
+  var createLeague = async function (req, res, next) {
     const newLeague = {
       group_id: req.body.group_id,
       name: req.body.name,
@@ -52,12 +52,14 @@ const LeagueController = function () {
         data: result,
       });
     } catch (error) {
-      const validationErrors = error.errors?.map((err) => ({
-        field: err.path,
-        message: err.message,
-      }));
-
-      return res.status(400).json({ error });
+      // const validationErrors = error.errors?.map((err) => ({
+      //   field: err.path,
+      //   message: err.message,
+      // }
+      // ));
+      
+      // return res.status(500).json({ error });
+      next(error);
     }
   };
 

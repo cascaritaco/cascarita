@@ -24,7 +24,6 @@ const Middlewares = {
       message: err.message,
       stack: process.env.NODE_ENV === "production" ? "[hidden]" : err.stack,
     };
-    console.error("Error: ", responseBody);
     res.json(responseBody);
   },
 }
