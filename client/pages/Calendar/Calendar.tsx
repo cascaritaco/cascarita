@@ -1,11 +1,11 @@
 import Layout from "../../components/Layout/Layout";
 
-const Home = () => {
+const Calendar = () => {
   return (
     <Layout>
-      <p>Home</p>
+      <p>Calendar</p>
     </Layout>
   );
 };
 
-export default Home;
+export default Calendar;
