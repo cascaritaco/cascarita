@@ -54,6 +54,7 @@ describe("League Routes", () => {
   afterEach(async () => {
     await testDb.League.destroy({ where: {} });
     await testDb.Group.destroy({ where: {} });
+
   });
 
   afterAll(async () => {
