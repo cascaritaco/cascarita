@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Season.belongsTo(models.Group, { foreignKey: "group_id" });
+      Season.belongsTo(models.Group, {
+        foreignKey: "group_id",
+        targetKey: "id",
+      });
     }
   }
   Season.init(
