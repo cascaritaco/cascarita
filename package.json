@@ -29,6 +29,7 @@
     "html-webpack-plugin": "^5.5.4",
     "jest-transform-css": "^6.0.1",
     "mysql2": "^3.6.5",
+    "node-mocks-http": "^1.14.1",
     "nodemon": "^3.0.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
