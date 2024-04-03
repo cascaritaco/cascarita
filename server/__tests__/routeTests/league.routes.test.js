@@ -77,6 +77,23 @@ describe("League Routes", () => {
     });
   });
 
+  it("should create a league with the same name from a different group POST /create", async () => {
+    const groupUno = await testDb.Group.create({ name: "Watsonville Corp." });
+    const groupDos = await testDb.Group.create({ name: "Salinas Inc." });
+
+    await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
+
+    const response = await request(app)
+      .post("/league/")
+      .send({ group_id: groupDos.id, name: "Summer 2024" });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({
+      success: true,
+      data: expect.objectContaining({ name: "Summer 2024" }),
+    });
+  });
+
   // ------------------- Update Tests ----------------
 
   it("should update league with valid ID and input PATCH /patch", async () => {
