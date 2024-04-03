@@ -118,6 +118,9 @@ describe("League Routes", () => {
       .send({ name: "Joe Mo Mah Inc." });
 
     expect(response.status).toBe(500);
+    expect(response.body).toMatchObject({
+      message: "League with given ID was not found",
+    });
   });
 
   it("should not update if the new name is already used in the group", async () => {
