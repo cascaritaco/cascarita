@@ -15,7 +15,6 @@ const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
 const LeagueRoutes = require("./routes/league.routes");
-
 const Middlewares = require("./middlewares");
 
 const app = express();
