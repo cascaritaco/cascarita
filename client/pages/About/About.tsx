@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createTeam } from "./../../api/apiService";
+import { createTeam } from "../../api/service";
 import { TeamResponse } from "./../../api/types";
 
 const About = () => {
