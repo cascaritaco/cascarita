@@ -67,7 +67,7 @@ const LeagueController = function () {
       });
 
       if (!currentLeague) {
-        next(error);
+        throw { field: "name", message: "League with given ID was not found" };
       }
 
       currentLeague.group_id = req.body.group_id || currentLeague.group_id;
