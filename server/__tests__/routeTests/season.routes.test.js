@@ -3,15 +3,14 @@
 const request = require("supertest");
 const express = require("express");
 
-const { Group, Season, sequelize } = require("../../models");
+const { errorHandler } = require("../../middlewares.js");
 const SeasonRoutes = require("../../routes/season.routes");
-const Middlewares = require("../../middlewares.js");
+const { Group, Season, sequelize } = require("../../models");
 
 const app = express();
-
 app.use(express.json());
 app.use("/season", SeasonRoutes);
-app.use(Middlewares.errorHandler);
+app.use(errorHandler);
 
 describe("Season routes", () => {
   beforeEach(async () => {
@@ -28,7 +27,7 @@ describe("Season routes", () => {
     await sequelize.close();
   });
 
-  describe("Get all seasons", () => {
+  describe("GET /season", () => {
     it("Should return list of seasons", async () => {
       const group = await Group.create({ name: "SOMOS" });
       await Season.bulkCreate([
@@ -94,7 +93,7 @@ describe("Season routes", () => {
     });
   });
 
-  describe("Get a single season", () => {
+  describe("GET /season/:id", () => {
     it("Should return a season", async () => {
       const group = await Group.create({ name: "Salinas" });
       const season = await Season.create({
@@ -120,7 +119,7 @@ describe("Season routes", () => {
     });
   });
 
-  describe("Create a season", () => {
+  describe("POST /season", () => {
     it("Should create a season", async () => {
       const group = await Group.create({ name: "Salinas" });
       const form = {
@@ -153,7 +152,7 @@ describe("Season routes", () => {
     });
   });
 
-  describe("Update a season", () => {
+  describe("PATCH /season/:id", () => {
     it("Should fail if missing id", async () => {
       const group = await Group.create({ name: "Salinas" });
       const season = await Season.create({
@@ -176,7 +175,11 @@ describe("Season routes", () => {
 
     it("Should fail if season not found", async () => {
       const id = 23;
-      const response = await request(app).patch(`/season/update/${id}`);
+      const form = {
+        name: "Spr 24",
+      };
+
+      const response = await request(app).patch(`/season/update/${id}`).send(form);
       expect(response.statusCode).toBe(404);
       expect(response.body).toMatchObject({
         message: `no such season with id ${id}`,
@@ -184,7 +187,7 @@ describe("Season routes", () => {
     });
   });
 
-  describe("Delete a season", () => {
+  describe("DELETE /season/:id", () => {
     it("Should delete a season", async () => {
       const group = await Group.create({ name: "Salinas" });
       const season = await Season.create({
