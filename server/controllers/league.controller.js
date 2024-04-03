@@ -1,9 +1,12 @@
 "use strict";
+
 const { League } = require("../models");
 
 const LeagueController = function () {
-  var getLeagueByGroupId = async function (req, res) {
-    const groupId = req.body.group_id;
+  var getLeagueByGroupId = async function (req, res, next) {
+    const groupId = req.params['id'];
+
+    console.log(groupId);
 
     try {
       const result = await League.findAll({
@@ -17,7 +20,7 @@ const LeagueController = function () {
         data: result,
       });
     } catch (error) {
-      return res.status(500).json({ error: "Failed to fetch leagues" });
+      next(error);
     }
   };
 
@@ -52,58 +55,52 @@ const LeagueController = function () {
         data: result,
       });
     } catch (error) {
-      // const validationErrors = error.errors?.map((err) => ({
-      //   field: err.path,
-      //   message: err.message,
-      // }
-      // ));
-      
-      // return res.status(500).json({ error });
       next(error);
     }
   };
 
-  var updateLeague = async function (req, res) {
+  var updateLeague = async function (req, res, next) {
     try {
       let currentLeague = await League.findOne({
         where: {
-          id: req.body.id,
+          id: req.params['id'],
         },
       });
 
       if (!currentLeague) {
-        return res.status(500).json({ error: "No League Found" });
+        next(error);
       }
 
       currentLeague.group_id = req.body.group_id || currentLeague.group_id;
       currentLeague.name = req.body.name || currentLeague.name;
-      currentLeague.description =
-        req.body.description || currentLeague.description;
+      currentLeague.description = req.body.description || currentLeague.description;
+
+      await isNameUniqueWithinGroup(currentLeague.group_id, currentLeague.name);
 
       await currentLeague.save();
 
       return res.status(200).json({ success: true, data: currentLeague });
     } catch (error) {
-      return res.status(500).json({ error: "Failed to update League" });
+      next(error);
     }
   };
 
-  var deleteLeague = async function (req, res) {
+  var deleteLeague = async function (req, res, next) {
     try {
       let deletedLeague = await League.destroy({
         where: {
-          id: req.body.id,
+          id: req.params['id'],
         },
       });
 
       if (deletedLeague === 0) {
         return res
-          .status(404)
+          .status(500)
           .json({ error: "No league found with the given ID" });
       }
-      return res.status(200).json();
+      return res.status(200).json({ success: true, message: "Delete league successfully" });
     } catch (error) {
-      return res.status(500).json({ error: "Failed to delete league" });
+      next(error)
     }
   };
 
