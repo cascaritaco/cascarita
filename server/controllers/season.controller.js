@@ -162,23 +162,16 @@ const SeasonController = {
    *
    * @returns {Promise<any>} An empty promise. If the season is successfully
    * deleted, a 204 status code is sent in the response body. Responds with a
-   * 400 if missing the season `id` and with a 404 if no season exists with
-   * the `id` sent.
+   * 404 if no season exists with the `id` sent.
    */
   async deleteSeason(req, res, next) {
     const { id } = req.params;
     try {
-      if (!id || isNaN(id)) {
-        res.status(400);
-        throw new Error("expected season id in request parameters");
-      }
-
-      const season = await Season.findByPk(id);
-      if (!season) {
+      let season = await Season.findByPk(id);
+      if (season === null) {
         res.status(404);
-        throw new Error(`no such season with id ${id}`);
+        throw new Error(`no season found for it ${id}`);
       }
-
       await season.destroy();
       res.status(204).json();
     } catch (error) {
