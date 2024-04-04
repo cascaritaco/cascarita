@@ -85,7 +85,9 @@ const SeasonController = {
         throw new Error("season id must be an integer");
       }
 
-      const season = await Season.findByPk(id);
+      const season = await Season.findByPk(id, {
+        include: Group,
+      });
       if (!season) {
         res.status(404);
         throw new Error(`no season found with id '${id}'`);
