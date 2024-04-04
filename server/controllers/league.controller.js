@@ -40,7 +40,6 @@ const LeagueController = function () {
     }
   };
 
-  // TODO: Refactor code (Donzo)
   var createLeague = async function (req, res, next) {
     const { group_id, name, description } = req.body;  
     const newLeague = { group_id, name, description }; 
@@ -72,7 +71,6 @@ const LeagueController = function () {
         throw new Error("League with given ID was not found");
       }
 
-      // TODO: user should not be able to update the group id (Donzo)
       currentLeague.name = req.body.name || currentLeague.name;
       currentLeague.description = req.body.description || currentLeague.description;
 
@@ -101,7 +99,6 @@ const LeagueController = function () {
         throw new Error("No league found with the given ID");
        }
 
-      // TODO: for deleted it should be '204' (Donzo)
       return res.status(204).json({ success: true, message: "Delete league successfully" });
     } catch (error) {
       console.log("delete in error catch")
