@@ -8,7 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      DB_DATABASE: test_suite_db
+      DB_USER: root
+      DB_PASSWORD: root
+    
     steps:
+
       - name: Checkout source code
         uses: actions/checkout@v2
 
@@ -22,6 +29,11 @@ jobs:
 
       - name: Eslint Checks
         run: npm run eslint
+
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
 
       - name: Jest Tests
         run: npm run test

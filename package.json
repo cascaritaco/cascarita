@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "start": "node server/app.js",
+    "start": "nodemon server/app.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "coverage": "jest --coverage",
     "server": "nodemon server/app.js",
