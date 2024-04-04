@@ -1,6 +1,7 @@
 "use strict";
 
-const { Season } = require("../models");
+const { Op, Sequelize } = require("sequelize");
+const { Group, Season } = require("../models");
 const { NextFunction } = require("express");
 
 /**
@@ -15,42 +16,48 @@ const SeasonController = {
    * Retrieves all the seasons in the database. Results may be filtered using
    * query string parameters.
    *
+   * If no results are found, an empty array is returned. Accepted query
+   * parameters are:
+   *    - `name`: the name (or parts of a name) of a season.
+   *    - `group`: the id or name of a group.
+   *    - `is_active`: if a season is active.
+   * Query parameters may be in any order. Unknown parameters are ignored.
+   *
    * @param {Request} req The Express request object. An optional query string
    * is accepted to narrow search results.
    * @param {Response} res The Express response object.
    * @param {NextFunction} next The Express next function to call.
    *
-   * @returns {Promise<any>} A promise that resolves to a list of seasons. If
-   * no results are found, an empty array is returned. Unknown query parameters
-   * are ignored.
+   * @returns {Promise<any>} A promise that resolves to a list of seasons.
    */
   async getAllSeasons(req, res, next) {
     try {
       const { query } = req;
       const whereClause = {};
 
-      for (const key in query) {
-        if (Season.rawAttributes[key]) {
-          const dataType = Season.rawAttributes[key].type.constructor.key;
-          let parsedValue = query[key];
-
-          if (dataType === "INTEGER" || dataType === "BIGINT") {
-            parsedValue = parseInt(parsedValue, 10);
-          } else if (
-            dataType === "FLOAT" ||
-            dataType === "DOUBLE" ||
-            dataType === "REAL"
-          ) {
-            parsedValue = parseFloat(parsedValue);
-          } else if (dataType === "BOOLEAN") {
-            parsedValue = parsedValue.toLowerCase() === "true";
-          }
-
-          whereClause[key] = parsedValue;
+      if (query.name) {
+        whereClause["$Season.name$"] = {
+          [Op.substring]: query.name.toLowerCase().trim(),
+        };
+      }
+      if (query.group) {
+        const group = parseInt(query.group, 10);
+        if (isNaN(group)) {
+          whereClause["$Group.name$"] = {
+            [Op.substring]: query.group.toLowerCase().trim(),
+          };
+        } else {
+          whereClause["$Group.id$"] = group;
         }
       }
+      if (query.is_active) {
+        whereClause["is_active"] = query.is_active.toLowerCase() === "true";
+      }
 
-      const seasons = await Season.findAll({ where: whereClause });
+      const seasons = await Season.findAll({
+        where: whereClause,
+        include: Group,
+      });
       return res.json(seasons);
     } catch (error) {
       next(error);

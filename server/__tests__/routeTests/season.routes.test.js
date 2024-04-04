@@ -64,17 +64,17 @@ describe("Season routes", () => {
       const groupB = await Group.create({ name: "SOMOS" });
       await Season.bulkCreate([
         {
-          name: "Spring 2024",
+          name: "Winter 2024",
           start_date: "2024-03-15 00:00:00",
           end_date: "2025-06-01 11:59:00",
           is_active: true,
-          group_id: groupA.id,
+          group_id: groupB.id,
         },
         {
           name: "Winter 2024",
           start_date: "2024-11-01 00:00:00",
           end_date: "2025-03-14 11:59:00",
-          is_active: false,
+          is_active: true,
           group_id: groupB.id,
         },
         {
@@ -82,11 +82,11 @@ describe("Season routes", () => {
           start_date: "2025-07-01 00:00:00",
           end_date: "2025-10-31 11:59:00",
           is_active: false,
-          group_id: groupB.id,
+          group_id: groupA.id,
         },
       ]);
 
-      const query = `is_active=${false}&group_id=${groupB.id}`;
+      const query = `name=winter&is_active=true&group=${groupB.id}`;
       const response = await request(app).get(`/season?${query}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveLength(2);
