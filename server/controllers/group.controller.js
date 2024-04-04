@@ -25,8 +25,40 @@ const GroupController = function () {
     }
   };
 
+  var updateGroup = async function (req, res, next) {
+    try {
+      let currentGroup = await Group.findOne({
+        where: {
+          id: req.params['id'],
+        },
+      });
+
+      if (!currentGroup) {
+        throw { field: "name", message: "Group with given ID was not found" };
+      }
+
+  
+      Object.keys(req.body).forEach(key => {
+        currentGroup[key] = req.body[key] ? req.body[key] : currentGroup[key];
+      });
+  
+      await currentGroup.validate();
+      await currentGroup.save();
+  
+      return res.status(200).json({
+        success: true,
+        data: currentGroup,
+      });
+
+
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     createGroup,
+    updateGroup,
   };
 };
 

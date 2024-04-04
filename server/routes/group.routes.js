@@ -5,5 +5,6 @@ const router = express.Router();
 const GroupController = require("../controllers/group.controller");
 
 router.post("/", GroupController.createGroup);
+router.patch("/:id", GroupController.updateGroup);
 
 module.exports = router;
