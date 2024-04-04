@@ -23,12 +23,16 @@ const Middlewares = {
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
     res.status(statusCode);
 
+    console.log("In middleware");
+
+    console.log(err.message);
+
     const responseBody = {
       message: err.message,
       stack: process.env.NODE_ENV === "production" ? "[hidden]" : err.stack,
     };
 
-    res.json(responseBody);
+    return res.json(responseBody);
   },
 };
 
