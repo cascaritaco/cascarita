@@ -2,11 +2,16 @@
 const { Group } = require("../models");
 
 const GroupController = function () {
-  var createGroup = async function (req, res) {
+  var createGroup = async function (req, res, next) {
     const newGroup = {
       name: req.body.name,
+      street_address: req.body.street_address,
+      city: req.body.city,
+      state: req.body.state,
+      zip_code: req.body.zip_code,
+      logo_url: req.body.logo_url,
     };
-
+    
     try {
       await Group.build(newGroup).validate();
       const result = await Group.create(newGroup);
@@ -16,14 +21,7 @@ const GroupController = function () {
         data: result,
       });
     } catch (error) {
-      const validationErrors = error.errors?.map((err) => ({
-        field: err.path,
-        message: err.message,
-      }));
-
-      return res
-        .status(400)
-        .json({ error: "Validation error", details: validationErrors });
+        next(error);
     }
   };
 
