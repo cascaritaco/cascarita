@@ -145,6 +145,11 @@ const SeasonController = {
         throw new Error(`no such season with id ${id}`);
       }
 
+      if (req.body.group_id) {
+        res.status(400);
+        throw new Error("cannot update the 'group_id' field");
+      }
+
       const updatedSeasonData = await season.update(req.body);
       return res.json(updatedSeasonData);
     } catch (error) {
