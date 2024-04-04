@@ -2,6 +2,31 @@
 const { Group } = require("../models");
 
 const GroupController = function () {
+
+  var _getGroup = async function(id){
+    let currentGroup = await Group.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!currentGroup) {
+      throw { field: "name", message: "Group with given ID was not found" };
+    } else return currentGroup;
+  }
+
+  var getGroupById = async function (req, res, next) {
+    try {
+      return res.status(200).json({
+        success: true,
+        data: await _getGroup(req.params['id']),
+      });
+
+    } catch (error) {
+      next(error);
+    }
+  };
+
   var createGroup = async function (req, res, next) {
     const newGroup = {
       name: req.body.name,
@@ -27,17 +52,8 @@ const GroupController = function () {
 
   var updateGroup = async function (req, res, next) {
     try {
-      let currentGroup = await Group.findOne({
-        where: {
-          id: req.params['id'],
-        },
-      });
+      let currentGroup = await _getGroup(req.params['id']);
 
-      if (!currentGroup) {
-        throw { field: "name", message: "Group with given ID was not found" };
-      }
-
-  
       Object.keys(req.body).forEach(key => {
         currentGroup[key] = req.body[key] ? req.body[key] : currentGroup[key];
       });
@@ -57,6 +73,7 @@ const GroupController = function () {
   };
 
   return {
+    getGroupById,
     createGroup,
     updateGroup,
   };
