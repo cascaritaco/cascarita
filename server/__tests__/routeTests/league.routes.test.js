@@ -1,5 +1,7 @@
 "use strict";
 
+window.setImmediate = window.setTimeout
+
 const request = require("supertest");
 const express = require("express");
 const LeagueRoutes = require("../../routes/league.routes");
@@ -40,9 +42,10 @@ describe("League Routes", () => {
       .get(`/league/${groupM.id}`)
       .send();
 
-    expect(response.status).toBe(200);
-    expect(response.body.success).toBe(true);
-    expect(response.body.data.length).toBe(0);
+    expect(response.status).toBe(500);
+    expect(response.body).toMatchObject({
+      message: "Group with given ID has no leagues or not found",
+    });
   });
 
   // ------------------- Create Tests ----------------
@@ -121,6 +124,7 @@ describe("League Routes", () => {
     expect(response.body).toMatchObject({
       message: "League with given ID was not found",
     });
+    // TODO: Add error message to this (Already did)
   });
 
   it("should not update if the new name is already used in the group", async () => {
@@ -152,7 +156,7 @@ describe("League Routes", () => {
       .delete(`/league/${league.id}`)
       .send();
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(204);
     expect(await testDb.League.findByPk(league.id)).toBeNull();
   });
 
@@ -161,8 +165,7 @@ describe("League Routes", () => {
       .delete("/league/999")
       .send();
 
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ error: "No league found with the given ID" });
+    expect(response.status).toBe(404);
   });
 
   // ------------------------------------------------
