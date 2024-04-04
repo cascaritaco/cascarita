@@ -59,28 +59,31 @@ const SeasonController = {
   /**
    * Retrieves a season by its `id`.
    *
+   * The `id` must be an integer, otherwise will respond with a status code of
+   * 400. Reponds with a status code of 404 if no season is found with `id`.
+   *
    * @param {Request} req The Express request object. Expects `id` to be in the
    * request parameters.
    * @param {Response} res The Express response object.
    * @param {NextFunction} next The Express next function to call.
    *
-   * @returns {Promise<any>} A promise that resolves to a single season. If a
-   * malformed `id` is provided, a status code of 400 will be returned with an
-   * error message. Returns an error and a status code of 404 if no season
-   * exists with the `id` specified.
+   * @returns {Promise<any>} A promise that resolves to a single season with a
+   * status code of 200.
    */
   async getSeason(req, res, next) {
     try {
       const { id } = req.params;
-      if (!id || isNaN(id)) {
+      if (isNaN(id)) {
         res.status(400);
-        throw new Error("expected season id in request parameters");
+        throw new Error("season id must be an integer");
       }
+
       const season = await Season.findByPk(id);
       if (!season) {
         res.status(404);
-        throw new Error(`no such season with id ${id}`);
+        throw new Error(`no season found with id '${id}'`);
       }
+
       res.json(season);
     } catch (error) {
       next(error);

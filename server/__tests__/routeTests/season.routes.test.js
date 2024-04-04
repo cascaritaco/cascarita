@@ -109,12 +109,20 @@ describe("Season routes", () => {
       expect(response.body).toMatchObject({ name: season.name });
     });
 
+    it("Should fail if id is non-integer", async () => {
+      const response = await request(app).get("/season/foo");
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toMatchObject({
+        message: "season id must be an integer",
+      });
+    });
+
     it("Should fail if season not found", async () => {
       const id = 23;
       const response = await request(app).get(`/season/${id}`);
       expect(response.statusCode).toBe(404);
       expect(response.body).toMatchObject({
-        message: `no such season with id ${id}`,
+        message: `no season found with id '${id}'`,
       });
     });
   });
