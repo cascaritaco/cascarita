@@ -54,6 +54,22 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Season",
+      hooks: {
+        beforeCreate: (season, _options) => {
+          const now = new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/g, "");
+          season.dataValues.created_at = now;
+          season.dataValues.updated_at = now;
+        },
+        beforeUpdate: (season, _options) => {
+          season.dataValues.updated_at = new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/g, "");
+        },
+      },
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
