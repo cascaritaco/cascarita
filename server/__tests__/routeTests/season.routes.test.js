@@ -138,7 +138,7 @@ describe("Season routes", () => {
         group_id: group.id,
       };
 
-      const response = await request(app).post("/season/create").send(form);
+      const response = await request(app).post("/season").send(form);
       expect(response.statusCode).toBe(201);
       expect(response.body).toMatchObject({ name: form.name });
     });
@@ -152,7 +152,7 @@ describe("Season routes", () => {
         group_id: group.id,
       };
 
-      const response = await request(app).post("/season/create").send(form);
+      const response = await request(app).post("/season").send(form);
       expect(response.statusCode).toBe(400);
       expect(response.body).toMatchObject({
         message: "notNull Violation: Season.start_date cannot be null",
@@ -174,9 +174,7 @@ describe("Season routes", () => {
         name: "Spr 24",
       };
 
-      const response = await request(app)
-        .patch(`/season/update/${season.id}`)
-        .send(form);
+      const response = await request(app).patch(`/season/${season.id}`).send(form);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({ name: form.name });
     });
@@ -187,7 +185,7 @@ describe("Season routes", () => {
         name: "Spr 24",
       };
 
-      const response = await request(app).patch(`/season/update/${id}`).send(form);
+      const response = await request(app).patch(`/season/${id}`).send(form);
       expect(response.statusCode).toBe(404);
       expect(response.body).toMatchObject({
         message: `no such season with id ${id}`,
@@ -205,7 +203,7 @@ describe("Season routes", () => {
         is_active: true,
         group_id: group.id,
       });
-      const response = await request(app).delete(`/season/delete/${season.id}`);
+      const response = await request(app).delete(`/season/${season.id}`);
       expect(response.statusCode).toBe(204);
     });
   });
