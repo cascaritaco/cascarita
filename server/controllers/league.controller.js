@@ -23,7 +23,6 @@ const LeagueController = function () {
       });
     } catch (error) {
       next(error);
-      console.log("in error stuffs for get");
     }
   };
 
@@ -55,7 +54,6 @@ const LeagueController = function () {
       });
     } catch (error) {
       next(error);
-      console.log("in error stuffs for create");
     }
   };
 
@@ -81,7 +79,6 @@ const LeagueController = function () {
       return res.status(200).json({ success: true, data: currentLeague });
     } catch (error) {
       next(error);
-      console.log("in error stuffs for update");
     }
   };
 
@@ -93,17 +90,13 @@ const LeagueController = function () {
         },
       });
 
-      console.log(deletedLeague);
-
       if (deletedLeague === 0) {
         throw new Error("No league found with the given ID");
        }
 
       return res.status(204).json({ success: true, message: "Delete league successfully" });
     } catch (error) {
-      console.log("delete in error catch")
       next(error);
-      console.log("in error stuffs for delete");
     }
   };
 

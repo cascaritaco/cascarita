@@ -124,7 +124,6 @@ describe("League Routes", () => {
     expect(response.body).toMatchObject({
       message: "League with given ID was not found",
     });
-    // TODO: Add error message to this (Already did)
   });
 
   it("should not update if the new name is already used in the group", async () => {
