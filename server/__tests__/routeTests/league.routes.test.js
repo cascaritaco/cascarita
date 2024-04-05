@@ -12,6 +12,19 @@ app.use("/league", LeagueRoutes);
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
+const createDummyGroup = async function(groupName){
+  let newGroupData = {
+    name: groupName,
+    street_address: "123 Main Street",
+    city: "Sample City",
+    state: "CA",
+    zip_code: "12345",
+    logo_url: "https://example.com/logo",
+  }
+  const sampleGroup = await testDb.Group.create(newGroupData);
+  return sampleGroup;
+}
+
 describe("League Routes", () => {
 
   beforeEach(async () => {
@@ -22,7 +35,7 @@ describe("League Routes", () => {
   // ------------------- Get League by Group ID Tests ----------------
 
   it("should handle GET /getLeagueByGroupId", async () => {
-    const groupM = await testDb.Group.create({ name: "Group Uno" });
+    const groupM = await createDummyGroup("Group Uno");
 
     await testDb.League.create({ group_id: groupM.id, name: "Leeroy League" });
     await testDb.League.create({ group_id: groupM.id, name: "Martin Martians" });
@@ -36,7 +49,7 @@ describe("League Routes", () => {
   });
 
   it("should not get any leagues with GET /getLeagueByGroupId", async () => {
-    const groupM = await testDb.Group.create({ name: "Group Uno" });
+    const groupM = await createDummyGroup("Group Uno");
 
     const response = await request(app)
       .get(`/league/${groupM.id}`)
@@ -51,7 +64,7 @@ describe("League Routes", () => {
   // ------------------- Create Tests ----------------
 
   it("should handle POST /create", async () => {
-    const groupM = await testDb.Group.create({ name: "Salinas" });
+    const groupM = await createDummyGroup("Salinas");
 
     const response = await request(app)
       .post("/league/")
@@ -65,7 +78,7 @@ describe("League Routes", () => {
   });
 
   it("should not create if name is not unique POST /create", async () => {
-    const groupM = await testDb.Group.create({ name: "Saul's Group" });
+    const groupM = await createDummyGroup("Saul's Group");
 
     await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
@@ -80,8 +93,8 @@ describe("League Routes", () => {
   });
 
   it("should create a league with the same name from a different group POST /create", async () => {
-    const groupUno = await testDb.Group.create({ name: "Watsonville Corp." });
-    const groupDos = await testDb.Group.create({ name: "Salinas Inc." });
+    const groupUno = await createDummyGroup("Watsonville Corp.");
+    const groupDos = await createDummyGroup("Salinas Inc.");
 
     await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
 
@@ -99,7 +112,7 @@ describe("League Routes", () => {
   // ------------------- Update Tests ----------------
 
   it("should update league with valid ID and input PATCH /patch", async () => {
-    const groupM = await testDb.Group.create({ name: "Salinas" });
+    const groupM = await createDummyGroup("Salinas");
     const league = await testDb.League.create({ group_id: groupM.id, name: "SOMOS" });
 
     const updatedLeagueName = "Sopa Marucha";
@@ -127,7 +140,7 @@ describe("League Routes", () => {
   });
 
   it("should not update if the new name is already used in the group", async () => {
-    const groupM = await testDb.Group.create({ name: "Salinas" });
+    const groupM = await createDummyGroup("Salinas");
   
     const league1 = await testDb.League.create({ group_id: groupM.id, name: "Shrek League" });
     const league2 = await testDb.League.create({ group_id: groupM.id, name: "Donkey League" });
@@ -148,7 +161,7 @@ describe("League Routes", () => {
   // ------------------- Delete Tests ----------------
 
   it("should delete a league with a valid league ID DELETE /delete", async () => {
-    const groupM = await testDb.Group.create({ name: "Salinas" });
+    const groupM = await createDummyGroup("Salinas");
     const league = await testDb.League.create({ group_id: groupM.id, name: "SOMOS", });
 
     const response = await request(app)
