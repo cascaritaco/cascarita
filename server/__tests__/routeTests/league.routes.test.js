@@ -126,25 +126,19 @@ describe("League Routes", () => {
 
   it("should not update if the new name is already used in the group", async () => {
     const groupM = await testDb.Group.create({ name: "Salinas" });
-
-    const league1 = await testDb.League.create({
-      group_id: groupM.id,
-      name: "Shrek League",
-    });
-    const league2 = await testDb.League.create({
-      group_id: groupM.id,
-      name: "Donkey League",
-    });
-
+  
+    const league1 = await testDb.League.create({ group_id: groupM.id, name: "Shrek League" });
+    const league2 = await testDb.League.create({ group_id: groupM.id, name: "Donkey League" });
+  
     const response = await request(app)
       .patch(`/league/${league2.id}`)
       .send({ name: "Shrek League" });
-
+  
     expect(response.status).toBe(500);
     expect(response.body).toMatchObject({
-      message: "name is not unique",
+      message: "name is not unique"
     });
-
+  
     const updatedLeague2 = await testDb.League.findByPk(league2.id);
     expect(updatedLeague2.name).toBe("Donkey League");
   });
