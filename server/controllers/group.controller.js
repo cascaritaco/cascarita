@@ -11,7 +11,7 @@ const GroupController = function () {
     });
 
     if (!currentGroup) {
-      throw { field: "name", message: "Group with given ID was not found" };
+      throw new Error( "Group with given ID was not found" );
     } else return currentGroup;
   }
 
@@ -52,7 +52,7 @@ const GroupController = function () {
 
   var updateGroup = async function (req, res, next) {
     try {
-      let currentGroup = await _getGroup(req.params['id']);
+      let currentGroup = await _getGroup(req.params['id'])
 
       Object.keys(req.body).forEach(key => {
         currentGroup[key] = req.body[key] ? req.body[key] : currentGroup[key];
