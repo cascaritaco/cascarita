@@ -1,25 +1,30 @@
 "use strict";
-const { Division, DivisionHistory, Group } = require('../models');
+
+const { Division, Group } = require('../models');
 
 const DivisionController = function () {
+    const isDivisionNameUnique = async (groupId, name) => {
+        const existingDivision = await Division.findOne({ where: { group_id: groupId, name: name } });
+        return !existingDivision; 
+    };
+
     var create = async function (req, res) {
         try {
-            // Extract division data from the request body
             const { group_id, name } = req.body;
 
-            // Check if the provided group_id exists
             const group = await Group.findByPk(group_id);
             if (!group) {
                 return res.status(400).json({ error: 'Group does not exist' });
             }
+            const isUnique = await isDivisionNameUnique(group_id, name);
+            if (!isUnique) {
+                return res.status(400).json({ error: 'Division name is already taken.' });
+            }
 
-            // Create the division in the database
             const division = await Division.create({ group_id, name });
 
-            // Respond with the created division
             return res.status(201).json(division);
         } catch (error) {
-            // Handle validation errors
             if (error.name === 'SequelizeValidationError') {
                 const validationErrors = error.errors.map((err) => ({
                     field: err.path,
@@ -27,55 +32,56 @@ const DivisionController = function () {
                 }));
                 return res.status(400).json({ error: 'Validation error', details: validationErrors });
             }
-            // Handle other errors
             console.error('Error creating division:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     };
     
-    var archiveByGroupId = async function (req, res) {
-        try {
-            const { groupId } = req.params;
 
-            // Find divisions by GroupID
-            const divisions = await Division.findAll({ where: { group_id: groupId } });
 
-            // Archive divisions and store in DivisionHistory
-            for (const division of divisions) {
-                await division.update({ archived: true });
-                await DivisionHistory.create({ division_id: division.id, archived_at: new Date() });
-            }
+    // var archiveByGroupId = async function (req, res) {
+    //     try {
+    //         const { groupId } = req.body;
 
-            return res.status(200).json({ message: 'Division archived successfully' });
-        } catch (error) {
-            console.error('Error archiving division by Group ID:', error);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-    };
+    //         const divisions = await Division.findAll({ where: { groupId } });
+
+    //         for (const division of divisions) {
+    //             await division.update({ archived: true });
+    //             await divisionhistoryController.create({ group_id: groupId, name: division.name, archived_at: new Date() });
+    //         }
+
+    //         return res.status(200).json({ message: 'Division archived successfully' });
+    //     } catch (error) {
+    //         console.error('Error archiving division by Group ID:', error);
+    //         return res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // };
+    
 
     var update = async function (req, res) {
         try {
             const { id } = req.params;
             const { group_id, name } = req.body;
 
-            // Check if the provided group_id exists
             const group = await Group.findByPk(group_id);
             if (!group) {
                 return res.status(400).json({ error: 'Group does not exist' });
             }
 
-            // Update the division
+            const isUnique = await isDivisionNameUnique(group_id, name);
+            if (!isUnique) {
+                return res.status(400).json({ error: 'Division name is already taken.' });
+            }
+
             const division = await Division.findByPk(id);
             if (!division) {
                 return res.status(404).json({ error: 'Division not found' });
             }
-
+            
             await division.update({ group_id, name });
 
-            // Respond with the updated division
             return res.status(200).json(division);
         } catch (error) {
-            // Handle validation errors
             if (error.name === 'SequelizeValidationError') {
                 const validationErrors = error.errors.map((err) => ({
                     field: err.path,
@@ -83,7 +89,6 @@ const DivisionController = function () {
                 }));
                 return res.status(400).json({ error: 'Validation error', details: validationErrors });
             }
-            // Handle other errors
             console.error('Error updating division:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
@@ -91,16 +96,14 @@ const DivisionController = function () {
 
     var getByGroupId = async function (req, res) {
         try {
-            const { groupId } = req.params;
+            const { group_id } = req.body;
 
-            // Check if the provided group_id exists
-            const group = await Group.findByPk(groupId);
+            const group = await Group.findByPk(group_id);
             if (!group) {
                 return res.status(400).json({ error: 'Group does not exist' });
             }
 
-            // Get divisions by group id
-            const divisions = await Division.findAll({ where: { group_id: groupId } });
+            const divisions = await Division.findAll({ where: { group_id } });
 
             return res.status(200).json(divisions);
         } catch (error) {
@@ -111,9 +114,8 @@ const DivisionController = function () {
 
     var deleteDivision = async function (req, res) {
         try {
-            const { id } = req.params;
+            const { id } = req.body;
 
-            // Delete the division
             const division = await Division.findByPk(id);
             if (!division) {
                 return res.status(404).json({ error: 'Division not found' });
@@ -128,30 +130,47 @@ const DivisionController = function () {
         }
     };
 
-    var getDeletedDivisionsByGroupId = async function (req, res) {
-        try {
-            const { groupId } = req.params;
+    // var getDeletedDivisionsByGroupId = async function (req, res) {
+    //     try {
+    //         const { groupId } = req.body;
 
-            // Find deleted divisions from DivisionsHistory by GroupID
-            const deletedDivisions = await DivisionHistory.findAll({
-                where: { group_id: groupId },
-                attributes: ['division_id', 'archived_at'], // Specify which attributes to include in the result
-            });
+    //         const deletedDivisions = await DivisionHistory.findAll({
+    //             where: { group_id: groupId },
+    //             attributes: ['division_id', 'archived_at']
+    //         });
 
-            return res.status(200).json(deletedDivisions);
-        } catch (error) {
-            console.error('Error getting deleted divisions by Group ID:', error);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-    };
+    //         return res.status(200).json(deletedDivisions);
+    //     } catch (error) {
+    //         console.error('Error getting deleted divisions by Group ID:', error);
+    //         return res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // };
+
+    // var getDeletedDivisionsByGroupId = async function (req, res) {
+    //     try {
+    //         const { group_id, name } = req.body;
+
+    //         const group = await Group.findByPk(group_id);
+    //         if (!group) {
+    //             return res.status(400).json({ error: 'Group does not exist' });
+    //         }
+
+    //         const deletedDivisions = archiveByGroupId(req, res); // Call archiveByGroupId function to archive the division
+
+    //         return res.status(200).json(deletedDivisions);
+    //     } catch (error) {
+    //         console.error('Error getting deleted divisions by Group ID:', error);
+    //         return res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // };
 
     return {
         create,
-        archiveByGroupId,
+        // archiveByGroupId,
         update,
         getByGroupId,
         delete: deleteDivision,
-        getDeletedDivisionsByGroupId
+        // getDeletedDivisionsByGroupId
     };
 };
 

@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.post('/', DivisionController.create);
 router.put('/:id', DivisionController.update);
-router.put('/archive/:groupId', DivisionController.archiveByGroupId);
+// router.put('/archive/:groupId', DivisionController.archiveByGroupId);
 router.get('/group/:groupId', DivisionController.getByGroupId);
-router.get('/history/group/:groupId', DivisionController.getDeletedDivisionsByGroupId);
+// router.get('/history/group/:groupId', DivisionController.getDeletedDivisionsByGroupId);
 router.delete('/:id', DivisionController.delete);
 
 module.exports = router;

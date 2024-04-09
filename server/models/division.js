@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         targetKey: "id",
       });
+      Division.hasMany(models.Session, { 
+        foreignKey: "session_id",
+        targetKey: "id",
+      });
     }
   }
   Division.init(
@@ -26,6 +30,16 @@ module.exports = (sequelize, DataTypes) => {
         unique: {
           args: ["group_id"],
           msg: "Division name must be unique within a Group",
+        },
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Division name cannot be empty",
+          },
+          len: {
+            args: [2, 50],
+            msg: "Division name must be between 2 and 50 characters",
+          },
         },
       },
   },
