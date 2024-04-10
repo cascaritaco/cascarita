@@ -15,6 +15,7 @@ const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
 const LeagueRoutes = require("./routes/league.routes");
+const SeasonRoutes = require("./routes/season.routes");
 const Middlewares = require("./middlewares");
 
 const app = express();
@@ -40,6 +41,7 @@ router.use("/role", RoleRoutes);
 router.use("/user", UserRoutes);
 router.use("/player", PlayerRoutes);
 router.use("/league", LeagueRoutes);
+router.use("/seasons", SeasonRoutes);
 router.use(csrf());
 
 function init() {
