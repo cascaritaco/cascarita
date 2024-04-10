@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Session.hasMany(models.Division, { foreignKey: "division_id" });
-      Session.hasMany(models.Season, { foreignKey: "season_id" });
+      Session.belongsTo(models.Season, {
+        foreignKey: "season_id",
+        targetKey: "id",
+      });
       Session.belongsTo(models.League, {
         foreignKey: "league_id",
         targetKey: "id",
