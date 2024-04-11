@@ -1,7 +1,15 @@
 {
+  "testing": {
+    "username": "root",
+    "password": "root",
+    "database": "test_suite_db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "server_PORT": 8080
+  },
   "development": {
     "username": "root",
-    "password": null,
+    "password": "root",
     "database": "test_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
