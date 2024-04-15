@@ -1,96 +1,133 @@
 "use strict";
 
+const TestDataGenerator = require("../../utilityFunctions/testDataGenerator.js");
 const request = require("supertest");
 const express = require("express");
-const divisionController = require("../controllers/division.controller");
-const divisionRoutes = require("../routes/division.routes");
+const DivisionRoutes = require("../../routes/division.routes");
+const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/divisions", divisionRoutes);
-
-jest.mock("../controllers/division.controller", () => ({
-    create: jest.fn(),
-    update: jest.fn(),
-    archiveByGroupId: jest.fn(),
-    getByGroupId: jest.fn(),
-    getDeletedDivisionsByGroupId: jest.fn(),
-    delete: jest.fn(),
-}));
+app.use("/division", DivisionRoutes);
+app.use(Middlewares.errorHandler);
+const testDb = require("../../models");
 
 describe("Division Routes", () => {
-    it("should handle POST / to create a new division", async () => {
-        divisionController.create.mockImplementation((req, res) => {
-            res.status(201).json({ success: true, data: { name: "TestDivision" } });
-        });
 
-        const response = await request(app)
-        .post("/divisions")
-        .send({ group_id: 1, name: "TestDivision" });
+  beforeEach(async () => {
+    await testDb.Group.sync();
+    await testDb.Division.sync();
+  });
 
-        expect(response.status).toBe(201);
-        expect(response.body).toEqual({
-            success: true,
-            data: { name: "TestDivision" },
-        });
+  // ------------------- Get Division by Group ID Tests ----------------
+
+  it("should handle GET /group/:groupId", async () => {
+    const group = await TestDataGenerator.createDummyGroup("Group Uno");
+    const division1 = await testDb.Division.create({ group_id: group.id, name: "Division 1" });
+    const division2 = await testDb.Division.create({ group_id: group.id, name: "Division 2" });
+
+    const response = await request(app)
+      .get(`/division/group/${group.id}`)
+      .send();
+
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(2);
+  });
+
+  it("should not get any divisions with GET /group/:groupId", async () => {
+    const group = await TestDataGenerator.createDummyGroup("Group Dos");
+
+    const response = await request(app)
+      .get(`/division/group/${group.id}`)
+      .send();
+
+    expect(response.status).toBe(404);
+    expect(response.body).toMatchObject({
+      message: "No divisions found for the given group ID",
     });
-    it("should handle PUT /:id to update a division", async () => {
-        divisionController.update.mockImplementation((req, res) => {
-            res.status(200).json({ success: true, data: { id: 1, name: "UpdatedDivision" } });
-        });
+  });
 
-        const response = await request(app)
-            .put("/divisions/1")
-            .send({ group_id: 1, name: "UpdatedDivision" });
+  // ------------------- Create Tests ----------------
 
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({
-            success: true,
-            data: { id: 1, name: "UpdatedDivision" },
-        });
-    });
+  it("should handle POST /", async () => {
+    const group = await TestDataGenerator.createDummyGroup("Group Tres");
 
-    it("should handle PUT /archive/:groupId to archive divisions by GroupID", async () => {
-        divisionController.archiveByGroupId.mockImplementation((req, res) => {
-            res.status(200).json({ message: "Division archived successfully" });
-        });
+    const response = await request(app)
+      .post("/division")
+      .send({ group_id: group.id, name: "New Division" });
 
-        const response = await request(app).put("/divisions/archive/1");
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(expect.objectContaining({ name: "New Division" }));
+  });
 
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ message: "Division archived successfully" });
-    });
+  it("should not create if name is not unique POST /", async () => {
+    const group = await TestDataGenerator.createDummyGroup("Group Cuatro");
+    await testDb.Division.create({ group_id: group.id, name: "Duplicate Division" });
 
-    it("should handle GET /group/:groupId to get divisions by GroupID", async () => {
-        divisionController.getByGroupId.mockImplementation((req, res) => {
-            res.status(200).json([{ id: 1, name: "Division1" }]);
-        });
+    const response = await request(app)
+      .post("/division")
+      .send({ group_id: group.id, name: "Duplicate Division" });
 
-        const response = await request(app).get("/divisions/group/1");
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({ error: 'Division name is already taken.' });
+  });
 
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual([{ id: 1, name: "Division1" }]);
-    });
+  // ------------------- Update Tests ----------------
 
-    it("should handle GET /history/group/:groupId to get deleted divisions by GroupID from DivisionsHistory", async () => {
-        divisionController.getDeletedDivisionsByGroupId.mockImplementation((req, res) => {
-            res.status(200).json([{ division_id: 1, archived_at: new Date() }]);
-        });
+  it("should update division with valid ID and input PATCH /:id", async () => {
+    const group = await TestDataGenerator.createDummyGroup("Group Cinco");
+    const division = await testDb.Division.create({ group_id: group.id, name: "DivisionToUpdate" });
 
-        const response = await request(app).get("/divisions/history/group/1");
+    const updatedDivisionName = "Updated Division";
+    const response = await request(app)
+      .patch(`/division/${division.id}`)
+      .send({ name: updatedDivisionName });
 
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual([{ division_id: 1, archived_at: expect.any(String) }]);
-    });
+    expect(response.status).toBe(200);
 
-    it("should handle DELETE /:id to delete a division by ID", async () => {
-        divisionController.delete.mockImplementation((req, res) => {
-            res.status(200).json({ message: "Division deleted successfully" });
-        });
+    const updatedDivision = await testDb.Division.findByPk(division.id);
+    expect(updatedDivision.name).toBe(updatedDivisionName);
+  });
 
-        const response = await request(app).delete("/divisions/1");
+  it("should return an error if division not found PATCH /:id", async () => {
+    const nonExistentDivisionId = "9999"; 
 
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ message: "Division deleted successfully" });
-    });
+    const response = await request(app)
+      .patch(`/division/${nonExistentDivisionId}`)
+      .send({ name: "Updated Division Name" });
 
+    expect(response.status).toBe(404);
+    expect(response.body).toMatchObject({ error: 'Division not found' });
+  });
+
+  // ------------------- Delete Tests ----------------
+
+  it("should delete a division with a valid division ID DELETE /:id", async () => {
+    const group = await TestDataGenerator.createDummyGroup("Group Seis");
+    const division = await testDb.Division.create({ group_id: group.id, name: "DivisionToDelete" });
+
+    const response = await request(app)
+      .delete(`/division/${division.id}`)
+      .send();
+
+    expect(response.status).toBe(204);
+    expect(await testDb.Division.findByPk(division.id)).toBeNull();
+  });
+
+  it("should return an error when attempting to delete a non-existent division DELETE /:id", async () => {
+    const response = await request(app)
+      .delete("/division/999")
+      .send();
+
+    expect(response.status).toBe(404);
+    expect(response.body).toMatchObject({ error: 'Division not found' });
+  });
+
+  afterEach(async () => {
+    await testDb.Division.destroy({ where: {} });
+    await testDb.Group.destroy({ where: {} });
+  });
+
+  afterAll(async () => {
+    await testDb.sequelize.close();
+  });
 });
