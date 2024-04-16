@@ -2,7 +2,6 @@ const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const passport = require("./config/passport");
-const teamController = require("./controllers/team.controller");
 const http = require("http");
 const router = express.Router();
 
@@ -14,6 +13,7 @@ const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
+const TeamRoutes = require("./routes/team.routes");
 const LeagueRoutes = require("./routes/league.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const Middlewares = require("./middlewares");
@@ -42,14 +42,13 @@ router.use("/user", UserRoutes);
 router.use("/player", PlayerRoutes);
 router.use("/league", LeagueRoutes);
 router.use("/seasons", SeasonRoutes);
+router.use("/team", TeamRoutes);
 router.use(csrf());
 
 function init() {
   router.get("*", function (req, res) {
     res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
   });
-
-  router.post("/create/:name", teamController.createTeam);
 
   http.createServer(app).listen(app.get("port"), function () {
     console.log("Express server listening on port " + app.get("port"));
