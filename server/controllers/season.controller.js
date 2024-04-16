@@ -59,15 +59,24 @@ const SeasonController = {
     }
   },
   async createSeason(req, res, next) {
+    const form = {
+      name: req.body.name,
+      start_date: req.body.start_date,
+      end_date: req.body.end_date,
+      is_active: req.body.is_active,
+      league_id: req.body.league_id
+    };
+
     try {
-      const { name, league_id } = req.body;
-      const isUnique = await isNameUniqueWithinLeague(name, league_id);
+      const isUnique = await isNameUniqueWithinLeague(form.name, form.league_id);
       if (!isUnique) {
         res.status(400);
-        throw new Error("name is not unique")
+        throw new Error("name is not unique");
       }
 
-      const season = await Season.create(req.body);
+      await Season.build(form).validate();
+      const season = await Season.create(form);
+
       res.status(201).json(season);
     } catch (error) {
       res.status(400);
@@ -77,30 +86,28 @@ const SeasonController = {
   async updateSeason(req, res, next) {
     const { id } = req.params;
     try {
-      if (isNaN(id)) {
-        res.status(400);
-        throw new Error("expected id to be a number");
-      }
-
       const season = await Season.findByPk(id);
       if (!season) {
         res.status(404);
         throw new Error(`no such season with id ${id}`);
       }
 
-      const { name, league_id } = req.body;
-      if (league_id) {
-        res.status(400);
-        throw new Error("cannot update the 'league_id' field");
-      }
-      const isUnique = await isNameUniqueWithinLeague(name, season.league_id);
+      Object.keys(req.body).forEach(key => {
+        if (key !== "league_id") {
+          season[key] = req.body[key] ? req.body[key] : season[key];
+        }
+      });
+
+      const { name, league_id } = season;
+      const isUnique = await isNameUniqueWithinLeague(name, league_id);
       if (!isUnique) {
         res.status(400);
         throw new Error("name is not unique")
       }
 
-      const updatedSeasonData = await season.update(req.body);
-      return res.json(updatedSeasonData);
+      await season.validate();
+      await season.save();
+      res.json(season);
     } catch (error) {
       next(error);
     }
