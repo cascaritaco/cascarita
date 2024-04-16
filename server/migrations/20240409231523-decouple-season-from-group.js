@@ -3,12 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const groupName = "Default group";
+    const leagueName = "Default league";
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.removeColumn("Seasons", "group_id", { transaction });
 
-      // Create a group
-      const groupName = "Default group"
       await queryInterface.bulkInsert("Groups", [
         {
           name: groupName,
@@ -29,8 +29,6 @@ module.exports = {
         }
       );
       const group = result[0];
-      // Create a league
-      const leagueName = "Default league"
       await queryInterface.bulkInsert("Leagues", [
         {
           group_id: group.id,
@@ -65,21 +63,37 @@ module.exports = {
       }, null, { transaction });
 
       await queryInterface.changeColumn("Seasons", "league_id", {
+        type: Sequelize.INTEGER,
         allowNull: false,
       }, { transaction });
 
       await transaction.commit();
-    } catch (_error) {
+    } catch (error) {
       await transaction.rollback();
+      throw error;
     }
   },
 
   async down(queryInterface, Sequelize) {
+    const groupName = "Default group";
+    const leagueName = "Default league";
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.addColumn("Season", "group_id", {
+      await queryInterface.removeColumn("Seasons", "league_id", { transaction });
+
+      const group = await queryInterface.sequelize.query("SELECT id FROM `Groups` WHERE name = ?", {
+        replacements: [groupName],
+        type: Sequelize.QueryTypes.SELECT,
+        transaction: transaction,
+      });
+
+      if (!group) {
+        throw new Error("failed to create a group");
+      }
+
+      await queryInterface.addColumn("Seasons", "group_id", {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Groups",
           key: "id",
@@ -87,16 +101,33 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       }, { transaction });
-      await queryInterface.removeColumn("Seasons", "league_id", { transaction });
-      await queryInterface.bulkDelete("Leagues", {
-        name: leagueName,
+
+
+      await queryInterface.bulkUpdate("Seasons", {
+        group_id: group[0].id,
+      }, null, { transaction });
+
+      await queryInterface.changeColumn("Seasons", "group_id", {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       }, { transaction });
-      await queryInterface.bulkDelete("Groups", {
-        name: groupName,
-      }, { transaction });
+
+      // Deletes the "Default group" and "Default league" from their tables.
+      await queryInterface.sequelize.query("DELETE FROM `Groups` WHERE id = ?", {
+        replacements: [group[0].id],
+        type: Sequelize.QueryTypes.DELETE,
+        transaction: transaction,
+      });
+
+      await queryInterface.sequelize.query("DELETE FROM `Leagues` WHERE name = ?", {
+        replacements: [leagueName],
+        type: Sequelize.QueryTypes.DELETE,
+        transaction: transaction,
+      });
       await transaction.commit();
-    } catch (_error) {
+    } catch (error) {
       await transaction.rollback();
+      throw error;
     }
   }
 };
