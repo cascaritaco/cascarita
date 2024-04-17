@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/', DivisionController.create);
 router.patch('/:id', DivisionController.update);
-router.get('/group/:groupId', DivisionController.getByGroupId);
+router.get('/:groupId', DivisionController.getByGroupId);
 router.delete('/:id', DivisionController.delete);
 
 module.exports = router;

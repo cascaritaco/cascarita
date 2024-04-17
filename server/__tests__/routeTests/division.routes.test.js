@@ -9,6 +9,7 @@ const app = express();
 app.use(express.json());
 app.use("/division", DivisionRoutes);
 app.use(Middlewares.errorHandler);
+
 const testDb = require("../../models");
 
 describe("Division Routes", () => {
@@ -26,7 +27,7 @@ describe("Division Routes", () => {
     const division2 = await testDb.Division.create({ group_id: group.id, name: "Division 2" });
 
     const response = await request(app)
-      .get(`/division/group/${group.id}`)
+      .get(`/division/${group.id}`)
       .send();
 
     expect(response.status).toBe(200);
@@ -37,7 +38,7 @@ describe("Division Routes", () => {
     const group = await TestDataGenerator.createDummyGroup("Group Dos");
 
     const response = await request(app)
-      .get(`/division/group/${group.id}`)
+      .get(`/division/${group.id}`)
       .send();
 
     expect(response.status).toBe(404);
