@@ -1,19 +1,37 @@
+"use strict";
 const { Team } = require("./../models");
 
-async function createTeam(req, res) {
-  const { name } = req.params;
+const TeamController = function () {
+  var createTeam = async function (req, res) {
+    const newTeam = {
+      group_id: req.body.group_id,
+      name: req.body.name,
+      team_logo: req.body.team_logo,
+    };
 
-  const newTeam = {
-    name: name,
+    try {
+      await Team.build(newTeam).validate();
+      const result = await Team.create(newTeam);
+
+      return res.status(201).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      const validationErrors = error.errors?.map((err) => ({
+        field: err.path,
+        message: err.message,
+      }));
+
+      return res
+        .status(400)
+        .json({ error: "Validation error", details: validationErrors });
+    }
   };
-  let data = await Team.create(newTeam);
 
-  return res.status(201).json({
-    success: true,
-    data: data,
-  });
-}
-
-module.exports = {
-  createTeam,
+  return {
+    createTeam,
+  };
 };
+
+module.exports = TeamController();
