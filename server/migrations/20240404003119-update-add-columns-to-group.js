@@ -2,10 +2,10 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.addColumn('groups', 'street_address', {
+      await queryInterface.addColumn('Groups', 'street_address', {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
@@ -14,7 +14,7 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addColumn('groups', 'city', {
+      await queryInterface.addColumn('Groups', 'city', {
         type: Sequelize.STRING(50),
         allowNull: false,
         validate: {
@@ -23,7 +23,7 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addColumn('groups', 'state', {
+      await queryInterface.addColumn('Groups', 'state', {
         type: Sequelize.STRING(2),
         allowNull: false,
         validate: {
@@ -32,7 +32,7 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addColumn('groups', 'zip_code', {
+      await queryInterface.addColumn('Groups', 'zip_code', {
         type: Sequelize.STRING(10),
         allowNull: false,
         validate: {
@@ -41,13 +41,13 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addColumn('groups', 'logo_url', {
+      await queryInterface.addColumn('Groups', 'logo_url', {
         type: Sequelize.STRING,
         allowNull: true,
         transaction,
       });
 
-      await queryInterface.bulkUpdate('groups', {
+      await queryInterface.bulkUpdate('Groups', {
         street_address: '123 Main St',
         city: 'Watsonville',
         state: 'CA',
@@ -62,15 +62,15 @@ module.exports = {
     }
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
 
     try {
-      await queryInterface.removeColumn('groups', 'street_address', { transaction });
-      await queryInterface.removeColumn('groups', 'city', { transaction });
-      await queryInterface.removeColumn('groups', 'state', { transaction });
-      await queryInterface.removeColumn('groups', 'zip_code', { transaction });
-      await queryInterface.removeColumn('groups', 'logo_url', { transaction });
+      await queryInterface.removeColumn('Groups', 'street_address', { transaction });
+      await queryInterface.removeColumn('Groups', 'city', { transaction });
+      await queryInterface.removeColumn('Groups', 'state', { transaction });
+      await queryInterface.removeColumn('Groups', 'zip_code', { transaction });
+      await queryInterface.removeColumn('Groups', 'logo_url', { transaction });
 
       await transaction.commit();
     } catch (error) {
