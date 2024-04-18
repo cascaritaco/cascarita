@@ -23,6 +23,8 @@ app.use(express.static(path.join(__dirname, "../dist")));
 app.use("/api", router);
 app.use(Middlewares.errorHandler);
 
+app.use('/Images', express.static('./Images'));
+
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(
