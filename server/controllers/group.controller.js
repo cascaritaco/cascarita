@@ -38,7 +38,7 @@ const GroupController = function () {
       city: req.body.city,
       state: req.body.state,
       zip_code: req.body.zip_code,
-      logo_url: req.body.logo_url,
+      logo_url: req.body.path, //uses path MAKE SURE TO REMEMBER THAT
     };
     
     try {
@@ -90,7 +90,7 @@ var upload = multer({
   limits: { fileSize: '1000000' },
   fileFilter: (req, file, cb) => {
       const fileTypes = /jpeg|jpg|png|gif/
-      const mimeType = fileTypes.test(file.mimetype)  
+      const mimeType = fileTypes.test(file.mimetype)
       const extname = fileTypes.test(path.extname(file.originalname))
 
       if(mimeType && extname) {
