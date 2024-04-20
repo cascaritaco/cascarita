@@ -45,6 +45,7 @@ const LeagueController = function () {
       const leagueFound = await isNameUniqueWithinGroup(newLeague.group_id, newLeague.name);
 
       if (!leagueFound) {
+        res.status(400);
         throw new Error( "Name is not unique" );
       }
 
@@ -69,11 +70,15 @@ const LeagueController = function () {
       });
 
       if (!currentLeague) {
+        res.status(400);
         throw new Error("League with given ID was not found");
       }
 
-      currentLeague.name = req.body.name || currentLeague.name;
-      currentLeague.description = req.body.description || currentLeague.description;
+      Object.keys(req.body).forEach(key => {
+        if (key !== "group_id"){
+          currentLeague[key] = req.body[key] ? req.body[key] : currentLeague[key];
+        };
+      });
 
       const leagueFound = await isNameUniqueWithinGroup(currentLeague.group_id, currentLeague.name);
 
@@ -81,6 +86,7 @@ const LeagueController = function () {
         throw new Error( "Name is not unique" );
       }
 
+      await currentLeague.validate();
       await currentLeague.save();
 
       return res.status(200).json({ success: true, data: currentLeague });

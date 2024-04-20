@@ -34,6 +34,8 @@ const FieldController = function () {
       },
     });
 
+    console.log(fieldFound);
+
     return fieldFound == null;
 
   };
@@ -46,6 +48,7 @@ const FieldController = function () {
       const fieldFound = await isNameUniqueWithinGroup(newField.group_id, newField.name, newField.address, newField.length, newField.width);
 
       if (!fieldFound) {
+        res.status(400);
         throw new Error( "Name is not unique" );
       }
 
@@ -70,20 +73,26 @@ const FieldController = function () {
       });
 
       if (!currentField) {
+        res.status(400);
         throw new Error("Field with given ID was not found");
       }
 
-      currentField.name = req.body.name || currentField.name;
-      currentField.address = req.body.address || currentField.address;
-      currentField.length = req.body.length || currentField.length;
-      currentField.width = req.body.width || currentField.width;
+      Object.keys(req.body).forEach(key => {
+        if (key !== "group_id"){
+          currentField[key] = req.body[key] ? req.body[key] : currentField[key];
+        }
+      });
 
       const fieldFound = await isNameUniqueWithinGroup(currentField.group_id, currentField.name, currentField.address, currentField.length, currentField.width);
 
+      console.log(fieldFound);
+
       if (!fieldFound) {
+        res.status(400);
         throw new Error( "Name is not unique" );
       }
 
+      await currentField.validate();
       await currentField.save();
 
       return res.status(200).json({ success: true, data: currentField });

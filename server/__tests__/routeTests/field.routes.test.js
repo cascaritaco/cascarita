@@ -75,7 +75,7 @@ describe("Field Routes", () => {
       .post("/field/")
       .send({ group_id: groupM.id, name: "SOMOS Park", address: "528 Average Ave", length: 200, width: 50 });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
       message: "Name is not unique",
     });
@@ -122,7 +122,7 @@ describe("Field Routes", () => {
       .patch(`/field/${nonExistentFieldId}`)
       .send({ name: "Joe Mo Mah Lawn" });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
       message: "Field with given ID was not found",
     });
@@ -138,7 +138,7 @@ describe("Field Routes", () => {
       .patch(`/field/${field2.id}`)
       .send({ name: "SOMOS Park" });
   
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
       message: "Name is not unique"
     });
