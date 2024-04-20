@@ -1,8 +1,9 @@
-import React, { ChangeEventHandler, EventHandler } from "react";
+import React from "react";
 import Layout from "../../components/Layout/Layout";
 import Modal from "../../components/Modal/Modal";
-// import SelectMenu, { SelectItem } from "../../components/SelectMenu/SelectMenu";
+import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import styles from "./Home.module.css";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 const Home = () => {
   const [open, setOpen] = React.useState(false);
@@ -30,7 +31,6 @@ function LeagueForm() {
   const [selectOpen, setSelectOpen] = React.useState(false);
 
   const TEST_LEAGUES = ["English Premier League", "MLS", "Spanish LALIGA"];
-  const [existingLeagues, setExistingLeagues] = React.useState(TEST_LEAGUES[0]);
 
   return (
     <form className={styles.modalForm}>
@@ -90,7 +90,12 @@ function LeagueForm() {
         </div>
       </fieldset>
 
-      {isExistingLeague === "no" ? "" : <p>dropdown list</p>}
+      {/* {isExistingLeague === "yes" ? <p>Hello</p> : ""} */}
+      <SelectMenu open={selectOpen} onOpenChange={setSelectOpen}>
+        <SelectMenu.Button className={styles.selectBtn}>
+          <ChevronDownIcon />
+        </SelectMenu.Button>
+      </SelectMenu>
     </form>
   );
 }
