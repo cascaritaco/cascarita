@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, EventHandler } from "react";
+import React from "react";
 import Layout from "../../components/Layout/Layout";
 import Modal from "../../components/Modal/Modal";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
