@@ -43,6 +43,7 @@
   padding: 0 10px;
   font-size: 15px;
   line-height: 1;
+  background-color: #F4F7FB;
   color: var(--violet-11);
   box-shadow: 0 0 0 1px var(--violet-7);
   height: 35px;
@@ -61,4 +62,12 @@
 .radioContainer {
   display: flex;
   gap: 4px;
+}
+
+.groupLabel {
+  font-weight: 600;
+  padding: 0 16px;
+  font-size: 0.8rem;
+  line-height: 25px;
+  color: black;
 }

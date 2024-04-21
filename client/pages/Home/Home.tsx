@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler, EventHandler } from "react";
 import Layout from "../../components/Layout/Layout";
 import Modal from "../../components/Modal/Modal";
-// import SelectMenu, { SelectItem } from "../../components/SelectMenu/SelectMenu";
+import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import styles from "./Home.module.css";
 
 const Home = () => {
@@ -27,10 +27,8 @@ function LeagueForm() {
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
   const [isExistingLeague, setIsExistingLeague] = React.useState("no");
-  const [selectOpen, setSelectOpen] = React.useState(false);
 
   const TEST_LEAGUES = ["English Premier League", "MLS", "Spanish LALIGA"];
-  const [existingLeagues, setExistingLeagues] = React.useState(TEST_LEAGUES[0]);
 
   return (
     <form className={styles.modalForm}>
@@ -90,7 +88,17 @@ function LeagueForm() {
         </div>
       </fieldset>
 
-      {isExistingLeague === "no" ? "" : <p>dropdown list</p>}
+      {isExistingLeague === "no" ? "" : (
+        <SelectMenu defaultValue="Select a League">
+          <SelectMenu.Group>
+            <SelectMenu.GroupLabel className={styles.groupLabel}>Existing Leagues</SelectMenu.GroupLabel>
+
+            {TEST_LEAGUES.map((league, idx) => (
+              <SelectMenu.Item key={idx} value={league}>{league}</SelectMenu.Item>
+            ))}
+          </SelectMenu.Group>
+        </SelectMenu>
+      )}
     </form>
   );
 }
