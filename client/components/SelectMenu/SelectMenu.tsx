@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import styles from "./SelectMenu.module.css"
 
 import * as Select from "@radix-ui/react-select";
