@@ -3,6 +3,7 @@ import Layout from "../../components/Layout/Layout";
 import Modal from "../../components/Modal/Modal";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import styles from "./Home.module.css";
+import { createTeam } from "../../api/service";
 
 const Home = () => {
   const [open, setOpen] = React.useState(false);
@@ -27,11 +28,30 @@ function LeagueForm() {
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
   const [isExistingLeague, setIsExistingLeague] = React.useState("no");
-
+  const [existingLeague, setExistingLeague] = React.useState("");
   const TEST_LEAGUES = ["English Premier League", "MLS", "Spanish LALIGA"];
 
+  const [formData, setFormData] = React.useState({
+    leagueName: "",
+    leagueDesc: "",
+    isExistingLeague: "no",
+    existingLeague: "",
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <form className={styles.modalForm}>
+    <form className={styles.modalForm} onSubmit={handleSubmit}>
       <div className={styles.inputContainer}>
         <label className={styles.Label} htmlFor="leagueName">
           Name
@@ -40,8 +60,8 @@ function LeagueForm() {
           className={styles.Input}
           placeholder="League Name"
           id="leagueName"
-          value={leagueName}
-          onChange={(event) => setLeagueName(event.target.value)}
+          value={formData.leagueName}
+          onChange={handleChange}
         />
       </div>
 
@@ -58,7 +78,7 @@ function LeagueForm() {
         />
       </div>
 
-      <fieldset className={styles.FieldSet}>
+      <fieldset className={styles.fieldSet}>
         <legend className={styles.Label}>
           Want to link an existing divison?
         </legend>
@@ -88,17 +108,37 @@ function LeagueForm() {
         </div>
       </fieldset>
 
-      {isExistingLeague === "no" ? "" : (
-        <SelectMenu defaultValue="Select a League">
+      {isExistingLeague === "no" ? (
+        ""
+      ) : (
+        <SelectMenu
+          defaultValue="Select a League"
+          value={existingLeague}
+          onValueChange={setExistingLeague}
+        >
           <SelectMenu.Group>
-            <SelectMenu.GroupLabel className={styles.groupLabel}>Existing Leagues</SelectMenu.GroupLabel>
+            <SelectMenu.GroupLabel className={styles.groupLabel}>
+              Existing Leagues
+            </SelectMenu.GroupLabel>
 
             {TEST_LEAGUES.map((league, idx) => (
-              <SelectMenu.Item key={idx} value={league}>{league}</SelectMenu.Item>
+              <SelectMenu.Item key={idx} value={league}>
+                {league}
+              </SelectMenu.Item>
             ))}
           </SelectMenu.Group>
         </SelectMenu>
       )}
+
+      <div className={styles.formBtnContainer}>
+        <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
+          Cancel
+        </Modal.Close>
+
+        <button type="submit" className={`${styles.btn} ${styles.submitBtn}`}>
+          Submit
+        </button>
+      </div>
     </form>
   );
 }

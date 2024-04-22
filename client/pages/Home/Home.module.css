@@ -24,17 +24,19 @@
 .inputContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
 .Label {
   font-size: 1.1rem;
   color: black;
   margin-right: 16px;
+  display: block;
 }
 
 .Input {
   width: 100%;
+  height: auto;
   flex: 1;
   display: inline-flex;
   align-items: center;
@@ -43,7 +45,7 @@
   padding: 0 10px;
   font-size: 15px;
   line-height: 1;
-  background-color: #F4F7FB;
+  background-color: #f4f7fb;
   color: var(--violet-11);
   box-shadow: 0 0 0 1px var(--violet-7);
   height: 35px;
@@ -53,7 +55,7 @@
   box-shadow: 0 0 0 2px lightblue;
 }
 
-.FieldSet {
+.fieldSet {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -61,7 +63,12 @@
 
 .radioContainer {
   display: flex;
+  align-items: center;
   gap: 4px;
+}
+
+.radioContainer > input {
+  margin-bottom: 0;
 }
 
 .groupLabel {
@@ -70,4 +77,29 @@
   font-size: 0.8rem;
   line-height: 25px;
   color: black;
+}
+
+.formBtnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 16px;
+}
+
+.cancelBtn {
+  padding: 8px 32px;
+  outline: 1px solid black;
+  color: black;
+}
+
+.cancelBtn:hover,
+.cancelBtn:focus {
+  outline: 1px solid blue;
+  background-color: transparent;
+  color: black;
+}
+
+.submitBtn {
+  padding: 8px 32px;
 }

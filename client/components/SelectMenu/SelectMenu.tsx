@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./SelectMenu.module.css"
+import styles from "./SelectMenu.module.css";
 
 import * as Select from "@radix-ui/react-select";
 import {
@@ -11,20 +11,32 @@ import {
 export default function SelectMenu({
   open,
   onOpenChange,
+  value,
+  onValueChange,
   defaultValue,
   children,
   ...delegated
 }: {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
   defaultValue?: string;
   children: React.ReactNode;
   delegated?: React.HTMLProps<HTMLDivElement>;
 }) {
   return (
-    <Select.Root open={open} onOpenChange={onOpenChange} {...delegated}>
+    <Select.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      value={value}
+      onValueChange={onValueChange}
+      {...delegated}
+    >
       <Select.Trigger className={styles.selectTrigger}>
-        <Select.Value placeholder={defaultValue ? defaultValue : "Select a value"}/>
+        <Select.Value
+          placeholder={defaultValue ? defaultValue : "Select a value"}
+        />
 
         <Select.Icon>
           <ChevronDownIcon />
@@ -37,7 +49,9 @@ export default function SelectMenu({
             <ChevronUpIcon />
           </Select.ScrollUpButton>
 
-          <Select.Viewport className={styles.selectViewport}>{children}</Select.Viewport>
+          <Select.Viewport className={styles.selectViewport}>
+            {children}
+          </Select.Viewport>
 
           <Select.ScrollDownButton>
             <ChevronDownIcon />
@@ -49,14 +63,13 @@ export default function SelectMenu({
 }
 
 function SelectItem({
-    value,
-    children,
-} : {
-    value: string;
-    children: React.ReactNode;
+  value,
+  children,
+}: {
+  value: string;
+  children: React.ReactNode;
 }) {
-    return (
-
+  return (
     <Select.Item className={styles.selectItem} value={value}>
       <Select.ItemText>{children}</Select.ItemText>
 
@@ -64,12 +77,11 @@ function SelectItem({
         <CheckIcon />
       </Select.ItemIndicator>
     </Select.Item>
-    )
+  );
 }
 
-SelectMenu.Button = Select.Trigger
-SelectMenu.Group = Select.Group
-SelectMenu.GroupLabel = Select.Label
-SelectMenu.Separator = Select.Separator
-SelectMenu.Item = SelectItem
-
+SelectMenu.Button = Select.Trigger;
+SelectMenu.Group = Select.Group;
+SelectMenu.GroupLabel = Select.Label;
+SelectMenu.Separator = Select.Separator;
+SelectMenu.Item = SelectItem;
