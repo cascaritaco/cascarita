@@ -9,8 +9,8 @@ export default function Modal({
   onOpenChange,
   children,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
 }) {
   return (
@@ -24,7 +24,7 @@ function ModalContent({
   title,
   children,
 }: {
-  title: string;
+  title?: string;
   children: React.ReactNode;
 }) {
   return (

@@ -8,6 +8,7 @@
 
 .btn:hover,
 .btn:focus {
+  transition: ease-in 200ms;
   background-color: #170cb4;
   color: #ffffff;
 }

@@ -3,7 +3,6 @@ import Layout from "../../components/Layout/Layout";
 import Modal from "../../components/Modal/Modal";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import styles from "./Home.module.css";
-import { createTeam } from "../../api/service";
 
 const Home = () => {
   const [open, setOpen] = React.useState(false);
@@ -13,41 +12,35 @@ const Home = () => {
       <p className="text-2xl font-bold underline">Home</p>
 
       <Modal open={open} onOpenChange={setOpen}>
-        <Modal.Button className={styles.btn}>
+        <Modal.Button asChild className={styles.btn}>
           <button>Create New League</button>
         </Modal.Button>
         <Modal.Content title="Create League">
-          <LeagueForm />
+          <LeagueForm afterSave={() => setOpen(false)} />
         </Modal.Content>
       </Modal>
     </Layout>
   );
 };
 
-function LeagueForm() {
+function LeagueForm({ afterSave }: { afterSave: () => void }) {
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
   const [isExistingLeague, setIsExistingLeague] = React.useState("no");
   const [existingLeague, setExistingLeague] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const TEST_LEAGUES = ["English Premier League", "MLS", "Spanish LALIGA"];
 
-  const [formData, setFormData] = React.useState({
-    leagueName: "",
-    leagueDesc: "",
-    isExistingLeague: "no",
-    existingLeague: "",
-  });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+    const data = Object.fromEntries(new FormData(event.currentTarget));
+    console.log(data);
+
+    //TODO: Database logic goes here
+
+    afterSave();
   };
 
   return (
@@ -58,10 +51,12 @@ function LeagueForm() {
         </label>
         <input
           className={styles.Input}
+          required
           placeholder="League Name"
           id="leagueName"
-          value={formData.leagueName}
-          onChange={handleChange}
+          name="leagueName"
+          value={leagueName}
+          onChange={(event) => setLeagueName(event.target.value)}
         />
       </div>
 
@@ -73,6 +68,7 @@ function LeagueForm() {
           className={styles.Input}
           placeholder="League Description"
           id="leagueDesc"
+          name="leagueDescription"
           value={leagueDesc}
           onChange={(event) => setLeagueDesc(event.target.value)}
         />
@@ -112,9 +108,10 @@ function LeagueForm() {
         ""
       ) : (
         <SelectMenu
-          defaultValue="Select a League"
+          placeholder="Select a League"
+          name="existingLeague"
           value={existingLeague}
-          onValueChange={setExistingLeague}
+          onValueChange={(value) => setExistingLeague(value)}
         >
           <SelectMenu.Group>
             <SelectMenu.GroupLabel className={styles.groupLabel}>
@@ -136,7 +133,7 @@ function LeagueForm() {
         </Modal.Close>
 
         <button type="submit" className={`${styles.btn} ${styles.submitBtn}`}>
-          Submit
+          {isLoading === false ? "Submit" : "Saving..."}
         </button>
       </div>
     </form>

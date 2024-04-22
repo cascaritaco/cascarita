@@ -12,16 +12,18 @@ export default function SelectMenu({
   open,
   onOpenChange,
   value,
+  name,
   onValueChange,
-  defaultValue,
+  placeholder,
   children,
   ...delegated
 }: {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   value?: string;
+  name?: string;
   onValueChange?: (value: string) => void;
-  defaultValue?: string;
+  placeholder?: string;
   children: React.ReactNode;
   delegated?: React.HTMLProps<HTMLDivElement>;
 }) {
@@ -30,12 +32,14 @@ export default function SelectMenu({
       open={open}
       onOpenChange={onOpenChange}
       value={value}
+      defaultValue=""
+      name={name}
       onValueChange={onValueChange}
       {...delegated}
     >
       <Select.Trigger className={styles.selectTrigger}>
         <Select.Value
-          placeholder={defaultValue ? defaultValue : "Select a value"}
+          placeholder={placeholder ? placeholder : "Select a value"}
         />
 
         <Select.Icon>

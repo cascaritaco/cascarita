@@ -1,8 +1,55 @@
+@keyframes dialog-content-show {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes dialog-content-hide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
+@keyframes dialog-overlay-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-overlay-hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .overlay {
   position: fixed;
   inset: 0;
   background-color: rgb(0, 0, 0, 0.5);
-  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.overlay[data-state="open"] {
+  animation: dialog-overlay-show 200ms;
+}
+
+.overlay[data-state="closed"] {
+  animation: dialog-overlay-hide 200ms;
 }
 
 .content {
@@ -17,7 +64,14 @@
   max-width: 550px;
   max-height: 85vh;
   padding: 25px;
-  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.content[data-state="open"] {
+  animation: dialog-content-show 200ms;
+}
+
+.content[data-state="closed"] {
+  animation: dialog-content-hide 200ms;
 }
 
 .content:focus {
@@ -47,7 +101,7 @@
 
 .closeIcon:hover,
 .closeIcon:focus {
-  background-color: coral;
+  background-color: lightgray;
 }
 
 @keyframes overlayShow {
