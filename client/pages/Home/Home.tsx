@@ -3,6 +3,8 @@ import Layout from "../../components/Layout/Layout";
 import Modal from "../../components/Modal/Modal";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import styles from "./Home.module.css";
+import { application } from "express";
+import { json } from "body-parser";
 
 const Home = () => {
   const [open, setOpen] = React.useState(false);
@@ -32,13 +34,26 @@ function LeagueForm({ afterSave }: { afterSave: () => void }) {
 
   const TEST_LEAGUES = ["English Premier League", "MLS", "Spanish LALIGA"];
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const data = Object.fromEntries(new FormData(event.currentTarget));
-    console.log(data);
+    const { leagueName, leagueDescription } = Object.fromEntries(
+      new FormData(event.currentTarget),
+    );
 
-    //TODO: Database logic goes here
+    const newLeague = {
+      name: leagueName,
+      description: leagueDescription,
+      group_id: 1,
+    };
+
+    const response = await fetch("/api/league/", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newLeague),
+    });
 
     afterSave();
   };
