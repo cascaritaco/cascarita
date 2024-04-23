@@ -17,22 +17,41 @@ module.exports = (sequelize, DataTypes) => {
       group_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          isInt: true,
+        },
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: [1, 255],
+        },
       },
       address: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: [1, 255],
+        },
       },
       length: {
         type: DataTypes.FLOAT,
         allowNull: true,
+        validate: {
+          isFloat: true,
+          min: 0,
+        },
       },
       width: {
         type: DataTypes.FLOAT,
         allowNull: true,
+        validate: {
+          isFloat: true,
+          min: 0,
+        },
       },
     },
     {
