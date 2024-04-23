@@ -34,8 +34,6 @@ const FieldController = function () {
       },
     });
 
-    console.log(fieldFound);
-
     return fieldFound == null;
 
   };
@@ -84,8 +82,6 @@ const FieldController = function () {
       });
 
       const fieldFound = await isNameUniqueWithinGroup(currentField.group_id, currentField.name, currentField.address, currentField.length, currentField.width);
-
-      console.log(fieldFound);
 
       if (!fieldFound) {
         res.status(400);
