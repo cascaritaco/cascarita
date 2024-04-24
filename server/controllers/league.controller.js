@@ -34,9 +34,7 @@ const LeagueController = function () {
       },
     });
 
-    if (leagueFound) {
-      throw new Error( "name is not unique" );
-    }
+    return leagueFound == null;
   };
 
   var createLeague = async function (req, res, next) {
@@ -44,7 +42,13 @@ const LeagueController = function () {
     const newLeague = { group_id, name, description }; 
 
     try {
-      await isNameUniqueWithinGroup(newLeague.group_id, newLeague.name);
+      const leagueFound = await isNameUniqueWithinGroup(newLeague.group_id, newLeague.name);
+
+      if (!leagueFound) {
+        res.status(400);
+        throw new Error( "Name is not unique" );
+      }
+
       await League.build(newLeague).validate();
       const result = await League.create(newLeague);
 
@@ -66,14 +70,23 @@ const LeagueController = function () {
       });
 
       if (!currentLeague) {
+        res.status(400);
         throw new Error("League with given ID was not found");
       }
 
-      currentLeague.name = req.body.name || currentLeague.name;
-      currentLeague.description = req.body.description || currentLeague.description;
+      Object.keys(req.body).forEach(key => {
+        if (key !== "group_id"){
+          currentLeague[key] = req.body[key] ? req.body[key] : currentLeague[key];
+        };
+      });
 
-      await isNameUniqueWithinGroup(currentLeague.group_id, currentLeague.name);
+      const leagueFound = await isNameUniqueWithinGroup(currentLeague.group_id, currentLeague.name);
 
+      if (!leagueFound) {
+        throw new Error( "Name is not unique" );
+      }
+
+      await currentLeague.validate();
       await currentLeague.save();
 
       return res.status(200).json({ success: true, data: currentLeague });

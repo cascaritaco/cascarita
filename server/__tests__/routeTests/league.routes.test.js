@@ -76,9 +76,9 @@ describe("League Routes", () => {
       .post("/league/")
       .send({ group_id: groupM.id, name: "Salinas" });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "name is not unique",
+      message: "Name is not unique",
     });
   });
 
@@ -123,7 +123,7 @@ describe("League Routes", () => {
       .patch(`/league/${nonExistentLeagueId}`)
       .send({ name: "Joe Mo Mah Inc." });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
       message: "League with given ID was not found",
     });
@@ -141,7 +141,7 @@ describe("League Routes", () => {
   
     expect(response.status).toBe(500);
     expect(response.body).toMatchObject({
-      message: "name is not unique"
+      message: "Name is not unique"
     });
   
     const updatedLeague2 = await testDb.League.findByPk(league2.id);
