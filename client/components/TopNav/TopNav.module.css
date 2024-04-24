@@ -44,6 +44,15 @@
   border-radius: 8px;
   border: 1px solid #c8cbd0;
   margin-right: 25px;
+  outline: none;
+}
+
+.search > input:focus {
+  outline: none;
+}
+
+.input {
+  outline: none;
 }
 
 .search-alert-con {
