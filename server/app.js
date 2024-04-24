@@ -15,9 +15,8 @@ const UserRoutes = require("./routes/user.routes");
 const PlayerRoutes = require("./routes/player.routes");
 const TeamRoutes = require("./routes/team.routes");
 const LeagueRoutes = require("./routes/league.routes");
-const DivisionRoutes = require("./routes/division.routes");
+const FieldRoutes = require("./routes/field.routes");
 const SeasonRoutes = require("./routes/season.routes");
-
 const Middlewares = require("./middlewares");
 
 const app = express();
@@ -33,7 +32,7 @@ router.use(
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
-  })
+  }),
 );
 
 router.use(passport.initialize());
@@ -42,8 +41,8 @@ router.use("/group", GroupRoutes);
 router.use("/role", RoleRoutes);
 router.use("/user", UserRoutes);
 router.use("/player", PlayerRoutes);
-router.use("/division", DivisionRoutes);
 router.use("/league", LeagueRoutes);
+router.use("/field", FieldRoutes);
 router.use("/seasons", SeasonRoutes);
 router.use("/team", TeamRoutes);
 router.use(csrf());
