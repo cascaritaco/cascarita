@@ -5,6 +5,7 @@ import Modal from "../../Modal/Modal";
 import Radio from "../../Radio/Radio";
 
 interface LeagueFormProps {
+  //Use to set open state from true to false after form submission
   afterSave: () => void;
 }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./Radio.module.css";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import { Select } from "@radix-ui/react-select";
 
 interface RadioProps {
   children: React.ReactNode;
