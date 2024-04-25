@@ -1,0 +1,66 @@
+.page {
+  background-color: #fff;
+  width: -webkit-fill-available;
+  margin-right: 35px;
+  border-radius: 6px;
+  height: -webkit-fill-available;
+  margin-bottom: 35px;
+  position: fixed;
+  padding: 30px;
+  overflow: hidden;
+}
+
+.filter-search {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-search > p {
+  margin-right: 50px;
+}
+
+.dropdown {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dropdown > p {
+  padding-left: 15px;
+}
+
+.table {
+  overflow: scroll;
+  height: 70%;
+}
+
+.cols {
+  padding-top: 10px;
+  display: flex;
+  text-align: center;
+  border-bottom: 1px solid #c8cbd0;
+  padding-bottom: 10px;
+}
+
+.cols > h3 {
+  padding-top: 10px;
+  margin-right: 50%;
+  font-weight: 800;
+}
+
+.cols > p {
+  padding-right: 52%;
+}
+
+.cols > button {
+  padding-right: 50%;
+}
+
+.h1 {
+  font-size: 35px;
+  font-weight: 800;
+  position: relative;
+}
