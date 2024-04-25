@@ -8,7 +8,24 @@ import {
   ChevronUpIcon,
 } from "@radix-ui/react-icons";
 
-export default function SelectMenu({
+interface SelectMenu {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  name?: string;
+  placeholder?: string;
+  children: React.ReactNode;
+  delegated?: React.HTMLProps<HTMLDivElement>;
+}
+
+const SelectMenu: React.FC<SelectMenu> & {
+  Button: typeof Select.Trigger;
+  Group: typeof Select.Group;
+  GroupLabel: typeof Select.Label;
+  Separator: typeof Select.Separator;
+  Item: React.FC<SelectItemProps>;
+} = ({
   open,
   onOpenChange,
   value,
@@ -17,16 +34,7 @@ export default function SelectMenu({
   placeholder,
   children,
   ...delegated
-}: {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  value?: string;
-  name?: string;
-  onValueChange?: (value: string) => void;
-  placeholder?: string;
-  children: React.ReactNode;
-  delegated?: React.HTMLProps<HTMLDivElement>;
-}) {
+}) => {
   return (
     <Select.Root
       open={open}
@@ -64,15 +72,14 @@ export default function SelectMenu({
       </Select.Portal>
     </Select.Root>
   );
-}
+};
 
-function SelectItem({
-  value,
-  children,
-}: {
+interface SelectItemProps {
   value: string;
   children: React.ReactNode;
-}) {
+}
+
+const SelectItem: React.FC<SelectItemProps> = ({ value, children }) => {
   return (
     <Select.Item className={styles.selectItem} value={value}>
       <Select.ItemText>{children}</Select.ItemText>
@@ -82,10 +89,11 @@ function SelectItem({
       </Select.ItemIndicator>
     </Select.Item>
   );
-}
+};
 
 SelectMenu.Button = Select.Trigger;
 SelectMenu.Group = Select.Group;
 SelectMenu.GroupLabel = Select.Label;
 SelectMenu.Separator = Select.Separator;
 SelectMenu.Item = SelectItem;
+export default SelectMenu;
