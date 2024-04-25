@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./LeagueForm.module.css";
 import SelectMenu from "../../SelectMenu/SelectMenu";
 import Modal from "../../Modal/Modal";
+import Radio from "../../Radio/Radio";
 
 interface LeagueFormProps {
   afterSave: () => void;
@@ -71,33 +72,27 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
         />
       </div>
 
-      <fieldset className={styles.fieldSet}>
-        <legend className={styles.Label}>
-          Want to link an existing divison?
-        </legend>
-
+      <fieldset>
         <div className={styles.radioContainer}>
-          <input
-            type="radio"
-            name="existingLeague"
-            id="existing-yes"
-            value="yes"
-            checked={isExistingLeague === "yes"}
-            onChange={(event) => setIsExistingLeague(event.target.value)}
-          />
-          <label htmlFor="existing-yes">Yes</label>
-        </div>
+          <legend className={styles.Label}>
+            Want to link an existing divison?
+          </legend>
 
-        <div className={styles.radioContainer}>
-          <input
-            type="radio"
-            name="existingLeague"
-            id="existing-no"
-            value="no"
-            checked={isExistingLeague === "no"}
-            onChange={(event) => setIsExistingLeague(event.target.value)}
-          />
-          <label htmlFor="existing-no">No</label>
+          <Radio
+            groupName="isExistingLeague"
+            value={isExistingLeague}
+            onValueChange={(isExistingLeague) =>
+              setIsExistingLeague(isExistingLeague)
+            }
+          >
+            <div className={styles.radioInputContainer}>
+              <Radio.Item id="existing-yes" value="yes" />
+              <label htmlFor="existing-yes">Yes</label>
+
+              <Radio.Item id="existing-no" value="no" />
+              <label htmlFor="existing-no">No</label>
+            </div>
+          </Radio>
         </div>
       </fieldset>
 

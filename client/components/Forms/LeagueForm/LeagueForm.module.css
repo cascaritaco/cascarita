@@ -39,16 +39,16 @@
   box-shadow: 0 0 0 2px lightblue;
 }
 
-.fieldSet {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .radioContainer {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
+}
+
+.radioInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .radioContainer > input {
