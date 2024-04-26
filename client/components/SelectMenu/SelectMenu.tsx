@@ -9,6 +9,8 @@ import {
 } from "@radix-ui/react-icons";
 
 interface SelectMenu {
+  defaultValue?: string;
+  defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   value?: string;
@@ -16,6 +18,7 @@ interface SelectMenu {
   name?: string;
   placeholder?: string;
   children: React.ReactNode;
+  required?: boolean;
   delegated?: React.HTMLProps<HTMLDivElement>;
 }
 
@@ -26,6 +29,8 @@ const SelectMenu: React.FC<SelectMenu> & {
   Separator: typeof Select.Separator;
   Item: React.FC<SelectItemProps>;
 } = ({
+  defaultValue,
+  defaultOpen,
   open,
   onOpenChange,
   value,
@@ -33,16 +38,19 @@ const SelectMenu: React.FC<SelectMenu> & {
   onValueChange,
   placeholder,
   children,
+  required,
   ...delegated
 }) => {
   return (
     <Select.Root
+      defaultValue={defaultValue}
+      defaultOpen={defaultOpen}
       open={open}
       onOpenChange={onOpenChange}
       value={value}
-      defaultValue=""
       name={name}
       onValueChange={onValueChange}
+      required={required}
       {...delegated}
     >
       <Select.Trigger className={styles.selectTrigger}>
@@ -77,11 +85,20 @@ const SelectMenu: React.FC<SelectMenu> & {
 interface SelectItemProps {
   value: string;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
-const SelectItem: React.FC<SelectItemProps> = ({ value, children }) => {
+const SelectItem: React.FC<SelectItemProps> = ({
+  value,
+  children,
+  disabled,
+}) => {
   return (
-    <Select.Item className={styles.selectItem} value={value}>
+    <Select.Item
+      className={styles.selectItem}
+      value={value}
+      disabled={disabled}
+    >
       <Select.ItemText>{children}</Select.ItemText>
 
       <Select.ItemIndicator>

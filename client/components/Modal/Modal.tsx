@@ -7,6 +7,7 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 interface ModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  defaultOpen?: boolean;
   children: React.ReactNode;
 }
 
@@ -19,9 +20,13 @@ const Modal: React.FC<ModalProps> & {
   Button: React.FC<React.ComponentProps<typeof Dialog.Trigger>>;
   Content: React.FC<ModalContentProps>;
   Close: typeof Dialog.Close;
-} = ({ open, onOpenChange, children }) => {
+} = ({ open, onOpenChange, defaultOpen = false, children }) => {
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      defaultOpen={defaultOpen}
+    >
       {children}
     </Dialog.Root>
   );

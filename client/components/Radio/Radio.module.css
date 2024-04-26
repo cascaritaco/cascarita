@@ -1,3 +1,7 @@
+.radioGroupRoot[data-disabled] {
+  opacity: 0.5;
+}
+
 .radioGroupItem {
   background-color: white;
   width: 15px;
