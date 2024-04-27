@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./Radio.module.css";
+import styles from "./RadioSelect.module.css";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 
-interface RadioProps {
+interface RadioSelectProps {
   children: React.ReactNode;
   groupName: string;
   defaultValue?: string;
@@ -10,17 +10,19 @@ interface RadioProps {
   onValueChange?: (value: string) => void;
   required?: boolean;
   disabled?: boolean;
+  className?: string;
 }
 
-interface RadioItemProp {
+interface RadioSelectItemProp {
   value: string;
   id: string;
   disabled?: boolean;
   required?: boolean;
+  className?: string;
 }
 
-const Radio: React.FC<RadioProps> & {
-  Item: React.FC<RadioItemProp>;
+const RadioSelect: React.FC<RadioSelectProps> & {
+  Item: React.FC<RadioSelectItemProp>;
   Indicator: typeof RadioGroup.Indicator;
 } = ({
   children,
@@ -30,7 +32,10 @@ const Radio: React.FC<RadioProps> & {
   onValueChange,
   required = false,
   disabled = false,
+  className = "",
 }) => {
+  const radioSelectClassName = `${styles.radioGroupRoot} ${className}`;
+
   return (
     <RadioGroup.Root
       name={groupName}
@@ -39,14 +44,14 @@ const Radio: React.FC<RadioProps> & {
       onValueChange={onValueChange}
       required={required}
       disabled={disabled}
-      className={styles.radioGroupRoot}
+      className={radioSelectClassName}
     >
       {children}
     </RadioGroup.Root>
   );
 };
 
-const RadioItem: React.FC<RadioItemProp> = ({
+const RadioItem: React.FC<RadioSelectItemProp> = ({
   value,
   id,
   required = false,
@@ -65,6 +70,6 @@ const RadioItem: React.FC<RadioItemProp> = ({
   );
 };
 
-Radio.Item = RadioItem;
-Radio.Indicator = RadioGroup.Indicator;
-export default Radio;
+RadioSelect.Item = RadioItem;
+RadioSelect.Indicator = RadioGroup.Indicator;
+export default RadioSelect;

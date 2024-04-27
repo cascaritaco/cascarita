@@ -19,7 +19,7 @@ interface SelectMenu {
   placeholder?: string;
   children: React.ReactNode;
   required?: boolean;
-  delegated?: React.HTMLProps<HTMLDivElement>;
+  className?: string;
 }
 
 const SelectMenu: React.FC<SelectMenu> & {
@@ -39,10 +39,14 @@ const SelectMenu: React.FC<SelectMenu> & {
   placeholder,
   children,
   required,
+  className = "",
   ...delegated
 }) => {
+  const triggerClassName = `${styles.selectTrigger} ${className}`;
+
   return (
     <Select.Root
+      {...delegated}
       defaultValue={defaultValue}
       defaultOpen={defaultOpen}
       open={open}
@@ -51,9 +55,8 @@ const SelectMenu: React.FC<SelectMenu> & {
       name={name}
       onValueChange={onValueChange}
       required={required}
-      {...delegated}
     >
-      <Select.Trigger className={styles.selectTrigger}>
+      <Select.Trigger className={triggerClassName}>
         <Select.Value
           placeholder={placeholder ? placeholder : "Select a value"}
         />
@@ -86,16 +89,19 @@ interface SelectItemProps {
   value: string;
   children: React.ReactNode;
   disabled?: boolean;
+  className?: string;
 }
 
 const SelectItem: React.FC<SelectItemProps> = ({
   value,
   children,
   disabled,
+  className,
 }) => {
+  const selectItemClassName = `${styles.selectItem} ${className}`;
   return (
     <Select.Item
-      className={styles.selectItem}
+      className={selectItemClassName}
       value={value}
       disabled={disabled}
     >
