@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         sourceKey: "id",
       });
+      Group.hasMany(models.Division, {
+        foreignKey: "group_id",
+        sourceKey: "id",
+      });
     }
   }
   Group.init(
@@ -72,10 +76,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: 'State field cannot be empty'
           },
-          isIn: { 
-           args: [['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']], // Valid US state abbreviations
-           msg: 'Invalid state abbreviation'
-        }
+          isIn: {
+            args: [['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']], // Valid US state abbreviations
+            msg: 'Invalid state abbreviation'
+          }
         },
       },
       zip_code: {
