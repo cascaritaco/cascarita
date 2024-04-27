@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./LeagueForm.module.css";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
-import Radio from "../../components/Radio/Radio";
+import RadioSelect from "../RadioSelect/RadioSelect";
 
 interface LeagueFormProps {
   //Use to set open state from true to false after form submission
@@ -79,7 +79,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
             Want to link an existing divison?
           </legend>
 
-          <Radio
+          <RadioSelect
             groupName="isExistingLeague"
             value={isExistingLeague}
             onValueChange={(isExistingLeague) =>
@@ -87,13 +87,13 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
             }
           >
             <div className={styles.radioInputContainer}>
-              <Radio.Item id="existing-yes" value="yes" />
+              <RadioSelect.Item id="existing-yes" value="yes" />
               <label htmlFor="existing-yes">Yes</label>
 
-              <Radio.Item id="existing-no" value="no" />
+              <RadioSelect.Item id="existing-no" value="no" />
               <label htmlFor="existing-no">No</label>
             </div>
-          </Radio>
+          </RadioSelect>
         </div>
       </fieldset>
 
