@@ -45,11 +45,11 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputContainer}>
-        <label className={styles.Label} htmlFor="leagueName">
+        <label className={styles.label} htmlFor="leagueName">
           Name
         </label>
         <input
-          className={styles.Input}
+          className={styles.input}
           required
           placeholder="League Name"
           id="leagueName"
@@ -60,11 +60,11 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
       </div>
 
       <div className={styles.inputContainer}>
-        <label className={styles.Label} htmlFor="leagueDesc">
+        <label className={styles.label} htmlFor="leagueDesc">
           Description
         </label>
         <input
-          className={styles.Input}
+          className={styles.input}
           placeholder="League Description"
           id="leagueDesc"
           name="leagueDescription"
@@ -75,7 +75,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
 
       <fieldset>
         <div className={styles.radioContainer}>
-          <legend className={styles.Label}>
+          <legend className={styles.label}>
             Want to link an existing divison?
           </legend>
 

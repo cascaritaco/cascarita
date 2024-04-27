@@ -11,14 +11,14 @@
   align-items: baseline;
 }
 
-.Label {
+.label {
   font-size: 1.1rem;
   color: black;
   margin-right: 16px;
   display: block;
 }
 
-.Input {
+.input {
   width: 100%;
   height: auto;
   flex: 1;
@@ -35,7 +35,7 @@
   height: 35px;
 }
 
-.Input:focus {
+.input:focus {
   box-shadow: 0 0 0 2px lightblue;
 }
 
