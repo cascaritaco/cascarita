@@ -182,4 +182,66 @@ describe("Session Controller", () => {
       expect(caughtError.toString()).toMatch("Error: Session with given ID was not found");
     });
   });
+
+  describe("getSessionBySessionId", () => {
+    it("returns found Sessions based on the id", async () => {
+      const newSession = await createSampleSession();
+
+      const req = { body: {id: newSession.sessionData.id} };
+      const res = createMockResponse();
+      const next = jest.fn();
+
+      await SessionController.getSessionBySessionId(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.body.data.length).toBe(1);
+    });
+
+    it("returns error if Sessions id does not exist", async () => {
+      const ghostSessionId = 123;
+
+      const req = { body: {id: ghostSessionId} };
+      const res = createMockResponse();
+      const next = jest.fn();
+
+      await SessionController.getSessionBySessionId(req, res, next);
+
+      const nextArgs = next.mock.calls[0];
+      const caughtError = nextArgs[0];
+      
+      expect(next).toHaveBeenCalled();
+      expect(caughtError.toString()).toMatch("Error: Session with given ID does not exist");
+    });
+  });
+
+  describe("getSessionByDivisionId", () => {
+    it("returns found Sessions based on the Division id", async () => {
+      const newSession = await createSampleSession();
+
+      const req = { body: {division_id: newSession.sessionData.division_id} };
+      const res = createMockResponse();
+      const next = jest.fn();
+
+      await SessionController.getSessionByDivisionId(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.body.data.length).toBe(1);
+    });
+
+    it("returns error if Session with a Division id does not exist", async () => {
+      const ghostDivisionId = 456;
+
+      const req = { body: {division_id: ghostDivisionId} };
+      const res = createMockResponse();
+      const next = jest.fn();
+
+      await SessionController.getSessionByDivisionId(req, res, next);
+
+      const nextArgs = next.mock.calls[0];
+      const caughtError = nextArgs[0];
+      
+      expect(next).toHaveBeenCalled();
+      expect(caughtError.toString()).toMatch("Error: Session with given division ID does not exist");
+    });
+  });
 });

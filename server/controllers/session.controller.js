@@ -4,7 +4,7 @@ const { Session } = require("../models");
 
 const SessionController = function () {
     var getSessionBySessionId = async function (req, res, next) {
-        const sessionId = req.params['id'];
+        const sessionId = req.body.id;
 
         try {
             const result = await Session.findAll({
@@ -13,7 +13,7 @@ const SessionController = function () {
             },
             });
 
-            if (Object.keys(result).length === 0) {
+            if (result.length === 0) {
                 throw new Error("Session with given ID does not exist");
             }
 
@@ -27,7 +27,7 @@ const SessionController = function () {
     };
     
   var getSessionByDivisionId = async function (req, res, next) {
-    const divisionId = req.params['id'];
+    const divisionId = req.body.division_id;
 
     try {
       const result = await Session.findAll({
@@ -36,7 +36,7 @@ const SessionController = function () {
         },
       });
 
-      if (Object.keys(result).length === 0) {
+      if (result.length === 0) {
         throw new Error("Session with given division ID does not exist");
       }
 
