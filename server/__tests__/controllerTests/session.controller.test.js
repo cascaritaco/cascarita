@@ -194,7 +194,9 @@ describe("Session Controller", () => {
       await SessionController.getSessionBySessionId(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.body.data.length).toBe(1);
+      expect(res.body.data).toEqual(expect.objectContaining({
+        id:  newSession.sessionData.id
+      }));
     });
 
     it("returns error if Sessions id does not exist", async () => {
@@ -225,7 +227,9 @@ describe("Session Controller", () => {
       await SessionController.getSessionByDivisionId(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.body.data.length).toBe(1);
+      expect(res.body.data).toEqual(expect.objectContaining({
+        id:  newSession.sessionData.id
+      }));
     });
 
     it("returns error if Session with a Division id does not exist", async () => {

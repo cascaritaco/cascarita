@@ -7,15 +7,11 @@ const SessionController = function () {
         const sessionId = req.body.id;
 
         try {
-            const result = await Session.findAll({
-            where: {
-                id: sessionId,
-            },
-            });
+            const result = await Session.findByPk(sessionId);
 
-            if (result.length === 0) {
-                throw new Error("Session with given ID does not exist");
-            }
+            if (!result) {
+              throw new Error("Session with given ID does not exist");
+          }
 
             return res.status(200).json({
             success: true,
@@ -30,13 +26,13 @@ const SessionController = function () {
     const divisionId = req.body.division_id;
 
     try {
-      const result = await Session.findAll({
+      const result = await Session.findOne({
         where: {
           division_id: divisionId,
         },
       });
 
-      if (result.length === 0) {
+      if (!result) {
         throw new Error("Session with given division ID does not exist");
       }
 
