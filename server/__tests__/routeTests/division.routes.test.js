@@ -111,10 +111,10 @@ describe("Division routes", () => {
       const form = { group_id: group.id, name: "f" };
 
       const response = await request(app)
-        .post("/divisions")
+        .patch("/divisions")
         .send(form);
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(404);
       expect(response.body).toMatchObject({
         message: "Validation error: Division name must be between 2 and 50 characters long",
       })
