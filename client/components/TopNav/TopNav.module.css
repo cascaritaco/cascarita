@@ -15,13 +15,9 @@
   margin-left: 50px;
 }
 
-.search-icon {
-  color: #c8cbd0;
-  margin-right: 5px;
-}
-
 .notification {
   scale: 1.5;
+  margin-left: 35px;
   margin-right: 35px;
 }
 
@@ -33,22 +29,6 @@
   width: 25px;
   border-radius: 8px;
   border: 1px solid #c8cbd0;
-}
-
-.search {
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-  padding: 2px;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid #c8cbd0;
-  margin-right: 25px;
-  outline: none;
-}
-
-.search > input:focus {
-  outline: none;
 }
 
 .input {
