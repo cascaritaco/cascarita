@@ -3,16 +3,34 @@
 const request = require("supertest");
 const SessionController = require("../../controllers/session.controller");
 const TestDb = require("../../models");
+const TestDataGenerator = require("../../utilityFunctions/testDataGenerator");
+const express = require("express");
+const Middlewares = require("../../middlewares");
+const app = express();
+app.use(express.json());
 
-jest.mock("../../models", () => ({
-  Session: {
-    findAll: jest.fn(),
-    build: jest.fn(),
-    create: jest.fn(),
-    findOne: jest.fn(),
-    destroy: jest.fn()
-  },
-}));
+app.use(Middlewares.errorHandler);
+
+var createMockResponse = function(){
+  return {
+    
+      status: jest.fn(function (statusCode) {
+        return this;
+      }),
+      json: jest.fn(function (data) {
+        this.body = data;
+      }),
+  }
+}
+
+var setUpForSession = async function(groupName, LeagueName, SeasonName, DivisionName){
+  const group = await TestDataGenerator.createDummyGroup(groupName);
+  const league = await TestDataGenerator.createLeague(LeagueName, group.id);
+  const sampleSeason = await TestDataGenerator.createSeason(league.id, SeasonName);
+  const sampleDivision = await TestDataGenerator.createDivision(group.id, DivisionName);
+
+  return { divisionId: sampleDivision.id,  seasonId: sampleSeason.id };
+}
 
 
 describe("Session Controller", () => {
