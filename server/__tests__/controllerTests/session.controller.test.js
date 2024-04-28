@@ -10,19 +10,19 @@ app.use(express.json());
 
 app.use(Middlewares.errorHandler);
 
-var createMockResponse = function(){
+var createMockResponse = function() {
   return {
-    
-      status: jest.fn(function (statusCode) {
+
+      status: jest.fn(function(statusCode) {
         return this;
       }),
-      json: jest.fn(function (data) {
+      json: jest.fn(function(data) {
         this.body = data;
       }),
   }
 }
 
-var setUpForSession = async function(groupName, LeagueName, SeasonName, DivisionName){
+var setUpForSession = async function(groupName, LeagueName, SeasonName, DivisionName) {
   const group = await TestDataGenerator.createDummyGroup(groupName);
   const league = await TestDataGenerator.createLeague(LeagueName, group.id);
   const sampleSeason = await TestDataGenerator.createSeason(league.id, SeasonName);
@@ -53,7 +53,7 @@ describe("Session Controller", () => {
     });
 
   describe("createSession", () => {
-    it("should create a new session", async () => {
+    it("should create a new session", async() => {
       const sampleData = await setUpForSession("Dummy Group","Best League", "Winter 23", "U-18");
 
       const req = { body: { division_id: sampleData.divisionId, season_id: sampleData.seasonId } };
@@ -66,12 +66,12 @@ describe("Session Controller", () => {
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.body.data).toEqual(expect.objectContaining({
-        division_id: sampleData.divisionId, 
+        division_id: sampleData.divisionId,
         season_id:  sampleData.seasonId
       }));
     });
 
-    it("should handle error during session creation, when passing in an invalid id", async () => {
+    it("should handle error during session creation, when passing in an invalid id", async() => {
       const sampleData = await setUpForSession("Big Group","top League", "Summer 23", "1st");
 
       const req = { body: { division_id: "not a division lol", season_id: sampleData.seasonId } };
@@ -87,7 +87,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError).toEqual(expect.objectContaining({
-        name: "SequelizeDatabaseError", 
+        name: "SequelizeDatabaseError",
         original: expect.objectContaining({
           sqlMessage: "Incorrect integer value: 'not a division lol' for column 'division_id' at row 1"
         })
