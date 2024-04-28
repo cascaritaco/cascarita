@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         targetKey: "id",
       });
-      // WIP
-      League.hasMany(models.Session, {
+
+      League.hasMany(models.Season, {
         foreignKey: "league_id",
         sourceKey: "id",
       });

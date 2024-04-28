@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "season_id",
         targetKey: "id",
       });
-      
-      Session.belongsTo(models.League, {
-        foreignKey: "league_id",
-        targetKey: "id",
-      });
 
       Session.belongsTo(models.Division,
         { foreignKey: "division_id",
