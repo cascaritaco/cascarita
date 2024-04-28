@@ -3,8 +3,13 @@ import Search from "../../components/Search/Search";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import Page from "../../components/Page/Page";
+import SelectMenu from "../../components/SelectMenu/SelectMenu";
+import { useState } from "react";
 
 const Leagues = () => {
+  const [filter, setFilter] = useState("");
+  const [sorts, setSorts] = useState("");
+
   // note this needs to be replaced with backend call
   const leagues = [
     "test",
@@ -19,14 +24,49 @@ const Leagues = () => {
     "test",
   ];
 
+  const filterStatuses = ["Active", "Inactive"];
+  const sortStatuses = ["Alphabetical", "Date"];
+
   return (
     <Page>
       <h1 className={styles.h1}>Leagues</h1>
-      <div className={styles["filter-search"]}>
+      <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search />
-          <p>DropDown1</p>
-          <p>DropDown2</p>
+          <div className={styles.filterContainer}>
+            <p className={styles.filterSubTitle}>Filter</p>
+            <SelectMenu
+              placeholder="Active"
+              name="filter"
+              value={filter}
+              onValueChange={(value) => setFilter(value)}
+            >
+              <SelectMenu.Group>
+                {filterStatuses.map((status, idx) => (
+                  <SelectMenu.Item key={idx} value={status}>
+                    {status}
+                  </SelectMenu.Item>
+                ))}
+              </SelectMenu.Group>
+            </SelectMenu>
+          </div>
+          <div className={styles.filterContainer}>
+            <p className={styles.filterSubTitle}>Sort By</p>
+            <SelectMenu
+              placeholder="Alphabetical"
+              name="sorts"
+              value={sorts}
+              onValueChange={(value) => setSorts(value)}
+            >
+              <SelectMenu.Group>
+                {sortStatuses.map((status, idx) => (
+                  <SelectMenu.Item key={idx} value={status}>
+                    {status}
+                  </SelectMenu.Item>
+                ))}
+              </SelectMenu.Group>
+            </SelectMenu>
+          </div>
         </div>
         <PrimaryButton label="Add League" />
       </div>
