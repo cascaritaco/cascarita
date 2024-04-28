@@ -70,15 +70,9 @@ const SessionController = function () {
     try {
       let currentSession = await Session.findOne({
         where: {
-          id: req.params['id'],
+          id: req.body.session_id,
         },
       });
-
-      console.log("test " + currentSession);
-      console.log("bruh")
-
-      console.log(req.params['id']);
-      console.log(req.body);
 
       if (!currentSession) {
         res.status(400);
@@ -88,8 +82,6 @@ const SessionController = function () {
       Object.keys(req.body).forEach(key => {
             currentSession[key] = req.body[key] ? req.body[key] : currentSession[key];
       });
-
-      console.log(currentSession);
 
       await currentSession.validate();
       await currentSession.save();
