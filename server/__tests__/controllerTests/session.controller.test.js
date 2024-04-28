@@ -244,4 +244,34 @@ describe("Session Controller", () => {
       expect(caughtError.toString()).toMatch("Error: Session with given division ID does not exist");
     });
   });
+
+  describe("deleteSession", () => {
+    it("delete a session successfully", async () => {
+      const newSession = await createSampleSession();
+
+      const req = { body: {id: newSession.sessionData.id} };
+      const res = createMockResponse();
+      const next = jest.fn();
+
+      await SessionController.deleteSession(req, res, next);
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.body.message).toEqual("Delete session successfully");
+    });
+
+    it("sends error if a session is not found", async () => {
+      const ghostSessionId = 789;
+
+      const req = { body: {id: ghostSessionId} };
+      const res = createMockResponse();
+      const next = jest.fn();
+
+      await SessionController.deleteSession(req, res, next);
+
+      const nextArgs = next.mock.calls[0];
+      const caughtError = nextArgs[0];
+      
+      expect(next).toHaveBeenCalled();
+      expect(caughtError.toString()).toMatch("Error: No session found with the given ID");
+    });
+  });
 });

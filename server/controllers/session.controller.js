@@ -96,7 +96,7 @@ const SessionController = function () {
     try {
       let deletedSession = await Session.destroy({
         where: {
-          id: req.params['id'],
+          id: req.body.id,
         },
       });
 
