@@ -1,9 +1,10 @@
 import Layout from "../../components/Layout/Layout";
+import Leagues from "../Leagues/Leagues";
 
 const Home = () => {
   return (
     <Layout>
-      <p>Home</p>
+      <Leagues />
     </Layout>
   );
 };

@@ -1,9 +1,9 @@
 import Logo from "../../assets/logo.svg";
 import styles from "./TopNav.module.css";
 import { Text } from "@radix-ui/themes";
-import { TextField, Avatar } from "@radix-ui/themes";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { Avatar } from "@radix-ui/themes";
 import { MdOutlineNotifications } from "react-icons/md";
+import Search from "../Search/Search";
 
 const SideNav = () => {
   return (
@@ -17,11 +17,7 @@ const SideNav = () => {
         </span>
       </div>
       <div className={styles["search-alert-con"]}>
-        <TextField.Root className={styles.search} placeholder="Search" size="1">
-          <TextField.Slot className={styles["search-icon"]}>
-            <MagnifyingGlassIcon height="16" width="16" />
-          </TextField.Slot>
-        </TextField.Root>
+        <Search />
         <MdOutlineNotifications className={styles.notification} />
         <Avatar fallback="A" className={styles.avatar} />
       </div>
