@@ -1,14 +1,17 @@
 const path = require("path");
-const express = require("express");
+
+const passport = require("./passport");
 const session = require("express-session");
-const passport = require("./config/passport");
 const http = require("http");
+const express = require("express");
 const router = express.Router();
 
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
-const csrf = require("csurf");
+// const csrf = require("csurf");
+
+const AuthRoutes = require("./routes/auth.routes");
 const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
@@ -29,14 +32,13 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(
   session({
-    secret: "your-secret-key",
+    secret: "SECRET",
     resave: false,
     saveUninitialized: true,
   })
 );
 
-router.use(passport.initialize());
-router.use(passport.session());
+// Add the routes specific to your models here
 router.use("/group", GroupRoutes);
 router.use("/role", RoleRoutes);
 router.use("/user", UserRoutes);
@@ -45,7 +47,8 @@ router.use("/league", LeagueRoutes);
 router.use("/field", FieldRoutes);
 router.use("/seasons", SeasonRoutes);
 router.use("/team", TeamRoutes);
-router.use(csrf());
+router.use("/auth", AuthRoutes);
+// router.use(csrf());
 
 function init() {
   router.get("*", function (req, res) {
