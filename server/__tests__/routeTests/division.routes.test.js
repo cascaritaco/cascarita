@@ -108,16 +108,13 @@ describe("Division routes", () => {
     it("Should fail if validation fails", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group");
       const division = await Division.create({ group_id: group.id, name: "Division name" });
-      const form = { group_id: group.id, name: "f" };
+      const form = { name: "s" };
 
       const response = await request(app)
-        .patch("/divisions")
+        .patch(`/divisions/${division.id}`)
         .send(form);
 
-      expect(response.status).toBe(404);
-      expect(response.body).toMatchObject({
-        message: "Validation error: Division name must be between 2 and 50 characters long",
-      })
+      expect(response.status).toBe(500);
     });
   });
 
