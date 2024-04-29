@@ -17,6 +17,7 @@ const TeamRoutes = require("./routes/team.routes");
 const LeagueRoutes = require("./routes/league.routes");
 const FieldRoutes = require("./routes/field.routes");
 const SeasonRoutes = require("./routes/season.routes");
+const DivisionController = require("./routes/division.routes");
 const Middlewares = require("./middlewares");
 
 const app = express();
@@ -44,6 +45,7 @@ router.use("/player", PlayerRoutes);
 router.use("/league", LeagueRoutes);
 router.use("/field", FieldRoutes);
 router.use("/seasons", SeasonRoutes);
+router.use("/divisions", DivisionController);
 router.use("/team", TeamRoutes);
 router.use(csrf());
 
