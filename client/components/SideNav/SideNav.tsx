@@ -8,10 +8,14 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import NavItem from "../NavItem/NavItem";
+import { useNavigate } from "react-router-dom";
 
 const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
+  const navigate = useNavigate();
+
   const handleItemClick = (label: string) => {
     setSelectedItem(label);
+    navigate(`/${label.toLowerCase()}`);
   };
 
   return (

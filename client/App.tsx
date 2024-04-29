@@ -4,23 +4,22 @@ import Users from "./pages/Users/Users";
 import Schedule from "./pages/Schedule/Schedule";
 import Forms from "./pages/Forms/Forms";
 import Settings from "./pages/Settings/Settings";
-import SideNav from "./components/SideNav/SideNav";
-import TopNav from "./components/TopNav/TopNav";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import Layout from "./components/Layout/Layout";
+import { useState } from "react";
+import Login from "./pages/Login/Login";
+import { AuthProvider, useAuth } from "./components/AuthContext/AuthContext";
+import { Navigate } from "react-router-dom";
 
-const App = () => {
-  const [selectedItem, setSelectedItem] = useState("Home");
-  const navigate = useNavigate();
+const AppContent = () => {
+  const { currentUser } = useAuth();
+  const [selectedItem, setSelectedItem] = useState("home");
 
-  useEffect(() => {
-    navigate(`/${selectedItem.toLowerCase()}`);
-  }, [selectedItem]);
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
 
   return (
-    <div>
-      <TopNav />
-      <SideNav selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
+    <Layout selectedItem={selectedItem} setSelectedItem={setSelectedItem}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -29,7 +28,19 @@ const App = () => {
         <Route path="/forms" element={<Forms />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
-    </div>
+    </Layout>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+      {/* Add Public facing routes here */}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </AuthProvider>
   );
 };
 

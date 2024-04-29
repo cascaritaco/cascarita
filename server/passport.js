@@ -1,13 +1,68 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const passport = require("./config/passport");
+const LocalStrategy = require("passport-local").Strategy;
 const cookieSession = require("cookie-session");
+const passport = require("passport");
 const express = require("express");
 const cors = require("cors");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const { sequelize, DataTypes } = require("./models/index");
+const User = require("./models/user")(sequelize, DataTypes);
 
-const GOOGLE_CLIENT_ID =
-  "135465373081-fq0v2h8jcsv0vsb5v95ghlr740indnnv.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+// TODO add to environment variables
+const GOOGLE_CLIENT_ID = "";
+const GOOGLE_CLIENT_SECRET = "";
+
+function configureLocalAuth() {
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: "email",
+        passwordField: "password",
+      },
+      async (email, password, done) => {
+        try {
+          const user = await User.findOne({ where: { email } });
+          if (!user) {
+            //|| !(await user.validPassword(password))) {
+            return done(null, false, {
+              message: "Invalid email or password",
+            });
+          }
+          const token = jwt.sign(
+            { userId: user.id, userEmail: user.email },
+            "your_secret_key",
+            {
+              expiresIn: "1h",
+            }
+          );
+          return done(null, user, { token: token });
+        } catch (err) {
+          return done(err);
+        }
+      }
+    )
+  );
+
+  passport.serializeUser((user, done) => {
+    done(null, {
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      group_id: user.group_id,
+      role_id: user.role_id,
+    });
+  });
+
+  passport.deserializeUser(async (user, done) => {
+    try {
+      done(null, user);
+    } catch (err) {
+      done(err);
+    }
+  });
+}
 
 function configureGoogleOAuth() {
   passport.use(
@@ -33,6 +88,7 @@ function configureGoogleOAuth() {
 }
 
 configureGoogleOAuth();
+configureLocalAuth();
 router.use(
   cookieSession({
     name: "session",

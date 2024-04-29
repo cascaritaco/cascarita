@@ -4,6 +4,17 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/";
+const UserController = require("../controllers/user.controller");
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    // failureRedirect: "/auth/login/failed",
+    failureMessage: true,
+    session: false,
+  }),
+  UserController.logInUser
+);
 
 router.get("/login/success", (req, res) => {
   if (req.user) {

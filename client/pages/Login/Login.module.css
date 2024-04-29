@@ -1,0 +1,82 @@
+.login {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+
+.logo {
+  scale: 1.75;
+  margin-bottom: 10%;
+}
+
+.left {
+  background: linear-gradient(to right, #830aaf, #4238d5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Full height of the viewport */
+  width: 50%; /* 50% width of the viewport */
+  display: flex;
+  color: white;
+  font-size: 50px;
+  font-weight: 500;
+  flex-direction: column; /* Make it a column */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.right {
+  position: fixed;
+  top: 45%;
+  transform: translateY(-50%);
+  right: 0;
+  width: 50%;
+  text-align: center;
+  padding: 0 150px;
+}
+
+.loginHeader {
+  text-align: left;
+  font-size: 36px;
+  font-weight: 800;
+  padding-bottom: 30px;
+}
+
+.right > p {
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.right > input {
+  width: calc(100% - 20px);
+  margin-bottom: 10px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.right > button {
+  width: calc(100% - 100px);
+  margin-top: 30px;
+  margin-bottom: 10px;
+  padding: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #000;
+}
+
+.right > button:hover {
+  background-color: #808080;
+}
+
+.divider {
+  width: 100%;
+  border-top: 1px solid #ccc; /* Adjust color and thickness as needed */
+  margin-bottom: 20px;
+}

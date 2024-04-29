@@ -1,0 +1,11 @@
+.page {
+  background-color: #fff;
+  width: -webkit-fill-available;
+  margin-right: 35px;
+  border-radius: 6px;
+  height: -webkit-fill-available;
+  margin-bottom: 35px;
+  position: fixed;
+  padding: 30px;
+  overflow: hidden;
+}

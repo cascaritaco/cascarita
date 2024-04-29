@@ -38,8 +38,7 @@ const UserController = function () {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const welcomeMessage = `Welcome, ${req.user.first_name} ${req.user.last_name}`;
-    res.status(201).json({ message: welcomeMessage });
+    res.status(200).json({ user: req.user, token: req.authInfo.token });
   };
 
   return {

@@ -29,6 +29,10 @@ sequelize
     console.error("Unable to connect to the database", error.message);
   });
 
+// Export sequelize and DataTypes
+module.exports.sequelize = sequelize;
+module.exports.DataTypes = Sequelize.DataTypes;
+
 fs.readdirSync(__dirname)
   .filter((file) => {
     return (
@@ -50,6 +54,7 @@ Object.keys(db).forEach((modelName) => {
 });
 
 db.sequelize = sequelize;
+db.DataTypes = Sequelize.DataTypes;
 db.Sequelize = Sequelize;
 
 module.exports = db;
