@@ -64,30 +64,30 @@ function configureLocalAuth() {
   });
 }
 
-function configureGoogleOAuth() {
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "/api/auth/google/callback",
-      },
-      function (accessToken, refreshToken, profile, done) {
-        done(null, profile);
-      }
-    )
-  );
+// function configureGoogleOAuth() {
+//   passport.use(
+//     new GoogleStrategy(
+//       {
+//         clientID: GOOGLE_CLIENT_ID,
+//         clientSecret: GOOGLE_CLIENT_SECRET,
+//         callbackURL: "/api/auth/google/callback",
+//       },
+//       function (accessToken, refreshToken, profile, done) {
+//         done(null, profile);
+//       }
+//     )
+//   );
 
-  //Note the serialization process is not very needed
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-  passport.deserializeUser((user, done) => {
-    done(null, user);
-  });
-}
+//   //Note the serialization process is not very needed
+//   passport.serializeUser((user, done) => {
+//     done(null, user);
+//   });
+//   passport.deserializeUser((user, done) => {
+//     done(null, user);
+//   });
+// }
 
-configureGoogleOAuth();
+// configureGoogleOAuth();
 configureLocalAuth();
 router.use(
   cookieSession({
