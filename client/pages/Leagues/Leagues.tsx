@@ -1,14 +1,16 @@
-import styles from "./Leagues.module.css";
-import Search from "../../components/Search/Search";
-import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
-import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
+import React from "react";
 import Page from "../../components/Page/Page";
+import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
+import LeagueForm from "../../components/Forms/LeagueForm/LeagueForm";
+import Modal from "../../components/Modal/Modal";
+import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
+import Search from "../../components/Search/Search";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
-import { useState } from "react";
+import styles from "./Leagues.module.css";
 
 const Leagues = () => {
-  const [filter, setFilter] = useState("");
-  const [sorts, setSorts] = useState("");
+  const [filter, setFilter] = React.useState("");
+  const [sorts, setSorts] = React.useState("");
 
   // note this needs to be replaced with backend call
   const leagues = [
@@ -26,6 +28,8 @@ const Leagues = () => {
 
   const filterStatuses = ["Active", "Inactive"];
   const sortStatuses = ["Alphabetical", "Date"];
+
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Page>
@@ -68,7 +72,17 @@ const Leagues = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label="Add League" />
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Button asChild className={styles.btn}>
+            <PrimaryButton
+              label="Add League"
+              onClick={() => setOpen(true)}
+            ></PrimaryButton>
+          </Modal.Button>
+          <Modal.Content title="Create League">
+            <LeagueForm afterSave={() => setOpen(false)} />
+          </Modal.Content>
+        </Modal>
       </div>
       <div className={styles.cols}>
         <h3>Name</h3>
