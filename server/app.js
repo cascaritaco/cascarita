@@ -38,15 +38,15 @@ router.use(
 
 router.use(passport.initialize());
 router.use(passport.session());
-router.use("/group", GroupRoutes);
-router.use("/role", RoleRoutes);
-router.use("/user", UserRoutes);
-router.use("/player", PlayerRoutes);
-router.use("/league", LeagueRoutes);
-router.use("/field", FieldRoutes);
+router.use("/groups", GroupRoutes);
+router.use("/roles", RoleRoutes);
+router.use("/users", UserRoutes);
+router.use("/players", PlayerRoutes);
+router.use("/leagues", LeagueRoutes);
+router.use("/fields", FieldRoutes);
 router.use("/seasons", SeasonRoutes);
 router.use("/divisions", DivisionController);
-router.use("/team", TeamRoutes);
+router.use("/teams", TeamRoutes);
 router.use(csrf());
 
 function init() {
