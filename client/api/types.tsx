@@ -6,4 +6,9 @@ interface TeamResponse {
   updated_at: string;
 }
 
-export type { TeamResponse };
+interface FormProps {
+  //Use to set open state from true to false after form submission
+  afterSave: () => void;
+}
+
+export type { TeamResponse, FormProps };

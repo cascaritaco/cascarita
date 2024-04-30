@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./LeagueForm.module.css";
-import SelectMenu from "../../components/SelectMenu/SelectMenu";
-import Modal from "../../components/Modal/Modal";
-import RadioSelect from "../RadioSelect/RadioSelect";
+import SelectMenu from "../../SelectMenu/SelectMenu";
+import Modal from "../../Modal/Modal";
+import RadioSelect from "../../RadioSelect/RadioSelect";
 
 interface LeagueFormProps {
   //Use to set open state from true to false after form submission
@@ -22,7 +22,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
     event.preventDefault();
     setIsLoading(true);
     const { leagueName, leagueDescription } = Object.fromEntries(
-      new FormData(event.currentTarget),
+      new FormData(event.currentTarget)
     );
 
     const newLeague = {
