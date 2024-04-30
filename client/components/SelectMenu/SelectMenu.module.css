@@ -1,0 +1,65 @@
+.selectTrigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  background-color: #f4f7fb;
+  padding: 8px 16px;
+  box-shadow: 1px 2px 5px #d3d3d3;
+  font-size: 0.8rem;
+}
+
+.selectTrigger:hover,
+.selectTrigger:focus {
+  background-color: #d3d3d3cd;
+}
+
+.selectContent {
+  overflow: hidden;
+  background-color: white;
+  max-width: 100%;
+  border-radius: 6px;
+  box-shadow:
+    0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+}
+
+.selectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: black;
+  cursor: default;
+}
+
+.selectViewport {
+  padding: 5px;
+}
+
+.selectItem {
+  font-size: 13px;
+  line-height: 1;
+  color: black;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 25px;
+  padding: 0 35px 0 25px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.selectItem[data-disabled] {
+  color: grey;
+  pointer-events: none;
+}
+.selectItem[data-highlighted] {
+  outline: none;
+  background-color: lightblue;
+  color: black;
+}

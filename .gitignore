@@ -17,6 +17,3 @@ node_modules
 
 # Jest
 coverage
-
-# Ignore .vscode extensions
-.vscode

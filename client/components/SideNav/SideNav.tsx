@@ -1,30 +1,57 @@
-import { useState } from "react";
 import styles from "./SideNav.module.css";
-import Logo from "./../../assets/logo.svg";
-import SearchInput from "../SearchInput/SearchInput";
-import NavButton from "../NavButton/NavButton";
-import { useNavigate } from "react-router-dom";
+import { SideNavProps } from "./types";
+import { RiHomeLine } from "react-icons/ri";
+import { FiUser } from "react-icons/fi";
+import { MdOutlineCalendarToday } from "react-icons/md";
+import { HiOutlinePencilAlt } from "react-icons/hi";
+import { IoSettingsOutline } from "react-icons/io5";
+import { TbLogout } from "react-icons/tb";
+import LogoutButton from "../LogoutButton/LogoutButton";
+import NavItem from "../NavItem/NavItem";
 
-const pages = ["Home", "Users", "Calendar", "Settings"];
-
-export default function SideNav() {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState("");
+const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
+  const handleItemClick = (label: string) => {
+    setSelectedItem(label);
+  };
 
   return (
     <nav className={styles.sidenav}>
-      <div className={styles["logo-con"]} onClick={() => navigate("/")}>
-        <Logo className={styles.logo} />
-        <p className={styles["logo-text"]}>cascarita</p>
-      </div>
-      <SearchInput search={search} onSearch={setSearch} />
       <ul>
-        {pages.map((item) => (
-          <li key={item}>
-            <NavButton label={item} />
-          </li>
-        ))}
+        <NavItem
+          icon={<RiHomeLine />}
+          label="Home"
+          selected={selectedItem === "Home"}
+          onItemClick={handleItemClick}
+        />
+        <NavItem
+          icon={<FiUser />}
+          label="Users"
+          selected={selectedItem === "Users"}
+          onItemClick={handleItemClick}
+        />
+        <NavItem
+          icon={<MdOutlineCalendarToday />}
+          label="Schedule"
+          selected={selectedItem === "Schedule"}
+          onItemClick={handleItemClick}
+        />
+        <NavItem
+          icon={<HiOutlinePencilAlt />}
+          label="Forms"
+          selected={selectedItem === "Forms"}
+          onItemClick={handleItemClick}
+        />
+        <NavItem
+          icon={<IoSettingsOutline />}
+          label="Settings"
+          selected={selectedItem === "Settings"}
+          onItemClick={handleItemClick}
+        />
       </ul>
+      <div>
+        <LogoutButton icon={<TbLogout />} label="Logout" />
+      </div>
     </nav>
   );
-}
+};
+export default SideNav;
