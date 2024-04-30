@@ -36,7 +36,8 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       await Season.bulkCreate([
         {
@@ -76,10 +77,12 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const juniorLeague = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       const adultLeague = await League.create({
-        name: "Adult League", group_id: group.id,
+        name: "Adult League",
+        group_id: group.id,
       });
       await Season.bulkCreate([
         {
@@ -122,7 +125,8 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       const season = await Season.create({
         name: "Spring 2024",
@@ -165,7 +169,8 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       const form = {
         name: "Winter 2024",
@@ -189,7 +194,8 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       const form = {
         name: "Winter 2024",
@@ -214,9 +220,10 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
-      const name = "Winter 2024"
+      const name = "Winter 2024";
       await Season.create({
         name: name,
         start_date: "2024-03-15 11:59:00",
@@ -231,7 +238,7 @@ describe("Season routes", () => {
         end_date: "2025-03-15 11:59:00",
         is_active: false,
         league_id: league.id,
-      }
+      };
 
       const response = await request(app).post("/seasons").send(form);
       expect(response.statusCode).toBe(400);
@@ -251,7 +258,8 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       const season = await Season.create({
         name: "Spring 2024",
@@ -286,7 +294,8 @@ describe("Season routes", () => {
         zip_code: "93960",
       });
       const league = await League.create({
-        name: "Junior League", group_id: group.id,
+        name: "Junior League",
+        group_id: group.id,
       });
       const season = await Season.create({
         name: "Spring 2024",

@@ -32,9 +32,7 @@ describe("Division routes", () => {
       await Division.create({ group_id: group.id, name: "Division 1" });
       await Division.create({ group_id: group.id, name: "Division 2" });
 
-      const response = await request(app)
-        .get(`/divisions/${group.id}`)
-        .send();
+      const response = await request(app).get(`/divisions/${group.id}`).send();
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(2);
@@ -42,9 +40,7 @@ describe("Division routes", () => {
 
     it("Should fail if group not found", async () => {
       const invalidId = 99;
-      const response = await request(app)
-        .get(`/divisions/${invalidId}`)
-        .send();
+      const response = await request(app).get(`/divisions/${invalidId}`).send();
 
       expect(response.status).toBe(404);
       expect(response.body).toMatchObject({
@@ -58,9 +54,7 @@ describe("Division routes", () => {
       const group = await TestDataGenerator.createDummyGroup("Group Tres");
       const form = { group_id: group.id, name: "New Division" };
 
-      const response = await request(app)
-        .post("/divisions")
-        .send(form);
+      const response = await request(app).post("/divisions").send(form);
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual(expect.objectContaining({ name: form.name }));
@@ -70,21 +64,23 @@ describe("Division routes", () => {
       const group = await TestDataGenerator.createDummyGroup("Group Cuatro");
       const form = { group_id: group.id, name: "f" };
 
-      const response = await request(app)
-        .post("/divisions")
-        .send(form);
+      const response = await request(app).post("/divisions").send(form);
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
-        message: "Validation error: Division name must be between 2 and 50 characters long",
-      })
+        message:
+          "Validation error: Division name must be between 2 and 50 characters long",
+      });
     });
   });
 
   describe("PATCH /divisions/:id", () => {
     it("Should update a division", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group Tres");
-      const division = await Division.create({ group_id: group.id, name: "Division name" });
+      const division = await Division.create({
+        group_id: group.id,
+        name: "Division name",
+      });
       const form = { name: "new name" };
 
       const response = await request(app)
@@ -107,7 +103,10 @@ describe("Division routes", () => {
 
     it("Should fail if validation fails", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group");
-      const division = await Division.create({ group_id: group.id, name: "Division name" });
+      const division = await Division.create({
+        group_id: group.id,
+        name: "Division name",
+      });
       const form = { name: "s" };
 
       const response = await request(app)
@@ -121,7 +120,10 @@ describe("Division routes", () => {
   describe("DELETE /divisions/:id", () => {
     it("Should delete a division", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group");
-      const division = await Division.create({ group_id: group.id, name: "Division name" });
+      const division = await Division.create({
+        group_id: group.id,
+        name: "Division name",
+      });
 
       const response = await request(app).delete(`/divisions/${division.id}`);
 
