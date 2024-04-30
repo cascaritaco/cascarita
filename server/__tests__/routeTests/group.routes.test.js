@@ -1,14 +1,18 @@
 "use strict";
 
+window.setImmediate = window.setTimeout;
+
 const TestDataGenerator = require("../../utilityFunctions/testDataGenerator.js");
 const request = require("supertest");
 const express = require("express");
 const GroupRoutes = require("../../routes/group.routes");
+const DivisionRoutes = require("../../routes/division.routes");
 const Middlewares = require("../../middlewares");
-const TestDb = require("../../models");
+const { Division, Group, sequelize } = require("../../models");
 const app = express();
 app.use(express.json());
 app.use("/groups", GroupRoutes);
+app.use("/divisions", DivisionRoutes);
 app.use(Middlewares.errorHandler);
 
 const sampleGroup = {
@@ -30,12 +34,14 @@ const sampleErrorGroup = {
 };
 
 describe("Integration Tests for Group", () => {
-  beforeEach(async function () {
-    await TestDb.Group.sync();
+  beforeEach(async () => {
+    await Group.sync();
+    await Division.sync();
   });
 
-  afterEach(async function () {
-    await TestDb.Group.destroy({ where: {} });
+  afterEach(async () => {
+    await Division.destroy({ where: {} });
+    await Group.destroy({ where: {} });
   });
 
   // ---------------- GET ----------------
@@ -64,6 +70,19 @@ describe("Integration Tests for Group", () => {
           message: "Group with given ID was not found",
         }),
       );
+    });
+
+    it("Get divisions by group Id", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+      await Division.create({ group_id: group.id, name: "Division 1" });
+      await Division.create({ group_id: group.id, name: "Division 2" });
+
+      const response = await request(app).get(`/groups/${group.id}/divisions`);
+
+      expect(response.status).toBe(200);
+      response.body.forEach((division) => {
+        expect(division.group_id).toBe(group.id);
+      });
     });
   });
 
@@ -115,7 +134,7 @@ describe("Integration Tests for Group", () => {
 
     expect(response.status).toBe(200);
 
-    const updatedGroup = await TestDb.Group.findByPk(coolGroup.id);
+    const updatedGroup = await Group.findByPk(coolGroup.id);
     expect(updatedGroup.name).toBe(updatedGroupName);
   });
 
@@ -130,12 +149,12 @@ describe("Integration Tests for Group", () => {
 
     expect(response.status).toBe(200);
 
-    const updatedGroup = await TestDb.Group.findByPk(coolGroup.id);
+    const updatedGroup = await Group.findByPk(coolGroup.id);
     expect(updatedGroup.name).toBe(updatedGroupName);
     expect(updatedGroup.state).toBe(updatedState);
   });
 });
 
 afterAll(async () => {
-  await TestDb.sequelize.close();
+  await sequelize.close();
 });

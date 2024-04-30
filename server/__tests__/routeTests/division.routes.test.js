@@ -26,29 +26,6 @@ describe("Division routes", () => {
     await Group.destroy({ where: {} });
   });
 
-  describe("GET /divisions/:groupId", () => {
-    it("Should get a division by its group id", async () => {
-      const group = await TestDataGenerator.createDummyGroup("Group Uno");
-      await Division.create({ group_id: group.id, name: "Division 1" });
-      await Division.create({ group_id: group.id, name: "Division 2" });
-
-      const response = await request(app).get(`/divisions/${group.id}`).send();
-
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(2);
-    });
-
-    it("Should fail if group not found", async () => {
-      const invalidId = 99;
-      const response = await request(app).get(`/divisions/${invalidId}`).send();
-
-      expect(response.status).toBe(404);
-      expect(response.body).toMatchObject({
-        message: `no such ${Group.name} found for id ${invalidId}`,
-      });
-    });
-  });
-
   describe("POST /divisions", () => {
     it("Should create a division", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group Tres");

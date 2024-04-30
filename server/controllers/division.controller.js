@@ -11,7 +11,7 @@ const isDivisionNameUnique = async (groupId, name) => {
     },
   });
   return !division;
-}
+};
 
 const DivisionController = {
   getByGroupId: async function (req, res, next) {
@@ -33,7 +33,7 @@ const DivisionController = {
   create: async function (req, res, next) {
     const form = {
       group_id: req.body.group_id,
-      name: req.body.name
+      name: req.body.name,
     };
 
     try {
