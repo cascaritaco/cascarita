@@ -1,12 +1,13 @@
-import { TeamResponse } from "./types";
+import { TeamResponse, DivisionResponse } from "./types";
+
 const createTeam = async (
-  group_id: string,
+  groupId: string,
   name: string
 ): Promise<TeamResponse> => {
   try {
     const response = await fetch(`/api/team/create`, {
       method: "POST",
-      body: JSON.stringify({ group_id, name }),
+      body: JSON.stringify({ group_id: groupId, name }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -19,4 +20,24 @@ const createTeam = async (
   }
 };
 
-export { createTeam };
+const createDivision = async (
+  groupId: string,
+  name: string
+): Promise<DivisionResponse> => {
+  try {
+    const response = await fetch(`/api/division/`, {
+      method: "POST",
+      body: JSON.stringify({ group_id: groupId, name }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await response.json();
+    return result.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export { createTeam, createDivision };
