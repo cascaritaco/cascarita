@@ -6,7 +6,7 @@ describe("Error handler middleware", () => {
     let err = {
       message: "expected foo, got bar.",
       stack: "at /some/file.js 0:4 at ...\n",
-    }
+    };
     let req = httpMock.createRequest();
     let res = httpMock.createResponse();
     let next = jest.fn();
@@ -19,7 +19,7 @@ describe("Error handler middleware", () => {
     let err = {
       message: "expected foo, got bar.",
       stack: "at /some/file.js 0:4 at ...\n",
-    }
+    };
     let req = httpMock.createRequest();
     let res = httpMock.createResponse();
     res.status(401);

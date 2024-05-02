@@ -7,6 +7,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
+const Middlewares = require("./middlewares");
 
 const app = express();
 
@@ -37,8 +38,7 @@ app.use(
     credentials: true,
   })
 );
-
-// app.use(Middlewares.errorHandler);
+app.use(Middlewares.errorHandler);
 
 // Add the routes specific to your models here
 const AuthRoutes = require("./routes/auth.routes");
@@ -51,7 +51,6 @@ const LeagueRoutes = require("./routes/league.routes");
 const FieldRoutes = require("./routes/field.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const DivisionController = require("./routes/division.routes");
-const Middlewares = require("./middlewares");
 
 app.use("/api/group", GroupRoutes);
 app.use("/api/role", RoleRoutes);

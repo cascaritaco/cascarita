@@ -2,11 +2,7 @@
 
 const express = require("express");
 const router = express.Router();
-
-const { doubleCsrf } = require("csrf-csrf");
-const { generateToken, doubleCsrfProtection } = doubleCsrf({
-  getSecret: () => "secret",
-});
+const { generateToken, doubleCsrfProtection } = require("../csrf");
 
 const passport = require("passport");
 const UserController = require("../controllers/user.controller");
