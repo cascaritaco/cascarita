@@ -11,4 +11,13 @@ interface FormProps {
   afterSave: () => void;
 }
 
-export type { TeamResponse, FormProps };
+interface LeagueResponse {
+  id: number;
+  // group_id: number;
+  name: string;
+  // description: string;
+  // created_at: string;
+  // updated_at: string;
+}
+
+export type { TeamResponse, FormProps, LeagueResponse };

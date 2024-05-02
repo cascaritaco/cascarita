@@ -6,25 +6,21 @@ import Modal from "../../components/Modal/Modal";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import Search from "../../components/Search/Search";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
+import { LeagueResponse } from "../../api/types";
 import styles from "./Leagues.module.css";
 
 const Leagues = () => {
+  const [leagues, setLeagues] = React.useState<LeagueResponse[]>([]);
   const [filter, setFilter] = React.useState("");
   const [sorts, setSorts] = React.useState("");
 
-  // note this needs to be replaced with backend call
-  const leagues = [
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-  ];
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch("/api/league/1");
+      result.json().then((data) => setLeagues(data.data));
+    };
+    fetchData();
+  }, []);
 
   const filterStatuses = ["Active", "Inactive"];
   const sortStatuses = ["Alphabetical", "Date"];
@@ -90,12 +86,18 @@ const Leagues = () => {
       </div>
       <div className={styles.table}>
         <div>
-          {leagues.map((league, index) => (
-            <div className={styles.cols} key={index}>
-              <p>{league}</p>
-              <DropdownMenuButton />
+          {leagues == undefined ? (
+            <div className={styles.cols}>
+              <p> No Leagues </p>
             </div>
-          ))}
+          ) : (
+            leagues?.map((league) => (
+              <div className={styles.cols} key={league.id}>
+                <p>{league.name}</p>
+                <DropdownMenuButton />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </Page>
