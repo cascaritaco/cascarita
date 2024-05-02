@@ -201,7 +201,7 @@ describe("logInUser", () => {
 
     await UserController.logInUser(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 
   it("should return a error message for an UNauthenticated user", async () => {
