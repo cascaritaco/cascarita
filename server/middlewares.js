@@ -20,8 +20,8 @@ const Middlewares = {
     // In Express, the default status code is 200. Since this handler will be
     // invoked automatically by Express when an error is caught, status codes
     // of incoming responses will be set to be 500 if they are found to be 200.
-    // const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-    // res.status(statusCode);
+    const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+    res.status(statusCode);
 
     const responseBody = {
       message: err.message,
