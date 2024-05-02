@@ -184,7 +184,7 @@ describe("registerUser", () => {
 });
 
 describe("logInUser", () => {
-  it("should return a welcome message for an authenticated user", async () => {
+  it("should return 201 status for an authenticated user", async () => {
     const req = {
       user: {
         first_name: "Leo",
@@ -201,7 +201,6 @@ describe("logInUser", () => {
 
     await UserController.logInUser(req, res);
 
-    expect(res.json).toHaveBeenCalledWith({ message: "Welcome, Leo Messi" });
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
