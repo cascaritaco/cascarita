@@ -9,13 +9,18 @@ import { useState } from "react";
 import Login from "./pages/Login/Login";
 import { AuthProvider, useAuth } from "./components/AuthContext/AuthContext";
 import { Navigate } from "react-router-dom";
+import SignUp from "./pages/SignUp/SignUp";
 
 const AppContent = () => {
   const { currentUser } = useAuth();
   const [selectedItem, setSelectedItem] = useState("home");
 
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    if (window.location.pathname === "/signup") {
+      return;
+    } else {
+      return <Navigate to="/login" />;
+    }
   }
 
   return (
@@ -35,11 +40,11 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <AppContent />
-      {/* Add Public facing routes here */}
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
+      <AppContent />
     </AuthProvider>
   );
 };

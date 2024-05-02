@@ -2,25 +2,27 @@ import styles from "./Login.module.css";
 import LogoWhite from "../../assets/logoWhite.svg";
 import { useState } from "react";
 import { useAuth } from "../../components/AuthContext/AuthContext";
-import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
-import { GoogleLoginButton } from "react-social-login-buttons";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
-
-const google = () => {
-  window.open("http://localhost:3000/api/auth/google", "_self");
-};
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [fail, setFail] = useState(false);
   const [password, setPassword] = useState("");
+
+  const handleSignUp = () => {
+    navigate("/signup");
+  };
 
   const handleLogin = async () => {
     try {
       await login(email, password);
       navigate("/");
     } catch (error) {
+      setFail(true);
+      setEmail("");
+      setPassword("");
       console.error("Login failed", error);
     }
   };
@@ -33,6 +35,7 @@ const Login = () => {
       </div>
       <div className={styles.right}>
         <h3 className={styles.loginHeader}>Welcome back!</h3>
+        {fail ? <p>Login failed, please try again.</p> : <></>}
         <p className={styles.loginSubHeaders}>Email or username</p>
         <input
           placeholder="email or username"
@@ -47,11 +50,8 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div onClick={handleLogin}>
-          <PrimaryButton label="Sign in" />
-        </div>
-        <div className={styles.divider}></div>
-        <GoogleLoginButton onClick={google} />
+        <button onClick={handleLogin}>Sign in</button>
+        <button onClick={handleSignUp}>Sign Up</button>
       </div>
     </div>
   );

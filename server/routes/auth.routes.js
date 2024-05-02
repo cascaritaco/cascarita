@@ -1,47 +1,50 @@
-"use strict";
+// "use strict";
 
 const express = require("express");
 const router = express.Router();
+
+const { doubleCsrf } = require("csrf-csrf");
+const { generateToken, doubleCsrfProtection } = doubleCsrf({
+  getSecret: () => "secret",
+});
+
 const passport = require("passport");
-const CLIENT_URL = "http://localhost:3000/";
 const UserController = require("../controllers/user.controller");
+
+router.post("/helloworld", (req, res) => {
+  res.status(200).send({ hi: "world" });
+});
+
+router.get("/csrf-token", (req, res) => {
+  const csrfToken = generateToken(req, res);
+  // You could also pass the token into the context of a HTML response.
+  res.json({ csrfToken });
+});
 
 router.post(
   "/login",
   passport.authenticate("local", {
-    // failureRedirect: "/auth/login/failed",
     failureMessage: true,
-    session: false,
+    // keepSessionInfo: true,
   }),
   UserController.logInUser
 );
 
-router.get("/login/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      success: true,
-      message: "successful",
-      user: req.user,
-      //cookies: req.cookies
-    });
+router.get("/user", doubleCsrfProtection, (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json({ user: req.user });
+  } else {
+    res.status(401).json({ error: "Unauthorized" });
   }
 });
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    success: false,
-    message: "failure",
+
+router.post("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
   });
 });
-router.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect(CLIENT_URL);
-});
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
-);
+
 module.exports = router;

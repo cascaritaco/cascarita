@@ -1,8 +1,5 @@
-// AuthContext.tsx
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { jwtDecode } from "jwt-decode";
-
-// import axios from "axios"; // Assuming you use axios for HTTP requests
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -12,15 +9,10 @@ interface User {
 
 interface AuthContextType {
   currentUser: User | null;
+  csrfToken: string;
   login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   // Add other authentication methods as needed
-}
-
-interface JwtPayload {
-  userId: string;
-  userEmail: string;
-  // Add other properties as needed
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,98 +25,72 @@ export function useAuth() {
   return context;
 }
 
-// After successful login, store JWT in local storage
-const storeJwtInLocalStorage = (jwt: string) => {
-  localStorage.setItem("jwt", jwt);
-};
-
-// Retrieve JWT from local storage
-const getJwtFromLocalStorage = () => {
-  return localStorage.getItem("jwt");
-};
-
-const removeJwtFromLocalStorage = () => {
-  localStorage.removeItem("jwt");
-};
-
-const isJwtExpired = (token: string) => {
-  try {
-    const decodedToken = jwtDecode(token);
-    const expirationTime = decodedToken?.exp ? decodedToken.exp * 1000 : null; // Convert expiration time to milliseconds
-    const currentTime = Date.now(); // Get current time in milliseconds
-
-    // Check if current time is past the expiration time
-    return expirationTime ? currentTime > expirationTime : true;
-  } catch (error) {
-    // If there's an error decoding the token, consider it expired
-    return true;
-  }
-};
-
-const getActiveUserFromJwt = () => {
-  const token = getJwtFromLocalStorage();
-  if (!token) {
-    console.error("Token is undefined");
-    return { id: "", email: "" };
-  }
-  const decodedToken = token ? (jwtDecode(token) as JwtPayload | null) : null;
-  if (!decodedToken) {
-    console.error("Decoded token is null or undefined");
-    return { id: "", email: "" };
-  }
-
-  // Check if decoded token has the expected properties
-  if (!decodedToken.userId || !decodedToken.userEmail) {
-    console.error("Decoded token does not contain expected properties");
-    return { id: "", email: "" };
-  }
-  return { id: decodedToken.userId, email: decodedToken.userEmail };
-};
-
-const isLoggedIn = () => {
-  const jwt = getJwtFromLocalStorage();
-  // Check if JWT exists and is not expired
-  return jwt && !isJwtExpired(jwt);
-};
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true); // originally set to true
+  const [csrfToken, setCsrfToken] = useState<string>(""); // Add csrfToken state
+  const navigate = useNavigate(); // Use the useNavigate hook to navigate programmatically
 
   useEffect(() => {
-    // const fetchCurrentUser = async () => {
-    if (isLoggedIn()) {
-      const data = getActiveUserFromJwt();
-      setCurrentUser({ id: data.id, email: data.email });
-    } else {
-      console.log("=================");
-      console.log("Not logged in!");
-      console.log("=================");
-    }
-    setLoading(false);
-    // };
+    const fetchCurrentUser = async () => {
+      if (window.location.pathname === "/signup") {
+        return;
+      }
+      const fetchGetReponse = await fetch("/api/auth/csrf-token", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (fetchGetReponse.status == 200) {
+        const data = await fetchGetReponse.json();
+        setCsrfToken(data.csrfToken);
 
-    // fetchCurrentUser();
-  }, []);
+        const response = await fetch("/api/auth/user", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+        });
+        if (response.status == 200) {
+          const userData = await response.json();
+          const user = userData.user;
+          setCurrentUser({ id: user.id, email: user.email });
+        } else {
+          if (currentUser !== null) {
+            setCurrentUser(null);
+            setCsrfToken("");
+          }
+          navigate("/login");
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchCurrentUser();
+  }, [navigate]);
 
   const login = async (email: string, password: string): Promise<User> => {
     const loginData = {
-      email: email, // Replace with actual email
-      password: password, // Replace with actual password
+      email: email,
+      password: password,
     };
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "X-Csrf-Token": csrfToken,
         },
         body: JSON.stringify(loginData),
       });
       if (response.status == 200) {
         const userData = await response.json();
         const user = userData.user;
-        const jwt = userData.token;
-        storeJwtInLocalStorage(jwt);
         setCurrentUser({ id: user.id, email: user.email });
         return { id: user.id, email: user.email };
       } else {
@@ -138,9 +104,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async (): Promise<void> => {
     try {
-      //   await axios.post("/api/logout");
-      removeJwtFromLocalStorage();
       setCurrentUser(null);
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+      });
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -148,6 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value: AuthContextType = {
     currentUser,
+    csrfToken,
     login,
     logout,
     // Add other authentication methods as needed
