@@ -81,8 +81,9 @@
 .title {
   margin-bottom: 16px;
   font-weight: 500;
-  color: #1e1e1e;
-  font-size: 1.5rem;
+  color: #5a5656;
+  font-size: 1.6rem;
+  font-weight: 900;
 }
 
 .closeIcon {
