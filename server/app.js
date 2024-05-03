@@ -21,7 +21,7 @@ const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     sameSite: "strict",
-    maxAge: 3600000, // 30 seconds in milliseconds
+    maxAge: 3600000, // 1 hour session
   },
 });
 app.use(bodyParser.json());

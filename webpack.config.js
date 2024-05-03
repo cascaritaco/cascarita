@@ -9,13 +9,7 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
-    fallback: {
-      // buffer: false,
-      // crypto: false,
-      // stream: false,
-      // util: false,
-      // vm: false,
-    },
+    fallback: {},
   },
   module: {
     rules: [

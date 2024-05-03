@@ -9,7 +9,6 @@ const UserController = require("../controllers/user.controller");
 
 router.get("/csrf-token", (req, res) => {
   const csrfToken = generateToken(req, res);
-  // You could also pass the token into the context of a HTML response.
   res.json({ csrfToken });
 });
 
