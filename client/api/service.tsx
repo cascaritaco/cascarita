@@ -25,7 +25,7 @@ const createDivision = async (
   name: string
 ): Promise<DivisionResponse> => {
   try {
-    const response = await fetch(`/api/division/`, {
+    const response = await fetch(`/api/division`, {
       method: "POST",
       body: JSON.stringify({ group_id: groupId, name }),
       headers: {
