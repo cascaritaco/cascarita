@@ -1,4 +1,4 @@
-// "use strict";
+"use strict";
 
 const express = require("express");
 const router = express.Router();
@@ -6,10 +6,6 @@ const { generateToken, doubleCsrfProtection } = require("../csrf");
 
 const passport = require("passport");
 const UserController = require("../controllers/user.controller");
-
-router.post("/helloworld", (req, res) => {
-  res.status(200).send({ hi: "world" });
-});
 
 router.get("/csrf-token", (req, res) => {
   const csrfToken = generateToken(req, res);
@@ -21,7 +17,6 @@ router.post(
   "/login",
   passport.authenticate("local", {
     failureMessage: true,
-    // keepSessionInfo: true,
   }),
   UserController.logInUser
 );

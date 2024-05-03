@@ -11,10 +11,6 @@ const Login = () => {
   const [fail, setFail] = useState(false);
   const [password, setPassword] = useState("");
 
-  const handleSignUp = () => {
-    navigate("/signup");
-  };
-
   const handleLogin = async () => {
     try {
       await login(email, password);
@@ -51,7 +47,6 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Sign in</button>
-        <button onClick={handleSignUp}>Sign Up</button>
       </div>
     </div>
   );

@@ -14,7 +14,6 @@ const app = express();
 app.set("port", process.env.PORT || 80);
 app.use(express.static(path.join(__dirname, "../dist")));
 
-// Configure express-session middleware with Redis store
 const sessionMiddleware = session({
   secret: "secret", //TODO: replace with valid secret
   saveUninitialized: false,
@@ -22,7 +21,7 @@ const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     sameSite: "strict",
-    maxAge: 10000, // 10 seconds in milliseconds
+    maxAge: 3600000, // 30 seconds in milliseconds
   },
 });
 app.use(bodyParser.json());
