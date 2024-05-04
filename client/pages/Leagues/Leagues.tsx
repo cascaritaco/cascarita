@@ -20,7 +20,7 @@ const Leagues = () => {
       result.json().then((data) => setLeagues(data.data));
     };
     fetchData();
-  }, []);
+  }, [leagues]);
 
   const filterStatuses = ["Active", "Inactive"];
   const sortStatuses = ["Alphabetical", "Date"];
