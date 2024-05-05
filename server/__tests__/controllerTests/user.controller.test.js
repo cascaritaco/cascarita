@@ -184,7 +184,7 @@ describe("registerUser", () => {
 });
 
 describe("logInUser", () => {
-  it("should return 201 status for an authenticated user", async () => {
+  it("should return 200 status for an authenticated user", async () => {
     const req = {
       user: {
         first_name: "Leo",
