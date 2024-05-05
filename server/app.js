@@ -21,7 +21,7 @@ const DivisionController = require("./routes/division.routes");
 const Middlewares = require("./middlewares");
 
 const app = express();
-app.set("port", process.env.PORT || 80);
+app.set("port", process.env.PORT || 3001);
 app.use(express.static(path.join(__dirname, "../dist")));
 app.use("/api", router);
 app.use(Middlewares.errorHandler);

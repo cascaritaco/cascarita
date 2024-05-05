@@ -42,9 +42,9 @@ module.exports = {
     proxy: {
       "/api": {
         target: {
-          host: "0.0.0.0",
+          host: process.env.HOST,
           protocol: "http:",
-          port: 80,
+          port: 3001,
         },
       },
     },
