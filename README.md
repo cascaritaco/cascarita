@@ -52,29 +52,41 @@ npm install
 
 ### Running Commands
 
-### 0. (Optional) Using Docker
+### 0. Using Docker
 
 If you haven't done so, please download [Docker Desktop](https://www.docker.com/products/docker-desktop/), and start the Docker daemon, then run:
 
 ```bash
-docker build -t cascarita .
-docker run -d -p 3000:3000 cascarita
+# load the environment variables
+cp .env.example .env
+# build the images
+docker-compose build
+# start the client and server container
+docker-compose up
 ```
+
+**NOTE**: It's important to ensure that for local connections to database from the server container, specify within the `.env` `DB_HOST=host.docker.internal`. This will be the way we are planning on deploying our applicaton to the cloud!
 
 #### 1. Start the Development Server
 
 To run the project locally, use the following command:
 
 ```bash
-# runs react frontend on port 3000 and backend node server on port 80
+# load the environment variables
+cp .env.example .env
+# runs react frontend on port 3000 and backend node server on port 3001
 npm run dev
 ```
+
+**NOTE**: In order for this to work you will need to ensure that `.env` `DB_HOST=127.0.0.1`.
 
 #### 2. Start the Production Server
 
 To run the project as in production:
 
 ```bash
+# load the environment variables
+cp .env.example .env
 # builds the `dist` directory used to serve frontend
 npm run build
 # starts the node server
