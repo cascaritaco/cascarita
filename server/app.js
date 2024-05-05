@@ -11,11 +11,11 @@ const Middlewares = require("./middlewares");
 
 const app = express();
 
-app.set("port", process.env.PORT || 80);
+app.set("port", process.env.SERVER_PORT || 3001);
 app.use(express.static(path.join(__dirname, "../dist")));
 
 const sessionMiddleware = session({
-  secret: "secret", //TODO: replace with valid secret
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: true,
   cookie: {

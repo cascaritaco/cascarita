@@ -1,4 +1,5 @@
 const path = require("path");
+require("dotenv").config();
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -37,15 +38,15 @@ module.exports = {
   ],
   devServer: {
     compress: true,
-    port: 3000,
+    port: process.env.CLIENT_PORT,
     open: true,
     historyApiFallback: true,
     proxy: {
       "/api": {
         target: {
-          host: "0.0.0.0",
+          host: process.env.HOST,
           protocol: "http:",
-          port: 80,
+          port: process.env.SERVER_PORT,
         },
       },
     },
