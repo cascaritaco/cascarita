@@ -1,4 +1,5 @@
 const path = require("path");
+require("dotenv").config();
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -9,6 +10,7 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
+    fallback: {},
   },
   module: {
     rules: [
@@ -36,7 +38,7 @@ module.exports = {
   ],
   devServer: {
     compress: true,
-    port: 3000,
+    port: process.env.CLIENT_PORT,
     open: true,
     historyApiFallback: true,
     proxy: {
@@ -44,7 +46,7 @@ module.exports = {
         target: {
           host: process.env.HOST,
           protocol: "http:",
-          port: 3001,
+          port: process.env.SERVER_PORT,
         },
       },
     },

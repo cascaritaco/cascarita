@@ -1,12 +1,10 @@
-import Layout from "../../components/Layout/Layout";
 import Leagues from "../Leagues/Leagues";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const Home = () => {
-  return (
-    <Layout>
-      <Leagues />
-    </Layout>
-  );
+  const { currentUser } = useAuth();
+
+  return <div>{currentUser ? <Leagues /> : <></>}</div>;
 };
 
 export default Home;

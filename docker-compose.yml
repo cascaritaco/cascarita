@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: server/Dockerfile
+    # NOTE, if you change the .env SERVER_PORT, please update here to match
+    # Please update in the corresponding Dockerfile as well
     ports:
       - "3001:3001"
       - "3306:3306"
@@ -22,6 +24,8 @@ services:
       dockerfile: client/Dockerfile
     env_file:
       - .env
+    # NOTE, if you change the .env CLIENT_PORT, please update here to match
+    # Please update in the corresponding Dockerfile as well
     ports:
       - "3000:3000"
     volumes:

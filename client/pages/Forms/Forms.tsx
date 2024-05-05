@@ -1,11 +1,5 @@
-import Layout from "../../components/Layout/Layout";
-
 const Forms = () => {
-  return (
-    <Layout>
-      <p>Forms</p>
-    </Layout>
-  );
+  return <p>Forms</p>;
 };
 
 export default Forms;

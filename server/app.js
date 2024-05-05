@@ -1,14 +1,46 @@
 const path = require("path");
-const express = require("express");
 const session = require("express-session");
-const passport = require("./config/passport");
+const cookieParser = require("cookie-parser");
+const passport = require("./passport");
 const http = require("http");
-const router = express.Router();
-
-require("dotenv").config();
-
+const express = require("express");
 const bodyParser = require("body-parser");
-const csrf = require("csurf");
+require("dotenv").config();
+const cors = require("cors");
+const Middlewares = require("./middlewares");
+
+const app = express();
+
+app.set("port", process.env.SERVER_PORT || 3001);
+app.use(express.static(path.join(__dirname, "../dist")));
+
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: false,
+  resave: true,
+  cookie: {
+    httpOnly: true,
+    sameSite: "strict",
+    maxAge: 3600000, // 1 hour session
+  },
+});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(sessionMiddleware);
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+// Enable CORS before using the router
+app.use(
+  cors({
+    origin: `http://localhost:${app.get("port")}`,
+    credentials: true,
+  })
+);
+app.use(Middlewares.errorHandler);
+
+// Add the routes specific to your models here
+const AuthRoutes = require("./routes/auth.routes");
 const GroupRoutes = require("./routes/group.routes");
 const RoleRoutes = require("./routes/role.routes");
 const UserRoutes = require("./routes/user.routes");
@@ -18,39 +50,20 @@ const LeagueRoutes = require("./routes/league.routes");
 const FieldRoutes = require("./routes/field.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const DivisionController = require("./routes/division.routes");
-const Middlewares = require("./middlewares");
 
-const app = express();
-app.set("port", process.env.PORT || 3001);
-app.use(express.static(path.join(__dirname, "../dist")));
-app.use("/api", router);
-app.use(Middlewares.errorHandler);
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-router.use(passport.initialize());
-router.use(passport.session());
-router.use("/group", GroupRoutes);
-router.use("/role", RoleRoutes);
-router.use("/user", UserRoutes);
-router.use("/player", PlayerRoutes);
-router.use("/league", LeagueRoutes);
-router.use("/field", FieldRoutes);
-router.use("/seasons", SeasonRoutes);
-router.use("/divisions", DivisionController);
-router.use("/team", TeamRoutes);
-router.use(csrf());
+app.use("/api/group", GroupRoutes);
+app.use("/api/role", RoleRoutes);
+app.use("/api/user", UserRoutes);
+app.use("/api/player", PlayerRoutes);
+app.use("/api/league", LeagueRoutes);
+app.use("/api/field", FieldRoutes);
+app.use("/api/seasons", SeasonRoutes);
+app.use("/api/divisions", DivisionController);
+app.use("/api/team", TeamRoutes);
+app.use("/api/auth", AuthRoutes);
 
 function init() {
-  router.get("*", function (req, res) {
+  app.get("*", function (req, res) {
     res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
   });
 

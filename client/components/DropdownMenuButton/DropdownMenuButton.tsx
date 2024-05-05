@@ -1,4 +1,3 @@
-import { Button } from "@radix-ui/themes";
 import {
   DropdownMenuItem,
   DropdownMenu,
@@ -14,9 +13,7 @@ const DropdownMenuButton = () => {
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Button variant="soft">
-            <SlOptions />
-          </Button>
+          <SlOptions />
         </DropdownMenuTrigger>
         <DropdownMenuContent className={styles.options}>
           <DropdownMenuItem>Edit</DropdownMenuItem>
