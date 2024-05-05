@@ -29,9 +29,11 @@ function updateConfigFile() {
 }
 
 const db = {};
-updateConfigFile();
-let sequelize;
+if (env !== "testing") {
+  updateConfigFile();
+}
 
+let sequelize;
 const dbConfig = require(__dirname + "/../config/config.json")[env];
 
 if (config.use_env_variable) {
