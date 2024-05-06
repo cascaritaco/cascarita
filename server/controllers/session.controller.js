@@ -3,36 +3,40 @@
 const { Session } = require("../models");
 
 const SessionController = function () {
-    var getSessionBySessionId = async function (req, res, next) {
-        const sessionId = req.body.id;
-
-        try {
-            const result = await Session.findByPk(sessionId);
-
-            if (!result) {
-              throw new Error("Session with given ID does not exist");
-          }
-
-            return res.status(200).json({
-            success: true,
-            data: result,
-            });
-        } catch (error) {
-            next(error);
-      }
-    };
-    
-  var getSessionByDivisionId = async function (req, res, next) {
-    const divisionId = req.body.division_id;
+  var getSessionBySessionId = async function (req, res, next) {
+    const sessionId = req.params["id"];
 
     try {
-      const result = await Session.findOne({
+      const result = await Session.findAll({
+        where: {
+          id: sessionId,
+        },
+      });
+
+      if (Object.keys(result).length === 0) {
+        throw new Error("Session with given ID does not exist");
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var getSessionByDivisionId = async function (req, res, next) {
+    const divisionId = req.params["id"];
+
+    try {
+      const result = await Session.findAll({
         where: {
           division_id: divisionId,
         },
       });
 
-      if (!result) {
+      if (Object.keys(result).length === 0) {
         throw new Error("Session with given division ID does not exist");
       }
 
@@ -46,8 +50,8 @@ const SessionController = function () {
   };
 
   var createSession = async function (req, res, next) {
-    const { division_id, season_id } = req.body;  
-    const newSession = { division_id, season_id }; 
+    const { division_id, season_id } = req.body;
+    const newSession = { division_id, season_id };
 
     try {
       await Session.build(newSession).validate();
@@ -66,7 +70,7 @@ const SessionController = function () {
     try {
       let currentSession = await Session.findOne({
         where: {
-          id: req.body.session_id,
+          id: req.params["id"],
         },
       });
 
@@ -75,8 +79,10 @@ const SessionController = function () {
         throw new Error("Session with given ID was not found");
       }
 
-      Object.keys(req.body).forEach(key => {
-            currentSession[key] = req.body[key] ? req.body[key] : currentSession[key];
+      Object.keys(req.body).forEach((key) => {
+        currentSession[key] = req.body[key]
+          ? req.body[key]
+          : currentSession[key];
       });
 
       await currentSession.validate();
@@ -92,15 +98,17 @@ const SessionController = function () {
     try {
       let deletedSession = await Session.destroy({
         where: {
-          id: req.body.id,
+          id: req.params["id"],
         },
       });
 
       if (deletedSession === 0) {
         throw new Error("No session found with the given ID");
-       }
+      }
 
-      return res.status(204).json({ success: true, message: "Delete session successfully" });
+      return res
+        .status(204)
+        .json({ success: true, message: "Delete session successfully" });
     } catch (error) {
       next(error);
     }
