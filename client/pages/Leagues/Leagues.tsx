@@ -10,7 +10,6 @@ const Leagues = () => {
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
 
-  // note this needs to be replaced with backend call
   const leagues = [
     "test",
     "test",
@@ -26,6 +25,11 @@ const Leagues = () => {
 
   const filterStatuses = ["Active", "Inactive"];
   const sortStatuses = ["Alphabetical", "Date"];
+
+  // Handle click event for the dropdown menu button
+  const handleDropdownMenuButtonClick = () => {
+    // Optional: Add any logic here if needed
+  };
 
   return (
     <Page>
@@ -68,7 +72,11 @@ const Leagues = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label="Add League" />
+        {/* Pass the onClick handler to the DropdownMenuButton component */}
+        <PrimaryButton
+          label="Add League"
+          onClick={handleDropdownMenuButtonClick}
+        />
       </div>
       <div className={styles.cols}>
         <h3>Name</h3>
