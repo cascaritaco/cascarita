@@ -1,13 +1,9 @@
 import React from "react";
 import styles from "./SeasonForm.module.css";
 import Modal from "../../Modal/Modal";
+import { FormProps } from "../../../api/types";
 
-interface SeasonFormProps {
-  //Use to set open state from true to false after form submission
-  afterSave: () => void;
-}
-
-const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave }) => {
+const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
   const [seasonName, setSeasonName] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
@@ -28,7 +24,7 @@ const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave }) => {
       league_id: 1,
     };
 
-    await fetch("/api/season/", {
+    await fetch("/api/seasons/", {
       method: "POST",
       headers: {
         "content-type": "application/json",

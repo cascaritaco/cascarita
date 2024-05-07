@@ -13,11 +13,22 @@ interface FormProps {
 
 interface LeagueResponse {
   id: number;
-  // group_id: number;
+  group_id: number;
   name: string;
-  // description: string;
-  // created_at: string;
-  // updated_at: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
 }
 
-export type { TeamResponse, FormProps, LeagueResponse };
+interface SeasonResponse {
+  id: number;
+  name: string;
+  start_date: Date;
+  end_date: Date;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  league_id: number;
+}
+
+export type { TeamResponse, FormProps, LeagueResponse, SeasonResponse };
