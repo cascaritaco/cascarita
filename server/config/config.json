@@ -12,22 +12,7 @@
     "password": "root",
     "database": "test_db",
     "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "staging": {
-    "username": "staging",
-    "password": "cascarita2023!",
-    "database": "ebdb",
-    "host": "awseb-e-ismrimxiv2-stack-awsebrdsdatabase-3kjgpageucrn.ctxji11ur79e.us-east-2.rds.amazonaws.com",
-    "port": 3306,
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "producton",
-    "password": "cascarita2023!",
-    "database": "ebdb",
-    "host": "awseb-e-tgs8mpnpqv-stack-awsebrdsdatabase-wfg0bsux0ygq.ctxji11ur79e.us-east-2.rds.amazonaws.com",
-    "port": 3306,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "port": 3306
   }
 }

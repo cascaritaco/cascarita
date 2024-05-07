@@ -1,8 +1,7 @@
-"use strict";
-
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const { User } = require("../models");
+const { sequelize, DataTypes } = require("./models/index");
+const User = require("./models/user")(sequelize, DataTypes);
 
 passport.use(
   new LocalStrategy(
@@ -16,7 +15,6 @@ passport.use(
         if (!user || !(await user.validPassword(password))) {
           return done(null, false, { message: "Invalid email or password" });
         }
-
         return done(null, user);
       } catch (err) {
         return done(err);
@@ -36,9 +34,9 @@ passport.serializeUser((user, done) => {
   });
 });
 
-passport.deserializeUser(async (user, done) => {
+passport.deserializeUser(async (serializedUser, done) => {
   try {
-    done(null, user);
+    done(null, serializedUser);
   } catch (err) {
     done(err);
   }

@@ -13,9 +13,8 @@ jobs:
       DB_DATABASE: test_suite_db
       DB_USER: root
       DB_PASSWORD: root
-    
-    steps:
 
+    steps:
       - name: Checkout source code
         uses: actions/checkout@v2
 
@@ -44,7 +43,7 @@ jobs:
       - name: Start the app
         run: npm run start > app_output.log 2>&1 &
         env:
-          PORT: 3000
+          PORT: 3001
 
       - name: Wait for the app to start
         run: sleep 10
@@ -54,4 +53,4 @@ jobs:
           echo "Application logs: $(cat app_output.log)"
 
       - name: Check if the app is up
-        run: curl -I http://127.0.0.1:3000
+        run: curl -I http://127.0.0.1:3001

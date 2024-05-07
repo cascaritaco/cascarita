@@ -15,5 +15,11 @@ node_modules
 # Webpack
 # dist
 
+# Environment variables
+.env
+
+# config.json file
+server/config/config.json
+
 # Jest
 coverage
