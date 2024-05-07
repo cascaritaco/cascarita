@@ -31,63 +31,89 @@ const sampleErrorGroup = {
 };
 
 describe("Integration Tests for Group", () => {
-
-  beforeEach(async function() {
+  beforeEach(async function () {
+    await TestDb.Division.sync();
     await TestDb.Group.sync();
   });
 
-  afterEach(async function() {
+  afterEach(async function () {
+    await TestDb.Division.destroy({ where: {} });
     await TestDb.Group.destroy({ where: {} });
   });
 
   // ---------------- GET ----------------
 
   describe("GET/ Group routes", () => {
-
     it("successful GET of group information", async () => {
       const coolGroup = await TestDataGenerator.createDummyGroup("Sample Group");
 
-      const response = await request(app)
-        .get(`/group/${coolGroup.id}`)
+      const response = await request(app).get(`/group/${coolGroup.id}`);
 
       expect(response.status).toBe(200);
-      expect(response.body.data).toEqual(expect.objectContaining({
-        name: "Sample Group"
-      }));
+      expect(response.body.data).toEqual(
+        expect.objectContaining({
+          name: "Sample Group",
+        }),
+      );
     });
 
     it("returns an error when attempting to retrieve non-existent group", async () => {
-      const missingGroup = {id: 12345}
-      const response = await request(app)
-        .get(`/group/${missingGroup.id}`)
+      const missingGroup = { id: 12345 };
+      const response = await request(app).get(`/group/${missingGroup.id}`);
 
       expect(response.status).toBe(500);
-      expect(response.body).toEqual(expect.objectContaining({
-        message: "Group with given ID was not found",
-      }));
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          message: "Group with given ID was not found",
+        }),
+      );
+    });
+  });
+
+  describe("GET /group/:id/divisions", () => {
+    it("Should get a division by its group id", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+      await TestDb.Division.create({ group_id: group.id, name: "Division 1" });
+      await TestDb.Division.create({ group_id: group.id, name: "Division 2" });
+
+      const response = await request(app).get(`/group/${group.id}/divisions`).send();
+
+      expect(response.status).toBe(200);
+      expect(response.body.length).toBe(2);
+    });
+
+    it("Should fail if group not found", async () => {
+      const invalidId = 18321;
+      const response = await request(app)
+        .get(`/group/${invalidId}/divisions`)
+        .send();
+
+      expect(response.status).toBe(404);
+      expect(response.body).toMatchObject({
+        message: `no such Group found for id ${invalidId}`,
+      });
     });
   });
 
   // ---------------- CREATE ----------------
 
   describe("POST/ Group routes", () => {
-
     it("successful POST when creating a new group", async () => {
-      const response = await request(app)
-        .post("/group/").send(sampleGroup)
+      const response = await request(app).post("/group/").send(sampleGroup);
 
       expect(response.status).toBe(201);
-      expect(response.body.data).toEqual(expect.objectContaining({
-        name: "Sample Group",
-        city: "Sample City"
-      }));
+      expect(response.body.data).toEqual(
+        expect.objectContaining({
+          name: "Sample Group",
+          city: "Sample City",
+        }),
+      );
     });
 
     it("error POST when creating a new group with the same name", async () => {
       const coolGroup = await TestDataGenerator.createDummyGroup("Sample Group");
 
-      const response = await request(app)
-        .post("/group/").send(sampleGroup)
+      const response = await request(app).post("/group/").send(sampleGroup);
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
@@ -96,22 +122,20 @@ describe("Integration Tests for Group", () => {
     });
 
     it("error POST when creating a new group with a bad state name", async () => {
-      const response = await request(app)
-        .post("/group/").send(sampleErrorGroup)
+      const response = await request(app).post("/group/").send(sampleErrorGroup);
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
         message: "Validation error: Invalid state abbreviation",
       });
     });
-
   });
 
   // ---------------- UPDATE ----------------
 
   it("should PATCH group with valid ID and input", async () => {
     const coolGroup = await TestDataGenerator.createDummyGroup("Sample Group");
-    
+
     const updatedGroupName = "Updated Sample Group";
     const response = await request(app)
       .patch(`/group/${coolGroup.id}`)
@@ -125,9 +149,9 @@ describe("Integration Tests for Group", () => {
 
   it("should PATCH group with valid ID and input for state", async () => {
     const coolGroup = await TestDataGenerator.createDummyGroup("Sample Group");
-    
+
     const updatedGroupName = "Updated New York Sample Group";
-    const updatedState = "NY"
+    const updatedState = "NY";
     const response = await request(app)
       .patch(`/group/${coolGroup.id}`)
       .send({ name: updatedGroupName, state: updatedState });
