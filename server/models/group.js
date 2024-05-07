@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         sourceKey: "id",
       });
+
       Group.hasMany(models.Division, {
         foreignKey: "group_id",
         sourceKey: "id",
@@ -27,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Name field is required'
+            msg: "Name field is required",
           },
           notEmpty: {
-            msg: 'Name field cannot be empty'
+            msg: "Name field cannot be empty",
           },
         },
       },
@@ -39,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Street address field is required'
+            msg: "Street address field is required",
           },
           notEmpty: {
-            msg: 'Street address field cannot be empty'
+            msg: "Street address field cannot be empty",
           },
           len: {
             args: [5, 100],
-            msg: 'Street address must be between 5 and 100 characters'
-          }
+            msg: "Street address must be between 5 and 100 characters",
+          },
         },
       },
       city: {
@@ -55,15 +56,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'City field is required'
+            msg: "City field is required",
           },
           notEmpty: {
-            msg: 'City field cannot be empty'
+            msg: "City field cannot be empty",
           },
           len: {
             args: [2, 50],
-            msg: 'City name must be between 2 and 50 characters'
-          }
+            msg: "City name must be between 2 and 50 characters",
+          },
         },
       },
       state: {
@@ -71,15 +72,68 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'State field is required'
+            msg: "State field is required",
           },
           notEmpty: {
-            msg: 'State field cannot be empty'
+            msg: "State field cannot be empty",
           },
           isIn: {
-            args: [['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']], // Valid US state abbreviations
-            msg: 'Invalid state abbreviation'
-          }
+            args: [
+              [
+                "AL",
+                "AK",
+                "AZ",
+                "AR",
+                "CA",
+                "CO",
+                "CT",
+                "DE",
+                "FL",
+                "GA",
+                "HI",
+                "ID",
+                "IL",
+                "IN",
+                "IA",
+                "KS",
+                "KY",
+                "LA",
+                "ME",
+                "MD",
+                "MA",
+                "MI",
+                "MN",
+                "MS",
+                "MO",
+                "MT",
+                "NE",
+                "NV",
+                "NH",
+                "NJ",
+                "NM",
+                "NY",
+                "NC",
+                "ND",
+                "OH",
+                "OK",
+                "OR",
+                "PA",
+                "RI",
+                "SC",
+                "SD",
+                "TN",
+                "TX",
+                "UT",
+                "VT",
+                "VA",
+                "WA",
+                "WV",
+                "WI",
+                "WY",
+              ],
+            ], // Valid US state abbreviations
+            msg: "Invalid state abbreviation",
+          },
         },
       },
       zip_code: {
@@ -87,14 +141,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'ZIP code field is required'
+            msg: "ZIP code field is required",
           },
           notEmpty: {
-            msg: 'ZIP code field cannot be empty'
+            msg: "ZIP code field cannot be empty",
           },
           is: {
             args: /^\d{5}(-\d{4})?$/,
-            msg: 'Invalid ZIP code format'
+            msg: "Invalid ZIP code format",
           },
         },
       },

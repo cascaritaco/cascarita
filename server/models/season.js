@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
       });
       Season.hasMany(models.Session, {
-        foreignKey: "session_id",
+        foreignKey: "season_id",
         sourceKey: "id",
       });
     }

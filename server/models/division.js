@@ -12,9 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         targetKey: "id",
       });
+
       Division.hasMany(models.Session, {
-        foreignKey: "session_id",
-        targetKey: "id",
+        foreignKey: "division_id",
+        sourceKey: "id",
       });
     }
   }
@@ -39,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
           len: {
             args: [2, 50],
             msg: "Division name must be between 2 and 50 characters long",
-          }
-        }
+          },
+        },
       },
     },
     {

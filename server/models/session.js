@@ -8,16 +8,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Session.belongsTo(models.Division, {
-        foreignKey: "division_id",
-        targetKey: "id",
-      });
       Session.belongsTo(models.Season, {
         foreignKey: "season_id",
         targetKey: "id",
       });
-      Session.belongsTo(models.League, {
-        foreignKey: "league_id",
+
+      Session.belongsTo(models.Division, {
+        foreignKey: "division_id",
         targetKey: "id",
       });
     }
@@ -29,10 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       season_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      league_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
