@@ -4,46 +4,38 @@ const { Session } = require("../models");
 
 const SessionController = function () {
   var getSessionBySessionId = async function (req, res, next) {
-    const sessionId = req.params["id"];
+    const sessionId = req.body.id;
 
     try {
-      const result = await Session.findAll({
-        where: {
-          id: sessionId,
-        },
-      });
+      const result = await Session.findByPk(sessionId);
 
-      if (Object.keys(result).length === 0) {
+      if (!result) {
+        res.status(404);
         throw new Error("Session with given ID does not exist");
       }
 
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
   };
 
   var getSessionByDivisionId = async function (req, res, next) {
-    const divisionId = req.params["id"];
+    const divisionId = req.body.division_id;
 
     try {
-      const result = await Session.findAll({
+      const result = await Session.findOne({
         where: {
           division_id: divisionId,
         },
       });
 
-      if (Object.keys(result).length === 0) {
+      if (!result) {
+        res.status(404);
         throw new Error("Session with given division ID does not exist");
       }
 
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -57,10 +49,7 @@ const SessionController = function () {
       await Session.build(newSession).validate();
       const result = await Session.create(newSession);
 
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -70,12 +59,12 @@ const SessionController = function () {
     try {
       let currentSession = await Session.findOne({
         where: {
-          id: req.params["id"],
+          id: req.body.session_id,
         },
       });
 
       if (!currentSession) {
-        res.status(400);
+        res.status(404);
         throw new Error("Session with given ID was not found");
       }
 
@@ -88,7 +77,7 @@ const SessionController = function () {
       await currentSession.validate();
       await currentSession.save();
 
-      return res.status(200).json({ success: true, data: currentSession });
+      return res.status(200).json(currentSession);
     } catch (error) {
       next(error);
     }
@@ -98,17 +87,16 @@ const SessionController = function () {
     try {
       let deletedSession = await Session.destroy({
         where: {
-          id: req.params["id"],
+          id: req.body.id,
         },
       });
 
       if (deletedSession === 0) {
+        res.status(404);
         throw new Error("No session found with the given ID");
       }
 
-      return res
-        .status(204)
-        .json({ success: true, message: "Delete session successfully" });
+      return res.status(204).json("Delete session successfully");
     } catch (error) {
       next(error);
     }
