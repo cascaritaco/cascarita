@@ -11,7 +11,7 @@ interface FormProps {
   afterSave: () => void;
 }
 
-interface LeagueResponse {
+interface LeagueType {
   id: number;
   group_id: number;
   name: string;
@@ -20,7 +20,7 @@ interface LeagueResponse {
   updated_at: string;
 }
 
-interface SeasonResponse {
+interface SeasonType {
   id: number;
   name: string;
   start_date: Date;
@@ -31,4 +31,4 @@ interface SeasonResponse {
   league_id: number;
 }
 
-export type { TeamResponse, FormProps, LeagueResponse, SeasonResponse };
+export type { TeamResponse, FormProps, LeagueType, SeasonType };

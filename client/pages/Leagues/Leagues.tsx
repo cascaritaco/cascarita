@@ -6,26 +6,22 @@ import Modal from "../../components/Modal/Modal";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import Search from "../../components/Search/Search";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
-import { LeagueResponse } from "../../api/types";
+import { LeagueType } from "../../api/types";
+import { useQuery } from "@tanstack/react-query";
 import styles from "./Leagues.module.css";
 
 const Leagues = () => {
-  const [leagues, setLeagues] = React.useState<LeagueResponse[]>([]);
   const [filter, setFilter] = React.useState("");
   const [sorts, setSorts] = React.useState("");
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("/api/league/1");
-      result.json().then((data) => setLeagues(data.data));
-    };
-    fetchData();
-  }, [leagues]);
 
   const filterStatuses = ["Active", "Inactive"];
   const sortStatuses = ["Alphabetical", "Date"];
 
   const [open, setOpen] = React.useState(false);
+  const leaguesQuery = useQuery({
+    queryKey: ["leagues"],
+    queryFn: () => fetch("/api/league/1").then((res) => res.json()),
+  });
 
   return (
     <Page>
@@ -86,12 +82,16 @@ const Leagues = () => {
       </div>
       <div className={styles.table}>
         <div>
-          {leagues == undefined ? (
+          {leaguesQuery.isLoading ? (
             <div className={styles.cols}>
-              <p> No Leagues </p>
+              <p>Loading...</p>
+            </div>
+          ) : leaguesQuery.isError || !leaguesQuery.data ? (
+            <div className={styles.cols}>
+              <p>Error fetching data</p>
             </div>
           ) : (
-            leagues?.map((league) => (
+            leaguesQuery.data?.data.map((league: LeagueType) => (
               <div className={styles.cols} key={league.id}>
                 <p>{league.name}</p>
                 <DropdownMenuButton />
