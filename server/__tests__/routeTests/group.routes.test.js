@@ -31,12 +31,14 @@ const sampleErrorGroup = {
 
 describe("Integration Tests for Group", () => {
   beforeEach(async function () {
+    // await TestDb.League.sync();
     await TestDb.Division.sync();
     await TestDb.Fields.sync();
     await TestDb.Group.sync();
   });
 
   afterEach(async function () {
+    // await TestDb.League.destroy({ where: {} });
     await TestDb.Division.destroy({ where: {} });
     await TestDb.Fields.destroy({ where: {} });
     await TestDb.Group.destroy({ where: {} });
@@ -129,6 +131,31 @@ describe("Integration Tests for Group", () => {
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
         message: "Group with given ID has no fields",
+      });
+    });
+  });
+
+  describe("GET /group/:id/leagues", () => {
+    it("should handle GET /getLeagueByGroupId", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+
+      await TestDb.League.create({ group_id: group.id, name: "Leeroy League" });
+      await TestDb.League.create({ group_id: group.id, name: "Martin Martians" });
+
+      const response = await request(app).get(`/group/${group.id}/leagues`).send();
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.length).toBe(2);
+    });
+
+    it("should not get any leagues with GET /getLeagueByGroupId", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+
+      const response = await request(app).get(`/group/${group.id}/leagues`).send();
+
+      expect(response.status).toBe(500);
+      expect(response.body).toMatchObject({
+        message: "Group with given ID has no leagues or not found",
       });
     });
   });
