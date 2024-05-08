@@ -5,7 +5,7 @@ const express = require("express");
 const UserController = require("../../controllers/user.controller");
 const UserRoutes = require("../../routes/user.routes");
 const app = express();
-app.use("/user", UserRoutes);
+app.use("/users", UserRoutes);
 
 jest.mock("../../controllers/user.controller", () => ({
   registerUser: jest.fn(),
@@ -28,7 +28,7 @@ describe("User Routes", () => {
       });
     });
 
-    const response = await request(app).post("/user/register").send({
+    const response = await request(app).post("/users/register").send({
       firstName: "Leo",
       lastName: "Messi",
       email: "leoMessi10@gmail.com",
@@ -65,7 +65,7 @@ describe("User Routes", () => {
       });
     });
 
-    const response = await request(app).post("/user/register").send({
+    const response = await request(app).post("/users/register").send({
       firstName: "John",
       lastName: "Doe",
       email: existingEmail,
@@ -86,47 +86,11 @@ describe("User Routes", () => {
     });
   });
 
-  const fields = [
-    "firstName",
-    "lastName",
-    "email",
-    "password",
-    "groupId",
-    "roleId",
-  ];
+  const fields = ["firstName", "lastName", "email", "password", "groupId", "roleId"];
 
-  it.each(fields)(
-    "should handle POST /register with null %s",
-    async (field) => {
-      UserController.registerUser.mockImplementation((req, res) => {
-        res.status(400).json({
-          error: "Validation Error",
-          details: [
-            {
-              field: field,
-              message: `notNull Violation: User.${field} cannot be null`,
-            },
-          ],
-        });
-      });
-
-      const requestBody = {
-        firstName: "Leo",
-        lastName: "Messi",
-        email: "leoMessi10@gmail.com",
-        password: "testPassword",
-        groupId: 1,
-        roleId: 1,
-      };
-
-      requestBody[field] = null;
-
-      const response = await request(app)
-        .post("/user/register")
-        .send(requestBody);
-
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
+  it.each(fields)("should handle POST /register with null %s", async (field) => {
+    UserController.registerUser.mockImplementation((req, res) => {
+      res.status(400).json({
         error: "Validation Error",
         details: [
           {
@@ -135,6 +99,30 @@ describe("User Routes", () => {
           },
         ],
       });
-    }
-  );
+    });
+
+    const requestBody = {
+      firstName: "Leo",
+      lastName: "Messi",
+      email: "leoMessi10@gmail.com",
+      password: "testPassword",
+      groupId: 1,
+      roleId: 1,
+    };
+
+    requestBody[field] = null;
+
+    const response = await request(app).post("/users/register").send(requestBody);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Validation Error",
+      details: [
+        {
+          field: field,
+          message: `notNull Violation: User.${field} cannot be null`,
+        },
+      ],
+    });
+  });
 });

@@ -9,7 +9,7 @@ const FieldRoutes = require("../../routes/field.routes");
 const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/field", FieldRoutes);
+app.use("/fields", FieldRoutes);
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
@@ -24,15 +24,13 @@ describe("Field Routes", () => {
   it("should handle POST /create", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
 
-    const response = await request(app)
-      .post("/field/")
-      .send({
-        group_id: groupM.id,
-        name: "SOMOS Park",
-        address: "123 SOMOS Lane",
-        length: 500,
-        width: 200,
-      });
+    const response = await request(app).post("/fields/").send({
+      group_id: groupM.id,
+      name: "SOMOS Park",
+      address: "123 SOMOS Lane",
+      length: 500,
+      width: 200,
+    });
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
@@ -52,15 +50,13 @@ describe("Field Routes", () => {
       width: 200,
     });
 
-    const response = await request(app)
-      .post("/field/")
-      .send({
-        group_id: groupM.id,
-        name: "SOMOS Park",
-        address: "528 Average Ave",
-        length: 200,
-        width: 50,
-      });
+    const response = await request(app).post("/fields/").send({
+      group_id: groupM.id,
+      name: "SOMOS Park",
+      address: "528 Average Ave",
+      length: 200,
+      width: 50,
+    });
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
@@ -80,15 +76,13 @@ describe("Field Routes", () => {
       width: 50,
     });
 
-    const response = await request(app)
-      .post("/field/")
-      .send({
-        group_id: groupDos.id,
-        name: "SOMOS Park",
-        address: "528 Average Ave",
-        length: 200,
-        width: 50,
-      });
+    const response = await request(app).post("/fields/").send({
+      group_id: groupDos.id,
+      name: "SOMOS Park",
+      address: "528 Average Ave",
+      length: 200,
+      width: 50,
+    });
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
@@ -111,7 +105,7 @@ describe("Field Routes", () => {
 
     const updatedFieldName = "Cascarita Park";
     const response = await request(app)
-      .patch(`/field/${field.id}`)
+      .patch(`/fields/${field.id}`)
       .send({ name: updatedFieldName });
 
     expect(response.status).toBe(200);
@@ -124,7 +118,7 @@ describe("Field Routes", () => {
     const nonExistentFieldId = "9999";
 
     const response = await request(app)
-      .patch(`/field/${nonExistentFieldId}`)
+      .patch(`/fields/${nonExistentFieldId}`)
       .send({ name: "Joe Mo Mah Lawn" });
 
     expect(response.status).toBe(400);
@@ -152,7 +146,7 @@ describe("Field Routes", () => {
     });
 
     const response = await request(app)
-      .patch(`/field/${field2.id}`)
+      .patch(`/fields/${field2.id}`)
       .send({ name: "SOMOS Park" });
 
     expect(response.status).toBe(400);
@@ -176,14 +170,14 @@ describe("Field Routes", () => {
       width: 200,
     });
 
-    const response = await request(app).delete(`/field/${field.id}`).send();
+    const response = await request(app).delete(`/fields/${field.id}`).send();
 
     expect(response.status).toBe(204);
     expect(await testDb.Fields.findByPk(field.id)).toBeNull();
   });
 
   it("should return an error when attempting to delete a non-existant field DELETE /delete", async () => {
-    const response = await request(app).delete("/field/999").send();
+    const response = await request(app).delete("/fields/999").send();
 
     expect(response.status).toBe(404);
   });

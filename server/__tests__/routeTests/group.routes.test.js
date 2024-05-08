@@ -8,7 +8,7 @@ const Middlewares = require("../../middlewares");
 const TestDb = require("../../models");
 const app = express();
 app.use(express.json());
-app.use("/group", GroupRoutes);
+app.use("/groups", GroupRoutes);
 app.use(Middlewares.errorHandler);
 
 const sampleGroup = {
@@ -52,7 +52,7 @@ describe("Integration Tests for Group", () => {
     it("successful GET of group information", async () => {
       const coolGroup = await TestDataGenerator.createDummyGroup("Sample Group");
 
-      const response = await request(app).get(`/group/${coolGroup.id}`);
+      const response = await request(app).get(`/groups/${coolGroup.id}`);
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(
@@ -64,7 +64,7 @@ describe("Integration Tests for Group", () => {
 
     it("returns an error when attempting to retrieve non-existent group", async () => {
       const missingGroup = { id: 12345 };
-      const response = await request(app).get(`/group/${missingGroup.id}`);
+      const response = await request(app).get(`/groups/${missingGroup.id}`);
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual(
@@ -81,7 +81,9 @@ describe("Integration Tests for Group", () => {
       await TestDb.Division.create({ group_id: group.id, name: "Division 1" });
       await TestDb.Division.create({ group_id: group.id, name: "Division 2" });
 
-      const response = await request(app).get(`/group/${group.id}/divisions`).send();
+      const response = await request(app)
+        .get(`/groups/${group.id}/divisions`)
+        .send();
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(2);
@@ -90,7 +92,7 @@ describe("Integration Tests for Group", () => {
     it("Should fail if group not found", async () => {
       const invalidId = 18321;
       const response = await request(app)
-        .get(`/group/${invalidId}/divisions`)
+        .get(`/groups/${invalidId}/divisions`)
         .send();
 
       expect(response.status).toBe(404);
@@ -119,7 +121,7 @@ describe("Integration Tests for Group", () => {
         width: 150,
       });
 
-      const response = await request(app).get(`/group/${group.id}/fields`).send();
+      const response = await request(app).get(`/groups/${group.id}/fields`).send();
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(2);
@@ -128,7 +130,7 @@ describe("Integration Tests for Group", () => {
     it("should not get any fields with GET /getFieldByGroupId", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group Uno");
 
-      const response = await request(app).get(`/group/${group.id}/fields`).send();
+      const response = await request(app).get(`/groups/${group.id}/fields`).send();
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
@@ -144,7 +146,7 @@ describe("Integration Tests for Group", () => {
       await TestDb.League.create({ group_id: group.id, name: "Leeroy League" });
       await TestDb.League.create({ group_id: group.id, name: "Martin Martians" });
 
-      const response = await request(app).get(`/group/${group.id}/leagues`).send();
+      const response = await request(app).get(`/groups/${group.id}/leagues`).send();
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(2);
@@ -153,7 +155,7 @@ describe("Integration Tests for Group", () => {
     it("should not get any leagues with GET /getLeagueByGroupId", async () => {
       const group = await TestDataGenerator.createDummyGroup("Group Uno");
 
-      const response = await request(app).get(`/group/${group.id}/leagues`).send();
+      const response = await request(app).get(`/groups/${group.id}/leagues`).send();
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
@@ -166,7 +168,7 @@ describe("Integration Tests for Group", () => {
 
   describe("POST/ Group routes", () => {
     it("successful POST when creating a new group", async () => {
-      const response = await request(app).post("/group/").send(sampleGroup);
+      const response = await request(app).post("/groups/").send(sampleGroup);
 
       expect(response.status).toBe(201);
       expect(response.body.data).toEqual(
@@ -180,7 +182,7 @@ describe("Integration Tests for Group", () => {
     it("error POST when creating a new group with the same name", async () => {
       const coolGroup = await TestDataGenerator.createDummyGroup("Sample Group");
 
-      const response = await request(app).post("/group/").send(sampleGroup);
+      const response = await request(app).post("/groups/").send(sampleGroup);
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
@@ -189,7 +191,7 @@ describe("Integration Tests for Group", () => {
     });
 
     it("error POST when creating a new group with a bad state name", async () => {
-      const response = await request(app).post("/group/").send(sampleErrorGroup);
+      const response = await request(app).post("/groups/").send(sampleErrorGroup);
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
@@ -205,7 +207,7 @@ describe("Integration Tests for Group", () => {
 
     const updatedGroupName = "Updated Sample Group";
     const response = await request(app)
-      .patch(`/group/${coolGroup.id}`)
+      .patch(`/groups/${coolGroup.id}`)
       .send({ name: updatedGroupName });
 
     expect(response.status).toBe(200);
@@ -220,7 +222,7 @@ describe("Integration Tests for Group", () => {
     const updatedGroupName = "Updated New York Sample Group";
     const updatedState = "NY";
     const response = await request(app)
-      .patch(`/group/${coolGroup.id}`)
+      .patch(`/groups/${coolGroup.id}`)
       .send({ name: updatedGroupName, state: updatedState });
 
     expect(response.status).toBe(200);
