@@ -3,7 +3,6 @@
 const TestDataGenerator = require("../../utilityFunctions/testDataGenerator.js");
 const request = require("supertest");
 const express = require("express");
-const GroupController = require("../../controllers/group.controller");
 const GroupRoutes = require("../../routes/group.routes");
 const Middlewares = require("../../middlewares");
 const TestDb = require("../../models");
@@ -33,11 +32,13 @@ const sampleErrorGroup = {
 describe("Integration Tests for Group", () => {
   beforeEach(async function () {
     await TestDb.Division.sync();
+    await TestDb.Fields.sync();
     await TestDb.Group.sync();
   });
 
   afterEach(async function () {
     await TestDb.Division.destroy({ where: {} });
+    await TestDb.Fields.destroy({ where: {} });
     await TestDb.Group.destroy({ where: {} });
   });
 
@@ -91,6 +92,43 @@ describe("Integration Tests for Group", () => {
       expect(response.status).toBe(404);
       expect(response.body).toMatchObject({
         message: `no such Group found for id ${invalidId}`,
+      });
+    });
+  });
+
+  describe("GET /group/:id/fields", () => {
+    it("should handle GET /getFieldByGroupId", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+
+      await TestDb.Fields.create({
+        group_id: group.id,
+        name: "SOMOS Park",
+        address: "123 SOMOS Lane",
+        length: 500,
+        width: 200,
+      });
+      await TestDb.Fields.create({
+        group_id: group.id,
+        name: "Cascarita University",
+        address: "456 Soccer St.",
+        length: 400,
+        width: 150,
+      });
+
+      const response = await request(app).get(`/group/${group.id}/fields`).send();
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.length).toBe(2);
+    });
+
+    it("should not get any fields with GET /getFieldByGroupId", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+
+      const response = await request(app).get(`/group/${group.id}/fields`).send();
+
+      expect(response.status).toBe(500);
+      expect(response.body).toMatchObject({
+        message: "Group with given ID has no fields",
       });
     });
   });

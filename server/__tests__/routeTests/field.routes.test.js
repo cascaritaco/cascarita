@@ -1,6 +1,6 @@
 "use strict";
 
-window.setImmediate = window.setTimeout
+window.setImmediate = window.setTimeout;
 
 const TestDataGenerator = require("../../utilityFunctions/testDataGenerator.js");
 const request = require("supertest");
@@ -13,41 +13,10 @@ app.use("/field", FieldRoutes);
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
-
 describe("Field Routes", () => {
-
   beforeEach(async () => {
     await testDb.Group.sync();
     await testDb.Fields.sync();
-  });
-
-  // ------------------- Get Field by Group ID Tests ----------------
-
-  it("should handle GET /getFieldByGroupId", async () => {
-    const groupM = await TestDataGenerator.createDummyGroup("Group Uno");
-
-    await testDb.Fields.create({ group_id: groupM.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 500, width: 200 });
-    await testDb.Fields.create({ group_id: groupM.id, name: "Cascarita University", address: "456 Soccer St.", length: 400, width: 150 });
-
-    const response = await request(app)
-      .get(`/field/${groupM.id}`)
-      .send();
-
-    expect(response.status).toBe(200);
-    expect(response.body.data.length).toBe(2);
-  });
-
-  it("should not get any fields with GET /getFieldByGroupId", async () => {
-    const groupM = await TestDataGenerator.createDummyGroup("Group Uno");
-
-    const response = await request(app)
-      .get(`/field/${groupM.id}`)
-      .send();
-
-    expect(response.status).toBe(500);
-    expect(response.body).toMatchObject({
-      message: "Group with given ID has no fields",
-    });
   });
 
   // ------------------- Create Tests ----------------
@@ -57,7 +26,13 @@ describe("Field Routes", () => {
 
     const response = await request(app)
       .post("/field/")
-      .send({ group_id: groupM.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 500, width: 200 });
+      .send({
+        group_id: groupM.id,
+        name: "SOMOS Park",
+        address: "123 SOMOS Lane",
+        length: 500,
+        width: 200,
+      });
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
@@ -69,11 +44,23 @@ describe("Field Routes", () => {
   it("should not create if name is not unique POST /create", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Saul's Group");
 
-    await testDb.Fields.create({ group_id: groupM.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 500, width: 200 });
+    await testDb.Fields.create({
+      group_id: groupM.id,
+      name: "SOMOS Park",
+      address: "123 SOMOS Lane",
+      length: 500,
+      width: 200,
+    });
 
     const response = await request(app)
       .post("/field/")
-      .send({ group_id: groupM.id, name: "SOMOS Park", address: "528 Average Ave", length: 200, width: 50 });
+      .send({
+        group_id: groupM.id,
+        name: "SOMOS Park",
+        address: "528 Average Ave",
+        length: 200,
+        width: 50,
+      });
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
@@ -85,11 +72,23 @@ describe("Field Routes", () => {
     const groupUno = await TestDataGenerator.createDummyGroup("Watsonville Corp.");
     const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
-    await testDb.Fields.create({ group_id: groupUno.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 200, width: 50 });
+    await testDb.Fields.create({
+      group_id: groupUno.id,
+      name: "SOMOS Park",
+      address: "123 SOMOS Lane",
+      length: 200,
+      width: 50,
+    });
 
     const response = await request(app)
       .post("/field/")
-      .send({ group_id: groupDos.id, name: "SOMOS Park", address: "528 Average Ave", length: 200, width: 50 });
+      .send({
+        group_id: groupDos.id,
+        name: "SOMOS Park",
+        address: "528 Average Ave",
+        length: 200,
+        width: 50,
+      });
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
@@ -102,7 +101,13 @@ describe("Field Routes", () => {
 
   it("should update field with valid ID and input PATCH /patch", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
-    const field = await testDb.Fields.create({ group_id: groupM.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 200, width: 50 });
+    const field = await testDb.Fields.create({
+      group_id: groupM.id,
+      name: "SOMOS Park",
+      address: "123 SOMOS Lane",
+      length: 200,
+      width: 50,
+    });
 
     const updatedFieldName = "Cascarita Park";
     const response = await request(app)
@@ -116,7 +121,7 @@ describe("Field Routes", () => {
   });
 
   it("should return an error if field not found PATCH /patch", async () => {
-    const nonExistentFieldId = "9999"; 
+    const nonExistentFieldId = "9999";
 
     const response = await request(app)
       .patch(`/field/${nonExistentFieldId}`)
@@ -130,19 +135,31 @@ describe("Field Routes", () => {
 
   it("should not update if the new name is already used in the group", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
-  
-    const field1 = await testDb.Fields.create({ group_id: groupM.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 200, width: 50 });
-    const field2 = await testDb.Fields.create({ group_id: groupM.id, name: "Cascarita University", address: "123 SOMOS Lane", length: 200, width: 50 });
-  
+
+    const field1 = await testDb.Fields.create({
+      group_id: groupM.id,
+      name: "SOMOS Park",
+      address: "123 SOMOS Lane",
+      length: 200,
+      width: 50,
+    });
+    const field2 = await testDb.Fields.create({
+      group_id: groupM.id,
+      name: "Cascarita University",
+      address: "123 SOMOS Lane",
+      length: 200,
+      width: 50,
+    });
+
     const response = await request(app)
       .patch(`/field/${field2.id}`)
       .send({ name: "SOMOS Park" });
-  
+
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "Name is not unique"
+      message: "Name is not unique",
     });
-  
+
     const updatedField2 = await testDb.Fields.findByPk(field2.id);
     expect(updatedField2.name).toBe("Cascarita University");
   });
@@ -151,20 +168,22 @@ describe("Field Routes", () => {
 
   it("should delete a field with a valid field ID DELETE /delete", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
-    const field = await testDb.Fields.create({ group_id: groupM.id, name: "SOMOS Park", address: "123 SOMOS Lane", length: 200, width: 200 });
+    const field = await testDb.Fields.create({
+      group_id: groupM.id,
+      name: "SOMOS Park",
+      address: "123 SOMOS Lane",
+      length: 200,
+      width: 200,
+    });
 
-    const response = await request(app)
-      .delete(`/field/${field.id}`)
-      .send();
+    const response = await request(app).delete(`/field/${field.id}`).send();
 
     expect(response.status).toBe(204);
     expect(await testDb.Fields.findByPk(field.id)).toBeNull();
   });
 
   it("should return an error when attempting to delete a non-existant field DELETE /delete", async () => {
-    const response = await request(app)
-      .delete("/field/999")
-      .send();
+    const response = await request(app).delete("/field/999").send();
 
     expect(response.status).toBe(404);
   });
