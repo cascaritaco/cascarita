@@ -11,12 +11,50 @@ const app = express();
 app.use(express.json());
 app.use("/league", LeagueRoutes);
 app.use(Middlewares.errorHandler);
-const testDb = require("../../models");
+const TestDb = require("../../models");
 
 describe("League Routes", () => {
   beforeEach(async () => {
-    await testDb.Group.sync();
-    await testDb.League.sync();
+    await TestDb.Season.sync();
+    await TestDb.Group.sync();
+    await TestDb.League.sync();
+  });
+
+  describe("GET /league/:id/seasons", () => {
+    it("should get a season by its group id", async () => {
+      const group = await TestDataGenerator.createDummyGroup("Group Uno");
+      const league = await TestDb.League.create({
+        group_id: group.id,
+        name: "My League",
+      });
+
+      await TestDb.Season.create({
+        name: "Summer 2025",
+        start_date: "2025-07-01 00:00:00",
+        end_date: "2025-10-31 11:59:00",
+        is_active: false,
+        league_id: league.id,
+      });
+      await TestDb.Season.create({
+        name: "Winter 2024",
+        start_date: "2024-11-01 00:00:00",
+        end_date: "2025-03-14 11:59:00",
+        is_active: true,
+        league_id: league.id,
+      });
+
+      const response = await request(app).get(`/league/${league.id}/seasons`).send();
+
+      expect(response.status).toBe(200);
+      response.body.forEach((season) => expect(season.league_id).toBe(league.id));
+    });
+
+    it("should fail if group not found", async () => {
+      const invalidId = 12999;
+      const response = await request(app).get(`/league/${invalidId}/seasons`).send();
+
+      expect(response.status).toBe(404);
+    });
   });
 
   // ------------------- Create Tests ----------------
@@ -38,7 +76,7 @@ describe("League Routes", () => {
   it("should not create if name is not unique POST /create", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Saul's Group");
 
-    await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
+    await TestDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
     const response = await request(app)
       .post("/league/")
@@ -54,7 +92,7 @@ describe("League Routes", () => {
     const groupUno = await TestDataGenerator.createDummyGroup("Watsonville Corp.");
     const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
-    await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
+    await TestDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
 
     const response = await request(app)
       .post("/league/")
@@ -71,7 +109,7 @@ describe("League Routes", () => {
 
   it("should update league with valid ID and input PATCH /patch", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
-    const league = await testDb.League.create({
+    const league = await TestDb.League.create({
       group_id: groupM.id,
       name: "SOMOS",
     });
@@ -83,7 +121,7 @@ describe("League Routes", () => {
 
     expect(response.status).toBe(200);
 
-    const updatedLeague = await testDb.League.findByPk(league.id);
+    const updatedLeague = await TestDb.League.findByPk(league.id);
     expect(updatedLeague.name).toBe(updatedLeagueName);
   });
 
@@ -103,11 +141,11 @@ describe("League Routes", () => {
   it("should not update if the new name is already used in the group", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
 
-    const league1 = await testDb.League.create({
+    const league1 = await TestDb.League.create({
       group_id: groupM.id,
       name: "Shrek League",
     });
-    const league2 = await testDb.League.create({
+    const league2 = await TestDb.League.create({
       group_id: groupM.id,
       name: "Donkey League",
     });
@@ -121,7 +159,7 @@ describe("League Routes", () => {
       message: "Name is not unique",
     });
 
-    const updatedLeague2 = await testDb.League.findByPk(league2.id);
+    const updatedLeague2 = await TestDb.League.findByPk(league2.id);
     expect(updatedLeague2.name).toBe("Donkey League");
   });
 
@@ -129,7 +167,7 @@ describe("League Routes", () => {
 
   it("should delete a league with a valid league ID DELETE /delete", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
-    const league = await testDb.League.create({
+    const league = await TestDb.League.create({
       group_id: groupM.id,
       name: "SOMOS",
     });
@@ -137,7 +175,7 @@ describe("League Routes", () => {
     const response = await request(app).delete(`/league/${league.id}`).send();
 
     expect(response.status).toBe(204);
-    expect(await testDb.League.findByPk(league.id)).toBeNull();
+    expect(await TestDb.League.findByPk(league.id)).toBeNull();
   });
 
   it("should return an error when attempting to delete a non-existant league DELETE /delete", async () => {
@@ -149,11 +187,12 @@ describe("League Routes", () => {
   // ------------------------------------------------
 
   afterEach(async () => {
-    await testDb.League.destroy({ where: {} });
-    await testDb.Group.destroy({ where: {} });
+    await TestDb.Season.destroy({ where: {} });
+    await TestDb.Group.destroy({ where: {} });
+    await TestDb.League.destroy({ where: {} });
   });
 
   afterAll(async () => {
-    await testDb.sequelize.close();
+    await TestDb.sequelize.close();
   });
 });

@@ -34,6 +34,7 @@ describe("Integration Tests for Group", () => {
     // await TestDb.League.sync();
     await TestDb.Division.sync();
     await TestDb.Fields.sync();
+    await TestDb.Season.sync();
     await TestDb.Group.sync();
   });
 
@@ -41,6 +42,7 @@ describe("Integration Tests for Group", () => {
     // await TestDb.League.destroy({ where: {} });
     await TestDb.Division.destroy({ where: {} });
     await TestDb.Fields.destroy({ where: {} });
+    await TestDb.Season.destroy({ where: {} });
     await TestDb.Group.destroy({ where: {} });
   });
 
