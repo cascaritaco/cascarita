@@ -72,6 +72,7 @@ docker-compose up
 To run the project locally, use the following command:
 
 ```bash
+# NOTE: If you want to add Sentry logging and monitoring in your development environment, follow the setup steps here:https://scenic-lang.atlassian.net/l/cp/7P9i7wmF
 # load the environment variables
 cp .env.example .env
 # runs react frontend on port 3000 and backend node server on port 3001
