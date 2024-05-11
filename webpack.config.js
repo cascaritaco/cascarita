@@ -1,17 +1,24 @@
+const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
+const getAWSSecretAndWriteToEnv = require("./server/loadSecrets");
+getAWSSecretAndWriteToEnv();
 const path = require("path");
+
 require("dotenv").config();
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./client/index.tsx",
+
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
+
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
     fallback: {},
   },
+
   module: {
     rules: [
       {
@@ -31,11 +38,18 @@ module.exports = {
       },
     ],
   },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: "./client/public/index.html",
     }),
+    sentryWebpackPlugin({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: "cascarita",
+      project: "cascarita",
+    }),
   ],
+
   devServer: {
     compress: true,
     port: process.env.CLIENT_PORT,
@@ -51,4 +65,6 @@ module.exports = {
       },
     },
   },
+
+  devtool: "source-map",
 };

@@ -17,7 +17,7 @@ const configManager = {
       username: process.env.DB_USERNAME || "root",
       password: process.env.DB_PASSWORD || null,
       database: process.env.DB_NAME || "test_db",
-      host: process.env.DB_HOST || "127.0.0.1",
+      host: process.env.DB_HOST,
       dialect: process.env.DB_DIALECT || "mysql",
       port: parseInt(process.env.DB_PORT, 10) || 3306,
     };

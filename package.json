@@ -14,6 +14,7 @@
     "eslint": "npx eslint client/"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.574.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-icons": "^1.3.0",
@@ -21,6 +22,8 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/themes": "^3.0.2",
     "@react-oauth/google": "^0.12.1",
+    "@sentry/react": "^7.114.0",
+    "@sentry/webpack-plugin": "^2.16.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^9.1.3",
     "babel-polyfill": "^6.26.0",
