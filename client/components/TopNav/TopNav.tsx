@@ -5,9 +5,14 @@ import { Avatar } from "@radix-ui/themes";
 import { MdOutlineNotifications } from "react-icons/md";
 import Search from "../Search/Search";
 import { useAuth } from "../AuthContext/AuthContext";
+import { changeLanguage } from "../../i18n/config";
 
 const SideNav = () => {
   const { currentUser } = useAuth();
+
+  const handleLanguageChange = async (lng: string) => {
+    await changeLanguage(lng);
+  };
 
   return (
     <div className={styles["top-nav"]}>
@@ -20,6 +25,10 @@ const SideNav = () => {
         </span>
       </div>
       <div className={styles["search-alert-con"]}>
+        <div className={styles["button-container"]}>
+          <button onClick={() => handleLanguageChange("en")}>English</button>
+          <button onClick={() => handleLanguageChange("esp")}>Español</button>
+        </div>
         <Search />
         <MdOutlineNotifications className={styles.notification} />
         <div className={styles.avatarCard}>

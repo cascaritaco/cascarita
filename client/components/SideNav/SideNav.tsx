@@ -9,9 +9,11 @@ import { TbLogout } from "react-icons/tb";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import NavItem from "../NavItem/NavItem";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation("SideNav");
 
   const handleItemClick = (label: string) => {
     setSelectedItem(label);
@@ -23,37 +25,37 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
       <ul>
         <NavItem
           icon={<RiHomeLine />}
-          label="Home"
+          label={t("item1")}
           selected={selectedItem === "Home"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<FiUser />}
-          label="Users"
+          label={t("item2")}
           selected={selectedItem === "Users"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<MdOutlineCalendarToday />}
-          label="Schedule"
+          label={t("item3")}
           selected={selectedItem === "Schedule"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<HiOutlinePencilAlt />}
-          label="Forms"
+          label={t("item4")}
           selected={selectedItem === "Forms"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<IoSettingsOutline />}
-          label="Settings"
+          label={t("item5")}
           selected={selectedItem === "Settings"}
           onItemClick={handleItemClick}
         />
       </ul>
       <div>
-        <LogoutButton icon={<TbLogout />} label="Logout" />
+        <LogoutButton icon={<TbLogout />} label={t("item6")} />
       </div>
     </nav>
   );

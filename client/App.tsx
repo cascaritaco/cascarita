@@ -7,21 +7,25 @@ import Settings from "./pages/Settings/Settings";
 import Login from "./pages/Login/Login";
 import { AuthProvider } from "./components/AuthContext/AuthContext";
 import Layout from "./components/Layout/Layout";
+import { I18nextProvider } from "react-i18next";
+import i18next from "./i18n/config";
 
 const App = () => {
   return (
     <AuthProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/forms" element={<Forms />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Layout>
+      <I18nextProvider i18n={i18next}>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/forms" element={<Forms />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Layout>
+      </I18nextProvider>
     </AuthProvider>
   );
 };

@@ -5,8 +5,11 @@ import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenu
 import Page from "../../components/Page/Page";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Leagues = () => {
+  const { t } = useTranslation("Leagues");
+
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
 
@@ -24,19 +27,19 @@ const Leagues = () => {
     "test",
   ];
 
-  const filterStatuses = ["Active", "Inactive"];
-  const sortStatuses = ["Alphabetical", "Date"];
+  const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
+  const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   return (
     <Page>
-      <h1 className={styles.h1}>Leagues</h1>
+      <h1 className={styles.h1}>{t("title")}</h1>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search />
           <div className={styles.filterContainer}>
-            <p className={styles.filterSubTitle}>Filter</p>
+            <p className={styles.filterSubTitle}>{t("filter")}</p>
             <SelectMenu
-              placeholder="Active"
+              placeholder={t("filterOptions.item1")}
               name="filter"
               value={filter}
               onValueChange={(value) => setFilter(value)}
@@ -51,9 +54,9 @@ const Leagues = () => {
             </SelectMenu>
           </div>
           <div className={styles.filterContainer}>
-            <p className={styles.filterSubTitle}>Sort By</p>
+            <p className={styles.filterSubTitle}>{t("sort")}</p>
             <SelectMenu
-              placeholder="Alphabetical"
+              placeholder={t("sortOptions.item1")}
               name="sorts"
               value={sorts}
               onValueChange={(value) => setSorts(value)}
@@ -68,11 +71,11 @@ const Leagues = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label="Add League" />
+        <PrimaryButton label={t("button")} />
       </div>
       <div className={styles.cols}>
-        <h3>Name</h3>
-        <h3>Options</h3>
+        <h3>{t("col1")}</h3>
+        <h3>{t("col2")}</h3>
       </div>
       <div className={styles.table}>
         <div>
