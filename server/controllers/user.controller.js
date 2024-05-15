@@ -12,6 +12,7 @@ const UserController = function () {
       password: req.body.password,
       group_id: req.body.group_id,
       role_id: req.body.role_id,
+      language_id: req.body.language_id,
     };
 
     try {
