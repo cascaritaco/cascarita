@@ -10,8 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.belongsTo(models.Group, { foreignKey: "group_id" });
-      User.belongsTo(models.Role, { foreignKey: "role_id" });
+      User.belongsTo(models.Group, {
+        foreignKey: "group_id",
+        targetKey: "id",
+      });
+
+      User.belongsTo(models.Role, {
+        foreignKey: "role_id",
+        targetKey: "id",
+      });
+
+      User.belongsTo(models.Language, {
+        foreignKey: "language_id",
+        targetKey: "id",
+      });
     }
   }
   User.init(
@@ -41,6 +53,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       role_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      language_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
