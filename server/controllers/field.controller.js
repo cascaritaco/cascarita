@@ -4,7 +4,7 @@ const { Fields } = require("../models");
 
 const FieldController = function () {
   var getFieldByGroupId = async function (req, res, next) {
-    const groupId = req.params['id'];
+    const groupId = req.params.id;
 
     try {
       const result = await Fields.findAll({
@@ -35,19 +35,24 @@ const FieldController = function () {
     });
 
     return fieldFound == null;
-
   };
 
   var createField = async function (req, res, next) {
-    const { group_id, name, address, length, width } = req.body;  
-    const newField = { group_id, name, address, length, width }; 
+    const { group_id, name, address, length, width } = req.body;
+    const newField = { group_id, name, address, length, width };
 
     try {
-      const fieldFound = await isNameUniqueWithinGroup(newField.group_id, newField.name, newField.address, newField.length, newField.width);
+      const fieldFound = await isNameUniqueWithinGroup(
+        newField.group_id,
+        newField.name,
+        newField.address,
+        newField.length,
+        newField.width,
+      );
 
       if (!fieldFound) {
         res.status(400);
-        throw new Error( "Name is not unique" );
+        throw new Error("Name is not unique");
       }
 
       await Fields.build(newField).validate();
@@ -66,7 +71,7 @@ const FieldController = function () {
     try {
       let currentField = await Fields.findOne({
         where: {
-          id: req.params['id'],
+          id: req.params["id"],
         },
       });
 
@@ -75,17 +80,23 @@ const FieldController = function () {
         throw new Error("Field with given ID was not found");
       }
 
-      Object.keys(req.body).forEach(key => {
-        if (key !== "group_id"){
+      Object.keys(req.body).forEach((key) => {
+        if (key !== "group_id") {
           currentField[key] = req.body[key] ? req.body[key] : currentField[key];
         }
       });
 
-      const fieldFound = await isNameUniqueWithinGroup(currentField.group_id, currentField.name, currentField.address, currentField.length, currentField.width);
+      const fieldFound = await isNameUniqueWithinGroup(
+        currentField.group_id,
+        currentField.name,
+        currentField.address,
+        currentField.length,
+        currentField.width,
+      );
 
       if (!fieldFound) {
         res.status(400);
-        throw new Error( "Name is not unique" );
+        throw new Error("Name is not unique");
       }
 
       await currentField.validate();
@@ -101,15 +112,17 @@ const FieldController = function () {
     try {
       let deletedField = await Fields.destroy({
         where: {
-          id: req.params['id'],
+          id: req.params["id"],
         },
       });
 
       if (deletedField === 0) {
         throw new Error("No field found with the given ID");
-       }
+      }
 
-      return res.status(204).json({ success: true, message: "Delete field successfully" });
+      return res
+        .status(204)
+        .json({ success: true, message: "Delete field successfully" });
     } catch (error) {
       next(error);
     }
@@ -124,5 +137,3 @@ const FieldController = function () {
 };
 
 module.exports = FieldController();
-
-
