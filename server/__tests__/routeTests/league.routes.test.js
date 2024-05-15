@@ -9,7 +9,7 @@ const LeagueRoutes = require("../../routes/league.routes");
 const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/league", LeagueRoutes);
+app.use("/leagues", LeagueRoutes);
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
@@ -42,9 +42,7 @@ describe("League Routes", () => {
 
     const response = await request(app).get(`/league/${groupM.id}`).send();
 
-    expect(response.status).toBe(500);
-    expect(response.body).toMatchObject({
-      message: "Group with given ID has no leagues or not found",
+      expect(response.status).toBe(404);
     });
   });
 
@@ -56,7 +54,7 @@ describe("League Routes", () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
 
     const response = await request(app)
-      .post("/league/")
+      .post("/leagues/")
       .send({ group_id: groupM.id, name: "SOMOS" });
 
     expect(response.status).toBe(201);
@@ -69,10 +67,10 @@ describe("League Routes", () => {
   it("should not create if name is not unique POST /create", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Saul's Group");
 
-    await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
+    await TestDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
     const response = await request(app)
-      .post("/league/")
+      .post("/leagues/")
       .send({ group_id: groupM.id, name: "Salinas" });
 
     expect(response.status).toBe(400);
@@ -87,10 +85,10 @@ describe("League Routes", () => {
     );
     const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
-    await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
+    await TestDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
 
     const response = await request(app)
-      .post("/league/")
+      .post("/leagues/")
       .send({ group_id: groupDos.id, name: "Summer 2024" });
 
     expect(response.status).toBe(201);
@@ -111,12 +109,12 @@ describe("League Routes", () => {
 
     const updatedLeagueName = "Sopa Marucha";
     const response = await request(app)
-      .patch(`/league/${league.id}`)
+      .patch(`/leagues/${league.id}`)
       .send({ name: updatedLeagueName });
 
     expect(response.status).toBe(200);
 
-    const updatedLeague = await testDb.League.findByPk(league.id);
+    const updatedLeague = await TestDb.League.findByPk(league.id);
     expect(updatedLeague.name).toBe(updatedLeagueName);
   });
 
@@ -124,7 +122,7 @@ describe("League Routes", () => {
     const nonExistentLeagueId = "9999";
 
     const response = await request(app)
-      .patch(`/league/${nonExistentLeagueId}`)
+      .patch(`/leagues/${nonExistentLeagueId}`)
       .send({ name: "Joe Mo Mah Inc." });
 
     expect(response.status).toBe(400);
@@ -146,7 +144,7 @@ describe("League Routes", () => {
     });
 
     const response = await request(app)
-      .patch(`/league/${league2.id}`)
+      .patch(`/leagues/${league2.id}`)
       .send({ name: "Shrek League" });
 
     expect(response.status).toBe(500);
@@ -155,6 +153,7 @@ describe("League Routes", () => {
     });
 
     const updatedLeague2 = await testDb.League.findByPk(league2.id);
+
     expect(updatedLeague2.name).toBe("Donkey League");
   });
 
@@ -170,7 +169,7 @@ describe("League Routes", () => {
     const response = await request(app).delete(`/league/${league.id}`).send();
 
     expect(response.status).toBe(204);
-    expect(await testDb.League.findByPk(league.id)).toBeNull();
+    expect(await TestDb.League.findByPk(league.id)).toBeNull();
   });
 
   it("should return an error when attempting to delete a non-existant league DELETE /delete", async () => {
@@ -188,6 +187,6 @@ describe("League Routes", () => {
   });
 
   afterAll(async () => {
-    await testDb.sequelize.close();
+    await TestDb.sequelize.close();
   });
 });

@@ -4,6 +4,26 @@ const { Op } = require("sequelize");
 const { League, Season, Session, Team, TeamsSession } = require("../models");
 
 const SeasonController = {
+  async getSeasonByLeagueId(req, res, next) {
+    const leagueId = req.params.id;
+
+    try {
+      const league = await League.findByPk(leagueId);
+      if (!league) {
+        res.status(404);
+        throw new Error(`no such league with id ${id}`);
+      }
+      const seasons = await Season.findAll({
+        where: {
+          league_id: league.id,
+        },
+      });
+
+      res.json(seasons);
+    } catch (error) {
+      next(error);
+    }
+  },
   async getAllSeasons(req, res, next) {
     try {
       const { query } = req;
