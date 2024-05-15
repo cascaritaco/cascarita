@@ -60,8 +60,6 @@ const SeasonController = {
     }
   },
 
-  // api/teamsessions/
-
   async getTeamsByLeagueId(req, res, next) {
     try {
       const { id } = req.params;

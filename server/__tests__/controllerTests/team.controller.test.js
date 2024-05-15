@@ -1,7 +1,7 @@
 const request = require("supertest");
 const { createTeam } = require("../../controllers/team.controller");
 
-jest.mock("./../models", () => ({
+jest.mock("../../models", () => ({
   Team: {
     create: jest.fn(),
   },
