@@ -1,7 +1,7 @@
 "use strict";
 
 const { Op } = require("sequelize");
-const { League, Season } = require("../models");
+const { League, Season, Session, Team, TeamsSession } = require("../models");
 
 const SeasonController = {
   async getAllSeasons(req, res, next) {
@@ -14,6 +14,7 @@ const SeasonController = {
           [Op.substring]: query.name.toLowerCase().trim(),
         };
       }
+
       if (query.league) {
         const league = parseInt(query.league, 10);
         if (isNaN(league)) {
@@ -58,17 +59,68 @@ const SeasonController = {
       next(error);
     }
   },
+
+  // api/teamsessions/
+
+  async getTeamsByLeagueId(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (isNaN(id)) {
+        res.status(400);
+        throw new Error("league id must be an integer");
+      }
+
+      const season = await Season.findOne({
+        where: {
+          league_id: id,
+          is_active: true,
+        },
+      });
+      if (!season) {
+        res.status(404);
+        throw new Error(`no such season with id ${id}`);
+      }
+
+      const session = await Session.findOne({
+        where: {
+          season_id: season.id,
+        },
+      });
+      if (!session) {
+        res.status(404);
+        throw new Error(`no such session with id ${season.id}`);
+      }
+
+      const teamSession = await TeamsSession.findAll({
+        where: {
+          session_id: session.id,
+        },
+        include: Team,
+      });
+      if (!teamSession) {
+        res.status(404);
+        throw new Error(`no such team session with id ${session.id}`);
+      }
+
+      res.json(teamSession);
+    } catch (error) {
+      next(error);
+    }
+  },
   async createSeason(req, res, next) {
     const form = {
       name: req.body.name,
       start_date: req.body.start_date,
       end_date: req.body.end_date,
       is_active: req.body.is_active,
-      league_id: req.body.league_id
+      league_id: req.body.league_id,
     };
 
     try {
-      const isUnique = await isNameUniqueWithinLeague(form.name, form.league_id);
+      const isUnique = await isNameUniqueWithinLeague(
+        form.name,
+        form.league_id
+      );
       if (!isUnique) {
         res.status(400);
         throw new Error("name is not unique");
@@ -92,7 +144,7 @@ const SeasonController = {
         throw new Error(`no such season with id ${id}`);
       }
 
-      Object.keys(req.body).forEach(key => {
+      Object.keys(req.body).forEach((key) => {
         if (key !== "league_id") {
           season[key] = req.body[key] ? req.body[key] : season[key];
         }
@@ -102,7 +154,7 @@ const SeasonController = {
       const isUnique = await isNameUniqueWithinLeague(name, league_id);
       if (!isUnique) {
         res.status(400);
-        throw new Error("name is not unique")
+        throw new Error("name is not unique");
       }
 
       await season.validate();
@@ -137,7 +189,7 @@ async function isNameUniqueWithinLeague(name, leagueId) {
     },
   });
 
-  return league === null
+  return league === null;
 }
 
 module.exports = SeasonController;
