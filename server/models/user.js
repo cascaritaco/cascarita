@@ -24,6 +24,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "language_id",
         targetKey: "id",
       });
+
+      User.hasMany(models.Games, {
+        foreignKey: "created_by_id",
+        sourceKey: "id",
+      });
+
+      User.hasMany(models.Games, {
+        foreignKey: "updated_by_id",
+        sourceKey: "id",
+      });
     }
   }
   User.init(

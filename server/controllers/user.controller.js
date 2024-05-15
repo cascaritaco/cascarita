@@ -42,9 +42,55 @@ const UserController = function () {
     res.status(200).json({ user: req.user });
   };
 
+  var getLanguageByUserId = async function (req, res, next) {
+    try {
+      const { id } = req.params;
+      if (isNaN(id)) {
+        res.status(400);
+        throw new Error("season id must be an integer");
+      }
+
+      const user = await User.findByPk(id);
+      if (!user) {
+        res.status(404);
+        throw new Error(`No user was found with id ${id}`);
+      }
+
+      return res.json(user.language_id);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var updateLanguagePreference = async function (req, res, next) {
+    try {
+      let currentUser = await User.findOne({
+        where: {
+          id: req.params.id,
+        },
+      });
+
+      if (!currentUser) {
+        res.status(404);
+        throw new Error("User with given ID was not found");
+      }
+
+      currentUser.language_id = req.body.language_id || currentUser.language_id;
+
+      await currentUser.validate();
+      await currentUser.save();
+
+      return res.status(200).json(currentUser);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     registerUser,
     logInUser,
+    getLanguageByUserId,
+    updateLanguagePreference,
   };
 };
 
