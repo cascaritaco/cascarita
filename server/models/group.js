@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         sourceKey: "id",
       });
+
+      Group.hasMany(models.User, {
+        foreignKey: "group_id",
+        sourceKey: "id",
+      });
     }
   }
   Group.init(
