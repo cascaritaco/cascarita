@@ -74,7 +74,7 @@ const SeasonController = {
         throw new Error(`no such season with id ${id}`);
       }
 
-      res.json(season);
+      return res.status(200).json(season);
     } catch (error) {
       next(error);
     }
@@ -120,7 +120,7 @@ const SeasonController = {
         throw new Error(`no such team session with id ${session.id}`);
       }
 
-      res.json(teamSession);
+      return res.status(200).json(teamSession);
     } catch (error) {
       next(error);
     }
