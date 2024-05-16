@@ -10,6 +10,8 @@ app.use("/users", UserRoutes);
 jest.mock("../../controllers/user.controller", () => ({
   registerUser: jest.fn(),
   logInUser: jest.fn(),
+  getLanguageByUserId: jest.fn(),
+  updateLanguagePreference: jest.fn(),
 }));
 
 describe("User Routes", () => {
@@ -24,6 +26,7 @@ describe("User Routes", () => {
           password: "testPassword",
           groupId: 1,
           roleId: 1,
+          language_id: 1,
         },
       });
     });
@@ -35,6 +38,7 @@ describe("User Routes", () => {
       password: "testPassword",
       groupId: 1,
       roleId: 1,
+      language_id: 1,
     });
 
     expect(response.status).toBe(201);
@@ -47,6 +51,7 @@ describe("User Routes", () => {
         password: "testPassword",
         groupId: 1,
         roleId: 1,
+        language_id: 1,
       },
     });
   });
@@ -72,6 +77,7 @@ describe("User Routes", () => {
       password: "testPassword",
       groupId: 1,
       roleId: 1,
+      language_id: 1,
     });
 
     expect(response.status).toBe(400);
@@ -86,11 +92,48 @@ describe("User Routes", () => {
     });
   });
 
-  const fields = ["firstName", "lastName", "email", "password", "groupId", "roleId"];
+  const fields = [
+    "firstName",
+    "lastName",
+    "email",
+    "password",
+    "groupId",
+    "roleId",
+  ];
 
-  it.each(fields)("should handle POST /register with null %s", async (field) => {
-    UserController.registerUser.mockImplementation((req, res) => {
-      res.status(400).json({
+  it.each(fields)(
+    "should handle POST /register with null %s",
+    async (field) => {
+      UserController.registerUser.mockImplementation((req, res) => {
+        res.status(400).json({
+          error: "Validation Error",
+          details: [
+            {
+              field: field,
+              message: `notNull Violation: User.${field} cannot be null`,
+            },
+          ],
+        });
+      });
+
+      const requestBody = {
+        firstName: "Leo",
+        lastName: "Messi",
+        email: "leoMessi10@gmail.com",
+        password: "testPassword",
+        groupId: 1,
+        roleId: 1,
+        language_id: 1,
+      };
+
+      requestBody[field] = null;
+
+      const response = await request(app)
+        .post("/users/register")
+        .send(requestBody);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
         error: "Validation Error",
         details: [
           {
@@ -99,30 +142,6 @@ describe("User Routes", () => {
           },
         ],
       });
-    });
-
-    const requestBody = {
-      firstName: "Leo",
-      lastName: "Messi",
-      email: "leoMessi10@gmail.com",
-      password: "testPassword",
-      groupId: 1,
-      roleId: 1,
-    };
-
-    requestBody[field] = null;
-
-    const response = await request(app).post("/users/register").send(requestBody);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Validation Error",
-      details: [
-        {
-          field: field,
-          message: `notNull Violation: User.${field} cannot be null`,
-        },
-      ],
-    });
-  });
+    }
+  );
 });
