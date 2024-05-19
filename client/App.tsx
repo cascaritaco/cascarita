@@ -7,6 +7,7 @@ import Settings from "./pages/Settings/Settings";
 import Login from "./pages/Login/Login";
 import { AuthProvider } from "./components/AuthContext/AuthContext";
 import Layout from "./components/Layout/Layout";
+import NewForm from "./pages/NewForm/NewForm";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/forms" element={<Forms />} />
+          <Route path="/forms/new" element={<NewForm />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Login />} />
         </Routes>

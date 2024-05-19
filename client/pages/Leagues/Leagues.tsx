@@ -68,7 +68,12 @@ const Leagues = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label="Add League" />
+        <PrimaryButton
+          label="Add League"
+          onClick={() => {
+            console.log("implement me");
+          }}
+        />
       </div>
       <div className={styles.cols}>
         <h3>Name</h3>
