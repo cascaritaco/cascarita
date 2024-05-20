@@ -71,7 +71,7 @@ describe("Integration Tests for Group", () => {
       expect(response.status).toBe(500);
       expect(response.body).toEqual(
         expect.objectContaining({
-          message: "Group with given ID was not found",
+          message: "group with given id was not found",
         })
       );
     });
