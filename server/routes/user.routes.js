@@ -9,7 +9,7 @@ router.get("/loginReactPageHere", (req, res) => {
   res.json({ message: "Invalid email or password, try again" });
 });
 router.get("/:id/languages", UserController.getLanguageByUserId);
-router.patch("/:id", UserController.updateLanguagePreference);
+router.post("/:id/languages", UserController.updateLanguagePreference);
 router.post("/register", UserController.registerUser);
 router.post(
   "/login",

@@ -41,22 +41,64 @@ module.exports = (sequelize, DataTypes) => {
       first_name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: "First name field is required",
+          },
+          notEmpty: {
+            msg: "First name field cannot be empty",
+          },
+          len: {
+            args: [1, 30],
+            msg: "First name must be between 1 and 30 characters",
+          },
+        },
       },
       last_name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Last name field is required",
+          },
+          notEmpty: {
+            msg: "Last name field cannot be empty",
+          },
+          len: {
+            args: [1, 30],
+            msg: "Last name must be between 1 and 30 characters",
+          },
+        },
       },
       email: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
         validate: {
-          isEmail: true,
+          notNull: {
+            isEmail: true,
+            msg: "Email field is required",
+          },
+          notEmpty: {
+            msg: "Email field cannot be empty",
+          },
+          len: {
+            args: [1, 30],
+            msg: "Email must be between 1 and 30 characters",
+          },
         },
       },
       password: {
         type: DataTypes.STRING(64),
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Password field is required",
+          },
+          notEmpty: {
+            msg: "Password field cannot be empty",
+          },
+        },
       },
       group_id: {
         type: DataTypes.INTEGER,
