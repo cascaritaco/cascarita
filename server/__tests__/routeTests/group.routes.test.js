@@ -57,7 +57,7 @@ describe("Integration Tests for Group", () => {
       const response = await request(app).get(`/groups/${coolGroup.id}`);
 
       expect(response.status).toBe(200);
-      expect(response.body.data).toEqual(
+      expect(response.body).toEqual(
         expect.objectContaining({
           name: "Sample Group",
         })
@@ -184,7 +184,7 @@ describe("Integration Tests for Group", () => {
       const response = await request(app).post("/groups/").send(sampleGroup);
 
       expect(response.status).toBe(201);
-      expect(response.body.data).toEqual(
+      expect(response.body).toEqual(
         expect.objectContaining({
           name: "Sample Group",
           city: "Sample City",

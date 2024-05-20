@@ -38,10 +38,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "Name field is required",
+            msg: "name field is required",
           },
           notEmpty: {
-            msg: "Name field cannot be empty",
+            msg: "name field cannot be empty",
           },
         },
       },
@@ -50,14 +50,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "Street address field is required",
+            msg: "street address field is required",
           },
           notEmpty: {
-            msg: "Street address field cannot be empty",
+            msg: "street address field cannot be empty",
           },
           len: {
             args: [5, 100],
-            msg: "Street address must be between 5 and 100 characters",
+            msg: "street address must be between 5 and 100 characters",
           },
         },
       },
@@ -66,14 +66,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "City field is required",
+            msg: "city field is required",
           },
           notEmpty: {
-            msg: "City field cannot be empty",
+            msg: "city field cannot be empty",
           },
           len: {
             args: [2, 50],
-            msg: "City name must be between 2 and 50 characters",
+            msg: "city name must be between 2 and 50 characters",
           },
         },
       },
@@ -82,10 +82,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "State field is required",
+            msg: "state field is required",
           },
           notEmpty: {
-            msg: "State field cannot be empty",
+            msg: "state field cannot be empty",
           },
           isIn: {
             args: [
@@ -141,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
                 "WI",
                 "WY",
               ],
-            ], // Valid US state abbreviations
+            ],
             msg: "Invalid state abbreviation",
           },
         },
@@ -151,14 +151,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "ZIP code field is required",
+            msg: "zip code field is required",
           },
           notEmpty: {
-            msg: "ZIP code field cannot be empty",
+            msg: "zip code field cannot be empty",
           },
           is: {
             args: /^\d{5}(-\d{4})?$/,
-            msg: "Invalid ZIP code format",
+            msg: "invalid zip code format",
           },
         },
       },
