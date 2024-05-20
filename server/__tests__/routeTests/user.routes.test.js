@@ -1,147 +1,172 @@
 "use strict";
 
+window.setImmediate = window.setTimeout;
+
+const TestDataGenerator = require("../../utilityFunctions/testDataGenerator.js");
 const request = require("supertest");
 const express = require("express");
-const UserController = require("../../controllers/user.controller");
 const UserRoutes = require("../../routes/user.routes");
+const Middlewares = require("../../middlewares.js");
 const app = express();
+app.use(express.json());
 app.use("/users", UserRoutes);
-
-jest.mock("../../controllers/user.controller", () => ({
-  registerUser: jest.fn(),
-  logInUser: jest.fn(),
-  getLanguageByUserId: jest.fn(),
-  updateLanguagePreference: jest.fn(),
-}));
+app.use(Middlewares.errorHandler);
+const testDb = require("../../models");
 
 describe("User Routes", () => {
+  beforeEach(async () => {
+    await testDb.Group.sync();
+    await testDb.Role.sync();
+    await testDb.Language.sync();
+    await testDb.User.sync();
+  });
+
   it("should handle POST /register", async () => {
-    UserController.registerUser.mockImplementation((req, res) => {
-      res.status(201).json({
-        success: true,
-        data: {
-          firstName: "Leo",
-          lastName: "Messi",
-          email: "leoMessi10@gmail.com",
-          password: "testPassword",
-          groupId: 1,
-          roleId: 1,
-          language_id: 1,
-        },
-      });
+    const groupM = await TestDataGenerator.createDummyGroup("Salinas");
+    const roleM = await testDb.Role.create({
+      role_type: "Staff",
+    });
+    const languageM = await testDb.Language.create({
+      language: "English",
     });
 
-    const response = await request(app).post("/users/register").send({
-      firstName: "Leo",
-      lastName: "Messi",
+    const response = await request(app).post("/users/register/").send({
+      first_name: "Leo",
+      last_name: "Messi",
       email: "leoMessi10@gmail.com",
       password: "testPassword",
-      groupId: 1,
-      roleId: 1,
-      language_id: 1,
+      group_id: groupM.id,
+      role_id: roleM.id,
+      language_id: languageM.id,
     });
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      data: {
-        firstName: "Leo",
-        lastName: "Messi",
-        email: "leoMessi10@gmail.com",
-        password: "testPassword",
-        groupId: 1,
-        roleId: 1,
-        language_id: 1,
-      },
-    });
+    expect(response.body).toEqual(
+      expect.objectContaining({ first_name: "Leo" })
+    );
   });
 
   it("should handle POST /register with non-unique email", async () => {
-    const existingEmail = "existing@example.com";
-    UserController.registerUser.mockImplementation((req, res) => {
-      res.status(400).json({
-        error: "Validation Error",
-        details: [
-          {
-            field: "email",
-            message: "unique Violation: User.email must be unique",
-          },
-        ],
-      });
+    const groupM = await TestDataGenerator.createDummyGroup("Salinas");
+    const roleM = await testDb.Role.create({
+      role_type: "Staff",
+    });
+    const languageM = await testDb.Language.create({
+      language: "English",
     });
 
-    const response = await request(app).post("/users/register").send({
-      firstName: "John",
-      lastName: "Doe",
-      email: existingEmail,
+    const userM = await testDb.User.create({
+      first_name: "Leo",
+      last_name: "Messi",
+      email: "leoMessi10@gmail.com",
       password: "testPassword",
-      groupId: 1,
-      roleId: 1,
-      language_id: 1,
+      group_id: groupM.id,
+      role_id: roleM.id,
+      language_id: languageM.id,
+    });
+
+    const response = await request(app).post("/users/register/").send({
+      first_name: "Saul",
+      last_name: "Reyes",
+      email: "leoMessi10@gmail.com",
+      password: "password1",
+      group_id: groupM.id,
+      role_id: roleM.id,
+      language_id: languageM.id,
     });
 
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Validation Error",
-      details: [
-        {
-          field: "email",
-          message: "unique Violation: User.email must be unique",
-        },
-      ],
+    expect(response.body).toMatchObject({
+      message: "Email is not unique",
     });
   });
 
-  const fields = [
-    "firstName",
-    "lastName",
-    "email",
-    "password",
-    "groupId",
-    "roleId",
-  ];
+  it("should handle POST /register with an empty first name", async () => {
+    const groupM = await TestDataGenerator.createDummyGroup("Salinas");
+    const roleM = await testDb.Role.create({
+      role_type: "Staff",
+    });
+    const languageM = await testDb.Language.create({
+      language: "English",
+    });
 
-  it.each(fields)(
-    "should handle POST /register with null %s",
-    async (field) => {
-      UserController.registerUser.mockImplementation((req, res) => {
-        res.status(400).json({
-          error: "Validation Error",
-          details: [
-            {
-              field: field,
-              message: `notNull Violation: User.${field} cannot be null`,
-            },
-          ],
-        });
-      });
+    const response = await request(app).post("/users/register/").send({
+      first_name: "",
+      last_name: "Messi",
+      email: "leoMessi10@gmail.com",
+      password: "testPassword",
+      group_id: groupM.id,
+      role_id: roleM.id,
+      language_id: languageM.id,
+    });
 
-      const requestBody = {
-        firstName: "Leo",
-        lastName: "Messi",
-        email: "leoMessi10@gmail.com",
-        password: "testPassword",
-        groupId: 1,
-        roleId: 1,
-        language_id: 1,
-      };
+    expect(response.status).toBe(500);
+    expect(response.body.message).toContain("Validation error");
+  });
 
-      requestBody[field] = null;
+  it("should handle POST /register with an empty password", async () => {
+    const groupM = await TestDataGenerator.createDummyGroup("Salinas");
+    const roleM = await testDb.Role.create({
+      role_type: "Staff",
+    });
+    const languageM = await testDb.Language.create({
+      language: "English",
+    });
 
-      const response = await request(app)
-        .post("/users/register")
-        .send(requestBody);
+    const response = await request(app).post("/users/register/").send({
+      first_name: "Leo",
+      last_name: "Messi",
+      email: "leoMessi10@gmail.com",
+      password: "",
+      group_id: groupM.id,
+      role_id: roleM.id,
+      language_id: languageM.id,
+    });
 
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
-        error: "Validation Error",
-        details: [
-          {
-            field: field,
-            message: `notNull Violation: User.${field} cannot be null`,
-          },
-        ],
-      });
-    }
-  );
+    expect(response.status).toBe(500);
+    expect(response.body.message).toContain("Validation error");
+  });
+
+  it("Testing updateLanguagePreference function by updating user's language preference", async () => {
+    const groupM = await TestDataGenerator.createDummyGroup("Sample Group");
+    const roleM = await testDb.Role.create({
+      role_type: "Staff",
+    });
+    const languageM = await testDb.Language.create({
+      language: "English",
+    });
+    const updatedLanguagePref = await testDb.Language.create({
+      language: "Spanish",
+    });
+
+    const userM = await testDb.User.create({
+      first_name: "Leo",
+      last_name: "Messi",
+      email: "leoMessi10@gmail.com",
+      password: "testPassword",
+      group_id: groupM.id,
+      role_id: roleM.id,
+      language_id: languageM.id,
+    });
+
+    const response = await request(app)
+      .post(`/users/${userM.id}/languages`)
+      .send({ language_id: updatedLanguagePref.id });
+
+    expect(response.status).toBe(200);
+
+    const updatedUser = await testDb.User.findByPk(userM.id);
+    expect(updatedUser.language_id).toBe(updatedLanguagePref.id);
+  });
+
+  afterEach(async () => {
+    await testDb.User.destroy({ where: {} });
+    await testDb.Language.destroy({ where: {} });
+    await testDb.Role.destroy({ where: {} });
+    await testDb.Group.destroy({ where: {} });
+  });
+
+  afterAll(async () => {
+    await testDb.sequelize.close();
+  });
 });
