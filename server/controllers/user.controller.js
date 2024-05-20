@@ -4,34 +4,55 @@ const { User } = require("../models");
 const passport = require("passport");
 
 const UserController = function () {
-  var registerUser = async function (req, res) {
+  var isEmailUniqueWithinGroup = async function (groupId, email) {
+    let userFound = await User.findOne({
+      where: {
+        group_id: groupId,
+        email: email,
+      },
+    });
+
+    return userFound == null;
+  };
+
+  var registerUser = async function (req, res, next) {
+    const {
+      first_name,
+      last_name,
+      email,
+      password,
+      group_id,
+      role_id,
+      language_id,
+    } = req.body;
+
     const newUser = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      password: req.body.password,
-      group_id: req.body.group_id,
-      role_id: req.body.role_id,
-      language_id: req.body.language_id,
+      first_name,
+      last_name,
+      email,
+      password,
+      group_id,
+      role_id,
+      language_id,
     };
 
     try {
+      const userFound = await isEmailUniqueWithinGroup(
+        newUser.group_id,
+        newUser.email
+      );
+
+      if (!userFound) {
+        res.status(400);
+        throw new Error("Email is not unique");
+      }
+
       await User.build(newUser).validate();
       const result = await User.create(newUser);
 
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
+      return res.status(201).json(result);
     } catch (error) {
-      const validationErrors = error.errors?.map((err) => ({
-        field: err.path,
-        message: err.message,
-      }));
-
-      return res
-        .status(400)
-        .json({ error: "Validation error", details: validationErrors });
+      next(error);
     }
   };
 
@@ -47,7 +68,7 @@ const UserController = function () {
       const { id } = req.params;
       if (isNaN(id)) {
         res.status(400);
-        throw new Error("season id must be an integer");
+        throw new Error("User id must be an integer");
       }
 
       const user = await User.findByPk(id);
@@ -64,15 +85,18 @@ const UserController = function () {
 
   var updateLanguagePreference = async function (req, res, next) {
     try {
-      let currentUser = await User.findOne({
-        where: {
-          id: req.params.id,
-        },
-      });
+      const { id } = req.params;
+
+      if (isNaN(id)) {
+        res.status(400);
+        throw new Error("User id must be an integer");
+      }
+
+      let currentUser = await User.findByPk(id);
 
       if (!currentUser) {
         res.status(404);
-        throw new Error("User with given ID was not found");
+        throw new Error(`No user was found with id ${id}`);
       }
 
       currentUser.language_id = req.body.language_id || currentUser.language_id;
@@ -80,7 +104,7 @@ const UserController = function () {
       await currentUser.validate();
       await currentUser.save();
 
-      return res.status(200).json(currentUser);
+      res.json(currentUser);
     } catch (error) {
       next(error);
     }
