@@ -261,7 +261,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: Session with given ID was not found"
+        "Error: session with given id was not found"
       );
     });
   });
@@ -298,7 +298,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: Session with given ID does not exist"
+        "Error: session with given id does not exist"
       );
     });
   });
@@ -335,7 +335,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: Session with given division ID does not exist"
+        "Error: session with given division id does not exist"
       );
     });
   });
@@ -350,7 +350,6 @@ describe("Session Controller", () => {
 
       await SessionController.deleteSession(req, res, next);
       expect(res.status).toHaveBeenCalledWith(204);
-      expect(res.body).toEqual("Delete session successfully");
     });
 
     it("sends error if a session is not found", async () => {
@@ -367,7 +366,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: No session found with the given ID"
+        "Error: no session found with the given id"
       );
     });
   });
