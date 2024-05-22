@@ -48,12 +48,16 @@ describe("League Routes", () => {
         .send();
 
       expect(response.status).toBe(200);
-      response.body.forEach((season) => expect(season.league_id).toBe(league.id));
+      response.body.forEach((season) =>
+        expect(season.league_id).toBe(league.id)
+      );
     });
 
     it("should fail if group not found", async () => {
       const invalidId = 12999;
-      const response = await request(app).get(`/league/${invalidId}/seasons`).send();
+      const response = await request(app)
+        .get(`/league/${invalidId}/seasons`)
+        .send();
 
       expect(response.status).toBe(404);
     });
@@ -69,10 +73,7 @@ describe("League Routes", () => {
       .send({ group_id: groupM.id, name: "SOMOS" });
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      data: expect.objectContaining({ name: "SOMOS" }),
-    });
+    expect(response.body).toEqual(expect.objectContaining({ name: "SOMOS" }));
   });
 
   it("should not create if name is not unique POST /create", async () => {
@@ -86,12 +87,14 @@ describe("League Routes", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "Name is not unique",
+      message: "name is not unique",
     });
   });
 
   it("should create a league with the same name from a different group POST /create", async () => {
-    const groupUno = await TestDataGenerator.createDummyGroup("Watsonville Corp.");
+    const groupUno = await TestDataGenerator.createDummyGroup(
+      "Watsonville Corp."
+    );
     const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
     await TestDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
@@ -101,10 +104,9 @@ describe("League Routes", () => {
       .send({ group_id: groupDos.id, name: "Summer 2024" });
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      data: expect.objectContaining({ name: "Summer 2024" }),
-    });
+    expect(response.body).toEqual(
+      expect.objectContaining({ name: "Summer 2024" })
+    );
   });
 
   // ------------------- Update Tests ----------------
@@ -136,7 +138,7 @@ describe("League Routes", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "League with given ID was not found",
+      message: "league with given id was not found",
     });
   });
 
@@ -158,7 +160,7 @@ describe("League Routes", () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toMatchObject({
-      message: "Name is not unique",
+      message: "name is not unique",
     });
 
     const updatedLeague2 = await TestDb.League.findByPk(league2.id);

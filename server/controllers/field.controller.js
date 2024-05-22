@@ -14,13 +14,10 @@ const FieldController = function () {
       });
 
       if (Object.keys(result).length === 0) {
-        throw new Error("Group with given ID has no fields");
+        throw new Error("group with given id has no fields");
       }
 
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -47,21 +44,18 @@ const FieldController = function () {
         newField.name,
         newField.address,
         newField.length,
-        newField.width,
+        newField.width
       );
 
       if (!fieldFound) {
         res.status(400);
-        throw new Error("Name is not unique");
+        throw new Error("name is not unique");
       }
 
       await Fields.build(newField).validate();
       const result = await Fields.create(newField);
 
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -77,7 +71,7 @@ const FieldController = function () {
 
       if (!currentField) {
         res.status(400);
-        throw new Error("Field with given ID was not found");
+        throw new Error("field with given id was not found");
       }
 
       Object.keys(req.body).forEach((key) => {
@@ -91,18 +85,18 @@ const FieldController = function () {
         currentField.name,
         currentField.address,
         currentField.length,
-        currentField.width,
+        currentField.width
       );
 
       if (!fieldFound) {
         res.status(400);
-        throw new Error("Name is not unique");
+        throw new Error("name is not unique");
       }
 
       await currentField.validate();
       await currentField.save();
 
-      return res.status(200).json({ success: true, data: currentField });
+      return res.status(200).json(currentField);
     } catch (error) {
       next(error);
     }
@@ -117,12 +111,10 @@ const FieldController = function () {
       });
 
       if (deletedField === 0) {
-        throw new Error("No field found with the given ID");
+        throw new Error("no field found with the given id");
       }
 
-      return res
-        .status(204)
-        .json({ success: true, message: "Delete field successfully" });
+      return res.status(204).json();
     } catch (error) {
       next(error);
     }

@@ -14,13 +14,10 @@ const LeagueController = function () {
       });
 
       if (Object.keys(result).length === 0) {
-        throw new Error("Group with given ID has no leagues or not found");
+        throw new Error("group with given id has no leagues or not found");
       }
 
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -44,21 +41,18 @@ const LeagueController = function () {
     try {
       const leagueFound = await isNameUniqueWithinGroup(
         newLeague.group_id,
-        newLeague.name,
+        newLeague.name
       );
 
       if (!leagueFound) {
         res.status(400);
-        throw new Error("Name is not unique");
+        throw new Error("name is not unique");
       }
 
       await League.build(newLeague).validate();
       const result = await League.create(newLeague);
 
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -74,28 +68,30 @@ const LeagueController = function () {
 
       if (!currentLeague) {
         res.status(400);
-        throw new Error("League with given ID was not found");
+        throw new Error("league with given id was not found");
       }
 
       Object.keys(req.body).forEach((key) => {
         if (key !== "group_id") {
-          currentLeague[key] = req.body[key] ? req.body[key] : currentLeague[key];
+          currentLeague[key] = req.body[key]
+            ? req.body[key]
+            : currentLeague[key];
         }
       });
 
       const leagueFound = await isNameUniqueWithinGroup(
         currentLeague.group_id,
-        currentLeague.name,
+        currentLeague.name
       );
 
       if (!leagueFound) {
-        throw new Error("Name is not unique");
+        throw new Error("name is not unique");
       }
 
       await currentLeague.validate();
       await currentLeague.save();
 
-      return res.status(200).json({ success: true, data: currentLeague });
+      return res.status(200).json(currentLeague);
     } catch (error) {
       next(error);
     }
@@ -110,12 +106,10 @@ const LeagueController = function () {
       });
 
       if (deletedLeague === 0) {
-        throw new Error("No league found with the given ID");
+        throw new Error("no league found with the given id");
       }
 
-      return res
-        .status(204)
-        .json({ success: true, message: "Delete league successfully" });
+      return res.status(204).json();
     } catch (error) {
       next(error);
     }
