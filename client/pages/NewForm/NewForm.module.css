@@ -1,0 +1,59 @@
+.formElementsContainer {
+  width: 185px;
+  height: 100%;
+  display: block;
+  padding-left: 12px;
+  padding-right: 10px;
+  padding-top: 12px;
+  justify-content: left;
+  background-color: #f4f7fb;
+  border-radius: 10px;
+}
+
+.newFormContainer {
+  display: flex;
+  height: 100vh;
+  padding-bottom: 25%;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 15px;
+  font-weight: 800;
+  padding-bottom: 10px;
+}
+
+.smallText {
+  font-size: 10px;
+}
+
+.formTitleContainer {
+  border-radius: 15px;
+  border: 3px solid #c8cbd0;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  display: grid;
+  margin-bottom: 8px;
+}
+
+.formCanvasContainer {
+  margin-right: 8px;
+  margin-left: 8px;
+  width: 100%;
+}
+
+.formTitle {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.formDescription {
+  font-size: 15px;
+  font-weight: 400;
+}

@@ -19,7 +19,7 @@ const Forms = () => {
   const dates = ["date1", "date2", "date3"];
 
   const handleNewFormClick = () => {
-    navigate("/forms/new");
+    navigate("/forms/check");
   };
 
   return (

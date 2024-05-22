@@ -1,0 +1,70 @@
+import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
+import { useState } from "react";
+import { SlFrame } from "react-icons/sl";
+import { FaHeading } from "react-icons/fa6";
+import { PiTextT } from "react-icons/pi";
+import { LuCalendar } from "react-icons/lu";
+import { MdOutlineNumbers } from "react-icons/md";
+import { MdOutlineArrowDropDownCircle } from "react-icons/md";
+import { FaListUl } from "react-icons/fa6";
+import { FaPenNib } from "react-icons/fa6";
+import { IconType } from "react-icons";
+import styles from "./DraggableButton.module.css";
+import { DraggableButtonProps } from "./types";
+
+const iconMapping: { [key: string]: IconType } = {
+  section: SlFrame,
+  heading: FaHeading,
+  text: PiTextT,
+  dateandtime: LuCalendar,
+  numbers: MdOutlineNumbers,
+  dropdown: MdOutlineArrowDropDownCircle,
+  multiplechoice: FaListUl,
+  signature: FaPenNib,
+};
+
+const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
+  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+
+  const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
+    // Define the drop zone area (e.g., x: 100-300, y: 100-300)
+    const dropZone = { x1: 190, x2: 500 };
+
+    if (data.x >= dropZone.x1 && data.x <= dropZone.x2) {
+      console.log("handling onDrop");
+      onDrop();
+    }
+
+    // Reset button position (illusion of staying in place)
+    setDragPosition({ x: 0, y: 0 });
+  };
+
+  const getIcon = (label: string): IconType => {
+    const formattedLabel = label.replace(/\s+/g, "").toLowerCase();
+    return iconMapping[formattedLabel];
+  };
+
+  const IconComponent = getIcon(label);
+
+  const additionalClass =
+    label.toLowerCase() === "section"
+      ? styles.sectionStyle
+      : label.toLowerCase() === "signature"
+      ? styles.penStyle
+      : "styles.baseStyle";
+
+  return (
+    <Draggable
+      position={dragPosition}
+      onStop={handleDragStop}
+      onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}
+    >
+      <button className={`${styles.buttonContainer} ${additionalClass}`}>
+        {IconComponent && <IconComponent />}
+        {label}
+      </button>
+    </Draggable>
+  );
+};
+
+export default DraggableButton;
