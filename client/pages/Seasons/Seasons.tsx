@@ -10,8 +10,7 @@ const Seasons = () => {
 
   return (
     <Page>
-      {/* Need to substitute */}
-      <h1 className={styles.h1}>The Premier League - hold </h1>
+      <h1 className={styles.h1}>The Premier League </h1>
 
       <Modal open={open} onOpenChange={setOpen}>
         <Modal.Button asChild className={styles.btn}>

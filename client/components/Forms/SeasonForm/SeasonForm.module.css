@@ -1,4 +1,4 @@
-.form {
+form {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -11,7 +11,7 @@
   align-items: baseline;
 }
 
-.label {
+label {
   font-size: 1.1rem;
   color: black;
   margin-right: 16px;
@@ -37,30 +37,6 @@
 
 .input:focus {
   box-shadow: 0 0 0 2px lightblue;
-}
-
-.radioContainer {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.radioInputContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.radioContainer > input {
-  margin-bottom: 0;
-}
-
-.groupLabel {
-  font-weight: 600;
-  padding: 0 16px;
-  font-size: 0.8rem;
-  line-height: 25px;
-  color: black;
 }
 
 .formBtnContainer {

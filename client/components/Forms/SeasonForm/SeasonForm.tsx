@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./SeasonForm.module.css";
+import SelectMenu from "../../SelectMenu/SelectMenu";
 import Modal from "../../Modal/Modal";
+import { createSeason } from "../../../api/service";
 import { FormProps } from "../../../api/types";
 
 const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
@@ -9,6 +11,8 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
   const [endDate, setEndDate] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const TEST_LEAGUES = ["The Premier League"];
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -16,31 +20,40 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
       new FormData(event.currentTarget)
     );
 
-    const newSeason = {
-      name: seasonName,
-      start_date: startDate,
-      end_date: endDate,
-      is_active: 1,
-      league_id: 1,
-    };
-
-    await fetch("/api/seasons/", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newSeason),
-    });
-
-    afterSave();
+    try {
+      await createSeason(
+        seasonName as string,
+        startDate as string,
+        endDate as string
+      );
+      afterSave();
+    } catch (error) {
+      console.error("failed to create season:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className={styles.inputContainer}>
-        <label className={styles.label} htmlFor="seasonName">
-          Season Name
-        </label>
+        <label htmlFor="seasonName">Assign League</label>
+        <SelectMenu
+          className={styles.input}
+          name="existingLeague"
+          value="The Premier League"
+        >
+          <SelectMenu.Group>
+            {TEST_LEAGUES.map((league, idx) => (
+              <SelectMenu.Item key={idx} value={league}>
+                {league}
+              </SelectMenu.Item>
+            ))}
+          </SelectMenu.Group>
+        </SelectMenu>
+      </div>
+      <div className={styles.inputContainer}>
+        <label htmlFor="seasonName">Season Name</label>
         <input
           className={styles.input}
           required
@@ -51,41 +64,41 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
           onChange={(event) => setSeasonName(event.target.value)}
         />
       </div>
+
       <div className={styles.inputContainer}>
-        <label className={styles.label} htmlFor="startDate">
-          Start Date
-        </label>
-        <input
-          className={styles.input}
-          required
-          type="date"
-          id="startDate"
-          name="startDate"
-          value={startDate}
-          onChange={(event) => setStartDate(event.target.value)}
-        />
+        <div className={styles.inputContainer}>
+          <label htmlFor="startDate">Start Date</label>
+          <input
+            className={styles.input}
+            required
+            type="date"
+            id="startDate"
+            name="startDate"
+            value={startDate}
+            onChange={(event) => setStartDate(event.target.value)}
+          />
+        </div>
+        <div className={styles.inputContainer}>
+          <label htmlFor="endDate">End Date</label>
+          <input
+            className={styles.input}
+            required
+            type="date"
+            id="endDate"
+            name="endDate"
+            value={endDate}
+            onChange={(event) => setEndDate(event.target.value)}
+          />
+        </div>
       </div>
-      <div className={styles.inputContainer}>
-        <label className={styles.label} htmlFor="endDate">
-          Start Date
-        </label>
-        <input
-          className={styles.input}
-          required
-          type="date"
-          id="endDate"
-          name="endDate"
-          value={endDate}
-          onChange={(event) => setEndDate(event.target.value)}
-        />
-      </div>
+
       <div className={styles.formBtnContainer}>
         <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
           Cancel
         </Modal.Close>
 
         <button type="submit" className={`${styles.btn} ${styles.submitBtn}`}>
-          {isLoading === false ? "Submit" : "Saving..."}
+          {isLoading === true ? "Saving..." : "Submit"}
         </button>
       </div>
     </form>
