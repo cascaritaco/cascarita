@@ -3,21 +3,8 @@ import Page from "../../components/Page/Page";
 import { useState } from "react";
 import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
-
-type DroppedItemType =
-  | "Section"
-  | "Heading"
-  | "Text"
-  | "Date and Time"
-  | "Numbers"
-  | "Dropdown"
-  | "Multiple Choice"
-  | "Signature";
-
-interface DroppedItem {
-  id: number;
-  type: DroppedItemType;
-}
+import { DroppedItem, DroppedItemType } from "./types";
+import { v4 as uuidv4 } from "uuid";
 
 const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
@@ -25,21 +12,25 @@ const NewForm = () => {
   const [title, setTitle] = useState("Form Title");
 
   const draggableButtons = [
-    "Heading",
-    "Text",
-    "Date and Time",
-    "Numbers",
+    "Short Text",
+    "Long Text",
     "Dropdown",
     "Multiple Choice",
   ];
 
   const handleDrop = (label: DroppedItemType) => {
+    const uniqueId = uuidv4();
     const newItem: DroppedItem = {
-      id: droppedItems.length,
+      id: uniqueId,
       type: label,
     };
     console.log("new item here: ", newItem);
     setDroppedItems([...droppedItems, newItem]);
+  };
+
+  const handleDelete = (name: string) => {
+    setDroppedItems(droppedItems.filter((item) => item.id !== name));
+    console.log("items after delete: ", droppedItems);
   };
 
   return (
@@ -50,10 +41,6 @@ const NewForm = () => {
           <div className={styles.formElementsContainer}>
             <h2 className={styles.subtitle}>Form Elements</h2>
             <hr />
-            <DraggableButton
-              label="Section"
-              onDrop={() => handleDrop("Section")}
-            />
             <p className={styles.smallText}>Text Elements</p>
             {draggableButtons.map((label, index) => (
               <DraggableButton
@@ -62,11 +49,6 @@ const NewForm = () => {
                 onDrop={() => handleDrop(label as DroppedItemType)}
               />
             ))}
-            <p className={styles.smallText}>Advanced Elements</p>
-            <DraggableButton
-              label="Signature"
-              onDrop={() => handleDrop("Signature")}
-            />
           </div>
           <div className={styles.formCanvasContainer}>
             <div className={styles.formTitleContainer}>
@@ -86,7 +68,7 @@ const NewForm = () => {
               <hr />
             </div>
             <p className={styles.smallText}>Drag and Drop Area</p>
-            <DNDCanvas items={droppedItems} setItems={setDroppedItems} />
+            <DNDCanvas items={droppedItems} handleDelete={handleDelete} />
           </div>
         </div>
       </div>

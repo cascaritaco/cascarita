@@ -1,26 +1,20 @@
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import { useState } from "react";
-import { SlFrame } from "react-icons/sl";
-import { FaHeading } from "react-icons/fa6";
-import { PiTextT } from "react-icons/pi";
 import { LuCalendar } from "react-icons/lu";
-import { MdOutlineNumbers } from "react-icons/md";
 import { MdOutlineArrowDropDownCircle } from "react-icons/md";
 import { FaListUl } from "react-icons/fa6";
-import { FaPenNib } from "react-icons/fa6";
 import { IconType } from "react-icons";
 import styles from "./DraggableButton.module.css";
+import { MdOutlineShortText } from "react-icons/md";
 import { DraggableButtonProps } from "./types";
+import { GrTextAlignFull } from "react-icons/gr";
 
 const iconMapping: { [key: string]: IconType } = {
-  section: SlFrame,
-  heading: FaHeading,
-  text: PiTextT,
+  shorttext: MdOutlineShortText,
+  longtext: GrTextAlignFull,
   dateandtime: LuCalendar,
-  numbers: MdOutlineNumbers,
   dropdown: MdOutlineArrowDropDownCircle,
   multiplechoice: FaListUl,
-  signature: FaPenNib,
 };
 
 const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {

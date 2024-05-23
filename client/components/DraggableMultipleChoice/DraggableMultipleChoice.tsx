@@ -2,16 +2,12 @@ import React from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
 
-interface MultipleChoiceOption {
-  id: string;
-  value: string;
-}
-
 interface DraggableMultipleChoiceProps {
   id: string;
   index: number;
   question: string;
   control: any; // Type as appropriate
+  onDelete: () => void;
 }
 
 const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
@@ -19,6 +15,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   index,
   question,
   control,
+  onDelete,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -48,7 +45,18 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
             borderRadius: 4,
           }}
         >
-          <label>{question}</label>
+          <Controller
+            name={`questions.${index}.question`}
+            control={control}
+            defaultValue={question} // Ensure the default value is set
+            render={({ field }) => (
+              <input
+                {...field}
+                placeholder="Enter your question here"
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+            )}
+          />
           {fields.map((field, idx) => (
             <div key={field.id}>
               <Controller
@@ -65,6 +73,9 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
           ))}
           <button type="button" onClick={addOption}>
             Add Option
+          </button>
+          <button type="button" onClick={onDelete}>
+            Delete
           </button>
         </div>
       )}

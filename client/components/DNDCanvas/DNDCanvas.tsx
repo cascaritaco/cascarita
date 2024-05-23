@@ -2,32 +2,52 @@ import React, { useEffect } from "react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import DraggableMultipleChoice from "../DraggableMultipleChoice/DraggableMultipleChoice";
+import DraggableShortText from "../DraggableShortText/DraggableShortText";
 import { DNDCanvasProps } from "./types";
 
-interface DroppedItem {
-  id: number;
-  type: "Multiple Choice"; // Add other types as needed
+type FieldType = "Multiple Choice" | "Short Text";
+
+interface Field {
+  id: string;
+  name: string;
+  type: FieldType;
+  question?: string;
+  label?: string;
+  options?: { id: string; value: string }[];
 }
 
-const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, setItems }) => {
-  const methods = useForm();
+const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
+  const methods = useForm<{ questions: Field[] }>();
 
   const { control, handleSubmit } = methods;
 
-  const { fields, append, move, replace } = useFieldArray({
+  const { fields, append, move, remove } = useFieldArray({
     control,
-    name: "questions",
+    name: "questions", // This should match the structure in useForm
   });
 
   useEffect(() => {
-    // // replace(items);
-    // // handleDrop();
-    // console.log("items: ", items);
+    console.log("all items: ", items);
     if (items.length > 0) {
-      append({
-        type: "Multiple Choice",
-        // @ts-ignore
-        options: [{ id: "option-1", value: "" }],
+      items.forEach((item) => {
+        if (!fields.some((field) => field.name === item.id)) {
+          if (item.type === "Multiple Choice") {
+            append({
+              id: item.id,
+              name: item.id,
+              type: "Multiple Choice",
+              question: `Question ${fields.length + 1}`,
+              options: [{ id: "option-1", value: "" }],
+            });
+          } else if (item.type === "Short Text") {
+            append({
+              id: item.id,
+              name: item.id,
+              type: "Short Text",
+              label: `Label ${fields.length + 1}`,
+            });
+          }
+        }
       });
     }
   }, [items]);
@@ -49,27 +69,10 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, setItems }) => {
     move(result.source.index, result.destination.index);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    // console.log("HANDING DROP FROM DND CANVAS");
-    // e.preventDefault();
-    // const type = e.dataTransfer.getData("text/plain") as DroppedItem["type"];
-    // console.log("type: ", type);
-    // if (type === "Multiple Choice") {
-    //   const newItem: DroppedItem = {
-    //     id: items.length,
-    //     type: "Multiple Choice",
-    //   };
-    //   // setItems([...items, newItem]);
-    //   // append({
-    //   //   type: "Multiple Choice",
-    //   //   options: [{ id: "option-1", value: "" }],
-    //   // });
-    //   append({
-    //     type: "Multiple Choice",
-    //     // @ts-ignore
-    //     options: [{ id: "option-1", value: "" }],
-    //   });
-    // }
+  const onDelete = (index: number, name: string) => {
+    remove(index);
+    handleDelete(name);
+    console.log("fields after deletes: ", fields);
   };
 
   const onSubmit = (data: any) => {
@@ -91,7 +94,7 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, setItems }) => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                onDrop={handleDrop}
+                // onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
                 style={{
                   padding: "16px",
@@ -99,19 +102,32 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, setItems }) => {
                   minHeight: "400px",
                 }}
               >
-                {fields.map(
-                  (field, index) => (
-                    // field.type === "Multiple Choice" ? (
-                    <DraggableMultipleChoice
-                      key={field.id}
-                      id={field.id}
-                      index={index}
-                      question={`Question ${index + 1}`}
-                      control={control}
-                    />
-                  )
-                  // ) : null
-                )}
+                {fields.map((field, index) => {
+                  if (field.type === "Multiple Choice") {
+                    return (
+                      <DraggableMultipleChoice
+                        key={field.id}
+                        id={field.id}
+                        index={index}
+                        question={field.question || ""}
+                        control={control}
+                        onDelete={() => onDelete(index, field.name)}
+                      />
+                    );
+                  } else if (field.type === "Short Text") {
+                    return (
+                      <DraggableShortText
+                        key={field.id}
+                        id={field.id}
+                        index={index}
+                        label={field.label || ""}
+                        control={control}
+                        onDelete={() => onDelete(index, field.name)}
+                      />
+                    );
+                  }
+                  return null;
+                })}
                 {provided.placeholder}
               </div>
             )}
