@@ -1,18 +1,12 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-
-interface DraggableShortTextProps {
-  id: string;
-  index: number;
-  label: string;
-  control: any; // Type as appropriate
-  onDelete: () => void;
-}
+import { DraggableShortTextProps } from "./types";
 
 const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   id,
   index,
+  question,
   label,
   control,
   onDelete,
@@ -32,7 +26,18 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
             borderRadius: 4,
           }}
         >
-          {/* Render label input */}
+          <Controller
+            name={`questions.${index}.question`}
+            control={control}
+            defaultValue={question} // Ensure the default value is set
+            render={({ field }) => (
+              <input
+                {...field}
+                placeholder="Enter your question here"
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+            )}
+          />
           <Controller
             name={`questions.${index}.label`}
             control={control}

@@ -1,28 +1,15 @@
 import React from "react";
-import { Controller, useFieldArray } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableMultipleChoiceProps } from "./types";
+import { DraggableLongTextProps } from "./types";
 
-const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
+const DraggableLongText: React.FC<DraggableLongTextProps> = ({
   id,
   index,
   question,
   control,
   onDelete,
 }) => {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `questions.${index}.options`,
-  });
-
-  const addOption = () => {
-    append({ id: `option-${fields.length + 1}`, value: "" });
-  };
-
-  const removeOption = (optionIndex: number) => {
-    remove(optionIndex);
-  };
-
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -50,23 +37,18 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
               />
             )}
           />
-          {fields.map((field, idx) => (
-            <div key={field.id}>
-              <Controller
-                name={`questions.${index}.options.${idx}.value`}
-                control={control}
-                render={({ field }) => (
-                  <input {...field} placeholder={`Option ${idx + 1}`} />
-                )}
+          <Controller
+            name={`questions.${index}.longText`}
+            control={control}
+            defaultValue="" // Ensure the default value is set
+            render={({ field }) => (
+              <textarea
+                {...field}
+                placeholder="Enter long text here"
+                style={{ width: "100%", marginBottom: "8px", height: "150px" }}
               />
-              <button type="button" onClick={() => removeOption(idx)}>
-                Remove Option
-              </button>
-            </div>
-          ))}
-          <button type="button" onClick={addOption}>
-            Add Option
-          </button>
+            )}
+          />
           <button type="button" onClick={onDelete}>
             Delete
           </button>
@@ -76,4 +58,4 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   );
 };
 
-export default DraggableMultipleChoice;
+export default DraggableLongText;

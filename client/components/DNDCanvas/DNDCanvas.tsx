@@ -3,20 +3,15 @@ import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import DraggableMultipleChoice from "../DraggableMultipleChoice/DraggableMultipleChoice";
 import DraggableShortText from "../DraggableShortText/DraggableShortText";
-import { DNDCanvasProps } from "./types";
+import DraggableDropdown from "../DraggableDropdown/DraggableDropdown";
+import DraggableLongText from "../DraggableLongText/DraggableLongText";
+import { DNDCanvasProps, Field, Survey } from "./types";
 
-type FieldType = "Multiple Choice" | "Short Text";
-
-interface Field {
-  id: string;
-  name: string;
-  type: FieldType;
-  question?: string;
-  label?: string;
-  options?: { id: string; value: string }[];
-}
-
-const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
+const DNDCanvas: React.FC<DNDCanvasProps> = ({
+  items,
+  handleDelete,
+  saveSurvey,
+}) => {
   const methods = useForm<{ questions: Field[] }>();
 
   const { control, handleSubmit } = methods;
@@ -27,13 +22,12 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
   });
 
   useEffect(() => {
-    console.log("all items: ", items);
     if (items.length > 0) {
       items.forEach((item) => {
         if (!fields.some((field) => field.name === item.id)) {
           if (item.type === "Multiple Choice") {
             append({
-              id: item.id,
+              id: `${fields.length + 1}`,
               name: item.id,
               type: "Multiple Choice",
               question: `Question ${fields.length + 1}`,
@@ -41,10 +35,24 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
             });
           } else if (item.type === "Short Text") {
             append({
-              id: item.id,
+              id: `${fields.length + 1}`,
               name: item.id,
               type: "Short Text",
               label: `Label ${fields.length + 1}`,
+            });
+          } else if (item.type == "Dropdown") {
+            append({
+              id: `${fields.length + 1}`,
+              name: item.id,
+              type: "Dropdown",
+              label: `Label ${fields.length + 1}`,
+            });
+          } else if (item.type == "Long Text") {
+            append({
+              id: `${fields.length + 1}`,
+              name: item.id,
+              type: "Long Text",
+              longText: "test",
             });
           }
         }
@@ -52,18 +60,13 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
     }
   }, [items]);
 
-  console.log("fields: ", fields);
-
   const onDragEnd = (result: DropResult) => {
-    console.log("HANDING onDragEnd FROM DND CANVAS");
-
     if (!result.destination) return;
 
     // Reorder items array
     const updatedItems = Array.from(items);
     const [movedItem] = updatedItems.splice(result.source.index, 1);
     updatedItems.splice(result.destination.index, 0, movedItem);
-    // setItems(updatedItems);
 
     // Reorder fields in react-hook-form
     move(result.source.index, result.destination.index);
@@ -72,17 +75,17 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
   const onDelete = (index: number, name: string) => {
     remove(index);
     handleDelete(name);
-    console.log("fields after deletes: ", fields);
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
+  const onSubmit = (data: Survey) => {
+    saveSurvey(data);
+    // console.log("Form Data:", data);
 
-    // Convert the data object to a JSON string
-    const jsonData = JSON.stringify(data, null, 2);
+    // // Convert the data object to a JSON string
+    // const jsonData = JSON.stringify(data, null, 2);
 
-    // Write the JSON data to a file
-    console.log(jsonData);
+    // // Write the JSON data to a file
+    // console.log(jsonData);
   };
 
   return (
@@ -120,6 +123,30 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({ items, handleDelete }) => {
                         key={field.id}
                         id={field.id}
                         index={index}
+                        question={field.question || ""}
+                        label={field.label || ""}
+                        control={control}
+                        onDelete={() => onDelete(index, field.name)}
+                      />
+                    );
+                  } else if (field.type === "Dropdown") {
+                    return (
+                      <DraggableDropdown
+                        key={field.id}
+                        id={field.id}
+                        index={index}
+                        question={field.question || ""}
+                        control={control}
+                        onDelete={() => onDelete(index, field.name)}
+                      />
+                    );
+                  } else if (field.type === "Long Text") {
+                    return (
+                      <DraggableLongText
+                        key={field.id}
+                        id={field.id}
+                        index={index}
+                        question={field.question || ""}
                         label={field.label || ""}
                         control={control}
                         onDelete={() => onDelete(index, field.name)}

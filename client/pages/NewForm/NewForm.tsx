@@ -5,6 +5,7 @@ import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
+import { Survey } from "../../components/DNDCanvas/types";
 
 const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
@@ -30,7 +31,17 @@ const NewForm = () => {
 
   const handleDelete = (name: string) => {
     setDroppedItems(droppedItems.filter((item) => item.id !== name));
-    console.log("items after delete: ", droppedItems);
+  };
+
+  const saveSurvey = (data: Survey) => {
+    const surveyData = {
+      title: title,
+      description: description,
+      ...data,
+    };
+    const jsonData = JSON.stringify(surveyData, null, 2);
+    console.log(jsonData);
+    //TODO SEND THE SURVEY TO THE BACKEND
   };
 
   return (
@@ -68,7 +79,11 @@ const NewForm = () => {
               <hr />
             </div>
             <p className={styles.smallText}>Drag and Drop Area</p>
-            <DNDCanvas items={droppedItems} handleDelete={handleDelete} />
+            <DNDCanvas
+              items={droppedItems}
+              handleDelete={handleDelete}
+              saveSurvey={saveSurvey}
+            />
           </div>
         </div>
       </div>
