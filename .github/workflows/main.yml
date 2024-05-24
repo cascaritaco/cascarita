@@ -33,7 +33,7 @@ jobs:
       - name: Start MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
+          mysql -e "CREATE DATABASE IF NOT EXISTS $TEST_DB_NAME;" -u$TEST_DB_USERNAME -p$TEST_DB_PASSWORD
 
       - name: Jest Tests
         run: npm run test
