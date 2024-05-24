@@ -33,10 +33,9 @@ describe("Field Routes", () => {
     });
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      data: expect.objectContaining({ name: "SOMOS Park" }),
-    });
+    expect(response.body).toEqual(
+      expect.objectContaining({ name: "SOMOS Park" })
+    );
   });
 
   it("should not create if name is not unique POST /create", async () => {
@@ -60,12 +59,14 @@ describe("Field Routes", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "Name is not unique",
+      message: "name is not unique",
     });
   });
 
   it("should create a field with the same name from a different group POST /create", async () => {
-    const groupUno = await TestDataGenerator.createDummyGroup("Watsonville Corp.");
+    const groupUno = await TestDataGenerator.createDummyGroup(
+      "Watsonville Corp."
+    );
     const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
     await testDb.Fields.create({
@@ -85,10 +86,9 @@ describe("Field Routes", () => {
     });
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      data: expect.objectContaining({ name: "SOMOS Park" }),
-    });
+    expect(response.body).toEqual(
+      expect.objectContaining({ name: "SOMOS Park" })
+    );
   });
 
   // ------------------- Update Tests ----------------
@@ -123,7 +123,7 @@ describe("Field Routes", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "Field with given ID was not found",
+      message: "field with given id was not found",
     });
   });
 
@@ -151,7 +151,7 @@ describe("Field Routes", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "Name is not unique",
+      message: "name is not unique",
     });
 
     const updatedField2 = await testDb.Fields.findByPk(field2.id);
