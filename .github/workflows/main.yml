@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Print environment variables
+        run: |
+          echo "DB_DATABASE: $DB_DATABASE"
+          echo "DB_USER: $DB_USER"
+          echo "DB_PASSWORD: $DB_PASSWORD"
+
       - name: Eslint Checks
         run: npm run eslint
 
