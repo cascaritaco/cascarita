@@ -23,15 +23,8 @@ if (env === "development" || env === "production") {
     }
   );
 } else if (env === "testing") {
-  console.log("Using database configuration for testing:");
-  console.log("TEST_DB_NAME:", process.env.TEST_DB_NAME);
-  console.log("TEST_DB_USERNAME:", process.env.TEST_DB_USERNAME);
-  console.log("TEST_DB_PASSWORD:", process.env.TEST_DB_PASSWORD);
-  console.log("TEST_DB_HOST:", process.env.TEST_DB_HOST);
-  console.log("TEST_DB_DIALECT:", process.env.TEST_DB_DIALECT);
-  console.log("TEST_DB_PORT:", process.env.TEST_DB_PORT);
   sequelize = new Sequelize(
-    process.env.TEST_DB_NAMererererE,
+    process.env.TEST_DB_NAME,
     process.env.TEST_DB_USERNAME,
     process.env.TEST_DB_PASSWORD,
     {

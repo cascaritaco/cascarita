@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DB_DATABASE: test_suite_db
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_DIALECT: mysql
+      TEST_DB_NAME: test_suite_db
+      TEST_DB_USERNAME: root
+      TEST_DB_PASSWORD: root
+      TEST_DB_DIALECT: mysql
 
     steps:
       - name: Checkout source code
@@ -26,13 +26,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Print environment variables
-        run: |
-          echo "DB_DATABASE: $DB_DATABASE"
-          echo "DB_USER: $DB_USER"
-          echo "DB_PASSWORD: $DB_PASSWORD"
-          echo "DB_DIALECT: $DB_DIALECT"
 
       - name: Eslint Checks
         run: npm run eslint
