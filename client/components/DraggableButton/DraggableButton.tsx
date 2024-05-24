@@ -25,7 +25,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
     const dropZone = { x1: 190, x2: 500 };
 
     if (data.x >= dropZone.x1 && data.x <= dropZone.x2) {
-      console.log("handling onDrop");
       onDrop();
     }
 

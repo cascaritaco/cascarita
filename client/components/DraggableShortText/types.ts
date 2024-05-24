@@ -4,8 +4,7 @@ import { Field } from "../DNDCanvas/types";
 export interface DraggableShortTextProps {
   id: string;
   index: number;
-  question: string;
-  label: string;
-  control: Control<{ questions: Field[] }>;
+  title: string;
+  control: Control<{ fields: Field[] }>;
   onDelete: () => void;
 }

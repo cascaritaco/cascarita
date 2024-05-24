@@ -6,8 +6,7 @@ import { DraggableShortTextProps } from "./types";
 const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   id,
   index,
-  question,
-  label,
+  title,
   control,
   onDelete,
 }) => {
@@ -27,25 +26,13 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
           }}
         >
           <Controller
-            name={`questions.${index}.question`}
+            name={`fields.${index}.title`}
             control={control}
-            defaultValue={question} // Ensure the default value is set
+            defaultValue={title} // Ensure the default value is set
             render={({ field }) => (
               <input
                 {...field}
                 placeholder="Enter your question here"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-            )}
-          />
-          <Controller
-            name={`questions.${index}.label`}
-            control={control}
-            defaultValue={label} // Ensure the default value is set
-            render={({ field }) => (
-              <input
-                {...field}
-                placeholder="Enter your label here"
                 style={{ width: "100%", marginBottom: "8px" }}
               />
             )}

@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
 const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   id,
   index,
-  question,
+  title,
   control,
   onDelete,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `questions.${index}.options`,
+    name: `fields.${index}.properties.choices`,
   });
 
   const [options, setOptions] = useState(fields);
@@ -23,19 +23,19 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   }, [fields]);
 
   const addOption = () => {
-    append({ id: `option-${fields.length + 1}`, value: "" });
+    append({ ref: `option-${fields.length + 1}`, label: "" });
   };
 
   const removeOption = (optionIndex: number) => {
     remove(optionIndex);
   };
 
-  const changeOptionsIndex = (value: string, optionIndex: number) => {
+  const changeOptionsIndex = (label: string, optionIndex: number) => {
     const updatedOptions = [...options];
     updatedOptions[optionIndex] = {
       ...updatedOptions[optionIndex],
-      value,
-    } as Option;
+      label,
+    };
     setOptions(updatedOptions);
   };
 
@@ -55,9 +55,9 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
           }}
         >
           <Controller
-            name={`questions.${index}.question`}
+            name={`fields.${index}.title`}
             control={control}
-            defaultValue={question}
+            defaultValue={title}
             render={({ field }) => (
               <input
                 {...field}
@@ -68,8 +68,8 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
           />
           <select style={{ width: "100%", marginBottom: "8px" }}>
             {(options as Option[]).map((field, idx) => (
-              <option key={field.id} value={field.value}>
-                {field.value || `Option ${idx + 1}`}
+              <option key={field.ref} value={field.ref}>
+                {field.label || `Option ${idx + 1}`}
               </option>
             ))}
           </select>
@@ -79,7 +79,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
               style={{ display: "flex", alignItems: "center" }}
             >
               <Controller
-                name={`questions.${index}.options.${idx}.value`}
+                name={`fields.${index}.properties.choices.${idx}.label`}
                 control={control}
                 render={({ field }) => (
                   <input

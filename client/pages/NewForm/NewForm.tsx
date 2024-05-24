@@ -11,6 +11,7 @@ const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [description, setDescription] = useState("Description");
   const [title, setTitle] = useState("Form Title");
+  const [surveyLink, setSurveyLink] = useState(null);
 
   const draggableButtons = [
     "Short Text",
@@ -19,13 +20,16 @@ const NewForm = () => {
     "Multiple Choice",
   ];
 
+  function toSnakeCase(str: string) {
+    return str.toLowerCase().replace(/\s+/g, "_");
+  }
+
   const handleDrop = (label: DroppedItemType) => {
     const uniqueId = uuidv4();
     const newItem: DroppedItem = {
       id: uniqueId,
-      type: label,
+      type: toSnakeCase(label) as DroppedItemType,
     };
-    console.log("new item here: ", newItem);
     setDroppedItems([...droppedItems, newItem]);
   };
 
@@ -33,21 +37,49 @@ const NewForm = () => {
     setDroppedItems(droppedItems.filter((item) => item.id !== name));
   };
 
-  const saveSurvey = (data: Survey) => {
+  const saveSurvey = async (data: Survey) => {
     const surveyData = {
       title: title,
-      description: description,
+      welcome_screens: [
+        {
+          title: title,
+          properties: {
+            description: description,
+          },
+        },
+      ],
       ...data,
     };
-    const jsonData = JSON.stringify(surveyData, null, 2);
-    console.log(jsonData);
-    //TODO SEND THE SURVEY TO THE BACKEND
+
+    try {
+      const response = await fetch("/api/survey", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const surveyResponseObj = await response.json();
+      setSurveyLink(surveyResponseObj._links.display);
+    } catch (err) {
+      console.error("Error creating survey:", err);
+    }
   };
 
   return (
     <Page>
       <div>
         <h1 className={styles.title}>New Form</h1>
+        {surveyLink && (
+          <a href={surveyLink} target="_blank" rel="noopener noreferrer">
+            <button>Preview Survey</button>
+          </a>
+        )}
         <div className={styles.newFormContainer}>
           <div className={styles.formElementsContainer}>
             <h2 className={styles.subtitle}>Form Elements</h2>

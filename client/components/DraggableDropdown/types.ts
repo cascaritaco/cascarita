@@ -2,14 +2,14 @@ import { Control } from "react-hook-form";
 import { Field } from "../DNDCanvas/types";
 
 export interface Option {
-  id: string;
-  value: string;
+  ref: string;
+  label: string;
 }
 
 export interface DraggableDropdownProps {
   id: string;
   index: number;
-  question: string;
-  control: Control<{ questions: Field[] }>; // Type as appropriate
+  title: string;
+  control: Control<{ fields: Field[] }>; // Type as appropriate
   onDelete: () => void;
 }

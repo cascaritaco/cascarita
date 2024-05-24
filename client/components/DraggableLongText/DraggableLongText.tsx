@@ -6,7 +6,7 @@ import { DraggableLongTextProps } from "./types";
 const DraggableLongText: React.FC<DraggableLongTextProps> = ({
   id,
   index,
-  question,
+  title,
   control,
   onDelete,
 }) => {
@@ -26,26 +26,14 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
           }}
         >
           <Controller
-            name={`questions.${index}.question`}
+            name={`fields.${index}.title`}
             control={control}
-            defaultValue={question} // Ensure the default value is set
+            defaultValue={title} // Ensure the default value is set
             render={({ field }) => (
               <input
                 {...field}
                 placeholder="Enter your question here"
                 style={{ width: "100%", marginBottom: "8px" }}
-              />
-            )}
-          />
-          <Controller
-            name={`questions.${index}.longText`}
-            control={control}
-            defaultValue="" // Ensure the default value is set
-            render={({ field }) => (
-              <textarea
-                {...field}
-                placeholder="Enter long text here"
-                style={{ width: "100%", marginBottom: "8px", height: "150px" }}
               />
             )}
           />

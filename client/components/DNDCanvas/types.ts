@@ -1,23 +1,37 @@
 import { DroppedItem } from "../../pages/NewForm/types";
 
 export type FieldType =
-  | "Multiple Choice"
-  | "Short Text"
-  | "Long Text"
-  | "Dropdown";
+  | "multiple_choice"
+  | "short_text"
+  | "long_text"
+  | "dropdown";
+
+export interface Validation {
+  max_length: number;
+  required: boolean;
+}
+
+export interface Label {
+  label: string;
+  ref: string;
+}
+
+export interface Properties {
+  choices: Label[];
+}
 
 export interface Field {
-  id: string;
-  name: string;
+  // NOTE: See comment in DNDCanvas.tsx
+  // id: string;
+  ref: string;
   type: FieldType;
-  question?: string;
-  label?: string;
-  longText?: string;
-  options?: { id: string; value: string }[];
+  title: string;
+  validations?: Validation;
+  properties?: Properties;
 }
 
 export interface Survey {
-  questions: Field[];
+  fields: Field[];
 }
 
 export interface DNDCanvasProps {

@@ -6,17 +6,17 @@ import { DraggableMultipleChoiceProps } from "./types";
 const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   id,
   index,
-  question,
+  title,
   control,
   onDelete,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `questions.${index}.options`,
+    name: `fields.${index}.properties.choices`,
   });
 
   const addOption = () => {
-    append({ id: `option-${fields.length + 1}`, value: "" });
+    append({ ref: `option-${fields.length + 1}`, label: "" });
   };
 
   const removeOption = (optionIndex: number) => {
@@ -39,9 +39,9 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
           }}
         >
           <Controller
-            name={`questions.${index}.question`}
+            name={`fields.${index}.title`}
             control={control}
-            defaultValue={question} // Ensure the default value is set
+            defaultValue={title} // Ensure the default value is set
             render={({ field }) => (
               <input
                 {...field}
@@ -53,7 +53,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
           {fields.map((field, idx) => (
             <div key={field.id}>
               <Controller
-                name={`questions.${index}.options.${idx}.value`}
+                name={`fields.${index}.properties.choices.${idx}.label`}
                 control={control}
                 render={({ field }) => (
                   <input {...field} placeholder={`Option ${idx + 1}`} />

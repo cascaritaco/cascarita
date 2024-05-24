@@ -12,47 +12,58 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
   handleDelete,
   saveSurvey,
 }) => {
-  const methods = useForm<{ questions: Field[] }>();
+  const methods = useForm<{ fields: Field[] }>();
 
   const { control, handleSubmit } = methods;
 
   const { fields, append, move, remove } = useFieldArray({
     control,
-    name: "questions", // This should match the structure in useForm
+    name: "fields", // This should match the structure in useForm
   });
 
   useEffect(() => {
     if (items.length > 0) {
       items.forEach((item) => {
-        if (!fields.some((field) => field.name === item.id)) {
-          if (item.type === "Multiple Choice") {
+        if (!fields.some((field) => field.ref === item.id)) {
+          if (item.type === "multiple_choice") {
             append({
-              id: `${fields.length + 1}`,
-              name: item.id,
-              type: "Multiple Choice",
-              question: `Question ${fields.length + 1}`,
-              options: [{ id: "option-1", value: "" }],
+              // NOTE: TypeForm does NOT extra keys, but if
+              // build custom surveys we will need to store this ref
+              // id: `${fields.length + 1}`,
+              ref: item.id,
+              type: item.type,
+              title: "",
+              properties: { choices: [] },
             });
-          } else if (item.type === "Short Text") {
+          } else if (item.type === "short_text") {
             append({
-              id: `${fields.length + 1}`,
-              name: item.id,
-              type: "Short Text",
-              label: `Label ${fields.length + 1}`,
+              // id: `${fields.length + 1}`,
+              ref: item.id,
+              type: item.type,
+              title: "",
+              validations: {
+                max_length: 20,
+                required: false,
+              },
             });
-          } else if (item.type == "Dropdown") {
+          } else if (item.type == "dropdown") {
             append({
-              id: `${fields.length + 1}`,
-              name: item.id,
-              type: "Dropdown",
-              label: `Label ${fields.length + 1}`,
+              // id: `${fields.length + 1}`,
+              ref: item.id,
+              type: item.type,
+              title: "",
+              properties: { choices: [] },
             });
-          } else if (item.type == "Long Text") {
+          } else if (item.type == "long_text") {
             append({
-              id: `${fields.length + 1}`,
-              name: item.id,
-              type: "Long Text",
-              longText: "test",
+              // id: `${fields.length + 1}`,
+              ref: item.id,
+              type: item.type,
+              title: "",
+              validations: {
+                max_length: 100,
+                required: false,
+              },
             });
           }
         }
@@ -79,13 +90,6 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
 
   const onSubmit = (data: Survey) => {
     saveSurvey(data);
-    // console.log("Form Data:", data);
-
-    // // Convert the data object to a JSON string
-    // const jsonData = JSON.stringify(data, null, 2);
-
-    // // Write the JSON data to a file
-    // console.log(jsonData);
   };
 
   return (
@@ -106,50 +110,48 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
                 }}
               >
                 {fields.map((field, index) => {
-                  if (field.type === "Multiple Choice") {
+                  if (field.type === "multiple_choice") {
                     return (
                       <DraggableMultipleChoice
                         key={field.id}
                         id={field.id}
                         index={index}
-                        question={field.question || ""}
+                        title={field.title}
                         control={control}
-                        onDelete={() => onDelete(index, field.name)}
+                        onDelete={() => onDelete(index, field.ref)}
                       />
                     );
-                  } else if (field.type === "Short Text") {
+                  } else if (field.type === "short_text") {
                     return (
                       <DraggableShortText
                         key={field.id}
                         id={field.id}
                         index={index}
-                        question={field.question || ""}
-                        label={field.label || ""}
+                        title={field.title}
                         control={control}
-                        onDelete={() => onDelete(index, field.name)}
+                        onDelete={() => onDelete(index, field.ref)}
                       />
                     );
-                  } else if (field.type === "Dropdown") {
+                  } else if (field.type === "dropdown") {
                     return (
                       <DraggableDropdown
                         key={field.id}
                         id={field.id}
                         index={index}
-                        question={field.question || ""}
+                        title={field.title}
                         control={control}
-                        onDelete={() => onDelete(index, field.name)}
+                        onDelete={() => onDelete(index, field.ref)}
                       />
                     );
-                  } else if (field.type === "Long Text") {
+                  } else if (field.type === "long_text") {
                     return (
                       <DraggableLongText
                         key={field.id}
                         id={field.id}
                         index={index}
-                        question={field.question || ""}
-                        label={field.label || ""}
+                        title={field.title}
                         control={control}
-                        onDelete={() => onDelete(index, field.name)}
+                        onDelete={() => onDelete(index, field.ref)}
                       />
                     );
                   }
