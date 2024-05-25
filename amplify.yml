@@ -12,7 +12,8 @@ applications:
             - echo $PWD
             - echo "$(ls)"
             - rm -f package-lock.json
-            - npm install --verbose
+            - node -v
+            - npm install -g npm@latest --verbose
         build:
           commands:
             - echo "No build step for backend"
