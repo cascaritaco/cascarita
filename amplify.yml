@@ -9,10 +9,11 @@ applications:
       phases:
         preBuild:
           commands:
-            - cd ..
             - echo $PWD
             - echo "$(ls)"
-            # - npm install
+            - rm -f package-lock.json
+            - cp .env.example .env
+            - npm install
         build:
           commands:
             - npm run build
@@ -24,12 +25,10 @@ applications:
       phases:
         preBuild:
           commands:
-            - rm -f package-lock.json
-            - cp .env.example .env
-            - npm install
+            - echo "no prebuild steps"
         build:
           commands:
             - echo "No build step for backend"
         postBuild:
           commands:
-            - npm start
+            - nohup npm run start &
