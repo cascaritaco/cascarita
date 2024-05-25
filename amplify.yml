@@ -12,7 +12,7 @@ applications:
             - echo $PWD
             - echo "$(ls)"
             - rm -f package-lock.json
-            - npm ci
+            - npm install --verbose
         build:
           commands:
             - echo "No build step for backend"
