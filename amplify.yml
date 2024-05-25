@@ -13,9 +13,7 @@ applications:
             - echo "$(ls)"
             - rm -f package-lock.json
             - node -v
-            # - sudo yum remove -y nodejs
-            # - curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
-            # - sudo yum install -y nodejs
+            - cp .env.example .env
             - npm install
         build:
           commands:
