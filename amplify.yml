@@ -8,11 +8,7 @@ applications:
       phases:
         preBuild:
           commands:
-            # - cd ..
-            - echo $PWD
-            - echo "$(ls)"
             - rm -f package-lock.json
-            - node -v
             - cp .env.example .env
             - npm install
         build:
