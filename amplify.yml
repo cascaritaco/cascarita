@@ -11,7 +11,8 @@ applications:
             # - cd ..
             - echo $PWD
             - echo "$(ls)"
-            - npm install
+            - rm -f package-lock.json
+            - npm ci
         build:
           commands:
             - echo "No build step for backend"
@@ -26,7 +27,7 @@ applications:
             - cd ..
             - echo $PWD
             - echo "$(ls)"
-            - npm install
+            # - npm install
         build:
           commands:
             - npm run build
