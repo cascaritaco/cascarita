@@ -13,7 +13,10 @@ applications:
             - echo "$(ls)"
             - rm -f package-lock.json
             - node -v
-            - npm install -g npm@latest --verbose
+            # - sudo yum remove -y nodejs
+            # - curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
+            # - sudo yum install -y nodejs
+            - npm install
         build:
           commands:
             - echo "No build step for backend"
