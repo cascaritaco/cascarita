@@ -9,7 +9,8 @@ applications:
         preBuild:
           commands:
             - cd ..
-            - npm ci --cache
+            - echo $PWD
+            - npm install
         build:
           commands:
             - echo "No build step for backend"
@@ -22,7 +23,8 @@ applications:
         preBuild:
           commands:
             - cd ..
-            - npm ci --cache
+            - echo $PWD
+            - npm install
         build:
           commands:
             - npm run build
