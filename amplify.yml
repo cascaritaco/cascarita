@@ -18,7 +18,7 @@ applications:
           commands:
             - npm run build
       artifacts:
-        baseDirectory: ../dist
+        baseDirectory: dist
         files:
           - "**/*"
     backend:
