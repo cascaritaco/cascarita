@@ -1,6 +1,6 @@
 version: 1
 applications:
-  - appRoot: frontend
+  - appRoot: client
     # env:
     #   variables:
     #     key: value
