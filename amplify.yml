@@ -8,8 +8,9 @@ applications:
       phases:
         preBuild:
           commands:
-            - cd ..
+            # - cd ..
             - echo $PWD
+            - echo "$(ls)"
             - npm install
         build:
           commands:
@@ -24,6 +25,7 @@ applications:
           commands:
             - cd ..
             - echo $PWD
+            - echo "$(ls)"
             - npm install
         build:
           commands:
