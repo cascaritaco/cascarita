@@ -4,19 +4,6 @@ applications:
     # env:
     #   variables:
     #     key: value
-    backend:
-      phases:
-        preBuild:
-          commands:
-            - rm -f package-lock.json
-            - cp .env.example .env
-            - npm install
-        build:
-          commands:
-            - echo "No build step for backend"
-        postBuild:
-          commands:
-            - npm start
     frontend:
       buildPath: / # Run install and build from the monorepo project root
       phases:
@@ -33,3 +20,16 @@ applications:
         baseDirectory: ../dist
         files:
           - "**/*"
+    backend:
+      phases:
+        preBuild:
+          commands:
+            - rm -f package-lock.json
+            - cp .env.example .env
+            - npm install
+        build:
+          commands:
+            - echo "No build step for backend"
+        postBuild:
+          commands:
+            - npm start
