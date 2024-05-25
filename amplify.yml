@@ -1,32 +1,38 @@
 version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - cd client
-        - npm ci --cache .npm --prefer-offline
-    build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: client/dist
-    files:
-      - "**/*"
-  cache:
-    paths:
-      - client/.npm/**/*
-backend:
-  phases:
-    preBuild:
-      commands:
-        - cd server
-        - npm ci --cache .npm --prefer-offline
-    build:
-      commands:
-        - echo "No build step for backend"
-    start:
-      commands:
-        - npm start
-  cache:
-    paths:
-      - server/.npm/**/*
+applications:
+  - name: frontend
+    appRoot: client
+    phases:
+      preBuild:
+        commands:
+          - pwd
+          - echo $AMPLIFY_MONOREPO_APP_ROOT
+          - npm ci --cache .npm --prefer-offline
+      build:
+        commands:
+          - npm run build
+    artifacts:
+      baseDirectory: dist
+      files:
+        - "**/*"
+    cache:
+      paths:
+        - .npm/**/*
+
+  - name: backend
+    appRoot: server
+    phases:
+      preBuild:
+        commands:
+          - pwd
+          - echo $AMPLIFY_MONOREPO_APP_ROOT
+          - npm ci --cache .npm --prefer-offline
+      build:
+        commands:
+          - echo "No build step for backend"
+      start:
+        commands:
+          - npm start
+    cache:
+      paths:
+        - .npm/**/*
