@@ -4,10 +4,10 @@ import { Text } from "@radix-ui/themes";
 import { Avatar } from "@radix-ui/themes";
 import { MdOutlineNotifications } from "react-icons/md";
 import Search from "../Search/Search";
-import { useAuth } from "../AuthContext/AuthContext";
+// import { useAuth } from "../AuthContext/AuthContext";
 
 const SideNav = () => {
-  const { currentUser } = useAuth();
+  const currentUser = "test";
 
   return (
     <div className={styles["top-nav"]}>
@@ -31,7 +31,7 @@ const SideNav = () => {
           />
 
           <Text as="div" size="1" weight="bold" className={styles.avatarText}>
-            {currentUser && currentUser.email}
+            {currentUser}
           </Text>
         </div>
       </div>

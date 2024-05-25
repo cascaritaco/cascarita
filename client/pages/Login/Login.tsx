@@ -1,14 +1,14 @@
 import styles from "./Login.module.css";
 import LogoWhite from "../../assets/logoWhite.svg";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../components/AuthContext/AuthContext";
-import { useNavigate } from "react-router-dom";
+// import { useAuth } from "../../components/AuthContext/AuthContext";
+// import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  // const { login } = useAuth();
+  // const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [fail, setFail] = useState(false);
+  // const [fail, setFail] = useState(false);
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -21,15 +21,16 @@ const Login = () => {
   }, []);
 
   const handleLogin = async () => {
-    try {
-      await login(email, password);
-      navigate("/");
-    } catch (error) {
-      setFail(true);
-      setEmail("");
-      setPassword("");
-      console.error("Login failed", error);
-    }
+    // try {
+    //   await login(email, password);
+    //   navigate("/");
+    // } catch (error) {
+    //   setFail(true);
+    //   setEmail("");
+    //   setPassword("");
+    //   console.error("Login failed", error);
+    // }
+    console.log("login in");
   };
 
   return (
@@ -42,7 +43,7 @@ const Login = () => {
       </div>
       <div className={styles.right}>
         <h3 className={styles.loginHeader}>Welcome back!</h3>
-        {fail ? <p>Login failed, please try again.</p> : <></>}
+        {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
         <p className={styles.loginSubHeaders}>E-mail</p>
         <input
           placeholder="Type your e-mail"

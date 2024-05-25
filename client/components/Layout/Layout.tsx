@@ -4,10 +4,10 @@ import TopNav from "../TopNav/TopNav";
 import SideNav from "../SideNav/SideNav";
 import { useState } from "react";
 import { blackListRoutes } from "./blacklist";
-import { useAuth } from "../AuthContext/AuthContext";
+// import { useAuth } from "../AuthContext/AuthContext";
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { currentUser } = useAuth();
+  const currentUser = "test";
   const [selectedItem, setSelectedItem] = useState("home");
   return (
     <div>
