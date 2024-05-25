@@ -1,6 +1,6 @@
 version: 1
 applications:
-  frontend:
+  - name: frontend
     phases:
       preBuild:
         commands:
@@ -9,14 +9,14 @@ applications:
         commands:
           - npm run build
     artifacts:
-      baseDirectory: client/dist
+      baseDirectory: dist
       files:
         - "**/*"
     cache:
       paths:
         - .npm/**/*
 
-  backend:
+  - name: backend
     phases:
       preBuild:
         commands:
