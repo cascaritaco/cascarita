@@ -1,7 +1,7 @@
 version: 1
 applications:
   - name: frontend
-    appRoot: client
+    appRoot: .
     phases:
       preBuild:
         commands:
@@ -18,7 +18,7 @@ applications:
         - .npm/**/*
 
   - name: backend
-    appRoot: server
+    appRoot: .
     phases:
       preBuild:
         commands:
