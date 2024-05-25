@@ -26,3 +26,7 @@ applications:
         build:
           commands:
             - npm run build
+      artifacts:
+        baseDirectory: ../dist
+        files:
+          - "**/*"
