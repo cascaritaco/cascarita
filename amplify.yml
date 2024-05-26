@@ -12,7 +12,9 @@ applications:
             - echo $PWD
             - echo "$(ls)"
             - rm -f package-lock.json
+            - bash overwrite.sh
             - cp .env.example .env
+            - cat .env
             - npm install
         build:
           commands:
