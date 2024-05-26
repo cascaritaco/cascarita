@@ -35,7 +35,7 @@ app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
     credentials: true,
-  }),
+  })
 );
 app.use(Middlewares.errorHandler);
 
@@ -61,6 +61,10 @@ app.use("/api/seasons", SeasonRoutes);
 app.use("/api/divisions", DivisionController);
 app.use("/api/teams", TeamRoutes);
 app.use("/api/auth", AuthRoutes);
+
+app.use("/api/hello", (req, res) => {
+  res.send("hello");
+});
 
 function init() {
   app.get("*", function (req, res) {

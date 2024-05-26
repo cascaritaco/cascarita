@@ -10,6 +10,17 @@ const Leagues = () => {
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
 
+  const handleClick = async () => {
+    const response = await fetch("/api/hello", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    });
+    console.log(response);
+  };
+
   // note this needs to be replaced with backend call
   const leagues = [
     "test",
@@ -69,6 +80,7 @@ const Leagues = () => {
           </div>
         </div>
         <PrimaryButton label="Add League" />
+        <button onClick={handleClick}>SUP</button>
       </div>
       <div className={styles.cols}>
         <h3>Name</h3>
