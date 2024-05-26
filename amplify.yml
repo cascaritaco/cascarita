@@ -33,4 +33,6 @@ applications:
             - echo "No build step for backend"
         postBuild:
           commands:
-            - nohup npm run start &
+            - nohup npm run start > output.log 2>&1 &
+            - sleep 5
+            - cat output.log
