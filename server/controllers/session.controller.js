@@ -11,7 +11,7 @@ const SessionController = function () {
 
       if (!result) {
         res.status(404);
-        throw new Error("Session with given ID does not exist");
+        throw new Error("session with given id does not exist");
       }
 
       return res.status(200).json(result);
@@ -32,7 +32,7 @@ const SessionController = function () {
 
       if (!result) {
         res.status(404);
-        throw new Error("Session with given division ID does not exist");
+        throw new Error("session with given division id does not exist");
       }
 
       return res.status(200).json(result);
@@ -65,7 +65,7 @@ const SessionController = function () {
 
       if (!currentSession) {
         res.status(404);
-        throw new Error("Session with given ID was not found");
+        throw new Error("session with given id was not found");
       }
 
       Object.keys(req.body).forEach((key) => {
@@ -93,10 +93,10 @@ const SessionController = function () {
 
       if (deletedSession === 0) {
         res.status(404);
-        throw new Error("No session found with the given ID");
+        throw new Error("no session found with the given id");
       }
 
-      return res.status(204).json("Delete session successfully");
+      return res.status(204).json();
     } catch (error) {
       next(error);
     }

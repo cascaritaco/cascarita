@@ -4,7 +4,7 @@ const { Fields } = require("../models");
 
 const FieldController = function () {
   var getFieldByGroupId = async function (req, res, next) {
-    const groupId = req.params['id'];
+    const groupId = req.params.id;
 
     try {
       const result = await Fields.findAll({
@@ -14,13 +14,10 @@ const FieldController = function () {
       });
 
       if (Object.keys(result).length === 0) {
-        throw new Error("Group with given ID has no fields");
+        throw new Error("group with given id has no fields");
       }
 
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -35,28 +32,30 @@ const FieldController = function () {
     });
 
     return fieldFound == null;
-
   };
 
   var createField = async function (req, res, next) {
-    const { group_id, name, address, length, width } = req.body;  
-    const newField = { group_id, name, address, length, width }; 
+    const { group_id, name, address, length, width } = req.body;
+    const newField = { group_id, name, address, length, width };
 
     try {
-      const fieldFound = await isNameUniqueWithinGroup(newField.group_id, newField.name, newField.address, newField.length, newField.width);
+      const fieldFound = await isNameUniqueWithinGroup(
+        newField.group_id,
+        newField.name,
+        newField.address,
+        newField.length,
+        newField.width
+      );
 
       if (!fieldFound) {
         res.status(400);
-        throw new Error( "Name is not unique" );
+        throw new Error("name is not unique");
       }
 
       await Fields.build(newField).validate();
       const result = await Fields.create(newField);
 
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -66,32 +65,38 @@ const FieldController = function () {
     try {
       let currentField = await Fields.findOne({
         where: {
-          id: req.params['id'],
+          id: req.params["id"],
         },
       });
 
       if (!currentField) {
         res.status(400);
-        throw new Error("Field with given ID was not found");
+        throw new Error("field with given id was not found");
       }
 
-      Object.keys(req.body).forEach(key => {
-        if (key !== "group_id"){
+      Object.keys(req.body).forEach((key) => {
+        if (key !== "group_id") {
           currentField[key] = req.body[key] ? req.body[key] : currentField[key];
         }
       });
 
-      const fieldFound = await isNameUniqueWithinGroup(currentField.group_id, currentField.name, currentField.address, currentField.length, currentField.width);
+      const fieldFound = await isNameUniqueWithinGroup(
+        currentField.group_id,
+        currentField.name,
+        currentField.address,
+        currentField.length,
+        currentField.width
+      );
 
       if (!fieldFound) {
         res.status(400);
-        throw new Error( "Name is not unique" );
+        throw new Error("name is not unique");
       }
 
       await currentField.validate();
       await currentField.save();
 
-      return res.status(200).json({ success: true, data: currentField });
+      return res.status(200).json(currentField);
     } catch (error) {
       next(error);
     }
@@ -101,15 +106,15 @@ const FieldController = function () {
     try {
       let deletedField = await Fields.destroy({
         where: {
-          id: req.params['id'],
+          id: req.params["id"],
         },
       });
 
       if (deletedField === 0) {
-        throw new Error("No field found with the given ID");
-       }
+        throw new Error("no field found with the given id");
+      }
 
-      return res.status(204).json({ success: true, message: "Delete field successfully" });
+      return res.status(204).json();
     } catch (error) {
       next(error);
     }
@@ -124,5 +129,3 @@ const FieldController = function () {
 };
 
 module.exports = FieldController();
-
-

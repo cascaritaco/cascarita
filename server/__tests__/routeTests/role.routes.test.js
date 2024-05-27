@@ -1,60 +1,39 @@
 "use strict";
-
+window.setImmediate = window.setTimeout;
 const request = require("supertest");
 const express = require("express");
-const RoleController = require("../../controllers/role.controller");
 const RoleRoutes = require("../../routes/role.routes");
+const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/role", RoleRoutes);
+app.use("/roles", RoleRoutes);
+app.use(Middlewares.errorHandler);
 
-jest.mock("../../controllers/role.controller", () => ({
-  createRole: jest.fn(),
-}));
+const TestDb = require("../../models");
 
-describe("Role Routes", () => {
-  it("should handle POST /create", async () => {
-    RoleController.createRole.mockImplementation((req, res) => {
-      res.status(201).json({ success: true, data: { role_type: "admin" } });
-    });
+describe("POST /roles/", () => {
+  beforeEach(async function () {
+    await TestDb.Role.sync();
+  });
 
+  afterEach(async function () {
+    await TestDb.Role.destroy({ where: {} });
+  });
+
+  it("should create a role", async () => {
     const response = await request(app)
-      .post("/role/create")
+      .post("/roles/")
       .send({ role_type: "admin" });
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      data: { role_type: "admin" },
-    });
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        role_type: "admin",
+      })
+    );
   });
+});
 
-  it("should handle POST /create with null role_type", async () => {
-    RoleController.createRole.mockImplementation((req, res) => {
-      res.status(400).json({
-        error: "Validation Error",
-        details: [
-          {
-            field: "role_type",
-            message: "notNull Violation: Role.role_type cannot be null",
-          },
-        ],
-      });
-    });
-
-    const response = await request(app)
-      .post("/role/create")
-      .send({ role_type: null });
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Validation Error",
-      details: [
-        {
-          field: "role_type",
-          message: "notNull Violation: Role.role_type cannot be null",
-        },
-      ],
-    });
-  });
+afterAll(async () => {
+  await TestDb.sequelize.close();
 });

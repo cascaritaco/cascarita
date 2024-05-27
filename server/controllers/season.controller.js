@@ -4,6 +4,26 @@ const { Op } = require("sequelize");
 const { League, Season } = require("../models");
 
 const SeasonController = {
+  async getSeasonByLeagueId(req, res, next) {
+    const leagueId = req.params.id;
+
+    try {
+      const league = await League.findByPk(leagueId);
+      if (!league) {
+        res.status(404);
+        throw new Error(`no such league with id ${id}`);
+      }
+      const seasons = await Season.findAll({
+        where: {
+          league_id: league.id,
+        },
+      });
+
+      res.json(seasons);
+    } catch (error) {
+      next(error);
+    }
+  },
   async getAllSeasons(req, res, next) {
     try {
       const { query } = req;
@@ -64,7 +84,7 @@ const SeasonController = {
       start_date: req.body.start_date,
       end_date: req.body.end_date,
       is_active: req.body.is_active,
-      league_id: req.body.league_id
+      league_id: req.body.league_id,
     };
 
     try {
@@ -92,7 +112,7 @@ const SeasonController = {
         throw new Error(`no such season with id ${id}`);
       }
 
-      Object.keys(req.body).forEach(key => {
+      Object.keys(req.body).forEach((key) => {
         if (key !== "league_id") {
           season[key] = req.body[key] ? req.body[key] : season[key];
         }
@@ -102,7 +122,7 @@ const SeasonController = {
       const isUnique = await isNameUniqueWithinLeague(name, league_id);
       if (!isUnique) {
         res.status(400);
-        throw new Error("name is not unique")
+        throw new Error("name is not unique");
       }
 
       await season.validate();
@@ -137,7 +157,7 @@ async function isNameUniqueWithinLeague(name, leagueId) {
     },
   });
 
-  return league === null
+  return league === null;
 }
 
 module.exports = SeasonController;

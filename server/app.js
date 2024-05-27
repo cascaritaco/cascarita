@@ -35,7 +35,7 @@ app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
     credentials: true,
-  })
+  }),
 );
 app.use(Middlewares.errorHandler);
 
@@ -51,15 +51,15 @@ const FieldRoutes = require("./routes/field.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const DivisionController = require("./routes/division.routes");
 
-app.use("/api/group", GroupRoutes);
-app.use("/api/role", RoleRoutes);
-app.use("/api/user", UserRoutes);
-app.use("/api/player", PlayerRoutes);
-app.use("/api/league", LeagueRoutes);
-app.use("/api/field", FieldRoutes);
+app.use("/api/groups", GroupRoutes);
+app.use("/api/roles", RoleRoutes);
+app.use("/api/users", UserRoutes);
+app.use("/api/players", PlayerRoutes);
+app.use("/api/leagues", LeagueRoutes);
+app.use("/api/fields", FieldRoutes);
 app.use("/api/seasons", SeasonRoutes);
 app.use("/api/divisions", DivisionController);
-app.use("/api/team", TeamRoutes);
+app.use("/api/teams", TeamRoutes);
 app.use("/api/auth", AuthRoutes);
 
 function init() {
