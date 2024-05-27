@@ -12,8 +12,8 @@ module.exports = {
           model: "Languages",
           key: "id",
         },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onUpdate: "RESTRICT",
+        onDelete: "RESTRICT",
         transaction,
       });
 

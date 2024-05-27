@@ -44,7 +44,7 @@ const UserController = function () {
 
       if (!userFound) {
         res.status(400);
-        throw new Error("Email is not unique");
+        throw new Error("email is not unique");
       }
 
       await User.build(newUser).validate();
@@ -58,48 +58,53 @@ const UserController = function () {
 
   var logInUser = function (req, res) {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "unauthorized" });
     }
     res.status(200).json({ user: req.user });
   };
 
-  var getLanguageByUserId = async function (req, res, next) {
+  var getUserByUserId = async function (req, res, next) {
     try {
       const { id } = req.params;
+
       if (isNaN(id)) {
         res.status(400);
-        throw new Error("User id must be an integer");
+        throw new Error("user id must be an integer");
       }
 
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ["password"] },
+      });
       if (!user) {
         res.status(404);
-        throw new Error(`No user was found with id ${id}`);
+        throw new Error(`no user was found with id ${id}`);
       }
 
-      return res.json(user.language_id);
+      return res.json(user);
     } catch (error) {
       next(error);
     }
   };
 
-  var updateLanguagePreference = async function (req, res, next) {
+  var updateUser = async function (req, res, next) {
     try {
       const { id } = req.params;
 
       if (isNaN(id)) {
         res.status(400);
-        throw new Error("User id must be an integer");
+        throw new Error("user id must be an integer");
       }
 
       let currentUser = await User.findByPk(id);
 
       if (!currentUser) {
         res.status(404);
-        throw new Error(`No user was found with id ${id}`);
+        throw new Error(`no user was found with id ${id}`);
       }
 
-      currentUser.language_id = req.body.language_id || currentUser.language_id;
+      Object.keys(req.body).forEach((key) => {
+        currentUser[key] = req.body[key] ? req.body[key] : currentUser[key];
+      });
 
       await currentUser.validate();
       await currentUser.save();
@@ -113,8 +118,8 @@ const UserController = function () {
   return {
     registerUser,
     logInUser,
-    getLanguageByUserId,
-    updateLanguagePreference,
+    getUserByUserId,
+    updateUser,
   };
 };
 
