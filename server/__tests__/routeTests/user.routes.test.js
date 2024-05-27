@@ -77,7 +77,7 @@ describe("User Routes", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      message: "Email is not unique",
+      message: "email is not unique",
     });
   });
 
@@ -127,7 +127,7 @@ describe("User Routes", () => {
     expect(response.body.message).toContain("Validation error");
   });
 
-  it("Testing updateLanguagePreference function by updating user's language preference", async () => {
+  it("Testing updateUser function by updating user's language preference", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Sample Group");
     const roleM = await testDb.Role.create({
       role_type: "Staff",
