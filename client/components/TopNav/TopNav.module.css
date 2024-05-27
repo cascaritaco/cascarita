@@ -106,3 +106,7 @@
 .button-container button:last-child {
   margin-bottom: 0;
 }
+
+.language {
+  margin-left: 30px;
+}
