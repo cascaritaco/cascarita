@@ -18,9 +18,9 @@ jobs:
 
       - name: Load .env file
         run: |
-          if [ -f .env ]; then
-            export $(cat .env | xargs)
-          fi
+          set -o allexport
+          source <(grep -v '^#' .env | xargs -d '\n')
+          set +o allexport
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
