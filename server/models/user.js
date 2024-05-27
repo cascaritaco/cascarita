@@ -43,14 +43,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "First name field is required",
+            msg: "first name field is required",
           },
           notEmpty: {
-            msg: "First name field cannot be empty",
+            msg: "first name field cannot be empty",
           },
           len: {
             args: [1, 30],
-            msg: "First name must be between 1 and 30 characters",
+            msg: "first name must be between 1 and 30 characters",
           },
         },
       },
@@ -59,14 +59,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "Last name field is required",
+            msg: "last name field is required",
           },
           notEmpty: {
-            msg: "Last name field cannot be empty",
+            msg: "last name field cannot be empty",
           },
           len: {
             args: [1, 30],
-            msg: "Last name must be between 1 and 30 characters",
+            msg: "last name must be between 1 and 30 characters",
           },
         },
       },
@@ -77,14 +77,14 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: {
             isEmail: true,
-            msg: "Email field is required",
+            msg: "email field is required",
           },
           notEmpty: {
-            msg: "Email field cannot be empty",
+            msg: "email field cannot be empty",
           },
           len: {
             args: [1, 30],
-            msg: "Email must be between 1 and 30 characters",
+            msg: "email must be between 1 and 30 characters",
           },
         },
       },
@@ -93,10 +93,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "Password field is required",
+            msg: "password field is required",
           },
           notEmpty: {
-            msg: "Password field cannot be empty",
+            msg: "password field cannot be empty",
           },
         },
       },
