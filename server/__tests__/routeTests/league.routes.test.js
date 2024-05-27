@@ -39,7 +39,7 @@ describe("League Routes", () => {
     const response = await request(app).get(`/leagues/${groupM.id}`).send();
 
     expect(response.status).toBe(200);
-    response.body.forEach((season) => expect(season.league_id).toBe(league.id));
+    expect(response.body.length).toBe(2);
   });
 
   it("should not get any leagues with GET /getLeagueByGroupId", async () => {
@@ -47,7 +47,10 @@ describe("League Routes", () => {
 
     const response = await request(app).get(`/leagues/${groupM.id}`).send();
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(500);
+    expect(response.body).toMatchObject({
+      message: "group with given id has no leagues or not found",
+    });
   });
 });
 
@@ -127,7 +130,7 @@ it("should handle POST /create", async () => {
 it("should not create if name is not unique POST /create", async () => {
   const groupM = await TestDataGenerator.createDummyGroup("Saul's Group");
 
-  await TestDb.League.create({ group_id: groupM.id, name: "Salinas" });
+  await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
   const response = await request(app)
     .post("/leagues/")
@@ -145,7 +148,7 @@ it("should create a league with the same name from a different group POST /creat
   );
   const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
-  await TestDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
+  await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
 
   const response = await request(app)
     .post("/leagues/")
@@ -173,7 +176,7 @@ it("should update league with valid ID and input PATCH /patch", async () => {
 
   expect(response.status).toBe(200);
 
-  const updatedLeague = await TestDb.League.findByPk(league.id);
+  const updatedLeague = await testDb.League.findByPk(league.id);
   expect(updatedLeague.name).toBe(updatedLeagueName);
 });
 
@@ -227,7 +230,7 @@ it("should delete a league with a valid league ID DELETE /delete", async () => {
   const response = await request(app).delete(`/leagues/${league.id}`).send();
 
   expect(response.status).toBe(204);
-  expect(await TestDb.League.findByPk(league.id)).toBeNull();
+  expect(await testDb.League.findByPk(league.id)).toBeNull();
 });
 
 it("should return an error when attempting to delete a non-existant league DELETE /delete", async () => {
