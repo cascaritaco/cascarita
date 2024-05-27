@@ -128,7 +128,7 @@ describe("Integration Tests for Group", () => {
         .send();
 
       expect(response.status).toBe(200);
-      expect(response.body.data.length).toBe(2);
+      expect(response.body.length).toBe(2);
     });
 
     it("should not get any fields with GET /getFieldByGroupId", async () => {
@@ -140,7 +140,7 @@ describe("Integration Tests for Group", () => {
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
-        message: "Group with given ID has no fields",
+        message: "group with given id has no fields",
       });
     });
   });
@@ -160,7 +160,7 @@ describe("Integration Tests for Group", () => {
         .send();
 
       expect(response.status).toBe(200);
-      expect(response.body.data.length).toBe(2);
+      expect(response.body.length).toBe(2);
     });
 
     it("should not get any leagues with GET /getLeagueByGroupId", async () => {
@@ -172,7 +172,7 @@ describe("Integration Tests for Group", () => {
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
-        message: "Group with given ID has no leagues or not found",
+        message: "group with given id has no leagues or not found",
       });
     });
   });
