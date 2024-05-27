@@ -45,11 +45,11 @@ jobs:
 
       - name: Start MySQL
         run: |
-        sudo service mysql start
-        export MYSQL_USER="$TEST_DB_USERNAME"
-        export MYSQL_PASSWORD="$TEST_DB_PASSWORD"
-        export MYSQL_DB="$TEST_DB_NAME"
-        mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB;"
+          sudo service mysql start
+          export MYSQL_USER="$TEST_DB_USERNAME"
+          export MYSQL_PASSWORD="$TEST_DB_PASSWORD"
+          export MYSQL_DB="$TEST_DB_NAME"
+          mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB;"
 
       - name: Jest Tests
         run: npm run test
