@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./LeagueForm.module.css";
+import styles from "./Form.module.css";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import RadioSelect from "../RadioSelect/RadioSelect";
@@ -22,7 +22,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
     event.preventDefault();
     setIsLoading(true);
     const { leagueName, leagueDescription } = Object.fromEntries(
-      new FormData(event.currentTarget),
+      new FormData(event.currentTarget)
     );
 
     const newLeague = {
