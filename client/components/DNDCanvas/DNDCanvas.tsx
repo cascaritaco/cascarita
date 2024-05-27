@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  DropResult,
+  DroppableProvided,
+} from "react-beautiful-dnd";
 import DraggableMultipleChoice from "../DraggableMultipleChoice/DraggableMultipleChoice";
 import DraggableShortText from "../DraggableShortText/DraggableShortText";
 import DraggableDropdown from "../DraggableDropdown/DraggableDropdown";
 import DraggableLongText from "../DraggableLongText/DraggableLongText";
 import { DNDCanvasProps, Field, Survey } from "./types";
+import { DroppedItem } from "../../pages/NewForm/types";
 
 const DNDCanvas: React.FC<DNDCanvasProps> = ({
   items,
@@ -13,6 +19,58 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
   saveSurvey,
 }) => {
   const methods = useForm<{ fields: Field[] }>();
+
+  const componentMap = {
+    multiple_choice: DraggableMultipleChoice,
+    short_text: DraggableShortText,
+    dropdown: DraggableDropdown,
+    long_text: DraggableLongText,
+  };
+
+  const appendField = (item: DroppedItem) => {
+    switch (item.type) {
+      case "multiple_choice":
+        append({
+          ref: item.id,
+          type: item.type,
+          title: "",
+          properties: { choices: [] },
+        });
+        break;
+      case "short_text":
+        append({
+          ref: item.id,
+          type: item.type,
+          title: "",
+          validations: {
+            max_length: 20,
+            required: false,
+          },
+        });
+        break;
+      case "dropdown":
+        append({
+          ref: item.id,
+          type: item.type,
+          title: "",
+          properties: { choices: [] },
+        });
+        break;
+      case "long_text":
+        append({
+          ref: item.id,
+          type: item.type,
+          title: "",
+          validations: {
+            max_length: 100,
+            required: false,
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   const { control, handleSubmit } = methods;
 
@@ -25,47 +83,7 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
     if (items.length > 0) {
       items.forEach((item) => {
         if (!fields.some((field) => field.ref === item.id)) {
-          if (item.type === "multiple_choice") {
-            append({
-              // NOTE: TypeForm does NOT extra keys, but if
-              // build custom surveys we will need to store this ref
-              // id: `${fields.length + 1}`,
-              ref: item.id,
-              type: item.type,
-              title: "",
-              properties: { choices: [] },
-            });
-          } else if (item.type === "short_text") {
-            append({
-              // id: `${fields.length + 1}`,
-              ref: item.id,
-              type: item.type,
-              title: "",
-              validations: {
-                max_length: 20,
-                required: false,
-              },
-            });
-          } else if (item.type == "dropdown") {
-            append({
-              // id: `${fields.length + 1}`,
-              ref: item.id,
-              type: item.type,
-              title: "",
-              properties: { choices: [] },
-            });
-          } else if (item.type == "long_text") {
-            append({
-              // id: `${fields.length + 1}`,
-              ref: item.id,
-              type: item.type,
-              title: "",
-              validations: {
-                max_length: 100,
-                required: false,
-              },
-            });
-          }
+          appendField(item);
         }
       });
     }
@@ -97,7 +115,7 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="canvas">
-            {(provided) => (
+            {(provided: DroppableProvided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
@@ -109,53 +127,20 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
                   minHeight: "400px",
                 }}
               >
-                {fields.map((field, index) => {
-                  if (field.type === "multiple_choice") {
-                    return (
-                      <DraggableMultipleChoice
-                        key={field.id}
-                        id={field.id}
-                        index={index}
-                        title={field.title}
-                        control={control}
-                        onDelete={() => onDelete(index, field.ref)}
-                      />
-                    );
-                  } else if (field.type === "short_text") {
-                    return (
-                      <DraggableShortText
-                        key={field.id}
-                        id={field.id}
-                        index={index}
-                        title={field.title}
-                        control={control}
-                        onDelete={() => onDelete(index, field.ref)}
-                      />
-                    );
-                  } else if (field.type === "dropdown") {
-                    return (
-                      <DraggableDropdown
-                        key={field.id}
-                        id={field.id}
-                        index={index}
-                        title={field.title}
-                        control={control}
-                        onDelete={() => onDelete(index, field.ref)}
-                      />
-                    );
-                  } else if (field.type === "long_text") {
-                    return (
-                      <DraggableLongText
-                        key={field.id}
-                        id={field.id}
-                        index={index}
-                        title={field.title}
-                        control={control}
-                        onDelete={() => onDelete(index, field.ref)}
-                      />
-                    );
-                  }
-                  return null;
+                {fields.map((field: Field, index: number) => {
+                  const Component = componentMap[field.type];
+                  if (!Component) return null;
+
+                  return (
+                    <Component
+                      key={index}
+                      id={index.toString()}
+                      index={index}
+                      title={field.title}
+                      control={control}
+                      onDelete={() => onDelete(index, field.ref)}
+                    />
+                  );
                 })}
                 {provided.placeholder}
               </div>

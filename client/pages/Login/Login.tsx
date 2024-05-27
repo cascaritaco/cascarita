@@ -5,7 +5,6 @@ import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  console.log("error is here");
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
