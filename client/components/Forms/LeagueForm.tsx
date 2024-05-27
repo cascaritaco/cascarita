@@ -18,7 +18,7 @@ const LeagueForm: React.FC<FormProps> = ({ afterSave }) => {
     event.preventDefault();
     setIsLoading(true);
     const { leagueName, leagueDescription } = Object.fromEntries(
-      new FormData(event.currentTarget)
+      new FormData(event.currentTarget),
     );
 
     const newLeague = {
@@ -80,8 +80,7 @@ const LeagueForm: React.FC<FormProps> = ({ afterSave }) => {
             value={isExistingLeague}
             onValueChange={(isExistingLeague) =>
               setIsExistingLeague(isExistingLeague)
-            }
-          >
+            }>
             <div className={styles.radioInputContainer}>
               <RadioSelect.Item id="existing-yes" value="yes" />
               <label htmlFor="existing-yes">Yes</label>
@@ -100,8 +99,7 @@ const LeagueForm: React.FC<FormProps> = ({ afterSave }) => {
           placeholder="Select a League"
           name="existingLeague"
           value={existingLeague}
-          onValueChange={(value) => setExistingLeague(value)}
-        >
+          onValueChange={(value) => setExistingLeague(value)}>
           <SelectMenu.Group>
             <SelectMenu.GroupLabel className={styles.groupLabel}>
               Existing Leagues
