@@ -10,7 +10,7 @@ const LeagueRoutes = require("../../routes/league.routes");
 const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/league", LeagueRoutes);
+app.use("/leagues", LeagueRoutes);
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
