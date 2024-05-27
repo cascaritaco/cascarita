@@ -35,14 +35,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "Name field is required",
+            msg: "name field is required",
           },
           notEmpty: {
-            msg: "Name field cannot be empty",
+            msg: "name field cannot be empty",
           },
           len: {
             args: [1, 30],
-            msg: "Name must be between 1 and 30 characters",
+            msg: "name must be between 1 and 30 characters",
           },
         },
       },
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         validate: {
           notEmpty: {
-            msg: "Team logo field cannot be empty",
+            msg: "team logo field cannot be empty",
           },
         },
       },

@@ -9,7 +9,7 @@ const LeagueRoutes = require("../../routes/league.routes");
 const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/league", LeagueRoutes);
+app.use("/leagues", LeagueRoutes);
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
@@ -31,7 +31,7 @@ describe("League Routes", () => {
       name: "Martin Martians",
     });
 
-    const response = await request(app).get(`/league/${groupM.id}`).send();
+    const response = await request(app).get(`/leagues/${groupM.id}`).send();
 
     expect(response.status).toBe(200);
     expect(response.body.data.length).toBe(2);
@@ -40,7 +40,7 @@ describe("League Routes", () => {
   it("should not get any leagues with GET /getLeagueByGroupId", async () => {
     const groupM = await TestDataGenerator.createDummyGroup("Group Uno");
 
-    const response = await request(app).get(`/league/${groupM.id}`).send();
+    const response = await request(app).get(`/leagues/${groupM.id}`).send();
 
     expect(response.status).toBe(500);
     expect(response.body).toMatchObject({
@@ -56,7 +56,7 @@ describe("League Routes", () => {
     const groupM = await TestDataGenerator.createDummyGroup("Salinas");
 
     const response = await request(app)
-      .post("/league/")
+      .post("/leagues/")
       .send({ group_id: groupM.id, name: "SOMOS" });
 
     expect(response.status).toBe(201);
@@ -72,7 +72,7 @@ describe("League Routes", () => {
     await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
 
     const response = await request(app)
-      .post("/league/")
+      .post("/leagues/")
       .send({ group_id: groupM.id, name: "Salinas" });
 
     expect(response.status).toBe(400);
@@ -90,13 +90,26 @@ describe("League Routes", () => {
     await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
 
     const response = await request(app)
-      .post("/league/")
+      .post("/leagues/")
       .send({ group_id: groupDos.id, name: "Summer 2024" });
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
       success: true,
       data: expect.objectContaining({ name: "Summer 2024" }),
+    });
+  });
+
+  it("should not create if no data was given POST /create", async () => {
+    // const groupM = await TestDataGenerator.createDummyGroup("Saul's Group");
+
+    // await testDb.League.create({ group_id: groupM.id, name: "Salinas" });
+
+    const response = await request(app).post("/leagues/").send();
+
+    expect(response.status).toBe(500);
+    expect(response.body).toMatchObject({
+      message: 'WHERE parameter "group_id" has invalid "undefined" value',
     });
   });
 
@@ -111,7 +124,7 @@ describe("League Routes", () => {
 
     const updatedLeagueName = "Sopa Marucha";
     const response = await request(app)
-      .patch(`/league/${league.id}`)
+      .patch(`/leagues/${league.id}`)
       .send({ name: updatedLeagueName });
 
     expect(response.status).toBe(200);
@@ -124,7 +137,7 @@ describe("League Routes", () => {
     const nonExistentLeagueId = "9999";
 
     const response = await request(app)
-      .patch(`/league/${nonExistentLeagueId}`)
+      .patch(`/leagues/${nonExistentLeagueId}`)
       .send({ name: "Joe Mo Mah Inc." });
 
     expect(response.status).toBe(400);
@@ -146,7 +159,7 @@ describe("League Routes", () => {
     });
 
     const response = await request(app)
-      .patch(`/league/${league2.id}`)
+      .patch(`/leagues/${league2.id}`)
       .send({ name: "Shrek League" });
 
     expect(response.status).toBe(500);
@@ -167,14 +180,14 @@ describe("League Routes", () => {
       name: "SOMOS",
     });
 
-    const response = await request(app).delete(`/league/${league.id}`).send();
+    const response = await request(app).delete(`/leagues/${league.id}`).send();
 
     expect(response.status).toBe(204);
     expect(await testDb.League.findByPk(league.id)).toBeNull();
   });
 
   it("should return an error when attempting to delete a non-existant league DELETE /delete", async () => {
-    const response = await request(app).delete("/league/999").send();
+    const response = await request(app).delete("/leagues/999").send();
 
     expect(response.status).toBe(404);
   });

@@ -1,9 +1,9 @@
 "use strict";
-const { Team } = require("./../models");
+const { Team, Group, Division } = require("./../models");
 const TeamsSessionController = require("../controllers/teamSession.controller");
 
 const TeamController = function () {
-  var getTeamByGroupId = async function (req, res, next) {
+  var getTeamsByGroupId = async function (req, res, next) {
     const groupId = req.params["id"];
 
     try {
@@ -14,7 +14,7 @@ const TeamController = function () {
       });
 
       if (Object.keys(result).length === 0) {
-        throw new Error("Group with given ID has no teams");
+        throw new Error("group with given id has no teams");
       }
 
       return res.status(200).json(result);
@@ -23,31 +23,42 @@ const TeamController = function () {
     }
   };
 
-  var getTeamsByLeagueId = async function (req, res, next) {
-    const leagueId = req.params["id"];
+  var isNameUniqueWithinDivision = async function (groupId, teamName) {
+    let teamFound = await Team.findOne({
+      where: {
+        group_id: groupId,
+        name: teamName,
+      },
+    });
 
-    try {
-      const result = await Team.findAll({
-        where: {
-          group_id: groupId,
-        },
-      });
-
-      if (Object.keys(result).length === 0) {
-        throw new Error("Group with given ID has no teams");
-      }
-
-      return res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
+    return teamFound == null;
   };
 
-  var createTeam = async function (req, res) {
+  var createTeam = async function (req, res, next) {
     const { group_id, name, team_logo } = req.body;
     const newTeam = { group_id, name, team_logo };
 
     try {
+      const group = await Group.findOne({
+        where: {
+          id: newTeam.group_id,
+        },
+      });
+      if (!group) {
+        res.status(404);
+        throw new Error(`no such group with id ${newTeam.group_id}`);
+      }
+
+      const teamNameUnique = await isNameUniqueWithinDivision(
+        newTeam.group_id,
+        newTeam.name
+      );
+
+      if (!teamNameUnique) {
+        res.status(400);
+        throw new Error("team name is not unique within the division");
+      }
+
       await Team.build(newTeam).validate();
       const result = await Team.create(newTeam);
 
@@ -67,7 +78,19 @@ const TeamController = function () {
 
       if (!currentTeam) {
         res.status(404);
-        throw new Error("Team with given ID was not found");
+        throw new Error("team with given id was not found");
+      }
+
+      if (req.body.name && req.body.name !== currentTeam.name) {
+        const nameUnique = await isNameUniqueWithinDivision(
+          currentTeam.group_id,
+          req.body.name
+        );
+
+        if (!nameUnique) {
+          res.status(400);
+          throw new Error("team name is not unique within the division");
+        }
       }
 
       Object.keys(req.body).forEach((key) => {
@@ -93,18 +116,17 @@ const TeamController = function () {
 
       if (deletedTeam === 0) {
         res.status(404);
-        throw new Error("No team found with the given ID");
+        throw new Error("no team found with the given id");
       }
 
-      return res.status(204).json("Deleted team successfully");
+      return res.status(204).json("deleted team successfully");
     } catch (error) {
       next(error);
     }
   };
 
   return {
-    getTeamByGroupId,
-    getTeamsByLeagueId,
+    getTeamsByGroupId,
     createTeam,
     updateTeam,
     deleteTeam,

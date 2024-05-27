@@ -13,9 +13,8 @@ const TeamsSessionController = function () {
         },
       });
 
-      if (!result) {
-        res.status(404);
-        throw new Error("Team sessions with given ID do not exist");
+      if (Object.keys(result).length === 0) {
+        throw new Error("group with given id has no teams");
       }
 
       return res.status(200).json(result);
@@ -42,13 +41,13 @@ const TeamsSessionController = function () {
     try {
       let currentTeamsSession = await TeamsSession.findOne({
         where: {
-          id: req.body.session_id,
+          id: req.body.id,
         },
       });
 
       if (!currentTeamsSession) {
         res.status(404);
-        throw new Error("Teams session with given ID was not found");
+        throw new Error("teams session with given id was not found");
       }
 
       Object.keys(req.body).forEach((key) => {
@@ -76,10 +75,10 @@ const TeamsSessionController = function () {
 
       if (deletedTeamsSession === 0) {
         res.status(404);
-        throw new Error("No team session found with the given ID");
+        throw new Error("no team session found with the given id");
       }
 
-      return res.status(204).json("Delete team session successfully");
+      return res.status(204).json("delete team session successfully");
     } catch (error) {
       next(error);
     }
