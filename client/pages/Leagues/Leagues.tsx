@@ -1,31 +1,27 @@
-import styles from "./Leagues.module.css";
-import Search from "../../components/Search/Search";
-import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
-import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
-import Page from "../../components/Page/Page";
-import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import { useState } from "react";
+import Page from "../../components/Page/Page";
+import LeagueForm from "../../components/Forms/LeagueForm";
+import Modal from "../../components/Modal/Modal";
+import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
+import Search from "../../components/Search/Search";
+import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
+import SelectMenu from "../../components/SelectMenu/SelectMenu";
+import { LeagueType } from "../../api/teams/types";
+import { useQuery } from "@tanstack/react-query";
+import styles from "./Leagues.module.css";
 
 const Leagues = () => {
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
 
-  // note this needs to be replaced with backend call
-  const leagues = [
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-  ];
-
   const filterStatuses = ["Active", "Inactive"];
   const sortStatuses = ["Alphabetical", "Date"];
+
+  const [open, setOpen] = useState(false);
+  const leaguesQuery = useQuery({
+    queryKey: ["leagues"],
+    queryFn: () => fetch("/api/league/1").then((res) => res.json()),
+  });
 
   return (
     <Page>
@@ -68,7 +64,17 @@ const Leagues = () => {
             </SelectMenu>
           </div>
         </div>
-        {/* <PrimaryButton label="Add League" /> */}
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Button asChild className={styles.btn}>
+            <PrimaryButton
+              label="Add League"
+              onClick={() => setOpen(true)}
+            ></PrimaryButton>
+          </Modal.Button>
+          <Modal.Content title="Create League">
+            <LeagueForm afterSave={() => setOpen(false)} />
+          </Modal.Content>
+        </Modal>
       </div>
       <div className={styles.cols}>
         <h3>Name</h3>
@@ -76,12 +82,22 @@ const Leagues = () => {
       </div>
       <div className={styles.table}>
         <div>
-          {leagues.map((league, index) => (
-            <div className={styles.cols} key={index}>
-              <p>{league}</p>
-              <DropdownMenuButton />
+          {leaguesQuery.isLoading ? (
+            <div className={styles.cols}>
+              <p>Loading...</p>
             </div>
-          ))}
+          ) : leaguesQuery.isError || !leaguesQuery.data ? (
+            <div className={styles.cols}>
+              <p>Error fetching data</p>
+            </div>
+          ) : (
+            leaguesQuery.data?.data.map((league: LeagueType) => (
+              <div className={styles.cols} key={league.id}>
+                <p>{league.name}</p>
+                <DropdownMenuButton />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </Page>

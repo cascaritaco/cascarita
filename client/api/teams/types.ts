@@ -11,6 +11,15 @@ interface FormProps {
   afterSave: () => void;
 }
 
+interface LeagueType {
+  id: number;
+  group_id: number;
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface SeasonType {
   id: number;
   name: string;
@@ -22,4 +31,4 @@ interface SeasonType {
   league_id: number;
 }
 
-export type { TeamResponse, FormProps, SeasonType };
+export type { TeamResponse, FormProps, LeagueType, SeasonType };
