@@ -9,6 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      DB_NAME: test_suite_db
+      DB_USER: root
+      DB_PASSWORD: root
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
@@ -21,16 +26,6 @@ jobs:
           set -o allexport
           source <(grep -v '^#' .env | xargs -d '\n')
           set +o allexport
-
-      - name: Debug Environment Variables
-        run: |
-          echo "TEST_DB_HOST: $TEST_DB_HOST"
-          echo "TEST_DB_NAME: $TEST_DB_NAME"
-          echo "TEST_DB_PASSWORD: $TEST_DB_PASSWORD"
-          echo "TEST_DB_USERNAME: $TEST_DB_USERNAME"
-          echo "TEST_DB_DIALECT: $TEST_DB_DIALECT"
-          echo "TEST_DB_PORT: $TEST_DB_PORT"
-          echo "TEST_DB_LOGGING: $TEST_DB_LOGGING"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -46,10 +41,7 @@ jobs:
       - name: Start MySQL
         run: |
           sudo service mysql start
-          export MYSQL_USER="$TEST_DB_USERNAME"
-          export MYSQL_PASSWORD="$TEST_DB_PASSWORD"
-          export MYSQL_DB="$TEST_DB_NAME"
-          mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB;"
+          mysql -u"$DB_USER" -p"$DB_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
 
       - name: Jest Tests
         run: npm run test
