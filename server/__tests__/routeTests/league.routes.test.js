@@ -19,6 +19,10 @@ describe("League Routes", () => {
     await testDb.Group.sync();
     await testDb.League.sync();
     await testDb.Season.sync();
+    await testDb.Division.sync();
+    await testDb.Session.sync();
+    await testDb.Team.sync();
+    await testDb.TeamsSession.sync();
   });
 
   // ------------------- Get League by Group ID Tests ----------------
@@ -47,7 +51,65 @@ describe("League Routes", () => {
   });
 });
 
-it("GET /{id}/seasons", async () => {});
+it("should get teams by league id", async () => {
+  const group = await TestDataGenerator.createDummyGroup("Group Uno");
+
+  const league = await testDb.League.create({
+    group_id: group.id,
+    name: "My League",
+  });
+
+  const season = await testDb.Season.create({
+    name: "Winter 2024",
+    start_date: "2024-11-01 00:00:00",
+    end_date: "2025-03-14 11:59:00",
+    is_active: true,
+    league_id: league.id,
+  });
+
+  const division = await testDb.Division.create({
+    group_id: group.id,
+    name: "Division 1",
+  });
+
+  const session = await testDb.Session.create({
+    division_id: division.id,
+    season_id: season.id,
+  });
+
+  const team = await testDb.Team.create({
+    name: "Team A",
+    group_id: group.id,
+  });
+
+  await testDb.TeamsSession.create({
+    session_id: session.id,
+    team_id: team.id,
+  });
+
+  const response = await request(app)
+    .get(`/leagues/${league.id}/seasons`)
+    .send();
+
+  expect(response.status).toBe(200);
+  expect(response.body).toHaveLength(1);
+  expect(Object.keys(response.body[0].Team)).toHaveLength(6);
+  expect(response.body[0].Team.name).toBe("Team A");
+});
+
+it("should fail if league not found", async () => {
+  // Use an invalid league ID
+  const invalidLeagueId = 99999;
+
+  const response = await request(app)
+    .get(`/leagues/${invalidLeagueId}/seasons`)
+    .send();
+
+  expect(response.status).toBe(404);
+  expect(response.body).toMatchObject({
+    message: `no such season with id ${invalidLeagueId}`, // Adjust the message as per your controller's error message
+  });
+});
 
 // ------------------- Create Tests ----------------
 
@@ -177,6 +239,10 @@ it("should return an error when attempting to delete a non-existant league DELET
 // ------------------------------------------------
 
 afterEach(async () => {
+  await testDb.TeamsSession.destroy({ where: {} });
+  await testDb.Team.destroy({ where: {} });
+  await testDb.Session.destroy({ where: {} });
+  await testDb.Division.destroy({ where: {} });
   await testDb.Season.destroy({ where: {} });
   await testDb.League.destroy({ where: {} });
   await testDb.Group.destroy({ where: {} });
