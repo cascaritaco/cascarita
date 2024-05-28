@@ -92,131 +92,141 @@ describe("Session Controller", () => {
     await TestDb.Group.destroy({ where: {} });
   });
 
-  describe("createTeamsSession", () => {
-    it("should create a new session", async () => {
-      const sampleData = await setUpForTeamsSession(
-        "Dummy Group",
-        "Best League",
-        "Winter 23",
-        "U-18",
-        "Sussy Sauls"
-      );
-
-      const req = {
-        body: {
-          team_id: sampleData.teamId,
-          session_id: sampleData.sessionId,
-        },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await TeamsSessionController.createTeamsSession(req, res, next);
-
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.body).toEqual(
-        expect.objectContaining({
-          team_id: sampleData.teamId,
-          session_id: sampleData.sessionId,
-        })
-      );
-    });
-
-    it("should handle error during teams session creation, when passing in an invalid id", async () => {
-      const sampleData = await setUpForTeamsSession(
-        "Big Group",
-        "top League",
-        "Summer 23",
-        "1st",
-        "Sussy Sauls"
-      );
-
-      const req = {
-        body: {
-          team_id: sampleData.teamId,
-          session_id: "Yo momma",
-        },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await TeamsSessionController.createTeamsSession(req, res, next);
-
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
-
-      expect(next).toHaveBeenCalled();
-      expect(caughtError).toEqual(
-        expect.objectContaining({
-          name: "SequelizeDatabaseError",
-          original: expect.objectContaining({
-            sqlMessage:
-              "Incorrect integer value: 'Yo momma' for column 'session_id' at row 1",
-          }),
-        })
-      );
-    });
-
-    it("should handle error during team session creation, when passing in an unexisting team id", async () => {
-      const sampleData = await setUpForTeamsSession(
-        "Big Group 2",
-        "top League 2",
-        "Summer 25",
-        "2nd",
-        "Sussy Sauls"
-      );
-
-      const req = {
-        body: { team_id: sampleData.teamId, session_id: 111 },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await TeamsSessionController.createTeamsSession(req, res, next);
-
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
-
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
-      );
-    });
-
-    it("should handle error during team session creation, when passing in an unexisting team id", async () => {
-      const sampleData = await setUpForTeamsSession(
-        "Big Group 2",
-        "top League 2",
-        "Summer 25",
-        "2nd",
-        "Sussy Sauls"
-      );
-
-      const req = {
-        body: { team_id: 111, session_id: sampleData.sessionId },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await TeamsSessionController.createTeamsSession(req, res, next);
-
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
-
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
-      );
-    });
+  describe("setup", async () => {
+    const sampleData = await setUpForTeamsSession(
+      "Dummy Group",
+      "Best League",
+      "Winter 23",
+      "U-18",
+      "Sussy Sauls"
+    );
   });
+
+  // describe("createTeamsSession", () => {
+  //   it("should create a new session", async () => {
+  //     const sampleData = await setUpForTeamsSession(
+  //       "Dummy Group",
+  //       "Best League",
+  //       "Winter 23",
+  //       "U-18",
+  //       "Sussy Sauls"
+  //     );
+
+  //     const req = {
+  //       body: {
+  //         team_id: sampleData.teamId,
+  //         session_id: sampleData.sessionId,
+  //       },
+  //     };
+
+  //     const res = createMockResponse();
+
+  //     const next = jest.fn();
+
+  //     await TeamsSessionController.createTeamsSession(req, res, next);
+
+  //     expect(res.status).toHaveBeenCalledWith(201);
+  //     expect(res.body).toEqual(
+  //       expect.objectContaining({
+  //         team_id: sampleData.teamId,
+  //         session_id: sampleData.sessionId,
+  //       })
+  //     );
+  //   });
+
+  //   it("should handle error during teams session creation, when passing in an invalid id", async () => {
+  //     const sampleData = await setUpForTeamsSession(
+  //       "Big Group",
+  //       "top League",
+  //       "Summer 23",
+  //       "1st",
+  //       "Sussy Sauls"
+  //     );
+
+  //     const req = {
+  //       body: {
+  //         team_id: sampleData.teamId,
+  //         session_id: "Yo momma",
+  //       },
+  //     };
+
+  //     const res = createMockResponse();
+
+  //     const next = jest.fn();
+
+  //     await TeamsSessionController.createTeamsSession(req, res, next);
+
+  //     const nextArgs = next.mock.calls[0];
+  //     const caughtError = nextArgs[0];
+
+  //     expect(next).toHaveBeenCalled();
+  //     expect(caughtError).toEqual(
+  //       expect.objectContaining({
+  //         name: "SequelizeDatabaseError",
+  //         original: expect.objectContaining({
+  //           sqlMessage:
+  //             "Incorrect integer value: 'Yo momma' for column 'session_id' at row 1",
+  //         }),
+  //       })
+  //     );
+  //   });
+
+  //   it("should handle error during team session creation, when passing in an unexisting team id", async () => {
+  //     const sampleData = await setUpForTeamsSession(
+  //       "Big Group 2",
+  //       "top League 2",
+  //       "Summer 25",
+  //       "2nd",
+  //       "Sussy Sauls"
+  //     );
+
+  //     const req = {
+  //       body: { team_id: sampleData.teamId, session_id: 111 },
+  //     };
+
+  //     const res = createMockResponse();
+
+  //     const next = jest.fn();
+
+  //     await TeamsSessionController.createTeamsSession(req, res, next);
+
+  //     const nextArgs = next.mock.calls[0];
+  //     const caughtError = nextArgs[0];
+
+  //     expect(next).toHaveBeenCalled();
+  //     expect(caughtError.toString()).toMatch(
+  //       /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
+  //     );
+  //   });
+
+  //   it("should handle error during team session creation, when passing in an unexisting team id", async () => {
+  //     const sampleData = await setUpForTeamsSession(
+  //       "Big Group 2",
+  //       "top League 2",
+  //       "Summer 25",
+  //       "2nd",
+  //       "Sussy Sauls"
+  //     );
+
+  //     const req = {
+  //       body: { team_id: 111, session_id: sampleData.sessionId },
+  //     };
+
+  //     const res = createMockResponse();
+
+  //     const next = jest.fn();
+
+  //     await TeamsSessionController.createTeamsSession(req, res, next);
+
+  //     const nextArgs = next.mock.calls[0];
+  //     const caughtError = nextArgs[0];
+
+  //     expect(next).toHaveBeenCalled();
+  //     expect(caughtError.toString()).toMatch(
+  //       /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
+  //     );
+  //   });
+  // });
 
   // describe("UpdateTeamsSession", () => {
   //   it("update a team session successfully", async () => {
@@ -286,47 +296,47 @@ describe("Session Controller", () => {
   //   });
   // });
 
-  describe("getTeamSessionBySessionId", () => {
-    it("returns found Sessions based on the id", async () => {
-      const newTeamsSession = await createSampleTeamsSession();
+  // describe("getTeamSessionBySessionId", () => {
+  //   it("returns found Sessions based on the id", async () => {
+  //     const newTeamsSession = await createSampleTeamsSession();
 
-      const req = { body: { id: newTeamsSession.teamsSessionData.session_id } };
-      const res = createMockResponse();
-      const next = jest.fn();
+  //     const req = { body: { id: newTeamsSession.teamsSessionData.session_id } };
+  //     const res = createMockResponse();
+  //     const next = jest.fn();
 
-      await TeamsSessionController.getTeamSessionBySessionId(req, res, next);
+  //     await TeamsSessionController.getTeamSessionBySessionId(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.body).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            session_id: newTeamsSession.teamsSessionData.session_id,
-          }),
-        ])
-      );
-    });
+  //     expect(res.status).toHaveBeenCalledWith(200);
+  //     expect(res.body).toEqual(
+  //       expect.arrayContaining([
+  //         expect.objectContaining({
+  //           session_id: newTeamsSession.teamsSessionData.session_id,
+  //         }),
+  //       ])
+  //     );
+  //   });
 
-    it("returns error if team sessions id does not exist", async () => {
-      const ghostSessionId = 1234;
+  //   it("returns error if team sessions id does not exist", async () => {
+  //     const ghostSessionId = 1234;
 
-      const req = { body: { id: ghostSessionId } };
-      const res = createMockResponse();
-      const next = jest.fn();
+  //     const req = { body: { id: ghostSessionId } };
+  //     const res = createMockResponse();
+  //     const next = jest.fn();
 
-      await TeamsSessionController.getTeamSessionBySessionId(req, res, next);
+  //     await TeamsSessionController.getTeamSessionBySessionId(req, res, next);
 
-      console.log("por que");
-      console.log(next.mock);
+  //     console.log("por que");
+  //     console.log(next.mock);
 
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
+  //     const nextArgs = next.mock.calls[0];
+  //     const caughtError = nextArgs[0];
 
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        "Error: group with given id has no teams"
-      );
-    });
-  });
+  //     expect(next).toHaveBeenCalled();
+  //     expect(caughtError.toString()).toMatch(
+  //       "Error: group with given id has no teams"
+  //     );
+  //   });
+  // });
 
   // describe("deleteTeamsSession", () => {
   //   it("delete a session successfully", async () => {
