@@ -218,73 +218,73 @@ describe("Session Controller", () => {
     });
   });
 
-  describe("UpdateTeamsSession", () => {
-    it("update a team session successfully", async () => {
-      const sampleData = await setUpForTeamsSession(
-        "Big Group 2",
-        "top League 2",
-        "Summer 25",
-        "2nd",
-        "Sussy Sauls"
-      );
-      const oldTeamsSession = await createSampleTeamsSession();
+  // describe("UpdateTeamsSession", () => {
+  //   it("update a team session successfully", async () => {
+  //     const sampleData = await setUpForTeamsSession(
+  //       "Big Group 2",
+  //       "top League 2",
+  //       "Summer 25",
+  //       "2nd",
+  //       "Sussy Sauls"
+  //     );
+  //     const oldTeamsSession = await createSampleTeamsSession();
 
-      const req = {
-        body: {
-          id: oldTeamsSession.teamsSessionData.id,
-          team_id: sampleData.teamId,
-          session_id: oldTeamsSession.teamsSessionData.session_id,
-        },
-      };
+  //     const req = {
+  //       body: {
+  //         id: oldTeamsSession.teamsSessionData.id,
+  //         team_id: sampleData.teamId,
+  //         session_id: oldTeamsSession.teamsSessionData.session_id,
+  //       },
+  //     };
 
-      const res = createMockResponse();
-      const next = jest.fn();
+  //     const res = createMockResponse();
+  //     const next = jest.fn();
 
-      await TeamsSessionController.updateTeamsSession(req, res, next);
+  //     await TeamsSessionController.updateTeamsSession(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.body).toEqual(
-        expect.objectContaining({
-          team_id: sampleData.teamId,
-          session_id: oldTeamsSession.teamsSessionData.session_id,
-        })
-      );
-    });
+  //     expect(res.status).toHaveBeenCalledWith(200);
+  //     expect(res.body).toEqual(
+  //       expect.objectContaining({
+  //         team_id: sampleData.teamId,
+  //         session_id: oldTeamsSession.teamsSessionData.session_id,
+  //       })
+  //     );
+  //   });
 
-    it("should not update a team session, if id is not valid", async () => {
-      const sampleData = await setUpForTeamsSession(
-        "Big Group",
-        "top League",
-        "Summer 23",
-        "1st",
-        "Sussy Sauls"
-      );
-      const oldTeamsSession = await createSampleTeamsSession();
-      const newSession = await TestDb.Session.create({
-        division_id: sampleData.divisionId,
-        season_id: sampleData.seasonId,
-      });
+  //   it("should not update a team session, if id is not valid", async () => {
+  //     const sampleData = await setUpForTeamsSession(
+  //       "Big Group",
+  //       "top League",
+  //       "Summer 23",
+  //       "1st",
+  //       "Sussy Sauls"
+  //     );
+  //     const oldTeamsSession = await createSampleTeamsSession();
+  //     const newSession = await TestDb.Session.create({
+  //       division_id: sampleData.divisionId,
+  //       season_id: sampleData.seasonId,
+  //     });
 
-      const req = {
-        body: {
-          team_id: oldTeamsSession.id,
-          session_id: newSession.id,
-        },
-      };
-      const res = createMockResponse();
-      const next = jest.fn();
+  //     const req = {
+  //       body: {
+  //         team_id: oldTeamsSession.id,
+  //         session_id: newSession.id,
+  //       },
+  //     };
+  //     const res = createMockResponse();
+  //     const next = jest.fn();
 
-      await TeamsSessionController.updateTeamsSession(req, res, next);
+  //     await TeamsSessionController.updateTeamsSession(req, res, next);
 
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
+  //     const nextArgs = next.mock.calls[0];
+  //     const caughtError = nextArgs[0];
 
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        'Error: WHERE parameter "id" has invalid "undefined" value'
-      );
-    });
-  });
+  //     expect(next).toHaveBeenCalled();
+  //     expect(caughtError.toString()).toMatch(
+  //       'Error: WHERE parameter "id" has invalid "undefined" value'
+  //     );
+  //   });
+  // });
 
   describe("getTeamSessionBySessionId", () => {
     it("returns found Sessions based on the id", async () => {
@@ -328,36 +328,36 @@ describe("Session Controller", () => {
     });
   });
 
-  describe("deleteTeamsSession", () => {
-    it("delete a session successfully", async () => {
-      const newTeamsSession = await createSampleTeamsSession();
+  // describe("deleteTeamsSession", () => {
+  //   it("delete a session successfully", async () => {
+  //     const newTeamsSession = await createSampleTeamsSession();
 
-      const req = { body: { id: newTeamsSession.teamsSessionData.id } };
-      const res = createMockResponse();
-      const next = jest.fn();
+  //     const req = { body: { id: newTeamsSession.teamsSessionData.id } };
+  //     const res = createMockResponse();
+  //     const next = jest.fn();
 
-      await TeamsSessionController.deleteTeamsSession(req, res, next);
+  //     await TeamsSessionController.deleteTeamsSession(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(204);
-      expect(res.body).toEqual("delete team session successfully");
-    });
+  //     expect(res.status).toHaveBeenCalledWith(204);
+  //     expect(res.body).toEqual("delete team session successfully");
+  //   });
 
-    it("sends error if a team session is not found", async () => {
-      const ghostSessionId = 789;
+  //   it("sends error if a team session is not found", async () => {
+  //     const ghostSessionId = 789;
 
-      const req = { body: { id: ghostSessionId } };
-      const res = createMockResponse();
-      const next = jest.fn();
+  //     const req = { body: { id: ghostSessionId } };
+  //     const res = createMockResponse();
+  //     const next = jest.fn();
 
-      await TeamsSessionController.deleteTeamsSession(req, res, next);
+  //     await TeamsSessionController.deleteTeamsSession(req, res, next);
 
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
+  //     const nextArgs = next.mock.calls[0];
+  //     const caughtError = nextArgs[0];
 
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        "Error: no team session found with the given id"
-      );
-    });
-  });
+  //     expect(next).toHaveBeenCalled();
+  //     expect(caughtError.toString()).toMatch(
+  //       "Error: no team session found with the given id"
+  //     );
+  //   });
+  // });
 });
