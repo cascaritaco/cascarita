@@ -22,15 +22,7 @@ var setUpForTeamsSession = async function (
   DivisionName,
   TeamName
 ) {
-  const newGroup = {
-    name: groupName,
-    street_address: "address",
-    city: "watsonville",
-    state: "CA",
-    zip_code: "95037",
-    logo_url: "www.google.com",
-  };
-  const group = await TestDataGenerator.createDummyGroup(newGroup);
+  const group = await TestDataGenerator.createDummyGroup(groupName);
   const league = await TestDataGenerator.createLeague(LeagueName, group.id);
   const sampleSeason = await TestDataGenerator.createSeason(
     league.id,
@@ -40,6 +32,12 @@ var setUpForTeamsSession = async function (
     group.id,
     DivisionName
   );
+
+  console.log("Group: ", group);
+  console.log("league: ", league);
+  console.log("sampleSeason: ", sampleSeason);
+  console.log("sampleDivision: ", sampleDivision);
+
   const sampleSession = await TestDb.Session.create({
     division_id: sampleDivision.id,
     season_id: sampleSeason.id,
@@ -51,13 +49,18 @@ var setUpForTeamsSession = async function (
     team_logo: "www.google.com",
   });
 
-  return {
+  console.log("sampleSession: ", sampleSession);
+  console.log("sampleTeam: ", sampleTeam);
+  const response = {
     teamId: sampleTeam.id,
     sessionId: sampleSession.id,
     divisionId: sampleDivision.id,
     seasonId: sampleSeason.id,
     groupId: group.id,
   };
+  console.log(response);
+
+  return response;
 };
 
 var createSampleTeamsSession = async function () {
