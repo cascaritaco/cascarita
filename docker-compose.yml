@@ -12,11 +12,6 @@ services:
       - "3306:3306"
     env_file:
       - .env
-    volumes:
-      - .:/app
-      - /app/node_modules
-    working_dir: /app
-    command: npm run server
 
   client:
     build:
@@ -28,7 +23,3 @@ services:
     # Please update in the corresponding Dockerfile as well
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: npm run client

@@ -23,3 +23,5 @@ server/config/config.json
 
 # Jest
 coverage
+# Sentry Config File
+.env.sentry-build-plugin
