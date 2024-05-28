@@ -22,7 +22,15 @@ var setUpForTeamsSession = async function (
   DivisionName,
   TeamName
 ) {
-  const group = await TestDataGenerator.createDummyGroup(groupName);
+  const newGroup = {
+    name: groupName,
+    street_address: "address",
+    city: "watsonville",
+    state: "CA",
+    zip_code: "95037",
+    logo_url: "www.google.com",
+  };
+  const group = await TestDataGenerator.createDummyGroup(newGroup);
   const league = await TestDataGenerator.createLeague(LeagueName, group.id);
   const sampleSeason = await TestDataGenerator.createSeason(
     league.id,
