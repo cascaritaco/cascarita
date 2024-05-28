@@ -50,8 +50,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
     <Draggable
       position={dragPosition}
       onStop={handleDragStop}
-      onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}
-    >
+      onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
       <button className={`${styles.buttonContainer} ${additionalClass}`}>
         {IconComponent && <IconComponent />}
         {label}

@@ -1,5 +1,13 @@
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Poppins" !important;
+}
+
 .formElementsContainer {
-  width: 185px;
+  font-family: "DM Sans";
+  width: 195px;
   height: 100%;
   display: block;
   padding-left: 12px;
@@ -17,35 +25,40 @@
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 800;
-}
-
-.subtitle {
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 46px;
+  color: #1e1e1e;
   padding-bottom: 10px;
 }
 
+.subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  padding-bottom: 10px;
+  line-height: 25px;
+}
+
 .smallText {
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 25px;
 }
 
 .formTitleContainer {
-  border-radius: 15px;
-  border: 3px solid #c8cbd0;
+  border-radius: 10px;
+  border: 1px solid #aaaaaa;
   padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 20px;
   display: grid;
   margin-bottom: 8px;
+  margin-right: 15px;
 }
 
 .formCanvasContainer {
   overflow: scroll;
-  margin-right: 8px;
-  margin-left: 8px;
+  margin-left: 15px;
   width: 100%;
 }
 
@@ -57,4 +70,8 @@
 .formDescription {
   font-size: 15px;
   font-weight: 400;
+}
+
+.canvasStyles {
+  margin-right: 15px;
 }

@@ -9,7 +9,7 @@ import { Survey } from "../../components/DNDCanvas/types";
 
 const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
-  const [description, setDescription] = useState("Description");
+  const [description, setDescription] = useState("");
   const [title, setTitle] = useState("Form Title");
   const [surveyLink, setSurveyLink] = useState(null);
 
@@ -100,22 +100,24 @@ const NewForm = () => {
                 placeholder="Form Title"
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
-              ></input>
+              />
               <hr />
               <input
                 className={styles.formDescription}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Description"
                 value={description}
-              ></input>
+              />
               <hr />
             </div>
             <p className={styles.smallText}>Drag and Drop Area</p>
-            <DNDCanvas
-              items={droppedItems}
-              handleDelete={handleDelete}
-              saveSurvey={saveSurvey}
-            />
+            <div className={styles.canvasStyles}>
+              <DNDCanvas
+                items={droppedItems}
+                handleDelete={handleDelete}
+                saveSurvey={saveSurvey}
+              />
+            </div>
           </div>
         </div>
       </div>

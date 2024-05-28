@@ -125,8 +125,7 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
                   padding: "16px",
                   background: "#eee",
                   minHeight: "400px",
-                }}
-              >
+                }}>
                 {fields.map((field: Field, index: number) => {
                   const Component = componentMap[field.type];
                   if (!Component) return null;
