@@ -5,11 +5,12 @@ import { Button } from "@radix-ui/themes";
 const NavItem: React.FC<NavButtonProps> = ({
   icon,
   label,
+  labelType,
   selected,
   onItemClick,
 }) => {
   const handleClick = () => {
-    onItemClick(label);
+    onItemClick(labelType);
   };
 
   return (

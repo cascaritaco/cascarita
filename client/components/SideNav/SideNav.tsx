@@ -15,9 +15,30 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
   const { t } = useTranslation("SideNav");
 
-  const handleItemClick = (label: string) => {
-    setSelectedItem(label);
-    navigate(`/${label.toLowerCase()}`);
+  const handleItemClick = (labelType: string) => {
+    let route: string;
+
+    switch (labelType) {
+      case "item1":
+        route = "home";
+        break;
+      case "item2":
+        route = "users";
+        break;
+      case "item3":
+        route = "schedule";
+        break;
+      case "item4":
+        route = "forms";
+        break;
+      case "item5":
+        route = "settings";
+        break;
+      default:
+        route = "/";
+    }
+    setSelectedItem(route);
+    navigate(`/${route}`);
   };
 
   return (
@@ -26,31 +47,36 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
         <NavItem
           icon={<RiHomeLine />}
           label={t("item1")}
-          selected={selectedItem === "Home"}
+          labelType="item1"
+          selected={selectedItem === "home"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<FiUser />}
           label={t("item2")}
-          selected={selectedItem === "Users"}
+          labelType="item2"
+          selected={selectedItem === "users"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<MdOutlineCalendarToday />}
           label={t("item3")}
-          selected={selectedItem === "Schedule"}
+          labelType="item3"
+          selected={selectedItem === "schedule"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<HiOutlinePencilAlt />}
           label={t("item4")}
-          selected={selectedItem === "Forms"}
+          labelType="item4"
+          selected={selectedItem === "forms"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<IoSettingsOutline />}
           label={t("item5")}
-          selected={selectedItem === "Settings"}
+          labelType="item5"
+          selected={selectedItem === "settings"}
           onItemClick={handleItemClick}
         />
       </ul>
