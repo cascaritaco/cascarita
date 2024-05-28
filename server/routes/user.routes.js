@@ -8,9 +8,9 @@ const passport = require("passport");
 router.get("/loginReactPageHere", (req, res) => {
   res.json({ message: "Invalid email or password, try again" });
 });
-
+router.get("/:id", UserController.getUserByUserId);
+router.post("/:id/languages", UserController.updateUser);
 router.post("/register", UserController.registerUser);
-
 router.post(
   "/login",
   passport.authenticate("local", {
