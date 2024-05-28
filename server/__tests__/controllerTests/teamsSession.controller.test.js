@@ -92,14 +92,16 @@ describe("Session Controller", () => {
     await TestDb.Group.destroy({ where: {} });
   });
 
-  describe("setup", async () => {
-    const sampleData = await setUpForTeamsSession(
-      "Dummy Group",
-      "Best League",
-      "Winter 23",
-      "U-18",
-      "Sussy Sauls"
-    );
+  describe("setup", () => {
+    it("should do setup", async () => {
+      const sampleData = await setUpForTeamsSession(
+        "Dummy Group",
+        "Best League",
+        "Winter 23",
+        "U-18",
+        "Sussy Sauls"
+      );
+    });
   });
 
   // describe("createTeamsSession", () => {
