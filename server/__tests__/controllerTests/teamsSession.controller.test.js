@@ -15,12 +15,11 @@ var createMockResponse = function () {
   };
 };
 
-var setUpForTeamsSession = async function (
+var setUpForSession = async function (
   groupName,
   LeagueName,
   SeasonName,
-  DivisionName,
-  TeamName
+  DivisionName
 ) {
   const group = await TestDataGenerator.createDummyGroup(groupName);
   const league = await TestDataGenerator.createLeague(LeagueName, group.id);
@@ -33,50 +32,21 @@ var setUpForTeamsSession = async function (
     DivisionName
   );
 
-  console.log("Group: ", group);
-  console.log("league: ", league);
-  console.log("sampleSeason: ", sampleSeason);
-  console.log("sampleDivision: ", sampleDivision);
-
-  // const sampleSession = await TestDb.Session.create({
-  //   division_id: sampleDivision.id,
-  //   season_id: sampleSeason.id,
-  // });
-
-  // const sampleTeam = await TestDb.Team.create({
-  //   group_id: group.id,
-  //   name: TeamName,
-  //   team_logo: "www.google.com",
-  // });
-
-  // console.log("sampleSession: ", sampleSession);
-  // console.log("sampleTeam: ", sampleTeam);
-  const response = {
-    // teamId: sampleTeam.id,
-    // sessionId: sampleSession.id,
+  return {
     divisionId: sampleDivision.id,
     seasonId: sampleSeason.id,
     groupId: group.id,
   };
-  console.log(response);
-
-  return response;
 };
 
-// var createSampleTeamsSession = async function () {
-//   const data = await setUpForTeamsSession(
-//     "group",
-//     "league",
-//     "season",
-//     "division",
-//     "team"
-//   );
-//   const sampleTeamsSession = await TestDb.TeamsSession.create({
-//     team_id: data.teamId,
-//     session_id: data.sessionId,
-//   });
-//   return { teamsSessionData: sampleTeamsSession, groupId: data.groupId };
-// };
+var createSampleSession = async function () {
+  const data = await setUpForSession("group", "league", "season", "division");
+  const sampleSession = await TestDb.Session.create({
+    division_id: data.divisionId,
+    season_id: data.seasonId,
+  });
+  return { sessionData: sampleSession, groupId: data.groupId };
+};
 
 afterAll(async function () {
   await TestDb.sequelize.close();
@@ -89,13 +59,9 @@ describe("Session Controller", () => {
     await TestDb.Season.sync();
     await TestDb.Division.sync();
     await TestDb.Session.sync();
-    await TestDb.TeamsSession.sync();
-    await TestDb.Team.sync();
   });
 
   afterEach(async function () {
-    await TestDb.Team.destroy({ where: {} });
-    await TestDb.TeamsSession.destroy({ where: {} });
     await TestDb.Session.destroy({ where: {} });
     await TestDb.Division.destroy({ where: {} });
     await TestDb.Season.destroy({ where: {} });
@@ -105,12 +71,11 @@ describe("Session Controller", () => {
 
   describe("setup", () => {
     it("should do setup", async () => {
-      const sampleData = await setUpForTeamsSession(
+      const sampleData = await setUpForSession(
         "Dummy Group",
         "Best League",
         "Winter 23",
-        "U-18",
-        "Sussy Sauls"
+        "U-18"
       );
     });
   });
