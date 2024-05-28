@@ -33,11 +33,6 @@ var setUpForTeamsSession = async function (
     DivisionName
   );
 
-  console.log("Group: ", group);
-  console.log("league: ", league);
-  console.log("sampleSeason: ", sampleSeason);
-  console.log("sampleDivision: ", sampleDivision);
-
   const sampleSession = await TestDb.Session.create({
     division_id: sampleDivision.id,
     season_id: sampleSeason.id,
@@ -49,8 +44,6 @@ var setUpForTeamsSession = async function (
     team_logo: "www.google.com",
   });
 
-  console.log("sampleSession: ", sampleSession);
-  console.log("sampleTeam: ", sampleTeam);
   const response = {
     teamId: sampleTeam.id,
     sessionId: sampleSession.id,
@@ -58,7 +51,6 @@ var setUpForTeamsSession = async function (
     seasonId: sampleSeason.id,
     groupId: group.id,
   };
-  console.log(response);
 
   return response;
 };
@@ -337,9 +329,6 @@ describe("Session Controller", () => {
       const next = jest.fn();
 
       await TeamsSessionController.getTeamSessionBySessionId(req, res, next);
-
-      console.log("por que");
-      console.log(next.mock);
 
       const nextArgs = next.mock.calls[0];
       const caughtError = nextArgs[0];
