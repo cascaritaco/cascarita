@@ -83,15 +83,15 @@ afterAll(async function () {
 });
 
 describe("Session Controller", () => {
-  beforeEach(async function () {
-    await TestDb.Group.sync();
-    await TestDb.League.sync();
-    await TestDb.Season.sync();
-    await TestDb.Division.sync();
-    await TestDb.Session.sync();
-    await TestDb.TeamsSession.sync();
-    await TestDb.Team.sync();
-  });
+  // beforeEach(async function () {
+  //   await TestDb.Group.sync();
+  //   await TestDb.League.sync();
+  //   await TestDb.Season.sync();
+  //   await TestDb.Division.sync();
+  //   await TestDb.Session.sync();
+  //   await TestDb.TeamsSession.sync();
+  //   await TestDb.Team.sync();
+  // });
 
   afterEach(async function () {
     await TestDb.Team.destroy({ where: {} });
