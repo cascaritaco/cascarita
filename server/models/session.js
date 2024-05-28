@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "division_id",
         targetKey: "id",
       });
+
+      Session.hasMany(models.TeamsSession, {
+        foreignKey: "session_id",
+        sourceKey: "id",
+      });
     }
   }
   Session.init(

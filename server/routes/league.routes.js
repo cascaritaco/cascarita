@@ -6,7 +6,8 @@ const LeagueController = require("../controllers/league.controller");
 const SeasonController = require("../controllers/season.controller");
 
 router.post("/", LeagueController.createLeague);
-router.get("/:id/seasons", SeasonController.getSeasonByLeagueId);
+router.get("/:id", LeagueController.getLeagueByGroupId);
+router.get("/:id/seasons", SeasonController.getTeamsByLeagueId);
 router.patch("/:id", LeagueController.updateLeague);
 router.delete("/:id", LeagueController.deleteLeague);
 
