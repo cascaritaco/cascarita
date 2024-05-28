@@ -23,3 +23,6 @@ server/config/config.json
 
 # Jest
 coverage
+
+# Build binaries not needed
+dist/*
