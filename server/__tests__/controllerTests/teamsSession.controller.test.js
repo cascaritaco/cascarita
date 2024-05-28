@@ -38,22 +38,22 @@ var setUpForTeamsSession = async function (
   console.log("sampleSeason: ", sampleSeason);
   console.log("sampleDivision: ", sampleDivision);
 
-  const sampleSession = await TestDb.Session.create({
-    division_id: sampleDivision.id,
-    season_id: sampleSeason.id,
-  });
+  // const sampleSession = await TestDb.Session.create({
+  //   division_id: sampleDivision.id,
+  //   season_id: sampleSeason.id,
+  // });
 
-  const sampleTeam = await TestDb.Team.create({
-    group_id: group.id,
-    name: TeamName,
-    team_logo: "www.google.com",
-  });
+  // const sampleTeam = await TestDb.Team.create({
+  //   group_id: group.id,
+  //   name: TeamName,
+  //   team_logo: "www.google.com",
+  // });
 
-  console.log("sampleSession: ", sampleSession);
-  console.log("sampleTeam: ", sampleTeam);
+  // console.log("sampleSession: ", sampleSession);
+  // console.log("sampleTeam: ", sampleTeam);
   const response = {
-    teamId: sampleTeam.id,
-    sessionId: sampleSession.id,
+    // teamId: sampleTeam.id,
+    // sessionId: sampleSession.id,
     divisionId: sampleDivision.id,
     seasonId: sampleSeason.id,
     groupId: group.id,
@@ -63,35 +63,35 @@ var setUpForTeamsSession = async function (
   return response;
 };
 
-var createSampleTeamsSession = async function () {
-  const data = await setUpForTeamsSession(
-    "group",
-    "league",
-    "season",
-    "division",
-    "team"
-  );
-  const sampleTeamsSession = await TestDb.TeamsSession.create({
-    team_id: data.teamId,
-    session_id: data.sessionId,
-  });
-  return { teamsSessionData: sampleTeamsSession, groupId: data.groupId };
-};
+// var createSampleTeamsSession = async function () {
+//   const data = await setUpForTeamsSession(
+//     "group",
+//     "league",
+//     "season",
+//     "division",
+//     "team"
+//   );
+//   const sampleTeamsSession = await TestDb.TeamsSession.create({
+//     team_id: data.teamId,
+//     session_id: data.sessionId,
+//   });
+//   return { teamsSessionData: sampleTeamsSession, groupId: data.groupId };
+// };
 
 afterAll(async function () {
   await TestDb.sequelize.close();
 });
 
 describe("Session Controller", () => {
-  // beforeEach(async function () {
-  //   await TestDb.Group.sync();
-  //   await TestDb.League.sync();
-  //   await TestDb.Season.sync();
-  //   await TestDb.Division.sync();
-  //   await TestDb.Session.sync();
-  //   await TestDb.TeamsSession.sync();
-  //   await TestDb.Team.sync();
-  // });
+  beforeEach(async function () {
+    await TestDb.Group.sync();
+    await TestDb.League.sync();
+    await TestDb.Season.sync();
+    await TestDb.Division.sync();
+    await TestDb.Session.sync();
+    await TestDb.TeamsSession.sync();
+    await TestDb.Team.sync();
+  });
 
   afterEach(async function () {
     await TestDb.Team.destroy({ where: {} });
