@@ -48,10 +48,10 @@ h4 {
 .formTitleContainer {
   border-radius: 10px;
   border: 1px solid #aaaaaa;
-  padding-top: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
+  padding-top: 13px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 23px;
   display: grid;
   margin-bottom: 8px;
   margin-right: 15px;
@@ -71,6 +71,16 @@ h4 {
 .formDescription {
   font-size: 15px;
   font-weight: 400;
+}
+
+.formTitle,
+.formDescription {
+  z-index: 1;
+  margin-left: -5px;
+  margin-right: -5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  width: 100%;
 }
 
 .canvasStyles {

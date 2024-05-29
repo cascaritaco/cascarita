@@ -80,11 +80,21 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                   name={`fields.${index}.properties.choices.${idx}.label`}
                   control={control}
                   render={({ field }) => (
-                    <input {...field} placeholder={`Option ${idx + 1}`} />
+                    <input
+                      {...field}
+                      placeholder={`Option ${idx + 1}`}
+                      style={{
+                        flexGrow: 1,
+                        marginLeft: -5,
+                        marginRight: -5,
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    />
                   )}
                 />
                 <button type="button" onClick={() => removeOption(idx)}>
-                  <MinusCircleIcon width={25} height={25} color={"#FF0000"} />
+                  <MinusCircleIcon width={20} height={20} color={"#FF0000"} />
                 </button>
               </div>
             ))}
@@ -95,7 +105,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                 display: "flex",
                 marginTop: 10,
               }}>
-              <PlusCircleIcon width={25} height={25} color={"#4171ED"} />
+              <PlusCircleIcon width={20} height={20} color={"#4171ED"} />
             </button>
             <button type="button" onClick={onDelete}>
               Delete

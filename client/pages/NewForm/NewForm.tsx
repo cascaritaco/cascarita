@@ -95,13 +95,15 @@ const NewForm = () => {
           </div>
           <div className={styles.formCanvasContainer}>
             <div className={styles.formTitleContainer}>
-              <input
-                className={styles.formTitle}
-                placeholder="Form Title"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-              />
-              <hr />
+              <div style={{ paddingBottom: 8 }}>
+                <input
+                  className={styles.formTitle}
+                  placeholder="Form Title"
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
+                />
+                <hr />
+              </div>
               <input
                 className={styles.formDescription}
                 onChange={(e) => setDescription(e.target.value)}
