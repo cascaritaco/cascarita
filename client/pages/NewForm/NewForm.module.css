@@ -58,7 +58,8 @@ h4 {
 }
 
 .formCanvasContainer {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: "hidden";
   margin-left: 15px;
   width: 100%;
 }
