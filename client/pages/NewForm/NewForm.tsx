@@ -105,7 +105,9 @@ const NewForm = () => {
           <div className={styles.formElementsContainer}>
             <h2 className={styles.subtitle}>Form Elements</h2>
             <hr />
-            <p className={styles.smallText}>Text Elements</p>
+            <p className={styles.smallText} style={{ paddingTop: 8 }}>
+              Text Elements
+            </p>
             {draggableButtons.map((label, index) => (
               <DraggableButton
                 key={index}

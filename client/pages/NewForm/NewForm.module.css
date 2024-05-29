@@ -65,8 +65,9 @@ h4 {
 }
 
 .formTitle {
-  font-size: 25px;
-  font-weight: 800;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 46px;
 }
 
 .formDescription {
