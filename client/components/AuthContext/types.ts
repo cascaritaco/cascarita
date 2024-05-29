@@ -1,7 +1,11 @@
 export interface User {
-  id: string;
+  id: number;
   email: string;
-  // Add more user properties as needed
+  first_name: string;
+  last_name: string;
+  group_id: number;
+  role_id: number;
+  language_id: number;
 }
 
 export interface AuthContextType {

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./LanguageDropdown.module.css";
 import { changeLanguage } from "../../i18n/config";
 import { LanguageDropdownProps } from "./types";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../AuthContext/AuthContext";
 
 interface LanguageOption {
   value: string;
@@ -17,15 +18,24 @@ const languages: LanguageOption[] = [
 const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   handleSelect,
 }) => {
+  const { currentUser } = useAuth();
   const { t } = useTranslation("LanguageDropdown");
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+
+  useEffect(() => {
+    const currLanguage = localStorage.getItem("defaultLanguage");
+    if (currLanguage) {
+      setSelectedLanguage(currLanguage);
+    }
+  }, []);
 
   const handleLanguageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    await changeLanguage(event.target.value);
-    await setSelectedLanguage(event.target.value);
-    //TODO make the call to the backend to change the selectedLanguage
+    if (currentUser) {
+      await setSelectedLanguage(event.target.value);
+      await changeLanguage(currentUser.id, event.target.value);
+    }
     handleSelect();
   };
 

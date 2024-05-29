@@ -10,10 +10,11 @@ import SearchEn from "./en/components/Search.json";
 import SearchEsp from "./esp/components/Search.json";
 import LeaguesEn from "./en/pages/Leagues.json";
 import LeaguesEsp from "./esp/pages/Leagues.json";
+import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
   debug: true,
-  fallbackLng: "en",
+  fallbackLng: localStorage.getItem("defaultLanguage") as string,
   interpolation: {
     escapeValue: false,
   },
@@ -42,7 +43,9 @@ i18next.use(initReactI18next).init({
   ],
 });
 
-export const changeLanguage = (lng: string) => {
+export const changeLanguage = async (user_id: number, lng: string) => {
+  await updateUsersLanguages(user_id, lng);
+  localStorage.setItem("defaultLanguage", lng);
   i18next.changeLanguage(lng);
 };
 
