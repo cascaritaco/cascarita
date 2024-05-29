@@ -8,3 +8,7 @@ export interface DroppedItem {
   id: string;
   type: DroppedItemType;
 }
+
+export interface DNDCanvasRef {
+  submitForm: () => void;
+}

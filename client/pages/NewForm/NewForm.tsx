@@ -1,9 +1,9 @@
 import DraggableButton from "../../components/DraggableButton/DraggableButton";
 import Page from "../../components/Page/Page";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
-import { DroppedItem, DroppedItemType } from "./types";
+import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { Survey } from "../../components/DNDCanvas/types";
 
@@ -12,6 +12,7 @@ const NewForm = () => {
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("Form Title");
   const [surveyLink, setSurveyLink] = useState(null);
+  const canvasRef = useRef<DNDCanvasRef>(null);
 
   const draggableButtons = [
     "Short Text",
@@ -35,6 +36,12 @@ const NewForm = () => {
 
   const handleDelete = (name: string) => {
     setDroppedItems(droppedItems.filter((item) => item.id !== name));
+  };
+
+  const handleSubmit = () => {
+    if (canvasRef.current) {
+      canvasRef.current.submitForm();
+    }
   };
 
   const saveSurvey = async (data: Survey) => {
@@ -74,12 +81,26 @@ const NewForm = () => {
   return (
     <Page>
       <div>
-        <h1 className={styles.title}>New Form</h1>
-        {surveyLink && (
-          <a href={surveyLink} target="_blank" rel="noopener noreferrer">
-            <button>Preview Survey</button>
-          </a>
-        )}
+        <div
+          className={styles.newFormHeader}
+          style={{
+            borderBottom: "1px solid #DFE5EE",
+            marginBottom: 15,
+            marginRight: 33,
+          }}>
+          <h1 className={styles.title}>New Form</h1>
+          {surveyLink && (
+            <a href={surveyLink} target="_blank" rel="noopener noreferrer">
+              <button>Preview Survey</button>
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className={styles.submitButtom}>
+            Submit
+          </button>
+        </div>
         <div className={styles.newFormContainer}>
           <div className={styles.formElementsContainer}>
             <h2 className={styles.subtitle}>Form Elements</h2>
@@ -118,6 +139,7 @@ const NewForm = () => {
 
             <div className={styles.canvasStyles}>
               <DNDCanvas
+                ref={canvasRef}
                 items={droppedItems}
                 handleDelete={handleDelete}
                 saveSurvey={saveSurvey}
