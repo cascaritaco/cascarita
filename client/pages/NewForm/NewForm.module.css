@@ -96,16 +96,32 @@ h4 {
   display: flex;
   justify-content: space-between;
   padding-bottom: 10px;
-  padding-right: 30px;
 }
 
-.submitButtom {
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.submitButtom,
+.cancelButton {
   font-family: "DM Sans";
   width: 117px;
   height: 43px;
   font-size: 16px;
   line-height: 21px;
+}
+
+.submitButtom {
   color: #ffffff;
   background: #170cb4;
+  border-radius: 21.5px;
+}
+
+.cancelButton {
+  color: #170cb4;
+  background: #ffffff;
+  border: 1px solid #170cb4;
   border-radius: 21.5px;
 }

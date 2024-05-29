@@ -6,6 +6,7 @@ import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { Survey } from "../../components/DNDCanvas/types";
+import { useNavigate } from "react-router-dom";
 
 const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
@@ -13,6 +14,7 @@ const NewForm = () => {
   const [title, setTitle] = useState("Form Title");
   const [surveyLink, setSurveyLink] = useState(null);
   const canvasRef = useRef<DNDCanvasRef>(null);
+  const navigate = useNavigate();
 
   const draggableButtons = [
     "Short Text",
@@ -32,6 +34,10 @@ const NewForm = () => {
       type: toSnakeCase(label) as DroppedItemType,
     };
     setDroppedItems([...droppedItems, newItem]);
+  };
+
+  const handleCancel = () => {
+    navigate(-1);
   };
 
   const handleDelete = (name: string) => {
@@ -89,17 +95,25 @@ const NewForm = () => {
             marginRight: 33,
           }}>
           <h1 className={styles.title}>New Form</h1>
-          {surveyLink && (
-            <a href={surveyLink} target="_blank" rel="noopener noreferrer">
-              <button>Preview Survey</button>
-            </a>
-          )}
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className={styles.submitButtom}>
-            Submit
-          </button>
+          <div className={styles.buttonGroup}>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className={styles.cancelButton}>
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className={styles.submitButtom}>
+              Submit
+            </button>
+            {surveyLink && (
+              <a href={surveyLink} target="_blank" rel="noopener noreferrer">
+                <button>Preview Survey</button>
+              </a>
+            )}
+          </div>
         </div>
         <div className={styles.newFormContainer}>
           <div className={styles.formElementsContainer}>
