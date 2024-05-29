@@ -9,6 +9,7 @@ import { AuthProvider } from "./components/AuthContext/AuthContext";
 import Layout from "./components/Layout/Layout";
 import { I18nextProvider } from "react-i18next";
 import i18next from "./i18n/config";
+import NewForm from "./pages/NewForm/NewForm";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/users" element={<Users />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/forms" element={<Forms />} />
+            <Route path="/forms/check" element={<NewForm />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/login" element={<Login />} />
           </Routes>

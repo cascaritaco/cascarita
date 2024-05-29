@@ -35,7 +35,7 @@ app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
     credentials: true,
-  }),
+  })
 );
 app.use(Middlewares.errorHandler);
 
@@ -50,6 +50,7 @@ const LeagueRoutes = require("./routes/league.routes");
 const FieldRoutes = require("./routes/field.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const DivisionController = require("./routes/division.routes");
+const SurveyController = require("./routes/survey.routes");
 
 app.use("/api/groups", GroupRoutes);
 app.use("/api/roles", RoleRoutes);
@@ -61,6 +62,7 @@ app.use("/api/seasons", SeasonRoutes);
 app.use("/api/divisions", DivisionController);
 app.use("/api/teams", TeamRoutes);
 app.use("/api/auth", AuthRoutes);
+app.use("/api", SurveyController);
 
 function init() {
   app.get("*", function (req, res) {

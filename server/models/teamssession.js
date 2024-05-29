@@ -8,7 +8,25 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      TeamsSession.hasMany(models.Team, { foreignKey: "team_id" });
+      TeamsSession.belongsTo(models.Session, {
+        foreignKey: "session_id",
+        targetKey: "id",
+      });
+
+      TeamsSession.belongsTo(models.Team, {
+        foreignKey: "team_id",
+        targetKey: "id",
+      });
+
+      TeamsSession.hasMany(models.PlayersTeams, {
+        foreignKey: "team_session_id",
+        sourceKey: "id",
+      });
+
+      TeamsSession.hasMany(models.TeamsPerformances, {
+        foreignKey: "team_session_id",
+        sourceKey: "id",
+      });
     }
   }
   TeamsSession.init(

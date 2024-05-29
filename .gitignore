@@ -18,8 +18,8 @@ node_modules
 # Environment variables
 .env
 
-# config.json file
-server/config/config.json
-
 # Jest
 coverage
+
+# Build binaries not needed
+dist/*

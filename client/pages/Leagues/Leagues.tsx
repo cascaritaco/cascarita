@@ -71,7 +71,7 @@ const Leagues = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label={t("button")} />
+        <PrimaryButton label={t("button")} onClick={() => {}} />
       </div>
       <div className={styles.cols}>
         <h3>{t("col1")}</h3>
