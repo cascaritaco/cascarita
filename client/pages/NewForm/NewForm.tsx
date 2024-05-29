@@ -110,7 +110,10 @@ const NewForm = () => {
               />
               <hr />
             </div>
-            <p className={styles.smallText}>Drag and Drop Area</p>
+            <p className={styles.smallText} style={{ color: "#b01254" }}>
+              Section
+            </p>
+
             <div className={styles.canvasStyles}>
               <DNDCanvas
                 items={droppedItems}

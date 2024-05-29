@@ -123,7 +123,7 @@ const DNDCanvas: React.FC<DNDCanvasProps> = ({
                 onDragOver={(e) => e.preventDefault()}
                 style={{
                   padding: "16px",
-                  background: "#eee",
+                  background: "white",
                   minHeight: "400px",
                 }}>
                 {fields.map((field: Field, index: number) => {
