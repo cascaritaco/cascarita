@@ -154,12 +154,14 @@ const NewForm = () => {
             </p>
 
             <div className={styles.canvasStyles}>
-              <DNDCanvas
-                ref={canvasRef}
-                items={droppedItems}
-                handleDelete={handleDelete}
-                saveSurvey={saveSurvey}
-              />
+              <div className={styles.canvasInnerContainer}>
+                <DNDCanvas
+                  ref={canvasRef}
+                  items={droppedItems}
+                  handleDelete={handleDelete}
+                  saveSurvey={saveSurvey}
+                />
+              </div>
             </div>
           </div>
         </div>
