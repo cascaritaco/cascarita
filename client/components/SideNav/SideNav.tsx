@@ -9,13 +9,36 @@ import { TbLogout } from "react-icons/tb";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import NavItem from "../NavItem/NavItem";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation("SideNav");
 
-  const handleItemClick = (label: string) => {
-    setSelectedItem(label);
-    navigate(`/${label.toLowerCase()}`);
+  const handleItemClick = (labelType: string) => {
+    let route: string;
+
+    switch (labelType) {
+      case "item1":
+        route = "home";
+        break;
+      case "item2":
+        route = "users";
+        break;
+      case "item3":
+        route = "schedule";
+        break;
+      case "item4":
+        route = "forms";
+        break;
+      case "item5":
+        route = "settings";
+        break;
+      default:
+        route = "/";
+    }
+    setSelectedItem(route);
+    navigate(`/${route}`);
   };
 
   return (
@@ -23,37 +46,42 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
       <ul>
         <NavItem
           icon={<RiHomeLine />}
-          label="Home"
-          selected={selectedItem === "Home"}
+          label={t("item1")}
+          labelType="item1"
+          selected={selectedItem === "home"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<FiUser />}
-          label="Users"
-          selected={selectedItem === "Users"}
+          label={t("item2")}
+          labelType="item2"
+          selected={selectedItem === "users"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<MdOutlineCalendarToday />}
-          label="Schedule"
-          selected={selectedItem === "Schedule"}
+          label={t("item3")}
+          labelType="item3"
+          selected={selectedItem === "schedule"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<HiOutlinePencilAlt />}
-          label="Forms"
-          selected={selectedItem === "Forms"}
+          label={t("item4")}
+          labelType="item4"
+          selected={selectedItem === "forms"}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<IoSettingsOutline />}
-          label="Settings"
-          selected={selectedItem === "Settings"}
+          label={t("item5")}
+          labelType="item5"
+          selected={selectedItem === "settings"}
           onItemClick={handleItemClick}
         />
       </ul>
       <div>
-        <LogoutButton icon={<TbLogout />} label="Logout" />
+        <LogoutButton icon={<TbLogout />} label={t("item6")} />
       </div>
     </nav>
   );
