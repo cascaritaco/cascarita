@@ -109,24 +109,48 @@ h4 {
   gap: 25px;
 }
 
-.submitButtom,
-.cancelButton {
+.submitButton,
+.cancelButton,
+.previewButton {
   font-family: "DM Sans";
   width: 117px;
   height: 43px;
   font-size: 16px;
   line-height: 21px;
+  border-radius: 21.5px;
 }
 
-.submitButtom {
+.submitButton {
   color: #ffffff;
   background: #170cb4;
-  border-radius: 21.5px;
 }
 
 .cancelButton {
   color: #170cb4;
   background: #ffffff;
   border: 1px solid #170cb4;
-  border-radius: 21.5px;
+}
+
+.previewButton {
+  width: 141px !important;
+  color: #ffffff;
+  background: #4238d5;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+  outline: 1px solid blue;
+  background-color: #2f26b7;
+}
+
+.cancelButton:hover,
+.cancelButton:focus {
+  outline: 1px solid blue;
+  background-color: transparent;
+}
+
+.previewButton:hover,
+.previewButton:focus {
+  outline: 1px solid blue;
+  background-color: #5b53d6;
 }

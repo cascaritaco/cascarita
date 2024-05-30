@@ -105,12 +105,12 @@ const NewForm = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              className={styles.submitButtom}>
+              className={styles.submitButton}>
               Submit
             </button>
             {surveyLink && (
               <a href={surveyLink} target="_blank" rel="noopener noreferrer">
-                <button>Preview Survey</button>
+                <button className={styles.previewButton}>Preview Survey</button>
               </a>
             )}
           </div>
