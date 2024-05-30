@@ -16,7 +16,7 @@ h4 {
   justify-content: left;
   background-color: #f4f7fb;
   border-radius: 10px;
-  z-index: 2;
+  z-index: 3;
 }
 
 .newFormContainer {
@@ -78,7 +78,7 @@ h4 {
 
 .formTitle,
 .formDescription {
-  z-index: 1;
+  z-index: 2;
   margin-left: -5px;
   margin-right: -5px;
   padding-left: 5px;

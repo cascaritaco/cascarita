@@ -12,6 +12,7 @@ import DraggableDropdown from "../DraggableDropdown/DraggableDropdown";
 import DraggableLongText from "../DraggableLongText/DraggableLongText";
 import { DNDCanvasProps, Field, Survey } from "./types";
 import { DroppedItem } from "../../pages/NewForm/types";
+import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 
 const DNDCanvas = forwardRef(
   ({ items, handleDelete, saveSurvey }: DNDCanvasProps, ref) => {
@@ -128,21 +129,25 @@ const DNDCanvas = forwardRef(
                     background: "white",
                     minHeight: "400px",
                   }}>
-                  {fields.map((field: Field, index: number) => {
-                    const Component = componentMap[field.type];
-                    if (!Component) return null;
+                  {items.length === 0 ? (
+                    <EmptyDNDCanvas />
+                  ) : (
+                    fields.map((field: Field, index: number) => {
+                      const Component = componentMap[field.type];
+                      if (!Component) return null;
 
-                    return (
-                      <Component
-                        key={index}
-                        id={index.toString()}
-                        index={index}
-                        title={field.title}
-                        control={control}
-                        onDelete={() => onDelete(index, field.ref)}
-                      />
-                    );
-                  })}
+                      return (
+                        <Component
+                          key={index}
+                          id={index.toString()}
+                          index={index}
+                          title={field.title}
+                          control={control}
+                          onDelete={() => onDelete(index, field.ref)}
+                        />
+                      );
+                    })
+                  )}
                   {provided.placeholder}
                 </div>
               )}
