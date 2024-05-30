@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
-import DropdownMenuButtonEn from "./en/components/dropdownMenuButton.json";
-import DropdownMenuButtonEsp from "./esp/components/dropdownMenuButton.json";
+import DropdownMenuButtonEn from "./en/components/DropdownMenuButton.json";
+import DropdownMenuButtonEsp from "./esp/components/DropdownMenuButton.json";
 import SideNavEn from "./en/components/SideNav.json";
 import SideNavEsp from "./esp/components/SideNav.json";
 import LanguageDropdownEn from "./en/components/LanguageDropdown.json";
