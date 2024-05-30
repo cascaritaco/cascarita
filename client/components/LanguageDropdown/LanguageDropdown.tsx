@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styles from "./LanguageDropdown.module.css";
 import { changeLanguage } from "../../i18n/config";
 import { LanguageDropdownProps } from "./types";
-import { useTranslation } from "react-i18next";
 import { useAuth } from "../AuthContext/AuthContext";
 
 interface LanguageOption {
@@ -11,15 +10,14 @@ interface LanguageOption {
 }
 
 const languages: LanguageOption[] = [
-  { value: "en", label: "option1" },
-  { value: "esp", label: "option2" },
+  { value: "en", label: "English" },
+  { value: "esp", label: "Español" },
 ];
 
 const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   handleSelect,
 }) => {
   const { currentUser } = useAuth();
-  const { t } = useTranslation("LanguageDropdown");
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
 
   useEffect(() => {
@@ -30,7 +28,7 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   }, []);
 
   const handleLanguageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (currentUser) {
       await setSelectedLanguage(event.target.value);
@@ -52,9 +50,7 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
             onChange={handleLanguageChange}
             className={styles.languagesInput}
           />
-          <label htmlFor={language.value}>
-            {t(language.label as "option1" | "option2")}
-          </label>
+          <label htmlFor={language.value}>{language.label}</label>
         </div>
       ))}
     </div>
