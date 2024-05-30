@@ -1,0 +1,13 @@
+{
+  "arrowParens": "always",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "trailingComma": "all",
+  "singleQuote": false,
+  "tabWidth": 2,
+  "semi": true,
+  "importOrder": ["^react(.*)", "@/(.*)", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "plugins": []
+}

@@ -1,8 +1,12 @@
 import React from "react";
 import { Controller, useFieldArray } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableDropdownProps, Option } from "./types";
+import { DraggableDropdownProps } from "./types";
 import { useEffect, useState } from "react";
+import styles from "./DraggableDropdown.module.css";
+import MinusCircleIcon from "../../assets/MinusCircleIcon";
+import PlusCircleIcon from "../../assets/PlusCircleIcon";
+import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 
 const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   id,
@@ -11,6 +15,12 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   control,
   onDelete,
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleClick = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: `fields.${index}.properties.choices`,
@@ -48,74 +58,84 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
           {...provided.dragHandleProps}
           style={{
             ...provided.draggableProps.style,
-            padding: 16,
-            margin: "0 0 8px 0",
-            background: "#f0f0f0",
-            borderRadius: 4,
           }}
-        >
-          <Controller
-            name={`fields.${index}.title`}
-            control={control}
-            defaultValue={title}
-            render={({ field }) => (
-              <input
-                {...field}
-                placeholder="Enter your question here"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-            )}
-          />
-          <select style={{ width: "100%", marginBottom: "8px" }}>
-            {(options as Option[]).map((field, idx) => (
-              <option key={field.ref} value={field.ref}>
-                {field.label || `Option ${idx + 1}`}
-              </option>
-            ))}
-          </select>
-          {fields.map((field, idx) => (
+          onClick={handleClick}>
+          <div style={{ position: "relative" }}>
+            <p className={styles.textElementTypeText}>Dropdown</p>
             <div
-              key={field.id}
-              style={{ display: "flex", alignItems: "center" }}
-            >
+              style={{
+                padding: 16,
+                margin: "0 0 8px 0",
+                background: "#FFFFFF",
+                border: "1px solid #DFE5EE",
+                borderRadius: 10,
+              }}>
               <Controller
-                name={`fields.${index}.properties.choices.${idx}.label`}
+                name={`fields.${index}.title`}
                 control={control}
+                defaultValue={title}
                 render={({ field }) => (
-                  <input
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e); // Ensure the field value is updated in react-hook-form
-                      changeOptionsIndex(e.target.value, idx); // Update the selectOptions state
-                    }}
-                    placeholder={`Option ${idx + 1}`}
-                    style={{ flexGrow: 1 }}
-                  />
+                  <>
+                    <input
+                      {...field}
+                      placeholder="Question"
+                      className={styles.question}
+                    />
+                    <hr />
+                  </>
                 )}
               />
+              {fields.map((field, idx) => (
+                <div
+                  key={field.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    marginTop: 10,
+                  }}>
+                  <Controller
+                    name={`fields.${index}.properties.choices.${idx}.label`}
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e); // Ensure the field value is updated in react-hook-form
+                          changeOptionsIndex(e.target.value, idx); // Update the selectOptions state
+                        }}
+                        placeholder={`Option ${idx + 1}`}
+                        style={{
+                          marginLeft: -5,
+                          marginRight: -5,
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                        }}
+                      />
+                    )}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeOption(idx)}
+                    style={{ marginLeft: "8px" }}>
+                    <MinusCircleIcon width={20} height={20} color={"#FF0000"} />
+                  </button>
+                </div>
+              ))}
               <button
                 type="button"
-                onClick={() => removeOption(idx)}
-                style={{ marginLeft: "8px" }}
-              >
-                Remove Option
+                onClick={addOption}
+                style={{
+                  display: "flex",
+                  marginTop: 10,
+                }}>
+                <PlusCircleIcon width={20} height={20} color={"#4171ED"} />
               </button>
+              {isMenuOpen && (
+                <DraggableSubMenu onDelete={onDelete} onClose={handleClick} />
+              )}
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addOption}
-            style={{ marginTop: "8px" }}
-          >
-            Add Option
-          </button>
-          <button
-            type="button"
-            onClick={onDelete}
-            style={{ marginTop: "8px", marginLeft: "8px" }}
-          >
-            Delete
-          </button>
+          </div>
         </div>
       )}
     </Draggable>

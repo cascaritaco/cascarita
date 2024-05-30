@@ -1,17 +1,20 @@
 import DraggableButton from "../../components/DraggableButton/DraggableButton";
 import Page from "../../components/Page/Page";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
-import { DroppedItem, DroppedItemType } from "./types";
+import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { Survey } from "../../components/DNDCanvas/types";
+import { useNavigate } from "react-router-dom";
 
 const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
-  const [description, setDescription] = useState("Description");
+  const [description, setDescription] = useState("");
   const [title, setTitle] = useState("Form Title");
   const [surveyLink, setSurveyLink] = useState(null);
+  const canvasRef = useRef<DNDCanvasRef>(null);
+  const navigate = useNavigate();
 
   const draggableButtons = [
     "Short Text",
@@ -33,8 +36,18 @@ const NewForm = () => {
     setDroppedItems([...droppedItems, newItem]);
   };
 
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
   const handleDelete = (name: string) => {
     setDroppedItems(droppedItems.filter((item) => item.id !== name));
+  };
+
+  const handleSubmit = () => {
+    if (canvasRef.current) {
+      canvasRef.current.submitForm();
+    }
   };
 
   const saveSurvey = async (data: Survey) => {
@@ -74,17 +87,41 @@ const NewForm = () => {
   return (
     <Page>
       <div>
-        <h1 className={styles.title}>New Form</h1>
-        {surveyLink && (
-          <a href={surveyLink} target="_blank" rel="noopener noreferrer">
-            <button>Preview Survey</button>
-          </a>
-        )}
+        <div
+          className={styles.newFormHeader}
+          style={{
+            borderBottom: "1px solid #DFE5EE",
+            marginBottom: 15,
+            marginRight: 33,
+          }}>
+          <h1 className={styles.title}>New Form</h1>
+          <div className={styles.buttonGroup}>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className={styles.cancelButton}>
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className={styles.submitButton}>
+              Submit
+            </button>
+            {surveyLink && (
+              <a href={surveyLink} target="_blank" rel="noopener noreferrer">
+                <button className={styles.previewButton}>Preview Survey</button>
+              </a>
+            )}
+          </div>
+        </div>
         <div className={styles.newFormContainer}>
           <div className={styles.formElementsContainer}>
             <h2 className={styles.subtitle}>Form Elements</h2>
             <hr />
-            <p className={styles.smallText}>Text Elements</p>
+            <p className={styles.smallText} style={{ paddingTop: 8 }}>
+              Text Elements
+            </p>
             {draggableButtons.map((label, index) => (
               <DraggableButton
                 key={index}
@@ -95,27 +132,37 @@ const NewForm = () => {
           </div>
           <div className={styles.formCanvasContainer}>
             <div className={styles.formTitleContainer}>
-              <input
-                className={styles.formTitle}
-                placeholder="Form Title"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-              ></input>
-              <hr />
+              <div style={{ paddingBottom: 8 }}>
+                <input
+                  className={styles.formTitle}
+                  placeholder="Form Title"
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
+                />
+                <hr />
+              </div>
               <input
                 className={styles.formDescription}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Description"
                 value={description}
-              ></input>
+              />
               <hr />
             </div>
-            <p className={styles.smallText}>Drag and Drop Area</p>
-            <DNDCanvas
-              items={droppedItems}
-              handleDelete={handleDelete}
-              saveSurvey={saveSurvey}
-            />
+            <p className={styles.smallText} style={{ color: "#b01254" }}>
+              Section
+            </p>
+
+            <div className={styles.canvasStyles}>
+              <div className={styles.canvasInnerContainer}>
+                <DNDCanvas
+                  ref={canvasRef}
+                  items={droppedItems}
+                  handleDelete={handleDelete}
+                  saveSurvey={saveSurvey}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
