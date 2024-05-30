@@ -25,11 +25,12 @@ const DraggableSubMenu: React.FC<DraggableSubMenuProps> = ({
     <div
       ref={menuRef}
       style={{
+        display: "flex",
+        flexDirection: "row-reverse",
         position: "absolute",
         top: 0,
-        right: "-150px",
-        width: "140px",
-        padding: "8px",
+        right: -55,
+        padding: 8,
         borderLeft: "1px solid #AAAAAA",
       }}>
       <button type="button" onClick={onDelete}>
