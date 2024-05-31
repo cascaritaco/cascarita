@@ -12,7 +12,7 @@ import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
   debug: true,
-  fallbackLng: localStorage.getItem("defaultLanguage") as string,
+  fallbackLng: (localStorage.getItem("defaultLanguage") as string) || "en",
   interpolation: {
     escapeValue: false,
   },
