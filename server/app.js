@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
 const Middlewares = require("./middlewares");
+const { startMongoConnection } = require("./mongodb")
 
 const app = express();
 
@@ -72,6 +73,8 @@ function init() {
   http.createServer(app).listen(app.get("port"), function () {
     console.log("Express server listening on port " + app.get("port"));
   });
+
+  startMongoConnection().catch(console.dir);
 }
 
 init();
