@@ -7,4 +7,5 @@ export interface DraggableLongTextProps {
   title: string;
   control: Control<{ fields: Field[] }>;
   onDelete: () => void;
+  onCopy: () => void;
 }

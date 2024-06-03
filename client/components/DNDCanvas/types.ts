@@ -22,7 +22,7 @@ export interface Properties {
 
 export interface Field {
   // NOTE: See comment in DNDCanvas.tsx
-  // id: string;
+  id?: string;
   ref: string;
   type: FieldType;
   title: string;
@@ -37,5 +37,6 @@ export interface Survey {
 export interface DNDCanvasProps {
   items: DroppedItem[];
   handleDelete: (name: string) => void;
+  handleCopy: (index: number, copiedItem: DroppedItem) => void;
   saveSurvey: (data: Survey) => void;
 }

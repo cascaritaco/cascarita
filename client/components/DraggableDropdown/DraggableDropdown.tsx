@@ -14,6 +14,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   title,
   control,
   onDelete,
+  onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -56,9 +57,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={{
-            ...provided.draggableProps.style,
-          }}
+          style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>Dropdown</p>
@@ -71,6 +70,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
                 borderRadius: 10,
               }}>
               <Controller
+                key={index}
                 name={`fields.${index}.title`}
                 control={control}
                 defaultValue={title}
@@ -95,6 +95,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
                     marginTop: 10,
                   }}>
                   <Controller
+                    key={index}
                     name={`fields.${index}.properties.choices.${idx}.label`}
                     control={control}
                     render={({ field }) => (
@@ -132,7 +133,11 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
                 <PlusCircleIcon width={20} height={20} color={"#4171ED"} />
               </button>
               {isMenuOpen && (
-                <DraggableSubMenu onDelete={onDelete} onClose={handleClick} />
+                <DraggableSubMenu
+                  onDelete={onDelete}
+                  onCopy={onCopy}
+                  onClose={handleClick}
+                />
               )}
             </div>
           </div>

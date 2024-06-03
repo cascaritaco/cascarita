@@ -44,6 +44,12 @@ const NewForm = () => {
     setDroppedItems(droppedItems.filter((item) => item.id !== name));
   };
 
+  const handleCopy = (index: number, copiedItem: DroppedItem) => {
+    const updatedItems = [...droppedItems];
+    updatedItems.splice(index + 1, 0, copiedItem);
+    setDroppedItems(updatedItems);
+  };
+
   const handleSubmit = () => {
     if (canvasRef.current) {
       canvasRef.current.submitForm();
@@ -159,6 +165,7 @@ const NewForm = () => {
                   ref={canvasRef}
                   items={droppedItems}
                   handleDelete={handleDelete}
+                  handleCopy={handleCopy}
                   saveSurvey={saveSurvey}
                 />
               </div>

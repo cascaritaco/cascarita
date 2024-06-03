@@ -12,4 +12,5 @@ export interface DraggableDropdownProps {
   title: string;
   control: Control<{ fields: Field[] }>; // Type as appropriate
   onDelete: () => void;
+  onCopy: () => void;
 }
