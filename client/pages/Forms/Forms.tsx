@@ -2,24 +2,39 @@ import Page from "../../components/Page/Page";
 import Search from "../../components/Search/Search";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import styles from "./Forms.module.css";
 import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
+import { Form } from "./types";
+import { Field } from "../../components/DNDCanvas/types";
 
 const Forms = () => {
   const [sorts, setSorts] = useState("");
+  const [forms, setForms] = useState<Form[]>([]);
   const navigate = useNavigate();
 
   const sortStatuses = ["Alphabetical", "Date"];
 
-  const forms = ["form1", "form2", "form3"];
-  const editsBy = ["editBy1", "editBy2", "editBy3"];
-  const dates = ["date1", "date2", "date3"];
+  useEffect(() => {
+    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    setForms(Object.values(surveys ?? []));
+  }, []);
 
   const handleNewFormClick = () => {
     navigate("/forms/check");
+  };
+
+  const onDelete = (id: string) => {
+    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    delete surveys[id];
+    localStorage.setItem("surveys", JSON.stringify(surveys));
+    setForms(Object.values(surveys ?? []));
+  };
+
+  const onEdit = (id: string, fields: Field[]) => {
+    navigate("/forms/check", { state: { id, fields } });
   };
 
   return (
@@ -34,8 +49,7 @@ const Forms = () => {
               placeholder="Alphabetical"
               name="sorts"
               value={sorts}
-              onValueChange={(value) => setSorts(value)}
-            >
+              onValueChange={(value) => setSorts(value)}>
               <SelectMenu.Group>
                 {sortStatuses.map((status, idx) => (
                   <SelectMenu.Item key={idx} value={status}>
@@ -59,10 +73,13 @@ const Forms = () => {
         <div>
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
-              <p>{form}</p>
-              <p>{editsBy[index]}</p>
-              <p>{dates[index]}</p>
-              <DropdownMenuButton />
+              <p>form{index}</p>
+              <p>editsBy{index}</p>
+              <p>dates{index}</p>
+              <DropdownMenuButton
+                onDelete={() => onDelete(form.id)}
+                onEdit={() => onEdit(form.id, form.fields)}
+              />
               <ShareButton />
             </div>
           ))}

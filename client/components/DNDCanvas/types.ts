@@ -36,6 +36,7 @@ export interface Survey {
 
 export interface DNDCanvasProps {
   items: DroppedItem[];
+  importedFields?: Field[];
   handleDelete: (name: string) => void;
   handleCopy: (index: number, copiedItem: DroppedItem) => void;
   saveSurvey: (data: Survey) => void;

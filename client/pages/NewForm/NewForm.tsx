@@ -5,16 +5,25 @@ import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
-import { Survey } from "../../components/DNDCanvas/types";
-import { useNavigate } from "react-router-dom";
+import { Field, Survey } from "../../components/DNDCanvas/types";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const NewForm = () => {
-  const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const fields = location.state?.fields as Field[] | undefined;
+  const id = location.state?.id as string | undefined;
+  const defaultItems = fields
+    ? fields.map((field) => ({
+        id: field.ref,
+        type: toSnakeCase(field.type) as DroppedItemType,
+      }))
+    : [];
+  const [droppedItems, setDroppedItems] = useState<DroppedItem[]>(defaultItems);
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("Form Title");
   const [surveyLink, setSurveyLink] = useState(null);
   const canvasRef = useRef<DNDCanvasRef>(null);
-  const navigate = useNavigate();
 
   const draggableButtons = [
     "Short Text",
@@ -70,6 +79,11 @@ const NewForm = () => {
       ...data,
     };
 
+    const existingSurveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    const surveyID = uuidv4();
+    existingSurveys[id ?? surveyID] = { id: id ?? surveyID, ...data };
+    localStorage.setItem("surveys", JSON.stringify(existingSurveys));
+
     try {
       const response = await fetch("/api/survey", {
         method: "POST",
@@ -100,7 +114,9 @@ const NewForm = () => {
             marginBottom: 15,
             marginRight: 33,
           }}>
-          <h1 className={styles.title}>New Form</h1>
+          <h1 className={styles.title}>
+            {fields == null ? "New Form" : "Edit Form"}
+          </h1>
           <div className={styles.buttonGroup}>
             <button
               type="button"
@@ -163,6 +179,7 @@ const NewForm = () => {
               <div className={styles.canvasInnerContainer}>
                 <DNDCanvas
                   ref={canvasRef}
+                  importedFields={fields}
                   items={droppedItems}
                   handleDelete={handleDelete}
                   handleCopy={handleCopy}

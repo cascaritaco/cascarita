@@ -16,8 +16,19 @@ import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 import { v4 as uuidv4 } from "uuid";
 
 const DNDCanvas = forwardRef(
-  ({ items, handleDelete, handleCopy, saveSurvey }: DNDCanvasProps, ref) => {
-    const methods = useForm<{ fields: Field[] }>();
+  (
+    {
+      items,
+      handleDelete,
+      handleCopy,
+      saveSurvey,
+      importedFields,
+    }: DNDCanvasProps,
+    ref,
+  ) => {
+    const methods = useForm<{ fields: Field[] }>({
+      defaultValues: { fields: importedFields ?? [] },
+    });
 
     useImperativeHandle(ref, () => ({
       submitForm: () => {
@@ -33,48 +44,33 @@ const DNDCanvas = forwardRef(
     };
 
     const appendField = (item: DroppedItem) => {
-      switch (item.type) {
-        case "multiple_choice":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            properties: { choices: [] },
-          });
-          break;
-        case "short_text":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            validations: {
-              max_length: 20,
-              required: false,
-            },
-          });
-          break;
-        case "dropdown":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            properties: { choices: [] },
-          });
-          break;
-        case "long_text":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            validations: {
-              max_length: 100,
-              required: false,
-            },
-          });
-          break;
-        default:
-          break;
-      }
+      const fieldTemplate = {
+        multiple_choice: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          properties: { choices: [] },
+        },
+        short_text: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          validations: { max_length: 20, required: false },
+        },
+        dropdown: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          properties: { choices: [] },
+        },
+        long_text: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          validations: { max_length: 100, required: false },
+        },
+      };
+      append(fieldTemplate[item.type]);
     };
 
     const { control, handleSubmit } = methods;
@@ -92,11 +88,7 @@ const DNDCanvas = forwardRef(
           }
         });
       }
-    }, [items]);
-
-    useEffect(() => {
-      console.log(fields);
-    }, [fields]);
+    }, [items, fields]);
 
     const onDragEnd = (result: DropResult) => {
       if (!result.destination) return;
