@@ -26,15 +26,36 @@ const Forms = () => {
     navigate("/forms/check");
   };
 
-  const onDelete = (id: string) => {
-    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    delete surveys[id];
-    localStorage.setItem("surveys", JSON.stringify(surveys));
-    setForms(Object.values(surveys ?? []));
+  const onDelete = async (id: string) => {
+    try {
+      const response = await fetch(`/api/survey/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete form");
+      }
+
+      // Delete the form from local storage
+      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+      delete surveys[id];
+      localStorage.setItem("surveys", JSON.stringify(surveys));
+      setForms(Object.values(surveys ?? []));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const onEdit = (id: string, fields: Field[]) => {
-    navigate("/forms/check", { state: { id, fields } });
+  const onEdit = (
+    id: string,
+    title: string,
+    description: string,
+    link: string,
+    fields: Field[],
+  ) => {
+    navigate("/forms/check", {
+      state: { id, title, description, link, fields },
+    });
   };
 
   return (
@@ -73,14 +94,24 @@ const Forms = () => {
         <div>
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
-              <p>form{index}</p>
-              <p>editsBy{index}</p>
-              <p>dates{index}</p>
+              <p>{form.title}</p>
+              <p>{form.edittedBy}</p>
+              <p>{form.lastUpdated}</p>
               <DropdownMenuButton
                 onDelete={() => onDelete(form.id)}
-                onEdit={() => onEdit(form.id, form.fields)}
+                onEdit={() =>
+                  onEdit(
+                    form.id,
+                    form.title,
+                    form.description,
+                    form.link,
+                    form.fields,
+                  )
+                }
               />
-              <ShareButton />
+              <a href={form.link} target="_blank" rel="noopener noreferrer">
+                <ShareButton />
+              </a>
             </div>
           ))}
         </div>

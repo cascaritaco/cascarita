@@ -7,6 +7,7 @@ import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { Field, Survey } from "../../components/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const NewForm = () => {
   const navigate = useNavigate();
@@ -20,10 +21,13 @@ const NewForm = () => {
       }))
     : [];
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>(defaultItems);
-  const [description, setDescription] = useState("");
-  const [title, setTitle] = useState("Form Title");
-  const [surveyLink, setSurveyLink] = useState(null);
+  const [description, setDescription] = useState(
+    location.state?.description ?? "",
+  );
+  const [title, setTitle] = useState(location.state?.title ?? "Form Title");
+  const [surveyLink, setSurveyLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
+  const { currentUser } = useAuth();
 
   const draggableButtons = [
     "Short Text",
@@ -67,22 +71,17 @@ const NewForm = () => {
 
   const saveSurvey = async (data: Survey) => {
     const surveyData = {
-      title: title,
+      title,
       welcome_screens: [
         {
-          title: title,
+          title,
           properties: {
-            description: description,
+            description,
           },
         },
       ],
       ...data,
     };
-
-    const existingSurveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    const surveyID = uuidv4();
-    existingSurveys[id ?? surveyID] = { id: id ?? surveyID, ...data };
-    localStorage.setItem("surveys", JSON.stringify(existingSurveys));
 
     try {
       const response = await fetch("/api/survey", {
@@ -92,13 +91,27 @@ const NewForm = () => {
         },
         body: JSON.stringify(surveyData),
       });
-
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
 
       const surveyResponseObj = await response.json();
-      setSurveyLink(surveyResponseObj._links.display);
+      const existingSurveys = JSON.parse(
+        localStorage.getItem("surveys") ?? "{}",
+      );
+      const surveyId = surveyResponseObj.id;
+      const link = surveyResponseObj._links.display;
+      setSurveyLink(link);
+      existingSurveys[id ?? surveyId] = {
+        id: id ?? surveyId,
+        edittedBy: currentUser?.first_name ?? "",
+        lastUpdated: new Date().toLocaleString(),
+        title,
+        description,
+        link,
+        ...data,
+      };
+      localStorage.setItem("surveys", JSON.stringify(existingSurveys));
     } catch (err) {
       console.error("Error creating survey:", err);
     }
@@ -115,7 +128,7 @@ const NewForm = () => {
             marginRight: 33,
           }}>
           <h1 className={styles.title}>
-            {fields == null ? "New Form" : "Edit Form"}
+            {id == null ? "New Form" : "Edit Form"}
           </h1>
           <div className={styles.buttonGroup}>
             <button
