@@ -13,7 +13,9 @@ const NewForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const fields = location.state?.fields as Field[] | undefined;
-  const id = location.state?.id as string | undefined;
+  const [formId, setFormId] = useState<string | null>(
+    (location.state?.id as string) ?? null,
+  );
   const defaultItems = fields
     ? fields.map((field) => ({
         id: field.ref,
@@ -69,7 +71,7 @@ const NewForm = () => {
     }
   };
 
-  const saveSurvey = async (data: Survey) => {
+  const onCreate = async (data: Survey) => {
     const surveyData = {
       title,
       welcome_screens: [
@@ -102,8 +104,9 @@ const NewForm = () => {
       const surveyId = surveyResponseObj.id;
       const link = surveyResponseObj._links.display;
       setSurveyLink(link);
-      existingSurveys[id ?? surveyId] = {
-        id: id ?? surveyId,
+      setFormId(surveyId);
+      existingSurveys[formId ?? surveyId] = {
+        id: formId ?? surveyId,
         edittedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
         title,
@@ -114,6 +117,53 @@ const NewForm = () => {
       localStorage.setItem("surveys", JSON.stringify(existingSurveys));
     } catch (err) {
       console.error("Error creating survey:", err);
+    }
+  };
+
+  const onSave = async (data: Survey) => {
+    if (formId == null || formId === undefined) {
+      throw new Error("Form ID is undefined");
+    }
+
+    const surveyData = {
+      title,
+      welcome_screens: [
+        {
+          title,
+          properties: {
+            description,
+          },
+        },
+      ],
+      ...data,
+    };
+
+    try {
+      const response = await fetch(`/api/survey/${formId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update form");
+      }
+
+      // Update the form in local storage
+      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+      surveys[formId] = {
+        ...surveys[formId],
+        edittedBy: currentUser?.first_name ?? "",
+        lastUpdated: new Date().toLocaleString(),
+        title,
+        description,
+        ...data,
+      };
+      localStorage.setItem("surveys", JSON.stringify(surveys));
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -128,7 +178,7 @@ const NewForm = () => {
             marginRight: 33,
           }}>
           <h1 className={styles.title}>
-            {id == null ? "New Form" : "Edit Form"}
+            {formId == null ? "New Form" : "Edit Form"}
           </h1>
           <div className={styles.buttonGroup}>
             <button
@@ -141,7 +191,7 @@ const NewForm = () => {
               type="button"
               onClick={handleSubmit}
               className={styles.submitButton}>
-              Submit
+              {formId == null ? "Create" : "Save"}
             </button>
             {surveyLink && (
               <a href={surveyLink} target="_blank" rel="noopener noreferrer">
@@ -196,7 +246,7 @@ const NewForm = () => {
                   items={droppedItems}
                   handleDelete={handleDelete}
                   handleCopy={handleCopy}
-                  saveSurvey={saveSurvey}
+                  saveSurvey={formId == null ? onCreate : onSave}
                 />
               </div>
             </div>
