@@ -5,16 +5,31 @@ import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
-import { Survey } from "../../components/DNDCanvas/types";
-import { useNavigate } from "react-router-dom";
+import { Field, Survey } from "../../components/DNDCanvas/types";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const NewForm = () => {
-  const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
-  const [description, setDescription] = useState("");
-  const [title, setTitle] = useState("Form Title");
-  const [surveyLink, setSurveyLink] = useState(null);
-  const canvasRef = useRef<DNDCanvasRef>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const fields = location.state?.fields as Field[] | undefined;
+  const [formId, setFormId] = useState<string | null>(
+    (location.state?.id as string) ?? null,
+  );
+  const defaultItems = fields
+    ? fields.map((field) => ({
+        id: field.ref,
+        type: toSnakeCase(field.type) as DroppedItemType,
+      }))
+    : [];
+  const [droppedItems, setDroppedItems] = useState<DroppedItem[]>(defaultItems);
+  const [description, setDescription] = useState(
+    location.state?.description ?? "",
+  );
+  const [title, setTitle] = useState(location.state?.title ?? "Form Title");
+  const [surveyLink, setSurveyLink] = useState(location.state?.link ?? null);
+  const canvasRef = useRef<DNDCanvasRef>(null);
+  const { currentUser } = useAuth();
 
   const draggableButtons = [
     "Short Text",
@@ -44,20 +59,26 @@ const NewForm = () => {
     setDroppedItems(droppedItems.filter((item) => item.id !== name));
   };
 
+  const handleCopy = (index: number, copiedItem: DroppedItem) => {
+    const updatedItems = [...droppedItems];
+    updatedItems.splice(index + 1, 0, copiedItem);
+    setDroppedItems(updatedItems);
+  };
+
   const handleSubmit = () => {
     if (canvasRef.current) {
       canvasRef.current.submitForm();
     }
   };
 
-  const saveSurvey = async (data: Survey) => {
+  const onCreate = async (data: Survey) => {
     const surveyData = {
-      title: title,
+      title,
       welcome_screens: [
         {
-          title: title,
+          title,
           properties: {
-            description: description,
+            description,
           },
         },
       ],
@@ -72,15 +93,77 @@ const NewForm = () => {
         },
         body: JSON.stringify(surveyData),
       });
-
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
 
       const surveyResponseObj = await response.json();
-      setSurveyLink(surveyResponseObj._links.display);
+      const existingSurveys = JSON.parse(
+        localStorage.getItem("surveys") ?? "{}",
+      );
+      const surveyId = surveyResponseObj.id;
+      const link = surveyResponseObj._links.display;
+      setSurveyLink(link);
+      setFormId(surveyId);
+      existingSurveys[formId ?? surveyId] = {
+        id: formId ?? surveyId,
+        edittedBy: currentUser?.first_name ?? "",
+        lastUpdated: new Date().toLocaleString(),
+        title,
+        description,
+        link,
+        ...data,
+      };
+      localStorage.setItem("surveys", JSON.stringify(existingSurveys));
     } catch (err) {
       console.error("Error creating survey:", err);
+    }
+  };
+
+  const onSave = async (data: Survey) => {
+    if (formId == null || formId === undefined) {
+      throw new Error("Form ID is undefined");
+    }
+
+    const surveyData = {
+      title,
+      welcome_screens: [
+        {
+          title,
+          properties: {
+            description,
+          },
+        },
+      ],
+      ...data,
+    };
+
+    try {
+      const response = await fetch(`/api/survey/${formId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update form");
+      }
+
+      // Update the form in local storage
+      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+      surveys[formId] = {
+        ...surveys[formId],
+        edittedBy: currentUser?.first_name ?? "",
+        lastUpdated: new Date().toLocaleString(),
+        title,
+        description,
+        ...data,
+      };
+      localStorage.setItem("surveys", JSON.stringify(surveys));
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -94,7 +177,9 @@ const NewForm = () => {
             marginBottom: 15,
             marginRight: 33,
           }}>
-          <h1 className={styles.title}>New Form</h1>
+          <h1 className={styles.title}>
+            {formId == null ? "New Form" : "Edit Form"}
+          </h1>
           <div className={styles.buttonGroup}>
             <button
               type="button"
@@ -106,7 +191,7 @@ const NewForm = () => {
               type="button"
               onClick={handleSubmit}
               className={styles.submitButton}>
-              Submit
+              {formId == null ? "Create" : "Save"}
             </button>
             {surveyLink && (
               <a href={surveyLink} target="_blank" rel="noopener noreferrer">
@@ -157,9 +242,11 @@ const NewForm = () => {
               <div className={styles.canvasInnerContainer}>
                 <DNDCanvas
                   ref={canvasRef}
+                  importedFields={fields}
                   items={droppedItems}
                   handleDelete={handleDelete}
-                  saveSurvey={saveSurvey}
+                  handleCopy={handleCopy}
+                  saveSurvey={formId == null ? onCreate : onSave}
                 />
               </div>
             </div>

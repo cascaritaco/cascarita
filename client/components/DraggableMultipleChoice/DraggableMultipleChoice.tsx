@@ -14,6 +14,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   title,
   control,
   onDelete,
+  onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -41,9 +42,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={{
-            ...provided.draggableProps.style,
-          }}
+          style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>Multiple Choice</p>
@@ -86,6 +85,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                     fill={"white"}
                   />
                   <Controller
+                    key={index}
                     name={`fields.${index}.properties.choices.${idx}.label`}
                     control={control}
                     render={({ field }) => (
@@ -116,7 +116,11 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                 <PlusCircleIcon width={20} height={20} color={"#4171ED"} />
               </button>
               {isMenuOpen && (
-                <DraggableSubMenu onDelete={onDelete} onClose={handleClick} />
+                <DraggableSubMenu
+                  onDelete={onDelete}
+                  onCopy={onCopy}
+                  onClose={handleClick}
+                />
               )}
             </div>
           </div>

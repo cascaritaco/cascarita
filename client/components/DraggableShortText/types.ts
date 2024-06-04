@@ -7,4 +7,5 @@ export interface DraggableShortTextProps {
   title: string;
   control: Control<{ fields: Field[] }>;
   onDelete: () => void;
+  onCopy: () => void;
 }

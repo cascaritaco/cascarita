@@ -11,9 +11,9 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   title,
   control,
   onDelete,
+  onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const handleClick = () => {
     setIsMenuOpen((prev) => !prev);
   };
@@ -25,9 +25,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={{
-            ...provided.draggableProps.style,
-          }}
+          style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>Short Text</p>
@@ -40,6 +38,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
                 borderRadius: 10,
               }}>
               <Controller
+                key={index}
                 name={`fields.${index}.title`}
                 control={control}
                 defaultValue={title} // Ensure the default value is set
@@ -56,7 +55,11 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
               />
             </div>
             {isMenuOpen && (
-              <DraggableSubMenu onDelete={onDelete} onClose={handleClick} />
+              <DraggableSubMenu
+                onDelete={onDelete}
+                onCopy={onCopy}
+                onClose={handleClick}
+              />
             )}
           </div>
         </div>

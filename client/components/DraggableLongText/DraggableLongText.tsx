@@ -11,6 +11,7 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
   title,
   control,
   onDelete,
+  onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -25,9 +26,7 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={{
-            ...provided.draggableProps.style,
-          }}
+          style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>Long Text</p>
@@ -40,6 +39,7 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
                 borderRadius: 10,
               }}>
               <Controller
+                key={index}
                 name={`fields.${index}.title`}
                 control={control}
                 defaultValue={title} // Ensure the default value is set
@@ -55,7 +55,11 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
                 )}
               />
               {isMenuOpen && (
-                <DraggableSubMenu onDelete={onDelete} onClose={handleClick} />
+                <DraggableSubMenu
+                  onDelete={onDelete}
+                  onCopy={onCopy}
+                  onClose={handleClick}
+                />
               )}
             </div>
           </div>
