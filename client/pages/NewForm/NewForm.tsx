@@ -92,7 +92,7 @@ const NewForm = () => {
     };
 
     try {
-      const response = await fetch("/api/survey", {
+      const response = await fetch("/api/forms/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

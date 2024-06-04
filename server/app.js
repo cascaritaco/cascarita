@@ -57,6 +57,7 @@ const SeasonRoutes = require("./routes/season.routes");
 const SurveyController = require("./routes/survey.routes");
 const TeamRoutes = require("./routes/team.routes");
 const UserRoutes = require("./routes/user.routes");
+const FormRoutes = require("./routes/form.routes");
 
 app.use("/api/auth", AuthRoutes);
 app.use("/api/divisions", DivisionController);
@@ -69,6 +70,7 @@ app.use("/api/seasons", SeasonRoutes);
 app.use("/api", SurveyController);
 app.use("/api/teams", TeamRoutes);
 app.use("/api/users", UserRoutes);
+app.use("/api/forms", FormRoutes);
 
 app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
