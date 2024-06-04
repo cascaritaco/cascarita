@@ -7,9 +7,13 @@ const session = require("express-session");
 const http = require("http");
 const path = require("path");
 
+const Form = require("./mongoModel/forms");
+const Test = require("./mongoModel/test");
+const Mouse = require("./mongoModel/mouse");
+
 const Middlewares = require("./middlewares");
 const passport = require("./passport");
-const { startMongoConnection } = require("./mongodb")
+const { startMongoConnection } = require("./mongodb");
 
 const app = express();
 app.set("port", process.env.SERVER_PORT || 3001);
@@ -26,7 +30,7 @@ const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     sameSite: "strict",
-    maxAge: secondsInAnHour * 1000
+    maxAge: secondsInAnHour * 1000,
   },
 });
 app.use(sessionMiddleware);
@@ -40,7 +44,7 @@ app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
     credentials: true,
-  })
+  }),
 );
 
 // Error handler should be the last middleware used
@@ -69,6 +73,51 @@ app.use("/api/seasons", SeasonRoutes);
 app.use("/api", SurveyController);
 app.use("/api/teams", TeamRoutes);
 app.use("/api/users", UserRoutes);
+
+app.get("/testGet", async (req, res) => {
+  const { id } = req.body;
+
+  let result = Test.findById(id);
+
+  try {
+    console.log("Test saved successfully:", result);
+    res.status(201);
+  } catch (error) {
+    console.error("Error getting test:", error);
+    res.status(500);
+  }
+});
+
+app.get("/mouseGet", async (req, res) => {
+  const { id } = req.body;
+
+  let result = Mouse.findById(id);
+
+  try {
+    console.log("Mouse saved successfully:", result);
+    res.status(201);
+  } catch (error) {
+    console.error("Error getting Mouse:", error);
+    res.status(500);
+  }
+});
+
+app.post("/mango", async (req, res) => {
+  const { group_id, form_data } = req.body;
+
+  const form = new Form({ group_id, form_data });
+
+  console.log("Form to be saved:", form);
+
+  try {
+    const result = await form.save();
+    console.log("Form saved successfully:", result);
+    res.status(201).send(result);
+  } catch (error) {
+    console.error("Error saving form:", error);
+    res.status(500).send(error);
+  }
+});
 
 app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "../dist") });

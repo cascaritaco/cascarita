@@ -69,6 +69,10 @@ npm install
 mongodb+srv://USERNAME:PASSWORD@$URL/?retryWrites=true&w=majority&appName=$APPNAME
 ```
 
+```
+mongodb+srv://<username>:<password>@cluster0.an9zth2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+```
+
 9. Copy `.env.example` into a new file named `.env`. Populate the `MONGO_*` environment variables from `.env` with the data extracted from the connection string.
 
 ```bash
