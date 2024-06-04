@@ -1,6 +1,6 @@
 "use strict";
 
-const { Division, Group } = require("../models");
+const { Division, Group, Sessions, Sequelize } = require("../models");
 const modelByPk = require("./utility");
 
 const isDivisionNameUnique = async (groupId, name) => {
@@ -26,6 +26,28 @@ const DivisionController = {
         },
       });
       res.json(divisions);
+    } catch (error) {
+      next(error);
+    }
+  },
+  getUnassociatedDivisions: async function (req, res, next) {
+    const groupId = req.params.id;
+
+    try {
+      await modelByPk(res, Group, groupId);
+
+      const unassociatedDivisions = await Division.findAll({
+        where: {
+          group_id: groupId,
+          id: {
+            [Sequelize.Op.notIn]: Sequelize.literal(
+              `(SELECT DISTINCT division_id FROM Sessions)`,
+            ),
+          },
+        },
+      });
+
+      res.status(200).json(unassociatedDivisions);
     } catch (error) {
       next(error);
     }
