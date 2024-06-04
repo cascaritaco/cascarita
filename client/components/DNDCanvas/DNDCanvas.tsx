@@ -102,8 +102,8 @@ const DNDCanvas = forwardRef(
 
     const onCopy = (field: Field, index: number) => {
       const newRef = uuidv4();
-      const { id, ...copiedFieldWithoutId } = field; // eslint-disable-line @typescript-eslint/no-unused-vars
-      insert(index + 1, { ...copiedFieldWithoutId, ref: newRef });
+      delete field.id;
+      insert(index + 1, { ...field, ref: newRef });
       handleCopy(index, {
         id: newRef,
         type: field.type,
