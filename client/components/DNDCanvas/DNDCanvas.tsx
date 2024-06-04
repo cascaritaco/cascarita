@@ -88,7 +88,7 @@ const DNDCanvas = forwardRef(
           }
         });
       }
-    }, [items, fields]);
+    }, [items]);
 
     const onDragEnd = (result: DropResult) => {
       if (!result.destination) return;
