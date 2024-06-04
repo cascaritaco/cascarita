@@ -42,8 +42,7 @@ const Leagues = () => {
               placeholder={t("filterOptions.item1")}
               name="filter"
               value={filter}
-              onValueChange={(value) => setFilter(value)}
-            >
+              onValueChange={(value) => setFilter(value)}>
               <SelectMenu.Group>
                 {filterStatuses.map((status, idx) => (
                   <SelectMenu.Item key={idx} value={status}>
@@ -59,8 +58,7 @@ const Leagues = () => {
               placeholder={t("sortOptions.item1")}
               name="sorts"
               value={sorts}
-              onValueChange={(value) => setSorts(value)}
-            >
+              onValueChange={(value) => setSorts(value)}>
               <SelectMenu.Group>
                 {sortStatuses.map((status, idx) => (
                   <SelectMenu.Item key={idx} value={status}>
@@ -82,7 +80,7 @@ const Leagues = () => {
           {leagues.map((league, index) => (
             <div className={styles.cols} key={index}>
               <p>{league}</p>
-              <DropdownMenuButton />
+              <DropdownMenuButton onDelete={() => {}} onEdit={() => {}} />
             </div>
           ))}
         </div>

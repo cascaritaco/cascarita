@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { DraggableSubMenuProps } from "./types";
 import TrashBinIcon from "../../assets/TrashBinIcon";
+import { CopyIcon } from "@radix-ui/react-icons";
 
 const DraggableSubMenu: React.FC<DraggableSubMenuProps> = ({
   onDelete,
   onClose,
+  onCopy,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -26,15 +28,19 @@ const DraggableSubMenu: React.FC<DraggableSubMenuProps> = ({
       ref={menuRef}
       style={{
         display: "flex",
-        flexDirection: "row-reverse",
+        flexDirection: "column",
         position: "absolute",
         top: 0,
         right: -55,
         padding: 8,
         borderLeft: "1px solid #AAAAAA",
+        gap: 10,
       }}>
       <button type="button" onClick={onDelete}>
         <TrashBinIcon width={20} height={20} color={"#AAAAAA"} />
+      </button>
+      <button type="button" onClick={onCopy}>
+        <CopyIcon width={20} height={20} color={"#AAAAAA"} />
       </button>
     </div>
   );

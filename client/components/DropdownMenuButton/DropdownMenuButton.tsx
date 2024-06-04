@@ -8,8 +8,9 @@ import {
 import { SlOptions } from "react-icons/sl";
 import styles from "./DropdownMenuButton.module.css";
 import { useTranslation } from "react-i18next";
+import { DropdownMenuButtonProps } from "./types";
 
-const DropdownMenuButton = () => {
+const DropdownMenuButton = ({ onEdit, onDelete }: DropdownMenuButtonProps) => {
   const { t } = useTranslation("DropdownMenuButton");
 
   return (
@@ -19,9 +20,11 @@ const DropdownMenuButton = () => {
           <SlOptions />
         </DropdownMenuTrigger>
         <DropdownMenuContent className={styles.options}>
-          <DropdownMenuItem>{t("option1")}</DropdownMenuItem>
+          <DropdownMenuItem onSelect={onEdit}>{t("option1")}</DropdownMenuItem>
           <DropdownMenuSeparator className={styles.seperator} />
-          <DropdownMenuItem>{t("option2")}</DropdownMenuItem>
+          <DropdownMenuItem onSelect={onDelete}>
+            {t("option2")}
+          </DropdownMenuItem>
           <DropdownMenuSeparator className={styles.seperator} />
           <DropdownMenuItem>{t("option3")}</DropdownMenuItem>
         </DropdownMenuContent>

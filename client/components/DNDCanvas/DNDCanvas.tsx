@@ -13,16 +13,29 @@ import DraggableLongText from "../DraggableLongText/DraggableLongText";
 import { DNDCanvasProps, Field, Survey } from "./types";
 import { DroppedItem } from "../../pages/NewForm/types";
 import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
+import { v4 as uuidv4 } from "uuid";
 
 const DNDCanvas = forwardRef(
-  ({ items, handleDelete, saveSurvey }: DNDCanvasProps, ref) => {
-    const methods = useForm<{ fields: Field[] }>();
+  (
+    {
+      items,
+      handleDelete,
+      handleCopy,
+      saveSurvey,
+      importedFields,
+    }: DNDCanvasProps,
+    ref,
+  ) => {
+    const methods = useForm<{ fields: Field[] }>({
+      defaultValues: { fields: importedFields ?? [] },
+    });
 
     useImperativeHandle(ref, () => ({
       submitForm: () => {
         methods.handleSubmit(onSubmit)();
       },
     }));
+
     const componentMap = {
       multiple_choice: DraggableMultipleChoice,
       short_text: DraggableShortText,
@@ -31,53 +44,38 @@ const DNDCanvas = forwardRef(
     };
 
     const appendField = (item: DroppedItem) => {
-      switch (item.type) {
-        case "multiple_choice":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            properties: { choices: [] },
-          });
-          break;
-        case "short_text":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            validations: {
-              max_length: 20,
-              required: false,
-            },
-          });
-          break;
-        case "dropdown":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            properties: { choices: [] },
-          });
-          break;
-        case "long_text":
-          append({
-            ref: item.id,
-            type: item.type,
-            title: "",
-            validations: {
-              max_length: 100,
-              required: false,
-            },
-          });
-          break;
-        default:
-          break;
-      }
+      const fieldTemplate = {
+        multiple_choice: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          properties: { choices: [] },
+        },
+        short_text: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          validations: { max_length: 20, required: false },
+        },
+        dropdown: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          properties: { choices: [] },
+        },
+        long_text: {
+          ref: item.id,
+          type: item.type,
+          title: "",
+          validations: { max_length: 100, required: false },
+        },
+      };
+      append(fieldTemplate[item.type]);
     };
 
     const { control, handleSubmit } = methods;
 
-    const { fields, append, move, remove } = useFieldArray({
+    const { fields, append, move, remove, insert } = useFieldArray({
       control,
       name: "fields", // This should match the structure in useForm
     });
@@ -94,19 +92,28 @@ const DNDCanvas = forwardRef(
 
     const onDragEnd = (result: DropResult) => {
       if (!result.destination) return;
-
-      // Reorder items array
-      const updatedItems = Array.from(items);
-      const [movedItem] = updatedItems.splice(result.source.index, 1);
-      updatedItems.splice(result.destination.index, 0, movedItem);
-
-      // Reorder fields in react-hook-form
       move(result.source.index, result.destination.index);
     };
 
     const onDelete = (index: number, name: string) => {
       remove(index);
       handleDelete(name);
+    };
+
+    const onCopy = (field: Field, index: number) => {
+      const newRef = uuidv4();
+      delete field.id;
+      insert(index + 1, { ...field, ref: newRef });
+      handleCopy(index, {
+        id: newRef,
+        type: field.type,
+      });
+
+      // Ensure the copied field has the same title as the original
+      methods.setValue(
+        `fields.${index + 1}.title`,
+        methods.getValues(`fields.${index}.title`),
+      );
     };
 
     const onSubmit = (data: Survey) => {
@@ -138,12 +145,13 @@ const DNDCanvas = forwardRef(
 
                       return (
                         <Component
-                          key={index}
-                          id={index.toString()}
+                          key={field.ref}
+                          id={field.ref}
                           index={index}
                           title={field.title}
                           control={control}
                           onDelete={() => onDelete(index, field.ref)}
+                          onCopy={() => onCopy(field, index)}
                         />
                       );
                     })
