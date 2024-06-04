@@ -1,7 +1,6 @@
 "use strict";
 
 window.setImmediate = window.setTimeout;
-window.setImmediate = window.setTimeout;
 
 const TestDataGenerator = require("../../utilityFunctions/testDataGenerator.js");
 const request = require("supertest");
@@ -144,7 +143,7 @@ it("should not create if name is not unique POST /create", async () => {
 
 it("should create a league with the same name from a different group POST /create", async () => {
   const groupUno = await TestDataGenerator.createDummyGroup(
-    "Watsonville Corp."
+    "Watsonville Corp.",
   );
   const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
@@ -156,7 +155,7 @@ it("should create a league with the same name from a different group POST /creat
 
   expect(response.status).toBe(201);
   expect(response.body).toEqual(
-    expect.objectContaining({ name: "Summer 2024" })
+    expect.objectContaining({ name: "Summer 2024" }),
   );
 });
 
@@ -240,6 +239,25 @@ it("should return an error when attempting to delete a non-existant league DELET
 });
 
 // ------------------------------------------------
+
+it("should handle GET /getUnassociatedDivisions", async () => {
+  const session = await TestDataGenerator.createSession();
+  await TestDataGenerator.createDivision(session.groupId, "pro div");
+  const divisions = await testDb.Division.findAll({
+    where: {
+      group_id: session.groupId,
+    },
+  });
+  expect(divisions.length).toBe(2);
+
+  const response = await request(app)
+    .get(`/leagues/${session.groupId}/divisions`)
+    .send();
+  expect(response.body.length).toBe(1);
+  expect(response.body).toEqual(
+    expect.arrayContaining([expect.objectContaining({ name: "pro div" })]),
+  );
+});
 
 afterEach(async () => {
   await testDb.TeamsSession.destroy({ where: {} });
