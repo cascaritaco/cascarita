@@ -7,8 +7,6 @@ const { Form } = require("../models");
 
 const SeasonController = {
   async createForm(req, res, next) {
-    console.log(req.body);
-
     try {
       const response = await fetch("https://api.typeform.com/forms", {
         method: "POST",
