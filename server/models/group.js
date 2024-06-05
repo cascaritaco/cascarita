@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         sourceKey: "id",
       });
+
+      Group.hasMany(models.Form, {
+        foreignKey: "group_id",
+        sourceKey: "id",
+      });
     }
   }
   Group.init(
@@ -172,7 +177,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Group",
       createdAt: "created_at",
       updatedAt: "updated_at",
-    }
+    },
   );
   return Group;
 };
