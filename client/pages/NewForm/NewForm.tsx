@@ -8,8 +8,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Field, Survey } from "../../components/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const NewForm = () => {
+  const { t } = useTranslation("NewForms");
   const navigate = useNavigate();
   const location = useLocation();
   const fields = location.state?.fields as Field[] | undefined;
@@ -26,7 +28,9 @@ const NewForm = () => {
   const [description, setDescription] = useState(
     location.state?.description ?? "",
   );
-  const [title, setTitle] = useState(location.state?.title ?? "Form Title");
+  const [title, setTitle] = useState(
+    location.state?.title ?? t("formTitlePlaceHolder"),
+  );
   const [surveyLink, setSurveyLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
   const { currentUser } = useAuth();
@@ -180,34 +184,36 @@ const NewForm = () => {
             marginRight: 33,
           }}>
           <h1 className={styles.title}>
-            {formId == null ? "New Form" : "Edit Form"}
+            {formId == null ? t("pageTitleNew") : t("pageTitleEdit")}
           </h1>
           <div className={styles.buttonGroup}>
             <button
               type="button"
               onClick={handleCancel}
               className={styles.cancelButton}>
-              Cancel
+              {t("cancelButton")}
             </button>
             <button
               type="button"
               onClick={handleSubmit}
               className={styles.submitButton}>
-              {formId == null ? "Create" : "Save"}
+              {formId == null ? t("createButton") : t("saveButton")}
             </button>
             {surveyLink && (
               <a href={surveyLink} target="_blank" rel="noopener noreferrer">
-                <button className={styles.previewButton}>Preview Survey</button>
+                <button className={styles.previewButton}>
+                  {t("previewButton")}
+                </button>
               </a>
             )}
           </div>
         </div>
         <div className={styles.newFormContainer}>
           <div className={styles.formElementsContainer}>
-            <h2 className={styles.subtitle}>Form Elements</h2>
+            <h2 className={styles.subtitle}>{t("formElements")}</h2>
             <hr />
             <p className={styles.smallText} style={{ paddingTop: 8 }}>
-              Text Elements
+              {t("textElements")}
             </p>
             {draggableButtons.map((label, index) => (
               <DraggableButton
@@ -231,13 +237,13 @@ const NewForm = () => {
               <input
                 className={styles.formDescription}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Description"
+                placeholder={t("descriptionPlaceholder")}
                 value={description}
               />
               <hr />
             </div>
             <p className={styles.smallText} style={{ color: "#b01254" }}>
-              Section
+              {t("sectionText")}
             </p>
 
             <div className={styles.canvasStyles}>
