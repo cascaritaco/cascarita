@@ -7,6 +7,7 @@ import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { Survey } from "../../components/DNDCanvas/types";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const NewForm = () => {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
@@ -15,6 +16,7 @@ const NewForm = () => {
   const [surveyLink, setSurveyLink] = useState(null);
   const canvasRef = useRef<DNDCanvasRef>(null);
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   const draggableButtons = [
     "Short Text",
@@ -23,9 +25,9 @@ const NewForm = () => {
     "Multiple Choice",
   ];
 
-  function toSnakeCase(str: string) {
-    return str.toLowerCase().replace(/\s+/g, "_");
-  }
+  // function toSnakeCase(str: string) {
+  //   return str.toLowerCase().replace(/\s+/g, "_");
+  // }
 
   const handleDrop = (label: DroppedItemType) => {
     const uniqueId = uuidv4();
@@ -65,7 +67,7 @@ const NewForm = () => {
     };
 
     try {
-      const response = await fetch("/api/forms/", {
+      const response = await fetch(`/api/forms/${currentUser?.group_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,6 +85,10 @@ const NewForm = () => {
       console.error("Error creating survey:", err);
     }
   };
+
+  function toSnakeCase(str: string) {
+    return str.toLowerCase().replace(/\s+/g, "_");
+  }
 
   return (
     <Page>
