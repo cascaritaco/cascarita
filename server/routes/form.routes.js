@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const FormController = require("../controllers/form.controller");
 
-router.post("/:id", FormController.createForm);
+router.get("/", FormController.getMovie);
+router.post("/mov", FormController.createMovie);
 
 module.exports = router;
