@@ -29,6 +29,7 @@ const NewForm = () => {
   const [title, setTitle] = useState(location.state?.title ?? "Form Title");
   const [surveyLink, setSurveyLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
+
   const { currentUser } = useAuth();
 
   const draggableButtons = [
@@ -37,10 +38,6 @@ const NewForm = () => {
     "Dropdown",
     "Multiple Choice",
   ];
-
-  function toSnakeCase(str: string) {
-    return str.toLowerCase().replace(/\s+/g, "_");
-  }
 
   const handleDrop = (label: DroppedItemType) => {
     const uniqueId = uuidv4();
@@ -86,7 +83,7 @@ const NewForm = () => {
     };
 
     try {
-      const response = await fetch("/api/forms/", {
+      const response = await fetch(`/api/forms/${currentUser?.group_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -166,6 +163,9 @@ const NewForm = () => {
       console.error(error);
     }
   };
+  function toSnakeCase(str: string) {
+    return str.toLowerCase().replace(/\s+/g, "_");
+  }
 
   return (
     <Page>
