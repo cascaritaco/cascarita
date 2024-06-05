@@ -9,9 +9,10 @@ import {
 import { FaListUl } from "react-icons/fa6";
 import { IconType } from "react-icons";
 import styles from "./DraggableButton.module.css";
-import { DraggableButtonProps } from "./types";
+import { DraggableButtonKeys, DraggableButtonProps } from "./types";
 import { GrTextAlignFull } from "react-icons/gr";
 import { TiPhoneOutline } from "react-icons/ti";
+import { useTranslation } from "react-i18next";
 
 const iconMapping: { [key: string]: IconType } = {
   shorttext: MdOutlineShortText,
@@ -24,6 +25,7 @@ const iconMapping: { [key: string]: IconType } = {
 };
 
 const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
+  const { t } = useTranslation("DraggableButtons");
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
@@ -59,7 +61,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
       onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
       <button className={`${styles.buttonContainer} ${additionalClass}`}>
         {IconComponent && <IconComponent />}
-        {label}
+        {t(`draggableButtons.${label}` as DraggableButtonKeys)}
       </button>
     </Draggable>
   );
