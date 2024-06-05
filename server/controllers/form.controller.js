@@ -2,12 +2,11 @@
 
 require("dotenv").config();
 
-const Form = require("./../mongoModel/form");
+const FormMongo = require("./../mongoModel/form");
+const { Form } = require("../models");
 
 const SeasonController = {
   async createForm(req, res, next) {
-    console.log(req.body);
-
     try {
       const response = await fetch("https://api.typeform.com/forms", {
         method: "POST",
@@ -20,13 +19,22 @@ const SeasonController = {
 
       const responseBody = await response.json();
 
-      const form = new Form({
+      const form = new FormMongo({
         group_id: req.params.id,
         form_data: responseBody,
         form_blueprint: req.body,
       });
 
       const result = await form.save();
+
+      const newForm = {
+        group_id: req.params.id,
+        document_id: result.id,
+      };
+
+      await Form.build(newForm).validate();
+      const sqlResult = await Form.create(newForm);
+
       return res.status(201).json(result);
     } catch (error) {
       next(error);

@@ -16,12 +16,12 @@ module.exports = {
           model: "Groups",
           key: "id",
         },
-        onUpdate: "RESTRICT",
-        onDelete: "RESTRICT",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       document_id: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,
