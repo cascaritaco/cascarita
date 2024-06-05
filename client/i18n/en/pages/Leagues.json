@@ -1,16 +1,16 @@
 {
-    "title": "Leagues",
-    "filter": "Filter",
-    "filterOptions": {
-        "item1": "Active",
-        "item2": "Inactive"
-    },
-    "sort": "Sort By",
-    "sortOptions": {
-        "item1": "Alphabetical",
-        "item2": "Date"
-    },
-    "button": "Add League",
-    "col1": "Name",
-    "col2": "Options"
+  "title": "Leagues",
+  "filter": "Filter",
+  "filterOptions": {
+    "item1": "Active",
+    "item2": "Inactive"
+  },
+  "sort": "Sort By",
+  "sortOptions": {
+    "item1": "Alphabetical",
+    "item2": "Date"
+  },
+  "button": "Add League",
+  "col1": "Name",
+  "col2": "Options"
 }

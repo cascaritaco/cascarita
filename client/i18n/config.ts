@@ -8,6 +8,8 @@ import SearchEn from "./en/components/Search.json";
 import SearchEsp from "./esp/components/Search.json";
 import LeaguesEn from "./en/pages/Leagues.json";
 import LeaguesEsp from "./esp/pages/Leagues.json";
+import FormsEn from "./en/pages/Forms.json";
+import FormsEsp from "./esp/pages/Forms.json";
 import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
@@ -22,15 +24,17 @@ i18next.use(initReactI18next).init({
       SideNav: SideNavEn,
       Search: SearchEn,
       Leagues: LeaguesEn,
+      Forms: FormsEn,
     },
     esp: {
       DropdownMenuButton: DropdownMenuButtonEsp,
       SideNav: SideNavEsp,
       Search: SearchEsp,
       Leagues: LeaguesEsp,
+      Forms: FormsEsp,
     },
   },
-  ns: ["DropdownMenuButton", "SideNav", "Search", "Leagues"],
+  ns: ["DropdownMenuButton", "SideNav", "Search", "Leagues", "Forms"],
 });
 
 export const changeLanguage = async (user_id: number, lng: string) => {
