@@ -7,7 +7,7 @@ export type FieldType =
   | "dropdown";
 
 export interface Validation {
-  max_length: number;
+  max_length?: number;
   required: boolean;
 }
 

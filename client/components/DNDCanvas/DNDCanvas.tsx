@@ -50,6 +50,7 @@ const DNDCanvas = forwardRef(
           type: item.type,
           title: "",
           properties: { choices: [] },
+          validations: { required: false },
         },
         short_text: {
           ref: item.id,
@@ -62,6 +63,7 @@ const DNDCanvas = forwardRef(
           type: item.type,
           title: "",
           properties: { choices: [] },
+          validations: { required: false },
         },
         long_text: {
           ref: item.id,
@@ -109,10 +111,15 @@ const DNDCanvas = forwardRef(
         type: field.type,
       });
 
-      // Ensure the copied field has the same title as the original
+      // Ensure the copied fields has the same fields as the original
       methods.setValue(
         `fields.${index + 1}.title`,
         methods.getValues(`fields.${index}.title`),
+      );
+
+      methods.setValue(
+        `fields.${index + 1}.validations`,
+        methods.getValues(`fields.${index}.validations`),
       );
     };
 
@@ -149,6 +156,7 @@ const DNDCanvas = forwardRef(
                           id={field.ref}
                           index={index}
                           title={field.title}
+                          validations={field.validations}
                           control={control}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
