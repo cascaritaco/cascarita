@@ -36,6 +36,8 @@ const NewForm = () => {
     "Long Text",
     "Dropdown",
     "Multiple Choice",
+    "Email",
+    "Phone Number",
   ];
 
   function toSnakeCase(str: string) {
