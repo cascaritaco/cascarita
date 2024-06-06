@@ -2,10 +2,38 @@
 
 require("dotenv").config();
 
+const RawResponse = require("./../mongoModel/raw_response");
+const ResponseId = require("./../mongoModel/response_id");
 const FormMongo = require("./../mongoModel/form");
 const { Form } = require("../models");
 
-const SeasonController = {
+const FormController = {
+  async getResponses(req, res, next) {
+    try {
+      const response = await fetch(
+        `https://api.typeform.com/forms/${req.params.form_id}/responses`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      const responseBody = await response.json();
+
+      const rawResponse = new RawResponse({
+        raw_response_data: responseBody,
+      });
+
+      const result = await rawResponse.save();
+
+      return res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
   async createForm(req, res, next) {
     try {
       const response = await fetch("https://api.typeform.com/forms", {
@@ -42,4 +70,4 @@ const SeasonController = {
   },
 };
 
-module.exports = SeasonController;
+module.exports = FormController;
