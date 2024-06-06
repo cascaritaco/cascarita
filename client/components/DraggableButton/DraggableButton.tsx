@@ -1,13 +1,18 @@
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import { useState } from "react";
 import { LuCalendar } from "react-icons/lu";
-import { MdOutlineArrowDropDownCircle } from "react-icons/md";
+import {
+  MdOutlineArrowDropDownCircle,
+  MdOutlineShortText,
+  MdOutlineMailOutline,
+} from "react-icons/md";
 import { FaListUl } from "react-icons/fa6";
 import { IconType } from "react-icons";
 import styles from "./DraggableButton.module.css";
-import { MdOutlineShortText } from "react-icons/md";
-import { DraggableButtonProps } from "./types";
+import { DraggableButtonKeys, DraggableButtonProps } from "./types";
 import { GrTextAlignFull } from "react-icons/gr";
+import { TiPhoneOutline } from "react-icons/ti";
+import { useTranslation } from "react-i18next";
 
 const iconMapping: { [key: string]: IconType } = {
   shorttext: MdOutlineShortText,
@@ -15,9 +20,12 @@ const iconMapping: { [key: string]: IconType } = {
   dateandtime: LuCalendar,
   dropdown: MdOutlineArrowDropDownCircle,
   multiplechoice: FaListUl,
+  email: MdOutlineMailOutline,
+  phonenumber: TiPhoneOutline,
 };
 
 const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
+  const { t } = useTranslation("DraggableButtons");
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
@@ -53,7 +61,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
       onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
       <button className={`${styles.buttonContainer} ${additionalClass}`}>
         {IconComponent && <IconComponent />}
-        {label}
+        {t(`draggableButtons.${label}` as DraggableButtonKeys)}
       </button>
     </Draggable>
   );

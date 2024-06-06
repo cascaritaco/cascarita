@@ -4,10 +4,12 @@ export type FieldType =
   | "multiple_choice"
   | "short_text"
   | "long_text"
-  | "dropdown";
+  | "dropdown"
+  | "email"
+  | "phone_number";
 
 export interface Validation {
-  max_length: number;
+  max_length?: number;
   required: boolean;
 }
 
@@ -17,17 +19,18 @@ export interface Label {
 }
 
 export interface Properties {
-  choices: Label[];
+  choices?: Label[];
+  default_country_code?: string;
 }
 
 export interface Field {
   // NOTE: See comment in DNDCanvas.tsx
   id?: string;
-  ref: string;
-  type: FieldType;
   title: string;
+  ref: string;
   validations?: Validation;
   properties?: Properties;
+  type: FieldType;
 }
 
 export interface Survey {

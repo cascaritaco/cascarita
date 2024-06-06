@@ -1,0 +1,10 @@
+{
+  "draggableButtons": {
+    "Short Text": "Short Text",
+    "Long Text": "Long Text",
+    "Dropdown": "Dropdown",
+    "Multiple Choice": "Multiple Choice",
+    "Email": "Email",
+    "Phone Number": "Phone Number"
+  }
+}

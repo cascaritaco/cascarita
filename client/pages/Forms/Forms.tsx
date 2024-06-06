@@ -9,13 +9,15 @@ import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { Field } from "../../components/DNDCanvas/types";
+import { useTranslation } from "react-i18next";
 
 const Forms = () => {
+  const { t } = useTranslation("Forms");
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
   const navigate = useNavigate();
 
-  const sortStatuses = ["Alphabetical", "Date"];
+  const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   useEffect(() => {
     const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
@@ -60,14 +62,14 @@ const Forms = () => {
 
   return (
     <Page>
-      <h1 className={styles.h1}>Forms</h1>
+      <h1 className={styles.h1}>{t("title")}</h1>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search />
           <div className={styles.filterContainer}>
-            <p className={styles.filterSubTitle}>Sort By</p>
+            <p className={styles.filterSubTitle}>{t("sort")}</p>
             <SelectMenu
-              placeholder="Alphabetical"
+              placeholder={t("sortOptions.item1")}
               name="sorts"
               value={sorts}
               onValueChange={(value) => setSorts(value)}>
@@ -81,14 +83,14 @@ const Forms = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label="Add Form" onClick={handleNewFormClick} />
+        <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
       </div>
       <div className={styles.cols}>
-        <h3>Title</h3>
-        <h3>Edited By</h3>
-        <h3>Last Updated</h3>
-        <h3>Options</h3>
-        <h3>Share</h3>
+        <h3>{t("col1")}</h3>
+        <h3>{t("col2")}</h3>
+        <h3>{t("col3")}</h3>
+        <h3>{t("col4")}</h3>
+        <h3>{t("col5")}</h3>
       </div>
       <div className={styles.table}>
         <div>
