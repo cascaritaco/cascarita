@@ -7,22 +7,27 @@ import Settings from "./pages/Settings/Settings";
 import Login from "./pages/Login/Login";
 import { AuthProvider } from "./components/AuthContext/AuthContext";
 import Layout from "./components/Layout/Layout";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/forms" element={<Forms />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Layout>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/forms" element={<Forms />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

@@ -1,0 +1,23 @@
+.tableContainer {
+  width: 100%;
+  overflow-y: auto;
+  max-height: 520px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.header {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+}
+
+.tableBody {
+  width: 100%;
+}
