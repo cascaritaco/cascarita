@@ -14,6 +14,8 @@ import { DNDCanvasProps, Field, Survey } from "./types";
 import { DroppedItem } from "../../pages/NewForm/types";
 import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 import { v4 as uuidv4 } from "uuid";
+import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
+import DraggableEmail from "../DraggableEmail/DraggableEmail";
 
 const DNDCanvas = forwardRef(
   (
@@ -41,33 +43,50 @@ const DNDCanvas = forwardRef(
       short_text: DraggableShortText,
       dropdown: DraggableDropdown,
       long_text: DraggableLongText,
+      email: DraggableEmail,
+      phone_number: DraggablePhoneNumber,
     };
 
     const appendField = (item: DroppedItem) => {
       const fieldTemplate = {
         multiple_choice: {
-          ref: item.id,
-          type: item.type,
           title: "",
+          ref: item.id,
           properties: { choices: [] },
+          validations: { required: false },
+          type: item.type,
         },
         short_text: {
-          ref: item.id,
-          type: item.type,
           title: "",
+          ref: item.id,
           validations: { max_length: 20, required: false },
+          type: item.type,
         },
         dropdown: {
-          ref: item.id,
-          type: item.type,
           title: "",
+          ref: item.id,
           properties: { choices: [] },
+          validations: { required: false },
+          type: item.type,
         },
         long_text: {
-          ref: item.id,
-          type: item.type,
           title: "",
+          ref: item.id,
           validations: { max_length: 100, required: false },
+          type: item.type,
+        },
+        email: {
+          title: "",
+          ref: item.id,
+          validations: { required: false },
+          type: item.type,
+        },
+        phone_number: {
+          title: "",
+          ref: item.id,
+          properties: { default_country_code: "US" },
+          validations: { required: false },
+          type: item.type,
         },
       };
       append(fieldTemplate[item.type]);
@@ -109,10 +128,15 @@ const DNDCanvas = forwardRef(
         type: field.type,
       });
 
-      // Ensure the copied field has the same title as the original
+      // Ensure the copied fields has the same fields as the original
       methods.setValue(
         `fields.${index + 1}.title`,
         methods.getValues(`fields.${index}.title`),
+      );
+
+      methods.setValue(
+        `fields.${index + 1}.validations`,
+        methods.getValues(`fields.${index}.validations`),
       );
     };
 
@@ -149,6 +173,7 @@ const DNDCanvas = forwardRef(
                           id={field.ref}
                           index={index}
                           title={field.title}
+                          validations={field.validations}
                           control={control}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}

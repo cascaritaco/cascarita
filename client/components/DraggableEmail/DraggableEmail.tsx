@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import { Controller, useFieldArray } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableMultipleChoiceProps } from "./types";
-import styles from "./DraggableMultipleChoice.module.css";
-import PlusCircleIcon from "../../assets/PlusCircleIcon";
-import MinusCircleIcon from "../../assets/MinusCircleIcon";
-import EllipseIcon from "../../assets/EllipseIcon";
+import { DraggableEmailProps } from "./types";
+import styles from "./DraggableEmail.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 
-const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
+const DraggableEmail: React.FC<DraggableEmailProps> = ({
   id,
   index,
   title,
@@ -24,19 +21,6 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
     setIsMenuOpen((prev) => !prev);
   };
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `fields.${index}.properties.choices`,
-  });
-
-  const addOption = () => {
-    append({ ref: `option-${fields.length + 1}`, label: "" });
-  };
-
-  const removeOption = (optionIndex: number) => {
-    remove(optionIndex);
-  };
-
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -47,7 +31,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
-            <p className={styles.textElementTypeText}>Multiple Choice</p>
+            <p className={styles.textElementTypeText}>Email</p>
             <div
               style={{
                 padding: 16,
@@ -82,6 +66,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                 </div>
               )}
               <Controller
+                key={index}
                 name={`fields.${index}.title`}
                 control={control}
                 defaultValue={title} // Ensure the default value is set
@@ -96,52 +81,6 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                   </>
                 )}
               />
-              {fields.map((field, idx) => (
-                <div
-                  key={field.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    marginTop: 10,
-                  }}>
-                  <EllipseIcon
-                    width={15}
-                    height={15}
-                    color={"#AAAAAA"}
-                    fill={"white"}
-                  />
-                  <Controller
-                    key={index}
-                    name={`fields.${index}.properties.choices.${idx}.label`}
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        placeholder={`Option ${idx + 1}`}
-                        style={{
-                          marginLeft: -5,
-                          marginRight: -5,
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                        }}
-                      />
-                    )}
-                  />
-                  <button type="button" onClick={() => removeOption(idx)}>
-                    <MinusCircleIcon width={20} height={20} color={"#FF0000"} />
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={addOption}
-                style={{
-                  display: "flex",
-                  marginTop: 10,
-                }}>
-                <PlusCircleIcon width={20} height={20} color={"#4171ED"} />
-              </button>
               {isMenuOpen && (
                 <DraggableSubMenu
                   onDelete={onDelete}
@@ -157,4 +96,4 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   );
 };
 
-export default DraggableMultipleChoice;
+export default DraggableEmail;

@@ -1,0 +1,14 @@
+{
+  "title": "Forms",
+  "sort": "Sort By",
+  "sortOptions": {
+    "item1": "Alphabetical",
+    "item2": "Date"
+  },
+  "button": "Add Form",
+  "col1": "Title",
+  "col2": "Edited By",
+  "col3": "Last Updated",
+  "col4": "Options",
+  "col5": "Share"
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Formularios",
+  "sort": "Ordenar Por",
+  "sortOptions": {
+    "item1": "Alfabético",
+    "item2": "Fecha"
+  },
+  "button": "Agregar Forma",
+  "col1": "Title",
+  "col2": "Editado Por",
+  "col3": "Última Actualización",
+  "col4": "Opciones",
+  "col5": "Compartir"
+}

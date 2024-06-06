@@ -1,12 +1,12 @@
 import { Control } from "react-hook-form";
 import { Field, Validation } from "../DNDCanvas/types";
 
-export interface DraggableMultipleChoiceProps {
+export interface DraggableEmailProps {
   id: string;
   index: number;
   title: string;
   validations: Validation | undefined;
-  control: Control<{ fields: Field[] }>; // Type as appropriate
+  control: Control<{ fields: Field[] }>;
   onDelete: () => void;
   onCopy: () => void;
 }
