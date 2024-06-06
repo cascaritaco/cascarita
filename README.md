@@ -18,7 +18,7 @@ Before you begin, make sure you have the following installed:
 brew install node
 ```
 
-2. Setup Local MySQL Database
+2. Setup the MySQL database
 
 ```bash
 # install and activate mysql service
@@ -32,27 +32,62 @@ mysql -u root
 CREATE DATABASE test_db;
 ```
 
-3. Clone the repository to your local machine
+3. Setup the MongoDB database
 
+```bash
+# Download the official Homebrew formula for MongoDB
+brew tap mongodb/brew
+# Install MongoDB
+brew install mongodb-community@7.0
+# Start the MongoDB service
+brew services start mongodb-community@7.0
 ```
+
+4. Clone the repository to your local machine
+
+```bash
 git clone git@github.com:cascaritaco/cascarita.git
 ```
 
-4. Change into the project directory:
+5. Change into the project directory:
 
-```
+```bash
 cd cascarita
 ```
 
-5. Install project dependencies:
+6. Install project dependencies:
 
 ```bash
 npm install
 ```
 
-### Running Commands
+7. Create a free MongoDB Atlas cluster [here](https://www.mongodb.com/docs/atlas/getting-started/).
 
-### 0. Using Docker
+8. Once your cluster is created, get your connection string to extract the username, password, url, and app name.
+
+```txt
+mongodb+srv://USERNAME:PASSWORD@$URL/?retryWrites=true&w=majority&appName=$APPNAME
+```
+
+9. Copy `.env.example` into a new file named `.env`. Populate the `MONGO_*` environment variables from `.env` with the data extracted from the connection string.
+
+```bash
+# MongoDB cluster configuration
+MONGO_CLUSTER_USERNAME=
+MONGO_CLUSTER_PASSWORD=
+MONGO_CLUSTER_DB_NAME=
+MONGO_CLUSTER_URL=
+MONGO_CLUSTER_APP_NAME=
+```
+
+10. If your MySQL database requires a password, make sure you set that password in the `.env` as well.
+
+```bash
+DB_NAME=test_db
+DB_PASSWORD=your-password
+```
+
+### Using Docker
 
 If you haven't done so, please download [Docker Desktop](https://www.docker.com/products/docker-desktop/), and start the Docker daemon, then run:
 
@@ -97,7 +132,7 @@ npm run start
 
 To run the Jest tests:
 
-```
+```bash
 npm run test
 ```
 

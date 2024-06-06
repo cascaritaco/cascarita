@@ -18,5 +18,5 @@ module.exports = {
     "\\.[jt]sx?$": "babel-jest",
     "\\.css$": "jest-transform-css",
   },
-  transformIgnorePatterns: ["/node_modules/(?!(uuid)/)"],
+  transformIgnorePatterns: ["/node_modules/(?!(sequelize|uuid)/)"],
 };

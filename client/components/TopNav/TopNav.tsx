@@ -5,6 +5,7 @@ import { Avatar } from "@radix-ui/themes";
 import { MdOutlineNotifications } from "react-icons/md";
 import Search from "../Search/Search";
 import { useAuth } from "../AuthContext/AuthContext";
+import LanguagePreferenceButton from "../LanguagePreferenceButton/LanguagePreferenceButton";
 
 const SideNav = () => {
   const { currentUser } = useAuth();
@@ -21,6 +22,9 @@ const SideNav = () => {
       </div>
       <div className={styles["search-alert-con"]}>
         <Search />
+        <div className={styles.language}>
+          <LanguagePreferenceButton />
+        </div>
         <MdOutlineNotifications className={styles.notification} />
         <div className={styles.avatarCard}>
           <Avatar

@@ -1,13 +1,13 @@
 const request = require("supertest");
-const { createTeam } = require("./team.controller");
+const { createTeam } = require("../../controllers/team.controller");
 
-jest.mock("./../models", () => ({
+jest.mock("../../models", () => ({
   Team: {
     create: jest.fn(),
   },
 }));
 
-const { Team } = require("./../models");
+const { Team } = require("../../models");
 
 describe.skip("createTeam controller", () => {
   it("should create a new team", async () => {

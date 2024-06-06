@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       TeamsPerformances.belongsTo(models.TeamsSession, {
         foreignKey: "team_session_id",
+        targetKey: "id",
       });
     }
   }

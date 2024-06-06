@@ -1,0 +1,30 @@
+.buttonContainer {
+  display: flex;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #1d74c5ff;
+  color: white;
+  align-items: center;
+  height: 51px;
+  width: 170px;
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
+.baseStyle {
+  background-color: #f4f7fb;
+}
+
+.penStyle {
+  background-color: #2a852cff;
+}
+
+.sectionStyle {
+  background-color: #b01254ff;
+}
+
+.buttonContainer > svg {
+  height: 17px;
+  width: 17px;
+  margin-right: 10px;
+}
