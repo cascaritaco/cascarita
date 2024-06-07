@@ -4,8 +4,12 @@ const { Schema } = mongoose;
 
 const responseIdSchema = new Schema(
   {
-    response_id: {
-      type: Number,
+    form_id: {
+      type: String,
+      required: true,
+    },
+    unique_ids: {
+      type: Schema.Types.Mixed,
       required: true,
     },
   },

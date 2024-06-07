@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const rawResponseSchema = new Schema(
+const responseSchema = new Schema(
   {
     form_id: {
       type: String,
       required: true,
     },
-    raw_response_data: {
+    response: {
       type: Schema.Types.Mixed,
       required: true,
     },
@@ -16,6 +16,6 @@ const rawResponseSchema = new Schema(
   { timestamps: true },
 );
 
-const rawResponse = mongoose.model("RawResponse", rawResponseSchema);
+const response = mongoose.model("Response", responseSchema);
 
-module.exports = rawResponse;
+module.exports = response;

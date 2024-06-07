@@ -2,8 +2,11 @@
 
 require("dotenv").config();
 
+const jsonParser = require("../utilityFunctions/responseParser");
+
 const RawResponse = require("./../mongoModel/raw_response");
 const ResponseId = require("./../mongoModel/response_id");
+const Response = require("./../mongoModel/response");
 const FormMongo = require("./../mongoModel/form");
 const { Form } = require("../models");
 
@@ -24,12 +27,55 @@ const FormController = {
       const responseBody = await response.json();
 
       const rawResponse = new RawResponse({
+        form_id: req.params.form_id,
         raw_response_data: responseBody,
       });
 
-      const result = await rawResponse.save();
+      const results = await RawResponse.find({
+        form_id: req.params.form_id,
+      });
 
-      return res.status(201).json(result);
+      if (results.length === 0) {
+        const result = await rawResponse.save();
+      } else {
+        const result = await rawResponse.updateOne(
+          { _id: results._id },
+          { $set: { raw_response_data: responseBody } },
+        );
+      }
+
+      const responseIdEntries = await ResponseId.findOne({
+        form_id: req.params.form_id,
+      });
+
+      const uniqueResponseIds =
+        jsonParser.loadMapWithDocument(responseIdEntries);
+
+      const jsonResponseBody = JSON.stringify(responseBody);
+
+      const parsedResponse = jsonParser.parseResponseJSON(
+        jsonResponseBody,
+        uniqueResponseIds,
+        req.params.form_id,
+      );
+
+      const sortedResponses = new Response({
+        form_id: req.params.form_id,
+        response: parsedResponse,
+      });
+
+      const responsesToInsert = sortedResponses.response.map((res) => ({
+        form_id: req.params.form_id,
+        response: res,
+      }));
+
+      await Response.insertMany(responsesToInsert);
+
+      const individualResponses = await Response.find({
+        form_id: req.params.form_id,
+      });
+
+      return res.status(201).json(individualResponses);
     } catch (error) {
       next(error);
     }

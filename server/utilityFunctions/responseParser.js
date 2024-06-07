@@ -1,3 +1,5 @@
+const ResponseId = require("../mongoModel/response_id");
+
 var jsonStr = `
 {
     "items": [
@@ -377,147 +379,151 @@ var jsonStr = `
     "total_items": 4,
     "page_count": 1
 }
-`
+`;
 // Following lines are acting as main for now:
 // main() {
 
 // responseIdDoc is an example of the response_ids collection
 // it should be queried/searchable by the form_id.
-var responseIdDoc = `
-{
-    "id": "asdf8jlkad7976asdf698afd",
-    "form_id": "TAzdWhJr",
-    "unique_ids": {
-    "7w8jz1kdsmgyem07w8l41mp4qlxn51jk": true,
-    "kia5m0hj5f3j4zcjoosmkia56wxhroza": true
-    }
-}
-`
+// var responseIdDoc = `
+// {
+//     "id": "asdf8jlkad7976asdf698afd",
+//     "form_id": "TAzdWhJr",
+//     "unique_ids": {
+//     "7w8jz1kdsmgyem07w8l41mp4qlxn51jk": true,
+//     "kia5m0hj5f3j4zcjoosmkia56wxhroza": true
+//     }
+// }
+// `;
 // loadMapWithDocument will load a map with any response_ids we have seen in the past
 // the map will then be used to avoid storing duplicate responses.
-uniqueResponseIds = loadMapWithDocument(responseIdDoc)
+// uniqueResponseIds = loadMapWithDocument(responseIdDoc);
 
 // Example of how we will get the form-id from the collection:
-var sampleFormId = JSON.parse(responseIdDoc).form_id;
+// var sampleFormId = JSON.parse(responseIdDoc).form_id;
 
 // Call to parseResponseJSON passing in the json raw responses json to be broken into
 // individual responses, the map of responseIds we have seen in the past, and the form-id.
-var individualResponses = parseResponseJSON(jsonStr, uniqueResponseIds, sampleFormId)
+// var individualResponses = parseResponseJSON(
+//   jsonStr,
+//   uniqueResponseIds,
+//   sampleFormId,
+// );
 
 // Following loop is just to see what each response object looks like:
-for (var i = 0; i < individualResponses.length; i++) {
-    console.log("-------------------------")
-    var response = individualResponses[i]
-    var resStr = JSON.stringify(response, null, 4)
-    console.log(resStr)
-    console.log("-------------------------")
-}
+// for (var i = 0; i < individualResponses.length; i++) {
+//   //   console.log("-------------------------");
+//   var response = individualResponses[i];
+//   var resStr = JSON.stringify(response, null, 4);
+//   //   console.log(resStr);
+//   //   console.log("-------------------------");
+// }
 // }
 
 // parseResponseJSON will take in the raw responses json and break it into individual responses:
 function parseResponseJSON(jsonStr, uniqueResponseIds, formId) {
+  // we'll add individual responses to this array:
+  var responses = [];
+  var emptyMap = false;
 
-    // we'll add individual responses to this array:
-    var responses = []
+  var obj = JSON.parse(jsonStr);
 
-    var obj = JSON.parse(jsonStr)
+  if (uniqueResponseIds.size == 0) {
+    emptyMap = true;
+  }
+  // items is a list of responses. Each response has an aswers[] and a response_id
+  var items = obj.items;
 
-    // items is a list of responses. Each response has an aswers[] and a response_id
-    var items = obj.items
-
-    // iterate through individual responses:
-    for (var i = 0; i < items.length; i++) {
-
-        let item = items[i]
-        if (item.response_type != "completed") {
-            continue;
-        }
-
-        var response_id = item.response_id;
-        var submitted_at = item.submitted_at;
-        var answers = item.answers;
-
-        // If the response_id is already in our map then it means we have already
-        // processed it in the past. We will not process it again.
-        if (uniqueResponseIds.has(response_id)) {
-            console.log("response id is already in map: ", response_id)
-            continue;
-        }
-
-        // Create individual response object and push to our responses array:
-        var response = newResponse(response_id, submitted_at, answers)
-        responses.push(response)
-
-        // maybe can set the value to the submitted date. If respnse can be updated
-        // by submitter then this can be used as indication to update the response.
-        uniqueResponseIds.set(response_id, true)
+  // iterate through individual responses:
+  for (var i = 0; i < items.length; i++) {
+    let item = items[i];
+    if (item.response_type != "completed") {
+      continue;
     }
 
-    // Call function to store/update unique response ids collection with any new ones
-    // we have found:
-    storeUniqueResponseIds(uniqueResponseIds, formId)
+    var response_id = item.response_id;
+    var submitted_at = item.submitted_at;
+    var answers = item.answers;
 
-    return responses
+    // If the response_id is already in our map then it means we have already
+    // processed it in the past. We will not process it again.
+    if (uniqueResponseIds.has(response_id)) {
+      continue;
+    }
+
+    // Create individual response object and push to our responses array:
+    var response = newResponse(response_id, submitted_at, answers);
+    responses.push(response);
+
+    // maybe can set the value to the submitted date. If respnse can be updated
+    // by submitter then this can be used as indication to update the response.
+    uniqueResponseIds.set(response_id, true);
+  }
+
+  // Call function to store/update unique response ids collection with any new ones
+  // we have found:
+  storeUniqueResponseIds(uniqueResponseIds, formId, emptyMap);
+
+  return responses;
 }
 
 // function to load collection into map:
 function loadMapWithDocument(responseIdDoc) {
+  // Create an empty map to store the key-value pairs
+  var map = new Map();
 
-    // Create an empty map to store the key-value pairs
-    var map = new Map();
-
-    if (responseIdDoc.length == 0) {
-        return map
-    }
-
-    // Parse the JSON string into a JavaScript object
-    var jsonObject = JSON.parse(responseIdDoc);
-    var prevResponseIds = jsonObject.unique_ids
-
-    // Iterate over the properties of the object
-    for (var key in prevResponseIds) {
-        if (prevResponseIds.hasOwnProperty(key)) {
-            // Add each key-value pair to the map
-            map.set(key, prevResponseIds[key]);
-        }
-    }
-
-    // Return the populated map
+  if (!responseIdDoc) {
     return map;
+  }
+  // Parse the JSON string into a JavaScript object
+  var prevResponseIds = responseIdDoc.unique_ids;
+
+  // Iterate over the properties of the object
+  for (var key in prevResponseIds) {
+    if (prevResponseIds.hasOwnProperty(key)) {
+      // Add each key-value pair to the map
+      map.set(key, prevResponseIds[key]);
+    }
+  }
+
+  // Return the populated map
+  return map;
 }
 
 function newResponse(response_id, submitted_at, answers) {
-    var response = {
-        response_id: response_id,
-        submitted_at: submitted_at,
-        answers: answers
-    };
+  var response = {
+    response_id: response_id,
+    submitted_at: submitted_at,
+    answers: answers,
+  };
 
-    return response;
+  return response;
 }
 
-function storeUniqueResponseIds(uniqueResponseIds, form_id) {
-    // Add logic to store response ids in a collection
+async function storeUniqueResponseIds(uniqueResponseIds, form_id, emptyMap) {
+  const response_id = new ResponseId({
+    form_id: form_id,
+    unique_ids: uniqueResponseIds,
+  });
 
-    /* What this collection should look like:
-        {
-            id: _ (generated collection id),
-            form_id: "string",
-            unique_ids: {
-                "string": bool,
-                "string": bool
-            }
-        }
+  const responseIdEntry = await ResponseId.findOne({
+    form_id: form_id,
+  });
 
-        example:
-        {
-            id: "asdf8jlkad7976asdf698afd",
-            form_id: "TAzdWhJr",
-            unique_ids: {
-                "7w8jz1kdsmgyem07w8l41mp4qlxn51jk": true,
-                "kia5m0hj5f3j4zcjoosmkia56wxhroza": true
-            }
-        }
-
-    */
+  if (emptyMap) {
+    const responseResult = await response_id.save();
+  } else {
+    const responseResult = await ResponseId.updateOne(
+      { _id: responseIdEntry._id },
+      {
+        $set: { unique_ids: uniqueResponseIds },
+      },
+    );
+  }
 }
+
+module.exports = {
+  parseResponseJSON,
+  loadMapWithDocument,
+  storeUniqueResponseIds,
+};
