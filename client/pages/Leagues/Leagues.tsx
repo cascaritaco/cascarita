@@ -35,8 +35,6 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
     queryKey: ["leagues"],
   });
 
-  console.log(leaguesQuery.data);
-
   return (
     <Page>
       <h1 className={styles.h1}>{t("title")}</h1>

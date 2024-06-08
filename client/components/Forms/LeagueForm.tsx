@@ -26,8 +26,6 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave, currentUser }) => {
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
 
-  console.log(currentUser);
-
   const queryClient = useQueryClient();
 
   const leagueFormMutation = useMutation({
