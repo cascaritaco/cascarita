@@ -53,7 +53,7 @@ const SeasonController = {
 
       await movie.save();
 
-      return res.status(201).json(movie._id);
+      return res.status(201).json(movie);
     } catch (error) {
       console.log("here in the create movie constroller funciton");
       next(error);

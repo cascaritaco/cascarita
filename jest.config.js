@@ -13,6 +13,7 @@ module.exports = {
   ],
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
+  setupFiles: ["<rootDir>/server/utilityFunctions/mongooseSetUp.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   transform: {
     "\\.[jt]sx?$": "babel-jest",
