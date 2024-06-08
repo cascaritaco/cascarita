@@ -1,4 +1,4 @@
-const ResponseId = require("../mongoModel/response_id");
+const ResponseId = require("../mongoModels/response_id");
 
 // parseResponseJSON will take in the raw responses json and break it into individual responses:
 function parseResponseJSON(jsonStr, uniqueResponseIds, formId) {
