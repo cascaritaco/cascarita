@@ -9,7 +9,7 @@ const path = require("path");
 
 const Middlewares = require("./middlewares");
 const passport = require("./passport");
-const { startMongoConnection } = require("./mongodb")
+const { startMongoConnection } = require("./mongodb");
 
 const app = express();
 app.set("port", process.env.SERVER_PORT || 3001);
@@ -26,7 +26,7 @@ const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     sameSite: "strict",
-    maxAge: secondsInAnHour * 1000
+    maxAge: secondsInAnHour * 1000,
   },
 });
 app.use(sessionMiddleware);
@@ -40,7 +40,7 @@ app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
     credentials: true,
-  })
+  }),
 );
 
 // Error handler should be the last middleware used
@@ -57,6 +57,7 @@ const SeasonRoutes = require("./routes/season.routes");
 const SurveyController = require("./routes/survey.routes");
 const TeamRoutes = require("./routes/team.routes");
 const UserRoutes = require("./routes/user.routes");
+const FormRoutes = require("./routes/form.routes");
 
 app.use("/api/auth", AuthRoutes);
 app.use("/api/divisions", DivisionController);
@@ -69,6 +70,7 @@ app.use("/api/seasons", SeasonRoutes);
 app.use("/api", SurveyController);
 app.use("/api/teams", TeamRoutes);
 app.use("/api/users", UserRoutes);
+app.use("/api/forms", FormRoutes);
 
 app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
