@@ -1,4 +1,4 @@
 export interface DropdownMenuButtonProps {
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }

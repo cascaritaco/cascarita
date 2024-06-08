@@ -1,26 +1,46 @@
 import React from "react";
 import styles from "./LeagueForm.module.css";
-import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
-import RadioSelect from "../RadioSelect/RadioSelect";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { User } from "../AuthContext/types";
 
 interface LeagueFormProps {
   //Use to set open state from true to false after form submission
   afterSave: () => void;
+  currentUser: User;
 }
 
-const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
+const addLeague = async (formData: object) => {
+  const response = await fetch("/api/leagues/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  return response.json();
+};
+
+const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave, currentUser }) => {
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
-  const [isExistingLeague, setIsExistingLeague] = React.useState("no");
-  const [existingLeague, setExistingLeague] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
 
-  const TEST_LEAGUES = ["English Premier League", "MLS", "Spanish LALIGA"];
+  console.log(currentUser);
+
+  const queryClient = useQueryClient();
+
+  const leagueFormMutation = useMutation({
+    mutationFn: addLeague,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["leagues"],
+      });
+    },
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
     const { leagueName, leagueDescription } = Object.fromEntries(
       new FormData(event.currentTarget),
     );
@@ -28,15 +48,13 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
     const newLeague = {
       name: leagueName,
       description: leagueDescription,
-      group_id: 1,
+      group_id: currentUser.group_id,
     };
 
-    await fetch("/api/league/", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newLeague),
+    leagueFormMutation.mutate({
+      name: newLeague.name,
+      description: newLeague.description,
+      group_id: newLeague.group_id,
     });
 
     afterSave();
@@ -59,7 +77,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
         />
       </div>
 
-      <div className={styles.inputContainer}>
+      <div className={`${styles.inputContainer} ${styles.halfContainer}`}>
         <label className={styles.label} htmlFor="leagueDesc">
           Description
         </label>
@@ -73,61 +91,19 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
         />
       </div>
 
-      <fieldset>
-        <div className={styles.radioContainer}>
-          <legend className={styles.label}>
-            Want to link an existing divison?
-          </legend>
-
-          <RadioSelect
-            groupName="isExistingLeague"
-            value={isExistingLeague}
-            onValueChange={(isExistingLeague) =>
-              setIsExistingLeague(isExistingLeague)
-            }
-          >
-            <div className={styles.radioInputContainer}>
-              <RadioSelect.Item id="existing-yes" value="yes" />
-              <label htmlFor="existing-yes">Yes</label>
-
-              <RadioSelect.Item id="existing-no" value="no" />
-              <label htmlFor="existing-no">No</label>
-            </div>
-          </RadioSelect>
-        </div>
-      </fieldset>
-
-      {isExistingLeague === "no" ? (
-        ""
-      ) : (
-        <SelectMenu
-          placeholder="Select a League"
-          name="existingLeague"
-          value={existingLeague}
-          onValueChange={(value) => setExistingLeague(value)}
-        >
-          <SelectMenu.Group>
-            <SelectMenu.GroupLabel className={styles.groupLabel}>
-              Existing Leagues
-            </SelectMenu.GroupLabel>
-
-            {TEST_LEAGUES.map((league, idx) => (
-              <SelectMenu.Item key={idx} value={league}>
-                {league}
-              </SelectMenu.Item>
-            ))}
-          </SelectMenu.Group>
-        </SelectMenu>
-      )}
-
       <div className={styles.formBtnContainer}>
         <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
           Cancel
         </Modal.Close>
 
-        <button type="submit" className={`${styles.btn} ${styles.submitBtn}`}>
-          {isLoading === false ? "Submit" : "Saving..."}
-        </button>
+        <div>
+          <button
+            type="submit"
+            onClick={() => {}}
+            className={`${styles.btn} ${styles.submitBtn}`}>
+            Submit
+          </button>
+        </div>
       </div>
     </form>
   );

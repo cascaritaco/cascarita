@@ -14,7 +14,7 @@
   justify-content: space-between;
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin: 20px 0;
   flex-wrap: wrap;
 }
 
@@ -30,33 +30,6 @@
 
 .dropdown > p {
   padding-left: 15px;
-}
-
-.table {
-  overflow: scroll;
-  height: 70%;
-}
-
-.cols {
-  padding-top: 10px;
-  display: flex;
-  text-align: center;
-  border-bottom: 1px solid #c8cbd0;
-  padding-bottom: 10px;
-}
-
-.cols > h3 {
-  padding-top: 10px;
-  margin-right: 50%;
-  font-weight: 800;
-}
-
-.cols > p {
-  padding-right: 52%;
-}
-
-.cols > button {
-  padding-right: 50%;
 }
 
 .h1 {
@@ -80,4 +53,19 @@
 
 .filterSubTitle {
   font-size: small;
+}
+
+.noLeagueMessage {
+  text-align: center;
+  margin-top: 200px;
+  font-size: 2rem;
+}
+
+.tableRow {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.tableData {
+  padding: 12px 0;
 }

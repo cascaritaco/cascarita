@@ -4,8 +4,7 @@
   width: -moz-available;
   margin-right: 35px;
   border-radius: 6px;
-  height: -webkit-fill-available;
-  height: -moz-available;
+  height: 87dvh;
   margin-bottom: 35px;
   position: fixed;
   padding: 30px;
