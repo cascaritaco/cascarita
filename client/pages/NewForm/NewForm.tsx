@@ -9,9 +9,11 @@ import { Field, Survey } from "../../components/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useTranslation } from "react-i18next";
+import FormResponses from "../../components/FormResponses/FormResponses";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
+  const [activeSection, setActiveSection] = useState("questions");
   const navigate = useNavigate();
   const location = useLocation();
   const fields = location.state?.fields as Field[] | undefined;
@@ -176,13 +178,7 @@ const NewForm = () => {
   return (
     <Page>
       <div>
-        <div
-          className={styles.newFormHeader}
-          style={{
-            borderBottom: "1px solid #DFE5EE",
-            marginBottom: 15,
-            marginRight: 33,
-          }}>
+        <div className={styles.newFormHeader} style={{}}>
           <h1 className={styles.title}>
             {formId == null ? t("pageTitleNew") : t("pageTitleEdit")}
           </h1>
@@ -208,58 +204,80 @@ const NewForm = () => {
             )}
           </div>
         </div>
-        <div className={styles.newFormContainer}>
-          <div className={styles.formElementsContainer}>
-            <h2 className={styles.subtitle}>{t("formElements")}</h2>
-            <hr />
-            <p className={styles.smallText} style={{ paddingTop: 8 }}>
-              {t("textElements")}
-            </p>
-            {draggableButtons.map((label, index) => (
-              <DraggableButton
-                key={index}
-                label={label}
-                onDrop={() => handleDrop(label as DroppedItemType)}
-              />
-            ))}
-          </div>
-          <div className={styles.formCanvasContainer}>
-            <div className={styles.formTitleContainer}>
-              <div style={{ paddingBottom: 8 }}>
+        <ul className={styles.formNav}>
+          <li
+            className={
+              activeSection === "questions" ? styles.activeSection : ""
+            }
+            style={{ marginRight: 20 }}
+            onClick={() => setActiveSection("questions")}>
+            Questions
+          </li>
+          {formId != null && (
+            <li
+              className={
+                activeSection === "responses" ? styles.activeSection : ""
+              }
+              onClick={() => setActiveSection("responses")}>
+              Responses
+            </li>
+          )}
+        </ul>
+        {activeSection === "questions" && (
+          <div className={styles.newFormContainer}>
+            <div className={styles.formElementsContainer}>
+              <h2 className={styles.subtitle}>{t("formElements")}</h2>
+              <hr />
+              <p className={styles.smallText} style={{ paddingTop: 8 }}>
+                {t("textElements")}
+              </p>
+              {draggableButtons.map((label, index) => (
+                <DraggableButton
+                  key={index}
+                  label={label}
+                  onDrop={() => handleDrop(label as DroppedItemType)}
+                />
+              ))}
+            </div>
+            <div className={styles.formCanvasContainer}>
+              <div className={styles.formTitleContainer}>
+                <div style={{ paddingBottom: 8 }}>
+                  <input
+                    className={styles.formTitle}
+                    placeholder="Form Title"
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title}
+                  />
+                  <hr />
+                </div>
                 <input
-                  className={styles.formTitle}
-                  placeholder="Form Title"
-                  onChange={(e) => setTitle(e.target.value)}
-                  value={title}
+                  className={styles.formDescription}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder={t("descriptionPlaceholder")}
+                  value={description}
                 />
                 <hr />
               </div>
-              <input
-                className={styles.formDescription}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder={t("descriptionPlaceholder")}
-                value={description}
-              />
-              <hr />
-            </div>
-            <p className={styles.smallText} style={{ color: "#b01254" }}>
-              {t("sectionText")}
-            </p>
+              <p className={styles.smallText} style={{ color: "#b01254" }}>
+                {t("sectionText")}
+              </p>
 
-            <div className={styles.canvasStyles}>
-              <div className={styles.canvasInnerContainer}>
-                <DNDCanvas
-                  ref={canvasRef}
-                  importedFields={fields}
-                  items={droppedItems}
-                  handleDelete={handleDelete}
-                  handleCopy={handleCopy}
-                  saveSurvey={formId == null ? onCreate : onSave}
-                />
+              <div className={styles.canvasStyles}>
+                <div className={styles.canvasInnerContainer}>
+                  <DNDCanvas
+                    ref={canvasRef}
+                    importedFields={fields}
+                    items={droppedItems}
+                    handleDelete={handleDelete}
+                    handleCopy={handleCopy}
+                    saveSurvey={formId == null ? onCreate : onSave}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+        {activeSection === "responses" && <FormResponses />}
       </div>
     </Page>
   );
