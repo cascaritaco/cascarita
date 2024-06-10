@@ -70,13 +70,19 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
     return (typeFormatters[answer.type] ?? typeFormatters.default)();
   };
 
+  const trimText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  };
+
   return (
     <div className={styles.container}>
       <table className={styles.table}>
         <thead>
           <tr>
             {formFields.map((field) => (
-              <th key={field.id}>{field.title}</th>
+              <th key={field.id} title={field.title}>
+                <p>{trimText(field.title, 35)}</p>
+              </th>
             ))}
           </tr>
         </thead>

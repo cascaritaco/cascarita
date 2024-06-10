@@ -61,6 +61,7 @@
     "react-router-dom": "^6.21.0",
     "react-social-login-buttons": "^4.1.0",
     "react-switch": "^7.0.0",
+    "react-tooltip": "^5.26.4",
     "sequelize": "^6.35.1",
     "sequelize-cli": "^6.6.2",
     "style-loader": "^3.3.3",
