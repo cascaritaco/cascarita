@@ -92,7 +92,7 @@ const NewForm = () => {
     };
 
     try {
-      const response = await fetch("/api/survey", {
+      const response = await fetch(`/api/forms/${currentUser?.group_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,8 +107,8 @@ const NewForm = () => {
       const existingSurveys = JSON.parse(
         localStorage.getItem("surveys") ?? "{}",
       );
-      const surveyId = surveyResponseObj.id;
-      const link = surveyResponseObj._links.display;
+      const surveyId = surveyResponseObj.form_data.id;
+      const link = surveyResponseObj.form_data._links.display;
       setSurveyLink(link);
       setFormId(surveyId);
       existingSurveys[formId ?? surveyId] = {
