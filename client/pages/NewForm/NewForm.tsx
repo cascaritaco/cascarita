@@ -16,7 +16,7 @@ const NewForm = () => {
   const [activeSection, setActiveSection] = useState("questions");
   const navigate = useNavigate();
   const location = useLocation();
-  const fields = location.state?.fields as Field[] | undefined;
+  const [fields, setFields] = useState<Field[]>(location.state?.fields ?? []);
   const [formId, setFormId] = useState<string | null>(
     (location.state?.id as string) ?? null,
   );
@@ -113,6 +113,7 @@ const NewForm = () => {
       const link = surveyResponseObj.form_data._links.display;
       setSurveyLink(link);
       setFormId(surveyId);
+      setFields(surveyResponseObj.fields);
       existingSurveys[surveyId] = {
         ...surveyResponseObj,
         edittedBy: currentUser?.first_name ?? "",
@@ -157,6 +158,7 @@ const NewForm = () => {
       const surveyResponseObj = await response.json();
       // Update the form in local storage
       const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+      setFields(surveyResponseObj.fields);
       surveys[formId] = {
         ...surveyResponseObj,
         edittedBy: currentUser?.first_name ?? "",
