@@ -107,8 +107,8 @@ const NewForm = () => {
       const existingSurveys = JSON.parse(
         localStorage.getItem("surveys") ?? "{}",
       );
-      const surveyId = surveyResponseObj.id;
-      const link = surveyResponseObj._links.display;
+      const surveyId = surveyResponseObj.form_data.id;
+      const link = surveyResponseObj.form_data._links.display;
       setSurveyLink(link);
       setFormId(surveyId);
       existingSurveys[formId ?? surveyId] = {
