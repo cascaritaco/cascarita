@@ -35,6 +35,8 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
     queryKey: ["leagues"],
   });
 
+  console.log(currentUser);
+
   return (
     <Page>
       <h1 className={styles.h1}>{t("title")}</h1>
@@ -92,17 +94,17 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
         </Modal>
       </div>
 
-      {!leaguesQuery.data ? (
+      {leaguesQuery.data == null || leaguesQuery?.data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a League to Display...</p>
       ) : (
         <DashboardTable headers={["Name", "Options"]}>
           {leaguesQuery.isLoading ? (
             <tr>
-              <p>Loading...</p>
+              <td>Loading...</td>
             </tr>
           ) : leaguesQuery.isError || !leaguesQuery.data ? (
             <tr>
-              <p>Error Fetching Data</p>
+              <td>Error Fetching Data</td>
             </tr>
           ) : (
             leaguesQuery.data?.map((league: LeagueType, idx: number) => (
