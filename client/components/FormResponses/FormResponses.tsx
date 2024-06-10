@@ -93,17 +93,13 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
               ))}
             </tr>
           ))}
-          {formResponsesMap.size === 0 && (
-            <tr>
-              <td
-                colSpan={formFields.length}
-                style={{ display: "flex", justifyContent: "center" }}>
-                <h2>No Form Responses yet</h2>
-              </td>
-            </tr>
-          )}
         </tbody>
       </table>
+      {formResponsesMap.size === 0 && (
+        <div style={{ display: "flex", justifyContent: "center", padding: 10 }}>
+          <h2>No Form Responses yet</h2>
+        </div>
+      )}
     </div>
   );
 };

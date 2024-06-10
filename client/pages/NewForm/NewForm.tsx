@@ -113,14 +113,10 @@ const NewForm = () => {
       const link = surveyResponseObj.form_data._links.display;
       setSurveyLink(link);
       setFormId(surveyId);
-      existingSurveys[formId ?? surveyId] = {
-        id: formId ?? surveyId,
+      existingSurveys[surveyId] = {
+        ...surveyResponseObj,
         edittedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
-        title,
-        description,
-        link,
-        ...data,
       };
       localStorage.setItem("surveys", JSON.stringify(existingSurveys));
     } catch (err) {
@@ -158,16 +154,13 @@ const NewForm = () => {
       if (!response.ok) {
         throw new Error("Failed to update form");
       }
-
+      const surveyResponseObj = await response.json();
       // Update the form in local storage
       const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
       surveys[formId] = {
-        ...surveys[formId],
+        ...surveyResponseObj,
         edittedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
-        title,
-        description,
-        ...data,
       };
       localStorage.setItem("surveys", JSON.stringify(surveys));
     } catch (error) {

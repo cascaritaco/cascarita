@@ -105,13 +105,16 @@ const Forms = () => {
                   onEdit(
                     form.id,
                     form.title,
-                    form.description,
-                    form.link,
+                    form.welcome_screens[0].properties.description,
+                    form._links.display,
                     form.fields,
                   )
                 }
               />
-              <a href={form.link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={form._links.display}
+                target="_blank"
+                rel="noopener noreferrer">
                 <ShareButton />
               </a>
             </div>
