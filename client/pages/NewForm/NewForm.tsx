@@ -113,9 +113,9 @@ const NewForm = () => {
       const link = surveyResponseObj.form_data._links.display;
       setSurveyLink(link);
       setFormId(surveyId);
-      setFields(surveyResponseObj.fields);
+      setFields(surveyResponseObj.form_data.fields);
       existingSurveys[surveyId] = {
-        ...surveyResponseObj,
+        ...surveyResponseObj.form_data,
         edittedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
       };
@@ -160,7 +160,7 @@ const NewForm = () => {
       const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
       setFields(surveyResponseObj.fields);
       surveys[formId] = {
-        ...surveyResponseObj,
+        ...surveyResponseObj.form_data,
         edittedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
       };
