@@ -9,5 +9,9 @@
   "formElements": "Form Elements",
   "textElements": "Text Elements",
   "descriptionPlaceholder": "Description",
-  "sectionText": "Section"
+  "sectionText": "Section",
+  "formNavOptions": {
+    "questions": "Questions",
+    "responses": "Responses"
+  }
 }

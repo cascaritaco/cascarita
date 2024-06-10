@@ -206,7 +206,7 @@ const NewForm = () => {
             }
             style={{ marginRight: 20 }}
             onClick={() => setActiveSection("questions")}>
-            Questions
+            {t("formNavOptions.questions")}
           </li>
           {formId != null && (
             <li
@@ -214,7 +214,7 @@ const NewForm = () => {
                 activeSection === "responses" ? styles.activeSection : ""
               }
               onClick={() => setActiveSection("responses")}>
-              Responses
+              {t("formNavOptions.responses")}
             </li>
           )}
         </ul>
