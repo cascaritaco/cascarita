@@ -277,7 +277,9 @@ const NewForm = () => {
             </div>
           </div>
         )}
-        {activeSection === "responses" && <FormResponses />}
+        {formId != null && activeSection === "responses" && (
+          <FormResponses formId={formId} />
+        )}
       </div>
     </Page>
   );

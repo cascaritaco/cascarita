@@ -1,19 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./FormResponses.module.css";
-import dummyFormData from "./dummyFormResponses2MissingAnswers.json";
-import dummyFormFieldId from "./dummyFormFieldIds.json";
-import { Answer } from "./types";
+import {
+  Answer,
+  AnswerRecordMap,
+  Field,
+  FormResponsesProps,
+  TypeformResponse,
+} from "./types";
 
-const FormResponses = () => {
-  const responsesMap = new Map();
-  dummyFormData.items.forEach((response) => {
-    const responseId = response.response_id;
-    const answersMap = new Map();
-    response.answers.forEach((answer) => {
-      answersMap.set(answer.field.id, answer);
-    });
-    responsesMap.set(responseId, answersMap);
-  });
+const FormResponses = ({ formId }: FormResponsesProps) => {
+  const [formFields, setFormFields] = useState<Field[]>([]);
+  const [formResponsesMap, setFormResponsesMap] = useState<AnswerRecordMap>(
+    new Map(),
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchSurveyData = async (endpoint: string) => {
+          const response = await fetch(`/api/survey/${formId}${endpoint}`);
+          if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+          }
+          return response.json();
+        };
+
+        const formData = await fetchSurveyData("");
+        setFormFields(formData.fields);
+
+        const responsesData = await fetchSurveyData("/responses");
+
+        const responsesMap = responsesData.items.reduce(
+          (res: AnswerRecordMap, response: TypeformResponse) => {
+            const answersMap: Map<string, Answer> = new Map();
+            response.answers?.forEach((answer: Answer) => {
+              answersMap.set(answer.field.id, answer);
+            });
+            res.set(response.response_id, answersMap);
+            return res;
+          },
+          new Map(),
+        );
+
+        setFormResponsesMap(responsesMap);
+      } catch (err) {
+        console.error("Error fetching form and responses:", err);
+      }
+    };
+
+    fetchData();
+  }, [formId]);
 
   const formatAnswer = (answer: Answer) => {
     const typeFormatters: Record<string, () => string | JSX.Element> = {
@@ -39,25 +75,33 @@ const FormResponses = () => {
       <table className={styles.table}>
         <thead>
           <tr>
-            {dummyFormFieldId.fieldIds.map((fieldId) => (
-              <th key={fieldId}>{fieldId}</th>
+            {formFields.map((field) => (
+              <th key={field.id}>{field.title}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {dummyFormData.items.map((response) => (
-            <tr key={response.response_id}>
-              {dummyFormFieldId.fieldIds.map((fieldId) => (
-                <td key={fieldId}>
-                  {responsesMap.has(response.response_id) &&
-                    responsesMap.get(response.response_id).has(fieldId) &&
+          {Array.from(formResponsesMap.keys()).map((responseId) => (
+            <tr key={responseId}>
+              {formFields.map((field) => (
+                <td key={field.id}>
+                  {formResponsesMap.get(responseId)?.get(field.id)?.type &&
                     formatAnswer(
-                      responsesMap.get(response.response_id).get(fieldId),
+                      formResponsesMap.get(responseId)?.get(field.id) as Answer,
                     )}
                 </td>
               ))}
             </tr>
           ))}
+          {formResponsesMap.size === 0 && (
+            <tr>
+              <td
+                colSpan={formFields.length}
+                style={{ display: "flex", justifyContent: "center" }}>
+                <h2>No Form Responses yet</h2>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
