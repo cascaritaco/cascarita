@@ -24,6 +24,12 @@ const FormController = {
         },
       );
 
+      if (!response.ok) {
+        throw new Error(
+          "typeform api call failed with status code of: " + response.status,
+        );
+      }
+
       const responseBody = await response.json();
 
       const rawResponse = new RawResponse({
@@ -36,9 +42,9 @@ const FormController = {
       });
 
       if (results.length === 0) {
-        const result = await rawResponse.save();
+        await rawResponse.save();
       } else {
-        const result = await rawResponse.updateOne(
+        await rawResponse.updateOne(
           { _id: results._id },
           { $set: { raw_response_data: responseBody } },
         );
@@ -90,6 +96,12 @@ const FormController = {
         },
         body: JSON.stringify(req.body),
       });
+
+      if (!response.ok) {
+        throw new Error(
+          "typeform api call failed with status code of: " + response.status,
+        );
+      }
 
       const responseBody = await response.json();
 
