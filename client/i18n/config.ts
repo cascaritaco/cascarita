@@ -18,6 +18,8 @@ import EmptyDNDCanvasEn from "./en/components/EmptyDNDCanvas.json";
 import EmptyDNDCanvasEsp from "./esp/components/EmptyDNDCanvas.json";
 import DraggableButtonsEn from "./en/components/DraggableButtons.json";
 import DraggableButtonsEsp from "./esp/components/DraggableButtons.json";
+import DraggableFieldsEn from "./en/components/DraggableFields.json";
+import DraggableFieldsEsp from "./esp/components/DraggableFields.json";
 import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
@@ -37,6 +39,7 @@ i18next.use(initReactI18next).init({
       EmptyDNDCanvas: EmptyDNDCanvasEn,
       DraggableButtons: DraggableButtonsEn,
       FormResponses: FormResponsesEn,
+      DraggableFields: DraggableFieldsEn,
     },
     esp: {
       DropdownMenuButton: DropdownMenuButtonEsp,
@@ -48,6 +51,7 @@ i18next.use(initReactI18next).init({
       EmptyDNDCanvas: EmptyDNDCanvasEsp,
       DraggableButtons: DraggableButtonsEsp,
       FormResponses: FormResponsesEsp,
+      DraggableFields: DraggableFieldsEsp,
     },
   },
   ns: [
@@ -60,6 +64,7 @@ i18next.use(initReactI18next).init({
     "EmptyDNDCanvas",
     "DraggableButtons",
     "FormResponses",
+    "DraggableFields",
   ],
 });
 

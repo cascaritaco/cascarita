@@ -50,9 +50,9 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
       date: () =>
         answer.date ? new Date(answer.date).toLocaleDateString() : "",
       file_url: () =>
-        answer.file_url ? <a href={answer.file_url}>{t`fileText`}</a> : "",
+        answer.file_url ? <a href={answer.file_url}>{t("fileText")}</a> : "",
       boolean: () =>
-        answer.boolean ? t`booleanOption.true` : t`booleanOption.false`,
+        answer.boolean ? t("booleanOption.true") : t("booleanOption.false"),
       default: () => "",
     };
 
@@ -88,7 +88,7 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
       </table>
       {formResponsesMap.size === 0 && (
         <div className={styles.emptyFormResponses}>
-          <h2>{t`noResponsesText`}</h2>
+          <h2>{t("noResponsesText")}</h2>
         </div>
       )}
     </div>
