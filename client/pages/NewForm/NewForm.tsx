@@ -84,18 +84,19 @@ const NewForm = () => {
       description,
       currentUser?.group_id,
     );
-    const existingSurveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    const surveyId = response.form_data.id;
-    const link = response.form_data._links.display;
-    setFormLink(link);
-    setFormId(surveyId);
+    const storedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    const fetchedFormId = response.form_data.id;
+    setFormLink(response.form_data._links.display);
+    setFormId(response.form_data.id);
     setFields(response.form_data.fields);
-    existingSurveys[surveyId] = {
-      ...response.form_data,
+    storedForms[fetchedFormId] = {
+      id: response.form_data.id,
+      title: response.form_data.title,
       editedBy: currentUser?.first_name ?? "",
-      lastUpdated: new Date().toLocaleString(),
+      _links: { ...response.form_data._links },
+      lastUpdated: new Date(),
     };
-    localStorage.setItem("surveys", JSON.stringify(existingSurveys));
+    localStorage.setItem("surveys", JSON.stringify(storedForms));
   };
 
   const onSave = async (data: Form) => {
@@ -104,14 +105,16 @@ const NewForm = () => {
     }
     const response = await updateForm(data, formId, title, description);
     // Update the form in local storage
-    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    const storedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
     setFields(response.fields);
-    surveys[formId] = {
-      ...response,
+    storedForms[formId] = {
+      id: response.id,
+      title: response.title,
       editedBy: currentUser?.first_name ?? "",
-      lastUpdated: new Date().toLocaleString(),
+      _links: { ...response._links },
+      lastUpdated: new Date(),
     };
-    localStorage.setItem("surveys", JSON.stringify(surveys));
+    localStorage.setItem("surveys", JSON.stringify(storedForms));
   };
 
   return (

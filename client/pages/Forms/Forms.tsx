@@ -8,9 +8,8 @@ import styles from "./Forms.module.css";
 import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
-import { Field } from "../../components/DNDCanvas/types";
 import { useTranslation } from "react-i18next";
-import { deleteForm } from "../../api/forms/service";
+import { deleteForm, fetchFormData } from "../../api/forms/service";
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
@@ -21,8 +20,8 @@ const Forms = () => {
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   useEffect(() => {
-    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    setForms(Object.values(surveys ?? []));
+    const fetchedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    setForms(Object.values(fetchedForms ?? []));
   }, []);
 
   const handleNewFormClick = () => {
@@ -32,21 +31,22 @@ const Forms = () => {
   const onDelete = async (id: string) => {
     await deleteForm(id);
     // Delete the form from local storage
-    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    delete surveys[id];
-    localStorage.setItem("surveys", JSON.stringify(surveys));
-    setForms(Object.values(surveys ?? []));
+    const fetchedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    delete fetchedForms[id];
+    localStorage.setItem("surveys", JSON.stringify(fetchedForms));
+    setForms(Object.values(fetchedForms ?? []));
   };
 
-  const onEdit = (
-    id: string,
-    title: string,
-    description: string,
-    link: string,
-    fields: Field[],
-  ) => {
+  const onEdit = async (id: string, title: string, link: string) => {
+    const form = await fetchFormData(id, "");
     navigate("/forms/check", {
-      state: { id, title, description, link, fields },
+      state: {
+        id,
+        title,
+        description: form.welcome_screens?.[0]?.properties?.description ?? "",
+        link,
+        fields: form.fields,
+      },
     });
   };
 
@@ -88,18 +88,10 @@ const Forms = () => {
             <div className={styles.cols} key={index}>
               <p>{form.title}</p>
               <p>{form.editedBy}</p>
-              <p>{form.lastUpdated}</p>
+              <p>{new Date(form.lastUpdated).toLocaleString()}</p>
               <DropdownMenuButton
                 onDelete={() => onDelete(form.id)}
-                onEdit={() =>
-                  onEdit(
-                    form.id,
-                    form.title,
-                    form.welcome_screens?.[0]?.properties?.description ?? "",
-                    form._links.display,
-                    form.fields,
-                  )
-                }
+                onEdit={() => onEdit(form.id, form.title, form._links.display)}
               />
               <a
                 href={form._links.display}
