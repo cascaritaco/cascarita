@@ -33,7 +33,7 @@ export interface Field {
   type: FieldType;
 }
 
-export interface Survey {
+export interface Form {
   fields: Field[];
 }
 
@@ -42,5 +42,5 @@ export interface DNDCanvasProps {
   importedFields?: Field[];
   handleDelete: (name: string) => void;
   handleCopy: (index: number, copiedItem: DroppedItem) => void;
-  saveSurvey: (data: Survey) => void;
+  saveForm: (data: Form) => void;
 }

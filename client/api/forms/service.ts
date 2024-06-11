@@ -1,4 +1,4 @@
-import { Survey } from "./types";
+import { Form } from "./types";
 
 // TODO: Create a call to fetch all forms by groupId (this will be the call to replace the forms stored in localStorage)
 
@@ -11,18 +11,18 @@ export const fetchFormData = async (formId: string, endpoint: string) => {
     }
     return response.json();
   } catch (error) {
-    console.error("Error fetching survey data:", error);
+    console.error("Error fetching form data:", error);
     throw error;
   }
 };
 
 export const createForm = async (
-  data: Survey,
+  data: Form,
   title: string,
   description: string,
   groupId: number | undefined,
 ) => {
-  const surveyData = {
+  const formData = {
     title,
     welcome_screens: [
       {
@@ -40,7 +40,7 @@ export const createForm = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(surveyData),
+      body: JSON.stringify(formData),
     });
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
@@ -48,17 +48,17 @@ export const createForm = async (
 
     return response.json();
   } catch (err) {
-    console.error("Error creating survey:", err);
+    console.error("Error creating form:", err);
   }
 };
 
 export const updateForm = async (
-  data: Survey,
+  data: Form,
   formId: string,
   title: string,
   description: string,
 ) => {
-  const surveyData = {
+  const formData = {
     title,
     welcome_screens: [
       {
@@ -77,7 +77,7 @@ export const updateForm = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(surveyData),
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {

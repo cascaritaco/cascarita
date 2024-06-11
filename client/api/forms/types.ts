@@ -31,6 +31,6 @@ export interface Field {
   type: FieldType;
 }
 
-export interface Survey {
+export interface Form {
   fields: Field[];
 }
