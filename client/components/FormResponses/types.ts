@@ -13,7 +13,7 @@ export interface Answer {
   text?: string;
   phone_number?: string;
   email?: string;
-  date?: string;
+  date?: Date;
   boolean?: boolean;
   choice?: { label: string };
   choices?: { labels: string[] };

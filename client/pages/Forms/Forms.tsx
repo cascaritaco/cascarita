@@ -97,7 +97,7 @@ const Forms = () => {
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
               <p>{form.title}</p>
-              <p>{form.edittedBy}</p>
+              <p>{form.editedBy}</p>
               <p>{form.lastUpdated}</p>
               <DropdownMenuButton
                 onDelete={() => onDelete(form.id)}
@@ -105,7 +105,7 @@ const Forms = () => {
                   onEdit(
                     form.id,
                     form.title,
-                    form.welcome_screens[0].properties.description,
+                    form.welcome_screens?.[0]?.properties?.description ?? "",
                     form._links.display,
                     form.fields,
                   )

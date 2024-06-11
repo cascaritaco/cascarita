@@ -1,0 +1,8 @@
+{
+  "booleanOption": {
+    "true": "Sí",
+    "false": "No"
+  },
+  "fileText": "Archivo",
+  "noResponsesText": "No hay respuestas al formulario"
+}

@@ -170,4 +170,14 @@ h4 {
 .activeSection {
   color: #170cb4;
   border-bottom: 1px solid #170cb4;
+  margin-right: 10px;
+}
+
+.questionsNav,
+.responsesNav {
+  margin-right: 10px;
+}
+
+.textElementsText {
+  padding-top: 8px;
 }

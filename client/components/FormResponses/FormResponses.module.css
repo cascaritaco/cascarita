@@ -47,3 +47,9 @@
 .table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
+.emptyFormResponses {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}

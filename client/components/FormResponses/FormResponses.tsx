@@ -7,29 +7,22 @@ import {
   FormResponsesProps,
   TypeformResponse,
 } from "./types";
+import { fetchSurveyData } from "../../api/forms/service";
+import { truncateText } from "../../util/truncateText";
+import { useTranslation } from "react-i18next";
 
 const FormResponses = ({ formId }: FormResponsesProps) => {
   const [formFields, setFormFields] = useState<Field[]>([]);
   const [formResponsesMap, setFormResponsesMap] = useState<AnswerRecordMap>(
     new Map(),
   );
-
+  const { t } = useTranslation("FormResponses");
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchSurveyData = async (endpoint: string) => {
-          const response = await fetch(`/api/survey/${formId}${endpoint}`);
-          if (!response.ok) {
-            throw new Error(`Error fetching data: ${response.statusText}`);
-          }
-          return response.json();
-        };
-
-        const formData = await fetchSurveyData("");
+        const formData = await fetchSurveyData(formId, "");
         setFormFields(formData.fields);
-
-        const responsesData = await fetchSurveyData("/responses");
-
+        const responsesData = await fetchSurveyData(formId, "/responses");
         const responsesMap = responsesData.items.reduce(
           (res: AnswerRecordMap, response: TypeformResponse) => {
             const answersMap: Map<string, Answer> = new Map();
@@ -62,16 +55,13 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
       date: () =>
         answer.date ? new Date(answer.date).toLocaleDateString() : "",
       file_url: () =>
-        answer.file_url ? <a href={answer.file_url}>File</a> : "",
-      boolean: () => (answer.boolean ? "Yes" : "No"),
+        answer.file_url ? <a href={answer.file_url}>{t`fileText`}</a> : "",
+      boolean: () =>
+        answer.boolean ? t`booleanOption.true` : t`booleanOption.false`,
       default: () => "",
     };
 
     return (typeFormatters[answer.type] ?? typeFormatters.default)();
-  };
-
-  const trimText = (text: string, maxLength: number) => {
-    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
   };
 
   return (
@@ -81,7 +71,7 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
           <tr>
             {formFields.map((field) => (
               <th key={field.id} title={field.title}>
-                <p>{trimText(field.title, 35)}</p>
+                <p>{truncateText(field.title, 35)}</p>
               </th>
             ))}
           </tr>
@@ -102,8 +92,8 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
         </tbody>
       </table>
       {formResponsesMap.size === 0 && (
-        <div style={{ display: "flex", justifyContent: "center", padding: 10 }}>
-          <h2>No Form Responses yet</h2>
+        <div className={styles.emptyFormResponses}>
+          <h2>{t`noResponsesText`}</h2>
         </div>
       )}
     </div>

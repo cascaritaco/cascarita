@@ -13,7 +13,7 @@ export interface WelcomeScreen {
 
 export interface Form {
   id: string;
-  edittedBy: string;
+  editedBy: string;
   lastUpdated: string;
   title: string;
   description: string;

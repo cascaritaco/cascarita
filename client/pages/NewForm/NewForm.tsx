@@ -116,7 +116,7 @@ const NewForm = () => {
       setFields(surveyResponseObj.form_data.fields);
       existingSurveys[surveyId] = {
         ...surveyResponseObj.form_data,
-        edittedBy: currentUser?.first_name ?? "",
+        editedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
       };
       localStorage.setItem("surveys", JSON.stringify(existingSurveys));
@@ -161,7 +161,7 @@ const NewForm = () => {
       setFields(surveyResponseObj.fields);
       surveys[formId] = {
         ...surveyResponseObj.form_data,
-        edittedBy: currentUser?.first_name ?? "",
+        editedBy: currentUser?.first_name ?? "",
         lastUpdated: new Date().toLocaleString(),
       };
       localStorage.setItem("surveys", JSON.stringify(surveys));
@@ -173,7 +173,7 @@ const NewForm = () => {
   return (
     <Page>
       <div>
-        <div className={styles.newFormHeader} style={{}}>
+        <div className={styles.newFormHeader}>
           <h1 className={styles.title}>
             {formId == null ? t("pageTitleNew") : t("pageTitleEdit")}
           </h1>
@@ -202,16 +202,19 @@ const NewForm = () => {
         <ul className={styles.formNav}>
           <li
             className={
-              activeSection === "questions" ? styles.activeSection : ""
+              activeSection === "questions"
+                ? styles.activeSection
+                : styles.questionsNav
             }
-            style={{ marginRight: 20 }}
             onClick={() => setActiveSection("questions")}>
             {t("formNavOptions.questions")}
           </li>
           {formId != null && (
             <li
               className={
-                activeSection === "responses" ? styles.activeSection : ""
+                activeSection === "responses"
+                  ? styles.activeSection
+                  : styles.responsesNav
               }
               onClick={() => setActiveSection("responses")}>
               {t("formNavOptions.responses")}
@@ -223,7 +226,7 @@ const NewForm = () => {
             <div className={styles.formElementsContainer}>
               <h2 className={styles.subtitle}>{t("formElements")}</h2>
               <hr />
-              <p className={styles.smallText} style={{ paddingTop: 8 }}>
+              <p className={`${styles.smallText} ${styles.textElementsText}`}>
                 {t("textElements")}
               </p>
               {draggableButtons.map((label, index) => (
