@@ -17,8 +17,9 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
     new Map(),
   );
   const { t } = useTranslation("FormResponses");
+
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       const formData = await fetchFormData(formId, "");
       setFormFields(formData.fields);
       const responsesData = await fetchFormData(formId, "/responses");
@@ -34,9 +35,7 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
         new Map(),
       );
       setFormResponsesMap(responsesMap);
-    };
-
-    fetchData();
+    })();
   }, [formId]);
 
   const formatAnswer = (answer: Answer) => {
