@@ -1,5 +1,8 @@
 import { Survey } from "./types";
 
+// TODO: Create a call to fetch all forms by groupId (this will be the call to replace the forms stored in localStorage)
+
+// fetches form data by endpoint (e.g. fetch form and/or form responses)
 export const fetchFormData = async (formId: string, endpoint: string) => {
   try {
     const response = await fetch(`/api/survey/${formId}${endpoint}`);
