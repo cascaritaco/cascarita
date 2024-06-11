@@ -7,7 +7,7 @@ import {
   FormResponsesProps,
   TypeformResponse,
 } from "./types";
-import { fetchSurveyData } from "../../api/forms/service";
+import { fetchFormData } from "../../api/forms/service";
 import { truncateText } from "../../util/truncateText";
 import { useTranslation } from "react-i18next";
 
@@ -19,26 +19,21 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
   const { t } = useTranslation("FormResponses");
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const formData = await fetchSurveyData(formId, "");
-        setFormFields(formData.fields);
-        const responsesData = await fetchSurveyData(formId, "/responses");
-        const responsesMap = responsesData.items.reduce(
-          (res: AnswerRecordMap, response: TypeformResponse) => {
-            const answersMap: Map<string, Answer> = new Map();
-            response.answers?.forEach((answer: Answer) => {
-              answersMap.set(answer.field.id, answer);
-            });
-            res.set(response.response_id, answersMap);
-            return res;
-          },
-          new Map(),
-        );
-
-        setFormResponsesMap(responsesMap);
-      } catch (err) {
-        console.error("Error fetching form and responses:", err);
-      }
+      const formData = await fetchFormData(formId, "");
+      setFormFields(formData.fields);
+      const responsesData = await fetchFormData(formId, "/responses");
+      const responsesMap = responsesData.items.reduce(
+        (res: AnswerRecordMap, response: TypeformResponse) => {
+          const answersMap: Map<string, Answer> = new Map();
+          response.answers?.forEach((answer: Answer) => {
+            answersMap.set(answer.field.id, answer);
+          });
+          res.set(response.response_id, answersMap);
+          return res;
+        },
+        new Map(),
+      );
+      setFormResponsesMap(responsesMap);
     };
 
     fetchData();

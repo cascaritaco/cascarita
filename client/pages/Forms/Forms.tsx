@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { Field } from "../../components/DNDCanvas/types";
 import { useTranslation } from "react-i18next";
+import { deleteForm } from "../../api/forms/service";
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
@@ -29,23 +30,12 @@ const Forms = () => {
   };
 
   const onDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/survey/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete form");
-      }
-
-      // Delete the form from local storage
-      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-      delete surveys[id];
-      localStorage.setItem("surveys", JSON.stringify(surveys));
-      setForms(Object.values(surveys ?? []));
-    } catch (error) {
-      console.error(error);
-    }
+    await deleteForm(id);
+    // Delete the form from local storage
+    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    delete surveys[id];
+    localStorage.setItem("surveys", JSON.stringify(surveys));
+    setForms(Object.values(surveys ?? []));
   };
 
   const onEdit = (

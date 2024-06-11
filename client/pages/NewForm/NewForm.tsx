@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
+import { toSnakeCase } from "../../util/toSnakeCase";
+import { createForm, updateForm } from "../../api/forms/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -46,10 +48,6 @@ const NewForm = () => {
     "Phone Number",
   ];
 
-  function toSnakeCase(str: string) {
-    return str.toLowerCase().replace(/\s+/g, "_");
-  }
-
   const handleDrop = (label: DroppedItemType) => {
     const uniqueId = uuidv4();
     const newItem: DroppedItem = {
@@ -80,94 +78,45 @@ const NewForm = () => {
   };
 
   const onCreate = async (data: Survey) => {
-    const surveyData = {
+    const surveyResponseObj = await createForm(
+      data,
       title,
-      welcome_screens: [
-        {
-          title,
-          properties: {
-            description,
-          },
-        },
-      ],
-      ...data,
+      description,
+      currentUser?.group_id,
+    );
+    const existingSurveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    const surveyId = surveyResponseObj.form_data.id;
+    const link = surveyResponseObj.form_data._links.display;
+    setSurveyLink(link);
+    setFormId(surveyId);
+    setFields(surveyResponseObj.form_data.fields);
+    existingSurveys[surveyId] = {
+      ...surveyResponseObj.form_data,
+      editedBy: currentUser?.first_name ?? "",
+      lastUpdated: new Date().toLocaleString(),
     };
-
-    try {
-      const response = await fetch(`/api/forms/${currentUser?.group_id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(surveyData),
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const surveyResponseObj = await response.json();
-      const existingSurveys = JSON.parse(
-        localStorage.getItem("surveys") ?? "{}",
-      );
-      const surveyId = surveyResponseObj.form_data.id;
-      const link = surveyResponseObj.form_data._links.display;
-      setSurveyLink(link);
-      setFormId(surveyId);
-      setFields(surveyResponseObj.form_data.fields);
-      existingSurveys[surveyId] = {
-        ...surveyResponseObj.form_data,
-        editedBy: currentUser?.first_name ?? "",
-        lastUpdated: new Date().toLocaleString(),
-      };
-      localStorage.setItem("surveys", JSON.stringify(existingSurveys));
-    } catch (err) {
-      console.error("Error creating survey:", err);
-    }
+    localStorage.setItem("surveys", JSON.stringify(existingSurveys));
   };
 
   const onSave = async (data: Survey) => {
     if (formId == null || formId === undefined) {
       throw new Error("Form ID is undefined");
     }
-
-    const surveyData = {
+    const surveyResponseObj = await updateForm(
+      data,
+      formId,
       title,
-      welcome_screens: [
-        {
-          title,
-          properties: {
-            description,
-          },
-        },
-      ],
-      ...data,
+      description,
+    );
+    // Update the form in local storage
+    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
+    setFields(surveyResponseObj.fields);
+    surveys[formId] = {
+      ...surveyResponseObj,
+      editedBy: currentUser?.first_name ?? "",
+      lastUpdated: new Date().toLocaleString(),
     };
-
-    try {
-      const response = await fetch(`/api/survey/${formId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(surveyData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update form");
-      }
-      const surveyResponseObj = await response.json();
-      // Update the form in local storage
-      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-      setFields(surveyResponseObj.fields);
-      surveys[formId] = {
-        ...surveyResponseObj.form_data,
-        editedBy: currentUser?.first_name ?? "",
-        lastUpdated: new Date().toLocaleString(),
-      };
-      localStorage.setItem("surveys", JSON.stringify(surveys));
-    } catch (error) {
-      console.error(error);
-    }
+    localStorage.setItem("surveys", JSON.stringify(surveys));
   };
 
   return (
