@@ -127,7 +127,7 @@ const FormController = {
     }
   },
 
-  async getForm(req, res, next) {
+  async getFormByDocumentId(req, res, next) {
     try {
       const results = await FormMongo.find({
         _id: req.params.document_id,
