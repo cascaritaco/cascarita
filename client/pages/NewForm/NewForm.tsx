@@ -84,19 +84,9 @@ const NewForm = () => {
       description,
       currentUser?.group_id,
     );
-    const storedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    const fetchedFormId = response.form_data.id;
     setFormLink(response.form_data._links.display);
     setFormId(response.form_data.id);
     setFields(response.form_data.fields);
-    storedForms[fetchedFormId] = {
-      id: response.form_data.id,
-      title: response.form_data.title,
-      editedBy: currentUser?.first_name ?? "",
-      _links: { ...response.form_data._links },
-      lastUpdated: new Date(),
-    };
-    localStorage.setItem("surveys", JSON.stringify(storedForms));
   };
 
   const onSave = async (data: Form) => {
@@ -104,17 +94,7 @@ const NewForm = () => {
       throw new Error("Form ID is undefined");
     }
     const response = await updateForm(data, formId, title, description);
-    // Update the form in local storage
-    const storedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
     setFields(response.fields);
-    storedForms[formId] = {
-      id: response.id,
-      title: response.title,
-      editedBy: currentUser?.first_name ?? "",
-      _links: { ...response._links },
-      lastUpdated: new Date(),
-    };
-    localStorage.setItem("surveys", JSON.stringify(storedForms));
   };
 
   return (

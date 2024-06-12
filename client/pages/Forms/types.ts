@@ -14,7 +14,7 @@ export interface WelcomeScreen {
 export interface Form {
   id: string;
   editedBy: string;
-  lastUpdated: string;
+  last_updated_at: string;
   title: string;
   description: string;
   welcome_screens: WelcomeScreen[];

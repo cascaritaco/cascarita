@@ -1,6 +1,6 @@
-import { Form, GetFormsParams, GetFormsResponse } from "./types";
+import { Form, GetFormsParams } from "./types";
 
-// TODO: Create a call to fetch all forms by groupId (this will be the call to replace the forms stored in localStorage)
+// TODO: Create a call to fetch all forms by groupId
 // TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
 
 export const getForms = async ({
@@ -10,7 +10,7 @@ export const getForms = async ({
   workspace_id,
   sort_by,
   order_by,
-}: GetFormsParams = {}): Promise<GetFormsResponse> => {
+}: GetFormsParams = {}) => {
   try {
     const params = {
       page: page.toString(),

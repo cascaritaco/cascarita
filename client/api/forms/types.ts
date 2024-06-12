@@ -47,5 +47,3 @@ export interface GetFormsParams {
   sort_by?: SortBy | null;
   order_by?: OrderBy | null;
 }
-
-export type GetFormsResponse = Form[];

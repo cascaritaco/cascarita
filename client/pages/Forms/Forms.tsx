@@ -9,7 +9,7 @@ import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { useTranslation } from "react-i18next";
-import { deleteForm, fetchFormData } from "../../api/forms/service";
+import { deleteForm, fetchFormData, getForms } from "../../api/forms/service";
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
@@ -20,8 +20,10 @@ const Forms = () => {
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   useEffect(() => {
-    const fetchedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    setForms(Object.values(fetchedForms ?? []));
+    (async () => {
+      const fetchedForms = await getForms();
+      setForms(fetchedForms.items ?? []);
+    })();
   }, []);
 
   const handleNewFormClick = () => {
@@ -30,11 +32,7 @@ const Forms = () => {
 
   const onDelete = async (id: string) => {
     await deleteForm(id);
-    // Delete the form from local storage
-    const fetchedForms = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    delete fetchedForms[id];
-    localStorage.setItem("surveys", JSON.stringify(fetchedForms));
-    setForms(Object.values(fetchedForms ?? []));
+    setForms((forms) => forms.filter((form) => form.id !== id));
   };
 
   const onEdit = async (id: string) => {
@@ -88,7 +86,7 @@ const Forms = () => {
             <div className={styles.cols} key={index}>
               <p>{form.title}</p>
               <p>{form.editedBy}</p>
-              <p>{new Date(form.lastUpdated).toLocaleString()}</p>
+              <p>{new Date(form.last_updated_at).toLocaleString()}</p>
               <DropdownMenuButton
                 onDelete={() => onDelete(form.id)}
                 onEdit={() => onEdit(form.id)}
