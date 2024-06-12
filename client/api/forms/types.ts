@@ -34,3 +34,18 @@ export interface Field {
 export interface Form {
   fields: Field[];
 }
+
+type SortBy = "created_at" | "last_updated_at";
+
+type OrderBy = "asc" | "desc";
+
+export interface GetFormsParams {
+  page?: number;
+  page_size?: number;
+  search?: string | null;
+  workspace_id?: string | null;
+  sort_by?: SortBy | null;
+  order_by?: OrderBy | null;
+}
+
+export type GetFormsResponse = Form[];

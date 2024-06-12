@@ -4,6 +4,8 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 
+// TODO: Slowly route these to our mongo DB, eventually we will get rid of this file
+
 router.get("/survey/:id", async (req, res) => {
   try {
     const response = await fetch(
@@ -20,6 +22,49 @@ router.get("/survey/:id", async (req, res) => {
 
     if (!response.ok) {
       console.error("Error fetching form:", responseBody);
+      return res.status(response.status).json(responseBody);
+    }
+
+    res.json(responseBody);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/surveys", async (req, res) => {
+  try {
+    const {
+      page = 1,
+      page_size = 10,
+      search,
+      workspace_id,
+      sort_by,
+      order_by,
+    } = req.query;
+
+    const params = new URLSearchParams({
+      page,
+      page_size,
+      ...(search && { search }),
+      ...(workspace_id && { workspace_id }),
+      ...(sort_by && { sort_by }),
+      ...(order_by && { order_by }),
+    }).toString();
+
+    const url = `https://api.typeform.com/forms?${params}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
+      },
+    });
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      console.error("Error fetching forms:", responseBody);
       return res.status(response.status).json(responseBody);
     }
 

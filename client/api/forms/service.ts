@@ -1,6 +1,42 @@
-import { Form } from "./types";
+import { Form, GetFormsParams, GetFormsResponse } from "./types";
 
 // TODO: Create a call to fetch all forms by groupId (this will be the call to replace the forms stored in localStorage)
+// TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
+
+export const getForms = async ({
+  page = 1,
+  page_size = 10,
+  search,
+  workspace_id,
+  sort_by,
+  order_by,
+}: GetFormsParams = {}): Promise<GetFormsResponse> => {
+  try {
+    const params = {
+      page: page.toString(),
+      page_size: page_size.toString(),
+      ...(search && { search }),
+      ...(workspace_id && { workspace_id }),
+      ...(sort_by && { sort_by }),
+      ...(order_by && { order_by }),
+    };
+
+    const queryParams = new URLSearchParams(params).toString();
+    const response = await fetch(`/api/surveys?${queryParams}`);
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      console.error("Error fetching forms:", responseBody);
+      throw new Error(`Error fetching forms: ${response.statusText}`);
+    }
+
+    return responseBody;
+  } catch (error) {
+    console.error("Server error:", error);
+    throw error;
+  }
+};
 
 // fetches form data by endpoint (e.g. fetch form and/or form responses)
 export const fetchFormData = async (formId: string, endpoint: string) => {
