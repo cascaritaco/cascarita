@@ -92,13 +92,16 @@ const NewForm = () => {
     };
 
     try {
-      const response = await fetch(`/api/forms/${currentUser?.group_id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/forms/${currentUser?.group_id}/${currentUser?.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(surveyData),
         },
-        body: JSON.stringify(surveyData),
-      });
+      );
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }

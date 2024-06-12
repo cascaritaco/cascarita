@@ -8,9 +8,33 @@ const RawResponse = require("./../mongoModels/raw_response");
 const ResponseId = require("./../mongoModels/response_id");
 const Response = require("./../mongoModels/response");
 const FormMongo = require("./../mongoModels/form");
-const { Form } = require("../models");
+const { Form, User } = require("../models");
 
 const FormController = {
+  async getAllForms(req, res, next) {
+    try {
+      const groupId = req.params.id;
+
+      const sqlForms = await Form.findAll({
+        where: {
+          group_id: groupId,
+        },
+        attributes: ["document_id"],
+      });
+
+      const documentIds = sqlForms.map((form) => form.document_id);
+
+      const mongoForms = await FormMongo.find({
+        _id: { $in: documentIds },
+      }).select(
+        "form_data.id form_data.title form_data._links.display created_by updated_by createdAt updatedAt",
+      );
+
+      return res.status(201).json(mongoForms);
+    } catch (error) {
+      next(error);
+    }
+  },
   async getResponses(req, res, next) {
     try {
       const response = await fetch(
@@ -104,17 +128,37 @@ const FormController = {
       }
 
       const responseBody = await response.json();
+      const user = await User.findByPk(req.params.user_id, {
+        attributes: { exclude: ["password"] },
+      });
+      if (!user) {
+        res.status(404);
+        throw new Error(`no user was found with id ${req.params.user_id}`);
+      }
+
+      const createdBy = {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+      };
 
       const form = new FormMongo({
-        group_id: req.params.id,
+        group_id: req.params.group_id,
+        created_by: createdBy,
+        updated_by: null,
         form_data: responseBody,
         form_blueprint: req.body,
       });
 
       const result = await form.save();
 
+      console.log("Testing the group-id thingy", req.params.group_id);
+
       const newForm = {
-        group_id: req.params.id,
+        group_id: req.params.group_id,
+        created_by: req.params.user_id,
+        updated_by: null,
         document_id: result.id,
       };
 
