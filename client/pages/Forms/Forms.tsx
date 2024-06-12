@@ -37,14 +37,14 @@ const Forms = () => {
     setForms(Object.values(fetchedForms ?? []));
   };
 
-  const onEdit = async (id: string, title: string, link: string) => {
+  const onEdit = async (id: string) => {
     const form = await fetchFormData(id, "");
     navigate("/forms/check", {
       state: {
         id,
-        title,
+        title: form.title,
         description: form.welcome_screens?.[0]?.properties?.description ?? "",
-        link,
+        link: form._links.display,
         fields: form.fields,
       },
     });
@@ -91,7 +91,7 @@ const Forms = () => {
               <p>{new Date(form.lastUpdated).toLocaleString()}</p>
               <DropdownMenuButton
                 onDelete={() => onDelete(form.id)}
-                onEdit={() => onEdit(form.id, form.title, form._links.display)}
+                onEdit={() => onEdit(form.id)}
               />
               <a
                 href={form._links.display}
