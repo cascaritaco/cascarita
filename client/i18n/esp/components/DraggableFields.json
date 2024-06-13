@@ -1,0 +1,10 @@
+{
+  "dropDown": "Desplegable",
+  "email": "Correo Electrónico",
+  "longText": "Texto Largo",
+  "multipleChoice": "Elección Múltiple",
+  "phoneNumber": "Número de Teléfono",
+  "shortText": "Texto Corto",
+  "questionPlaceholder": "Pregunta",
+  "requiredText": "Requerido"
+}

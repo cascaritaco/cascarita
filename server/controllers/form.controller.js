@@ -170,6 +170,18 @@ const FormController = {
       next(error);
     }
   },
+
+  async getFormByDocumentId(req, res, next) {
+    try {
+      const results = await FormMongo.find({
+        _id: req.params.document_id,
+      });
+
+      return res.status(201).json(results);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = FormController;
