@@ -11,6 +11,61 @@ const FormMongo = require("./../mongoModels/form");
 const { Form, User } = require("../models");
 
 const FormController = {
+  async updateForm(req, res, next) {
+    const userId = req.params.user_id;
+    const formId = req.params.form_id;
+
+    const response = await fetch(`https://api.typeform.com/forms/${formId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(req.body),
+    });
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      console.error("Error updating survey:", responseBody);
+      return res.status(response.status).json(responseBody);
+    }
+
+    const user = await User.findByPk(userId, {
+      attributes: { exclude: ["password"] },
+    });
+    if (!user) {
+      res.status(404);
+      throw new Error(`no user was found with id ${userId}`);
+    }
+
+    const updatedBy = {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+    };
+
+    let updatedForm = await FormMongo.findOneAndUpdate(
+      { _id: formId },
+      {
+        form_data: responseBody,
+        form_blueprint: req.body,
+        updated_by: updatedBy,
+      },
+    );
+
+    await Form.update(
+      { updated_by: user.id },
+      {
+        where: {
+          document_id: formId,
+        },
+      },
+    );
+
+    return res.status(201).json(updatedForm);
+  },
   async getAllForms(req, res, next) {
     try {
       const groupId = req.params.id;
@@ -152,8 +207,6 @@ const FormController = {
       });
 
       const result = await form.save();
-
-      console.log("Testing the group-id thingy", req.params.group_id);
 
       const newForm = {
         group_id: req.params.group_id,
