@@ -2,7 +2,7 @@ import { UserResponse, LanguageCodeToLanguageId } from "./types";
 
 const updateUsersLanguages = async (
   user_id: number,
-  language: string
+  language: string,
 ): Promise<UserResponse> => {
   const language_id = LanguageCodeToLanguageId[language as "en" | "esp"];
 

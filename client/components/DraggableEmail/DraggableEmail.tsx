@@ -5,6 +5,7 @@ import { DraggableEmailProps } from "./types";
 import styles from "./DraggableEmail.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
+import { useTranslation } from "react-i18next";
 
 const DraggableEmail: React.FC<DraggableEmailProps> = ({
   id,
@@ -16,6 +17,7 @@ const DraggableEmail: React.FC<DraggableEmailProps> = ({
   onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation("DraggableFields");
 
   const handleClick = () => {
     setIsMenuOpen((prev) => !prev);
@@ -31,7 +33,7 @@ const DraggableEmail: React.FC<DraggableEmailProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
-            <p className={styles.textElementTypeText}>Email</p>
+            <p className={styles.textElementTypeText}>{t("email")}</p>
             <div
               style={{
                 padding: 16,
@@ -42,7 +44,7 @@ const DraggableEmail: React.FC<DraggableEmailProps> = ({
               }}>
               {validations?.required != null && (
                 <div className={styles.requiredSwitch}>
-                  <p className={styles.requiredText}>Required</p>
+                  <p className={styles.requiredText}>{t("requiredText")}</p>
                   <Controller
                     name={`fields.${index}.validations.required`}
                     control={control}
@@ -74,7 +76,7 @@ const DraggableEmail: React.FC<DraggableEmailProps> = ({
                   <>
                     <input
                       {...field}
-                      placeholder="Question"
+                      placeholder={t("questionPlaceholder")}
                       className={styles.question}
                     />
                     <hr />

@@ -1,5 +1,3 @@
-import { DroppedItem } from "../../pages/NewForm/types";
-
 export type FieldType =
   | "multiple_choice"
   | "short_text"
@@ -37,10 +35,15 @@ export interface Form {
   fields: Field[];
 }
 
-export interface DNDCanvasProps {
-  items: DroppedItem[];
-  importedFields?: Field[];
-  handleDelete: (name: string) => void;
-  handleCopy: (index: number, copiedItem: DroppedItem) => void;
-  saveForm: (data: Form) => void;
+type SortBy = "created_at" | "last_updated_at";
+
+type OrderBy = "asc" | "desc";
+
+export interface GetFormsParams {
+  page?: number;
+  page_size?: number;
+  search?: string | null;
+  workspace_id?: string | null;
+  sort_by?: SortBy | null;
+  order_by?: OrderBy | null;
 }
