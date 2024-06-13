@@ -16,8 +16,7 @@ const Seasons = () => {
         <Modal.Button asChild className={styles.btn}>
           <PrimaryButton
             label="Add Season"
-            onClick={() => setOpen(true)}
-          ></PrimaryButton>
+            onClick={() => setOpen(true)}></PrimaryButton>
         </Modal.Button>
         <Modal.Content title="Create Season">
           <SeasonForm afterSave={() => setOpen(false)} />
