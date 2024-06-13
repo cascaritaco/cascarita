@@ -13,19 +13,8 @@ const { Form, User } = require("../models");
 const FormController = {
   async getAllForms(req, res, next) {
     try {
-      const groupId = req.params.id;
-
-      const sqlForms = await Form.findAll({
-        where: {
-          group_id: groupId,
-        },
-        attributes: ["document_id"],
-      });
-
-      const documentIds = sqlForms.map((form) => form.document_id);
-
       const mongoForms = await FormMongo.find({
-        _id: { $in: documentIds },
+        group_id: { $in: req.params.id },
       }).select(
         "form_data.id form_data.title form_data._links.display created_by updated_by createdAt updatedAt",
       );
