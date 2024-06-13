@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "./Form.module.css";
 import SelectMenu from "../SelectMenu/SelectMenu";
 import Modal from "../Modal/Modal";
 import { createSeason } from "../../api/teams/service";
 import { FormProps } from "../../api/teams/types";
+import styles from "./Form.module.css";
 
 const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
   const [seasonName, setSeasonName] = React.useState("");
@@ -17,14 +17,14 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
     event.preventDefault();
     setIsLoading(true);
     const { seasonName, startDate, endDate } = Object.fromEntries(
-      new FormData(event.currentTarget)
+      new FormData(event.currentTarget),
     );
 
     try {
       await createSeason(
         seasonName as string,
         startDate as string,
-        endDate as string
+        endDate as string,
       );
       afterSave();
     } catch (error) {
@@ -35,14 +35,15 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputContainer}>
-        <label htmlFor="seasonName">Assign League</label>
+        <label className={styles.label} htmlFor="seasonName">
+          Assign League
+        </label>
         <SelectMenu
           className={styles.input}
           name="existingLeague"
-          value="The Premier League"
-        >
+          value="The Premier League">
           <SelectMenu.Group>
             {TEST_LEAGUES.map((league, idx) => (
               <SelectMenu.Item key={idx} value={league}>
@@ -53,7 +54,9 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
         </SelectMenu>
       </div>
       <div className={styles.inputContainer}>
-        <label htmlFor="seasonName">Season Name</label>
+        <label className={styles.label} htmlFor="seasonName">
+          Season Name
+        </label>
         <input
           className={styles.input}
           required
@@ -67,7 +70,9 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
 
       <div className={styles.inputContainer}>
         <div className={styles.inputContainer}>
-          <label htmlFor="startDate">Start Date</label>
+          <label className={styles.label} htmlFor="startDate">
+            Start Date
+          </label>
           <input
             className={styles.input}
             required
@@ -79,7 +84,9 @@ const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
           />
         </div>
         <div className={styles.inputContainer}>
-          <label htmlFor="endDate">End Date</label>
+          <label className={styles.label} htmlFor="endDate">
+            End Date
+          </label>
           <input
             className={styles.input}
             required
