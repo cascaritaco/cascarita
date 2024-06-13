@@ -25,6 +25,16 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
       });
 
+      User.hasMany(models.Form, {
+        foreignKey: "created_by",
+        sourceKey: "id",
+      });
+
+      User.hasMany(models.Form, {
+        foreignKey: "updated_by",
+        sourceKey: "id",
+      });
+
       User.hasMany(models.Games, {
         foreignKey: "created_by_id",
         sourceKey: "id",
@@ -118,7 +128,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
       createdAt: "created_at",
       updatedAt: "updated_at",
-    }
+    },
   );
 
   User.beforeCreate(async (user) => {

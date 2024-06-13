@@ -19,6 +19,16 @@ const formsSchema = new Schema(
       type: Number,
       required: true,
     },
+
+    created_by: {
+      type: Schema.Types.Mixed,
+      required: true,
+    },
+
+    updated_by: {
+      type: Schema.Types.Mixed,
+      required: false,
+    },
   },
   { timestamps: true },
 );

@@ -12,6 +12,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "group_id",
         targetKey: "id",
       });
+
+      Form.belongsTo(models.User, {
+        foreignKey: "created_by",
+        targetKey: "id",
+      });
+      Form.belongsTo(models.User, {
+        foreignKey: "updated_by",
+        targetKey: "id",
+      });
     }
   }
   Form.init(
@@ -23,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       document_id: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      created_by: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      updated_by: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
     },
     {
