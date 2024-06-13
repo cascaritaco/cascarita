@@ -142,8 +142,6 @@ const FormController = {
 
       const result = await form.save();
 
-      console.log("Testing the group-id thingy", req.params.group_id);
-
       const newForm = {
         group_id: req.params.group_id,
         created_by: req.params.user_id,
