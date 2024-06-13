@@ -57,6 +57,7 @@ export const createForm = async (
   title: string,
   description: string,
   groupId: number | undefined,
+  userId: number | undefined,
 ) => {
   const formData = {
     title,
@@ -71,7 +72,7 @@ export const createForm = async (
     ...data,
   };
   try {
-    const response = await fetch(`/api/forms/${groupId}`, {
+    const response = await fetch(`/api/forms/${groupId}/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
