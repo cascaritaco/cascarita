@@ -1,0 +1,10 @@
+{
+  "dropDown": "Dropdown",
+  "email": "Email",
+  "longText": "Long Text",
+  "multipleChoice": "Multiple Choice",
+  "phoneNumber": "Phone Number",
+  "shortText": "Short Text",
+  "questionPlaceholder": "Question",
+  "requiredText": "Required"
+}

@@ -5,16 +5,20 @@ import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
-import { Field, Survey } from "../../components/DNDCanvas/types";
+import { Field, Form } from "../../components/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useTranslation } from "react-i18next";
+import FormResponses from "../../components/FormResponses/FormResponses";
+import { toSnakeCase } from "../../util/toSnakeCase";
+import { createForm, updateForm } from "../../api/forms/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
+  const [activeSection, setActiveSection] = useState("questions");
   const navigate = useNavigate();
   const location = useLocation();
-  const fields = location.state?.fields as Field[] | undefined;
+  const [fields, setFields] = useState<Field[]>(location.state?.fields ?? []);
   const [formId, setFormId] = useState<string | null>(
     (location.state?.id as string) ?? null,
   );
@@ -31,7 +35,7 @@ const NewForm = () => {
   const [title, setTitle] = useState(
     location.state?.title ?? t("formTitlePlaceHolder"),
   );
-  const [surveyLink, setSurveyLink] = useState(location.state?.link ?? null);
+  const [formLink, setFormLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
   const { currentUser } = useAuth();
 
@@ -43,10 +47,6 @@ const NewForm = () => {
     "Email",
     "Phone Number",
   ];
-
-  function toSnakeCase(str: string) {
-    return str.toLowerCase().replace(/\s+/g, "_");
-  }
 
   const handleDrop = (label: DroppedItemType) => {
     const uniqueId = uuidv4();
@@ -77,112 +77,30 @@ const NewForm = () => {
     }
   };
 
-  const onCreate = async (data: Survey) => {
-    const surveyData = {
+  const onCreate = async (data: Form) => {
+    const response = await createForm(
+      data,
       title,
-      welcome_screens: [
-        {
-          title,
-          properties: {
-            description,
-          },
-        },
-      ],
-      ...data,
-    };
-
-    try {
-      const response = await fetch(`/api/forms/${currentUser?.group_id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(surveyData),
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const surveyResponseObj = await response.json();
-      const existingSurveys = JSON.parse(
-        localStorage.getItem("surveys") ?? "{}",
-      );
-      const surveyId = surveyResponseObj.form_data.id;
-      const link = surveyResponseObj.form_data._links.display;
-      setSurveyLink(link);
-      setFormId(surveyId);
-      existingSurveys[formId ?? surveyId] = {
-        id: formId ?? surveyId,
-        edittedBy: currentUser?.first_name ?? "",
-        lastUpdated: new Date().toLocaleString(),
-        title,
-        description,
-        link,
-        ...data,
-      };
-      localStorage.setItem("surveys", JSON.stringify(existingSurveys));
-    } catch (err) {
-      console.error("Error creating survey:", err);
-    }
+      description,
+      currentUser?.group_id,
+    );
+    setFormLink(response.form_data._links.display);
+    setFormId(response.form_data.id);
+    setFields(response.form_data.fields);
   };
 
-  const onSave = async (data: Survey) => {
+  const onSave = async (data: Form) => {
     if (formId == null || formId === undefined) {
       throw new Error("Form ID is undefined");
     }
-
-    const surveyData = {
-      title,
-      welcome_screens: [
-        {
-          title,
-          properties: {
-            description,
-          },
-        },
-      ],
-      ...data,
-    };
-
-    try {
-      const response = await fetch(`/api/survey/${formId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(surveyData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update form");
-      }
-
-      // Update the form in local storage
-      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-      surveys[formId] = {
-        ...surveys[formId],
-        edittedBy: currentUser?.first_name ?? "",
-        lastUpdated: new Date().toLocaleString(),
-        title,
-        description,
-        ...data,
-      };
-      localStorage.setItem("surveys", JSON.stringify(surveys));
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await updateForm(data, formId, title, description);
+    setFields(response.fields);
   };
 
   return (
     <Page>
       <div>
-        <div
-          className={styles.newFormHeader}
-          style={{
-            borderBottom: "1px solid #DFE5EE",
-            marginBottom: 15,
-            marginRight: 33,
-          }}>
+        <div className={styles.newFormHeader}>
           <h1 className={styles.title}>
             {formId == null ? t("pageTitleNew") : t("pageTitleEdit")}
           </h1>
@@ -199,8 +117,8 @@ const NewForm = () => {
               className={styles.submitButton}>
               {formId == null ? t("createButton") : t("saveButton")}
             </button>
-            {surveyLink && (
-              <a href={surveyLink} target="_blank" rel="noopener noreferrer">
+            {formLink && (
+              <a href={formLink} target="_blank" rel="noopener noreferrer">
                 <button className={styles.previewButton}>
                   {t("previewButton")}
                 </button>
@@ -208,58 +126,85 @@ const NewForm = () => {
             )}
           </div>
         </div>
-        <div className={styles.newFormContainer}>
-          <div className={styles.formElementsContainer}>
-            <h2 className={styles.subtitle}>{t("formElements")}</h2>
-            <hr />
-            <p className={styles.smallText} style={{ paddingTop: 8 }}>
-              {t("textElements")}
-            </p>
-            {draggableButtons.map((label, index) => (
-              <DraggableButton
-                key={index}
-                label={label}
-                onDrop={() => handleDrop(label as DroppedItemType)}
-              />
-            ))}
-          </div>
-          <div className={styles.formCanvasContainer}>
-            <div className={styles.formTitleContainer}>
-              <div style={{ paddingBottom: 8 }}>
+        <ul className={styles.formNav}>
+          <li
+            className={
+              activeSection === "questions"
+                ? styles.activeSection
+                : styles.questionsNav
+            }
+            onClick={() => setActiveSection("questions")}>
+            {t("formNavOptions.questions")}
+          </li>
+          {formId != null && (
+            <li
+              className={
+                activeSection === "responses"
+                  ? styles.activeSection
+                  : styles.responsesNav
+              }
+              onClick={() => setActiveSection("responses")}>
+              {t("formNavOptions.responses")}
+            </li>
+          )}
+        </ul>
+        {activeSection === "questions" && (
+          <div className={styles.newFormContainer}>
+            <div className={styles.formElementsContainer}>
+              <h2 className={styles.subtitle}>{t("formElements")}</h2>
+              <hr />
+              <p className={`${styles.smallText} ${styles.textElementsText}`}>
+                {t("textElements")}
+              </p>
+              {draggableButtons.map((label, index) => (
+                <DraggableButton
+                  key={index}
+                  label={label}
+                  onDrop={() => handleDrop(label as DroppedItemType)}
+                />
+              ))}
+            </div>
+            <div className={styles.formCanvasContainer}>
+              <div className={styles.formTitleContainer}>
+                <div style={{ paddingBottom: 8 }}>
+                  <input
+                    className={styles.formTitle}
+                    placeholder="Form Title"
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title}
+                  />
+                  <hr />
+                </div>
                 <input
-                  className={styles.formTitle}
-                  placeholder="Form Title"
-                  onChange={(e) => setTitle(e.target.value)}
-                  value={title}
+                  className={styles.formDescription}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder={t("descriptionPlaceholder")}
+                  value={description}
                 />
                 <hr />
               </div>
-              <input
-                className={styles.formDescription}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder={t("descriptionPlaceholder")}
-                value={description}
-              />
-              <hr />
-            </div>
-            <p className={styles.smallText} style={{ color: "#b01254" }}>
-              {t("sectionText")}
-            </p>
+              <p className={styles.smallText} style={{ color: "#b01254" }}>
+                {t("sectionText")}
+              </p>
 
-            <div className={styles.canvasStyles}>
-              <div className={styles.canvasInnerContainer}>
-                <DNDCanvas
-                  ref={canvasRef}
-                  importedFields={fields}
-                  items={droppedItems}
-                  handleDelete={handleDelete}
-                  handleCopy={handleCopy}
-                  saveSurvey={formId == null ? onCreate : onSave}
-                />
+              <div className={styles.canvasStyles}>
+                <div className={styles.canvasInnerContainer}>
+                  <DNDCanvas
+                    ref={canvasRef}
+                    importedFields={fields}
+                    items={droppedItems}
+                    handleDelete={handleDelete}
+                    handleCopy={handleCopy}
+                    saveForm={formId == null ? onCreate : onSave}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+        {formId != null && activeSection === "responses" && (
+          <FormResponses formId={formId} />
+        )}
       </div>
     </Page>
   );

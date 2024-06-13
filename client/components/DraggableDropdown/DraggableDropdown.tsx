@@ -8,6 +8,7 @@ import MinusCircleIcon from "../../assets/MinusCircleIcon";
 import PlusCircleIcon from "../../assets/PlusCircleIcon";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
+import { useTranslation } from "react-i18next";
 
 const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   id,
@@ -19,6 +20,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation("DraggableFields");
 
   const handleClick = () => {
     setIsMenuOpen((prev) => !prev);
@@ -62,7 +64,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
-            <p className={styles.textElementTypeText}>Dropdown</p>
+            <p className={styles.textElementTypeText}>{t("dropDown")}</p>
             <div
               style={{
                 padding: 16,
@@ -73,7 +75,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
               }}>
               {validations?.required != null && (
                 <div className={styles.requiredSwitch}>
-                  <p className={styles.requiredText}>Required</p>
+                  <p className={styles.requiredText}>{t("requiredText")}</p>
                   <Controller
                     name={`fields.${index}.validations.required`}
                     control={control}
@@ -105,7 +107,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
                   <>
                     <input
                       {...field}
-                      placeholder="Question"
+                      placeholder={t("questionPlaceholder")}
                       className={styles.question}
                     />
                     <hr />

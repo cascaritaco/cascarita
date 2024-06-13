@@ -10,12 +10,16 @@ import LeaguesEn from "./en/pages/Leagues.json";
 import LeaguesEsp from "./esp/pages/Leagues.json";
 import FormsEn from "./en/pages/Forms.json";
 import FormsEsp from "./esp/pages/Forms.json";
+import FormResponsesEn from "./en/components/FormResponses.json";
+import FormResponsesEsp from "./esp/components/FormResponses.json";
 import NewFormsEn from "./en/pages/NewForms.json";
 import NewFormsEsp from "./esp/pages/NewForms.json";
 import EmptyDNDCanvasEn from "./en/components/EmptyDNDCanvas.json";
 import EmptyDNDCanvasEsp from "./esp/components/EmptyDNDCanvas.json";
 import DraggableButtonsEn from "./en/components/DraggableButtons.json";
 import DraggableButtonsEsp from "./esp/components/DraggableButtons.json";
+import DraggableFieldsEn from "./en/components/DraggableFields.json";
+import DraggableFieldsEsp from "./esp/components/DraggableFields.json";
 import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
@@ -34,6 +38,8 @@ i18next.use(initReactI18next).init({
       NewForms: NewFormsEn,
       EmptyDNDCanvas: EmptyDNDCanvasEn,
       DraggableButtons: DraggableButtonsEn,
+      FormResponses: FormResponsesEn,
+      DraggableFields: DraggableFieldsEn,
     },
     esp: {
       DropdownMenuButton: DropdownMenuButtonEsp,
@@ -44,6 +50,8 @@ i18next.use(initReactI18next).init({
       NewForms: NewFormsEsp,
       EmptyDNDCanvas: EmptyDNDCanvasEsp,
       DraggableButtons: DraggableButtonsEsp,
+      FormResponses: FormResponsesEsp,
+      DraggableFields: DraggableFieldsEsp,
     },
   },
   ns: [
@@ -55,6 +63,8 @@ i18next.use(initReactI18next).init({
     "NewForms",
     "EmptyDNDCanvas",
     "DraggableButtons",
+    "FormResponses",
+    "DraggableFields",
   ],
 });
 
