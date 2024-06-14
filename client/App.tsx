@@ -5,7 +5,7 @@ import Schedule from "./pages/Schedule/Schedule";
 import Forms from "./pages/Forms/Forms";
 import Settings from "./pages/Settings/Settings";
 import Login from "./pages/Login/Login";
-import { AuthProvider, useAuth } from "./components/AuthContext/AuthContext";
+import { AuthProvider } from "./components/AuthContext/AuthContext";
 import Layout from "./components/Layout/Layout";
 import { I18nextProvider } from "react-i18next";
 import i18next from "./i18n/config";

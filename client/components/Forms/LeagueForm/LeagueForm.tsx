@@ -1,26 +1,9 @@
 import React from "react";
 import styles from "./LeagueForm.module.css";
-import Modal from "../../components/Modal/Modal";
+import Modal from "../../Modal/Modal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { User } from "../AuthContext/types";
-
-interface LeagueFormProps {
-  //Use to set open state from true to false after form submission
-  afterSave: () => void;
-  currentUser: User;
-}
-
-const addLeague = async (formData: object) => {
-  const response = await fetch("/api/leagues/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  });
-
-  return response.json();
-};
+import { createNewLeague } from "../../../api/leagues/service";
+import { LeagueFormProps } from "./types";
 
 const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave, currentUser }) => {
   const [leagueName, setLeagueName] = React.useState("");
@@ -29,7 +12,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave, currentUser }) => {
   const queryClient = useQueryClient();
 
   const leagueFormMutation = useMutation({
-    mutationFn: addLeague,
+    mutationFn: createNewLeague,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["leagues"],

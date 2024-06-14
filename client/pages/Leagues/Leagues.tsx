@@ -5,13 +5,14 @@ import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenu
 import Page from "../../components/Page/Page";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
-import LeagueForm from "../../components/Forms/LeagueForm";
+import LeagueForm from "../../components/Forms/LeagueForm/LeagueForm";
 import { LeagueType } from "../../api/teams/types";
 import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { User } from "../../components/AuthContext/types";
+import { getLeagueByGroupId } from "../../api/leagues/service";
 
 interface LeaguesProps {
   currentUser: User;
@@ -27,15 +28,11 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [open, setOpen] = useState(false);
 
-  const leaguesQuery = useQuery({
-    queryFn: () =>
-      fetch(`/api/groups/${currentUser.group_id}/leagues`).then((res) =>
-        res.json(),
-      ),
-    queryKey: ["leagues"],
+  const groupId = currentUser.group_id;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["leagues", groupId],
+    queryFn: getLeagueByGroupId,
   });
-
-  console.log(currentUser);
 
   return (
     <Page>
@@ -94,20 +91,20 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
         </Modal>
       </div>
 
-      {leaguesQuery.data == null || leaguesQuery?.data?.length === 0 ? (
+      {data == null || data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a League to Display...</p>
       ) : (
         <DashboardTable headers={["Name", "Options"]}>
-          {leaguesQuery.isLoading ? (
+          {isLoading ? (
             <tr>
               <td>Loading...</td>
             </tr>
-          ) : leaguesQuery.isError || !leaguesQuery.data ? (
+          ) : isError || !data ? (
             <tr>
               <td>Error Fetching Data</td>
             </tr>
           ) : (
-            leaguesQuery.data?.map((league: LeagueType, idx: number) => (
+            data?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>{league.name}</td>
                 <td>
