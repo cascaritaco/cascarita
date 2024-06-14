@@ -11,12 +11,8 @@ import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { User } from "../../components/AuthContext/types";
+import { LeaguesProps } from "./types";
 import { getLeagueByGroupId } from "../../api/leagues/service";
-
-interface LeaguesProps {
-  currentUser: User;
-}
 
 const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
   const { t } = useTranslation("Leagues");
