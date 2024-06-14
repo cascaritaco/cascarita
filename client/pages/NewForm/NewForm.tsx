@@ -83,6 +83,7 @@ const NewForm = () => {
       title,
       description,
       currentUser?.group_id,
+      currentUser?.id,
     );
     setFormLink(response.form_data._links.display);
     setFormId(response.form_data.id);
