@@ -9,17 +9,15 @@ const LeagueController = function () {
 
     try {
       await modelByPk(res, Group, groupId);
-      let result = await League.findAll({
+      const result = await League.findAll({
         where: {
           group_id: groupId,
         },
       });
 
-      if (Object.keys(result).length === 0) {
-        result = [];
-      }
-
-      return res.status(200).json(result);
+      return res
+        .status(200)
+        .json(Object.keys(result).length === 0 ? [] : result);
     } catch (error) {
       next(error);
     }
