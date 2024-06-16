@@ -2,8 +2,8 @@ interface TeamResponse {
   id: number;
   group_id: number;
   name: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 interface FormProps {
@@ -16,8 +16,8 @@ interface LeagueType {
   group_id: number;
   name: string;
   description: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 interface SeasonType {
@@ -26,8 +26,8 @@ interface SeasonType {
   start_date: Date;
   end_date: Date;
   is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
   league_id: number;
 }
 
