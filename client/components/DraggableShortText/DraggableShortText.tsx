@@ -5,6 +5,7 @@ import { DraggableShortTextProps } from "./types";
 import styles from "./DraggableShortText.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
+import { useTranslation } from "react-i18next";
 
 const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   id,
@@ -16,6 +17,8 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   onCopy,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation("DraggableFields");
+
   const handleClick = () => {
     setIsMenuOpen((prev) => !prev);
   };
@@ -30,7 +33,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
-            <p className={styles.textElementTypeText}>Short Text</p>
+            <p className={styles.textElementTypeText}>{t("shortText")}</p>
             <div
               style={{
                 padding: 16,
@@ -41,7 +44,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
               }}>
               {validations?.required != null && (
                 <div className={styles.requiredSwitch}>
-                  <p className={styles.requiredText}>Required</p>
+                  <p className={styles.requiredText}>{t("requiredText")}</p>
                   <Controller
                     name={`fields.${index}.validations.required`}
                     control={control}
@@ -73,7 +76,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
                   <>
                     <input
                       {...field}
-                      placeholder="Question"
+                      placeholder={t("questionPlaceholder")}
                       className={styles.question}
                     />
                     <hr />

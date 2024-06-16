@@ -10,7 +10,7 @@ import DraggableMultipleChoice from "../DraggableMultipleChoice/DraggableMultipl
 import DraggableShortText from "../DraggableShortText/DraggableShortText";
 import DraggableDropdown from "../DraggableDropdown/DraggableDropdown";
 import DraggableLongText from "../DraggableLongText/DraggableLongText";
-import { DNDCanvasProps, Field, Survey } from "./types";
+import { DNDCanvasProps, Field, Form } from "./types";
 import { DroppedItem } from "../../pages/NewForm/types";
 import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 import { v4 as uuidv4 } from "uuid";
@@ -23,7 +23,7 @@ const DNDCanvas = forwardRef(
       items,
       handleDelete,
       handleCopy,
-      saveSurvey,
+      saveForm,
       importedFields,
     }: DNDCanvasProps,
     ref,
@@ -140,8 +140,8 @@ const DNDCanvas = forwardRef(
       );
     };
 
-    const onSubmit = (data: Survey) => {
-      saveSurvey(data);
+    const onSubmit = (data: Form) => {
+      saveForm(data);
     };
 
     return (

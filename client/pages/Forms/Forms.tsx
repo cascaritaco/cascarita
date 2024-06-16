@@ -8,8 +8,8 @@ import styles from "./Forms.module.css";
 import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
-import { Field } from "../../components/DNDCanvas/types";
 import { useTranslation } from "react-i18next";
+import { deleteForm, fetchFormData, getForms } from "../../api/forms/service";
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
@@ -20,8 +20,10 @@ const Forms = () => {
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   useEffect(() => {
-    const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-    setForms(Object.values(surveys ?? []));
+    (async () => {
+      const fetchedForms = await getForms();
+      setForms(fetchedForms.items ?? []);
+    })();
   }, []);
 
   const handleNewFormClick = () => {
@@ -29,34 +31,20 @@ const Forms = () => {
   };
 
   const onDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/survey/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete form");
-      }
-
-      // Delete the form from local storage
-      const surveys = JSON.parse(localStorage.getItem("surveys") ?? "{}");
-      delete surveys[id];
-      localStorage.setItem("surveys", JSON.stringify(surveys));
-      setForms(Object.values(surveys ?? []));
-    } catch (error) {
-      console.error(error);
-    }
+    await deleteForm(id);
+    setForms((forms) => forms.filter((form) => form.id !== id));
   };
 
-  const onEdit = (
-    id: string,
-    title: string,
-    description: string,
-    link: string,
-    fields: Field[],
-  ) => {
+  const onEdit = async (id: string) => {
+    const form = await fetchFormData(id, "");
     navigate("/forms/check", {
-      state: { id, title, description, link, fields },
+      state: {
+        id,
+        title: form.title,
+        description: form.welcome_screens?.[0]?.properties?.description ?? "",
+        link: form._links.display,
+        fields: form.fields,
+      },
     });
   };
 
@@ -97,21 +85,16 @@ const Forms = () => {
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
               <p>{form.title}</p>
-              <p>{form.edittedBy}</p>
-              <p>{form.lastUpdated}</p>
+              <p>{form.editedBy}</p>
+              <p>{new Date(form.last_updated_at).toLocaleString()}</p>
               <DropdownMenuButton
                 onDelete={() => onDelete(form.id)}
-                onEdit={() =>
-                  onEdit(
-                    form.id,
-                    form.title,
-                    form.description,
-                    form.link,
-                    form.fields,
-                  )
-                }
+                onEdit={() => onEdit(form.id)}
               />
-              <a href={form.link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={form._links.display}
+                target="_blank"
+                rel="noopener noreferrer">
                 <ShareButton />
               </a>
             </div>

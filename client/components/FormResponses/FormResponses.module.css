@@ -1,0 +1,55 @@
+.container {
+  width: 100%;
+  overflow: auto; /* Enable scrolling if needed */
+  max-height: 500px; /* Set a maximum height for the container */
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate; /* Don't collapse */
+  border-spacing: 0;
+}
+
+.table th {
+  /* Apply both top and bottom borders to the <th> */
+  padding: 8px;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.table td {
+  padding: 8px;
+  text-align: left;
+  min-width: 150px; /* Set minimum width for cells */
+  /* Apply both top and bottom borders to the <th> */
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.table td:first-child {
+  /* Apply a left border on the first <td> or <th> in a row */
+  border-left: 1px solid #ddd;
+}
+
+.table th:first-child {
+  /* Apply a left border on the first <td> or <th> in a row */
+  border-left: 2px solid black;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0; /* Stick the header to the top */
+  z-index: 1; /* Ensure the header stays above table rows */
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.emptyFormResponses {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
