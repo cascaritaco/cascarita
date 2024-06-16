@@ -11,10 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LeaguesProps } from "./types";
 import { getLeagueByGroupId } from "../../api/leagues/service";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
-const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
+const Leagues = () => {
   const { t } = useTranslation("Leagues");
 
   const [filter, setFilter] = useState("");
@@ -24,9 +24,11 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [open, setOpen] = useState(false);
 
-  const groupId = currentUser.group_id;
+  const { currentUser } = useAuth();
+
+  const groupId = currentUser?.group_id;
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["leagues", groupId],
+    queryKey: ["leagues", groupId ? groupId : 0],
     queryFn: getLeagueByGroupId,
   });
 
@@ -79,10 +81,7 @@ const Leagues: React.FC<LeaguesProps> = ({ currentUser }) => {
               onClick={() => setOpen(true)}></PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create League">
-            <LeagueForm
-              afterSave={() => setOpen(false)}
-              currentUser={currentUser}
-            />
+            <LeagueForm afterSave={() => setOpen(false)} />
           </Modal.Content>
         </Modal>
       </div>

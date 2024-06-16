@@ -9,7 +9,7 @@ const LeagueController = function () {
 
     try {
       await modelByPk(res, Group, groupId);
-      var result = await League.findAll({
+      let result = await League.findAll({
         where: {
           group_id: groupId,
         },

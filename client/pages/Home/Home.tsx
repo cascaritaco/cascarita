@@ -4,9 +4,7 @@ import { useAuth } from "../../components/AuthContext/AuthContext";
 const Home = () => {
   const { currentUser } = useAuth();
 
-  return (
-    <div>{currentUser ? <Leagues currentUser={currentUser} /> : <></>}</div>
-  );
+  return <div>{currentUser ? <Leagues /> : <></>}</div>;
 };
 
 export default Home;

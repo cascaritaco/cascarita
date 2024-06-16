@@ -14,8 +14,7 @@ const getLeagueByGroupId = async ({
       },
       mode: "cors",
     });
-    const result = response.json();
-    return result;
+    return response.json();
   } catch (error) {
     console.error("Error fetching league: ", error);
     throw error;

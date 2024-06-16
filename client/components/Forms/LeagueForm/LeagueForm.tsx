@@ -4,11 +4,13 @@ import Modal from "../../Modal/Modal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNewLeague } from "../../../api/leagues/service";
 import { LeagueFormProps } from "./types";
+import { useAuth } from "../../AuthContext/AuthContext";
 
-const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave, currentUser }) => {
+const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
 
+  const { currentUser } = useAuth();
   const queryClient = useQueryClient();
 
   const leagueFormMutation = useMutation({
@@ -26,16 +28,10 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave, currentUser }) => {
       new FormData(event.currentTarget),
     );
 
-    const newLeague = {
+    leagueFormMutation.mutate({
       name: leagueName,
       description: leagueDescription,
-      group_id: currentUser.group_id,
-    };
-
-    leagueFormMutation.mutate({
-      name: newLeague.name,
-      description: newLeague.description,
-      group_id: newLeague.group_id,
+      group_id: currentUser?.group_id,
     });
 
     afterSave();
