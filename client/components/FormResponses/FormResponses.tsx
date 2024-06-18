@@ -7,7 +7,10 @@ import {
   FormResponsesProps,
   TypeformResponse,
 } from "./types";
-import { fetchTypeformFormData } from "../../api/forms/service";
+import {
+  fetchTypeformFormData,
+  getMongoFormById,
+} from "../../api/forms/service";
 import { truncateText } from "../../util/truncateText";
 import { useTranslation } from "react-i18next";
 
@@ -20,9 +23,16 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
 
   useEffect(() => {
     (async () => {
-      const formData = await fetchTypeformFormData(formId, "");
-      setFormFields(formData.fields);
-      const responsesData = await fetchTypeformFormData(formId, "/responses");
+      const formData = await getMongoFormById(formId);
+      // TODO: Backend should return a form, not an array of forms
+      if (formData[0] == null) {
+        throw new Error("Form not found");
+      }
+      setFormFields(formData[0].form_data.fields);
+      const responsesData = await fetchTypeformFormData(
+        formData[0].form_data.id,
+        "/responses",
+      );
       const responsesMap = responsesData.items.reduce(
         (res: AnswerRecordMap, response: TypeformResponse) => {
           const answersMap: Map<string, Answer> = new Map();

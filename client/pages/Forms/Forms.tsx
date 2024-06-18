@@ -27,7 +27,6 @@ const Forms = () => {
   useEffect(() => {
     (async () => {
       const mongoForms = await getMongoForms(currentUser?.group_id ?? -1);
-      console.log(mongoForms);
       setForms(mongoForms);
     })();
   }, []);

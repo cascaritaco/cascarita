@@ -148,16 +148,13 @@ export const getMongoForms = async (groupId: number) => {
   try {
     const response = await fetch(`/api/forms/${groupId}/forms`);
 
-    const responseBody = await response.json();
-
     if (!response.ok) {
-      console.error("Error fetching forms:", responseBody);
       throw new Error(`Error fetching forms: ${response.statusText}`);
     }
 
-    return responseBody;
+    return response.json();
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Error fetching forms:", error);
     throw error;
   }
 };
@@ -166,16 +163,28 @@ export const getMongoFormById = async (formId: string) => {
   try {
     const response = await fetch(`/api/forms/${formId}`);
 
-    const responseBody = await response.json();
-
     if (!response.ok) {
-      console.error("Error fetching form:", responseBody);
       throw new Error(`Error fetching form: ${response.statusText}`);
     }
 
-    return responseBody;
+    return response.json();
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Error fetching forms:", error);
+    throw error;
+  }
+};
+
+export const getMongoFormResponses = async (formId: string) => {
+  try {
+    const response = await fetch(`/api/forms/${formId}/responses`);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching form responses: ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching responses:", error);
     throw error;
   }
 };
