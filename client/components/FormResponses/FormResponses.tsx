@@ -7,7 +7,7 @@ import {
   FormResponsesProps,
   TypeformResponse,
 } from "./types";
-import { fetchFormData } from "../../api/forms/service";
+import { fetchTypeformFormData } from "../../api/forms/service";
 import { truncateText } from "../../util/truncateText";
 import { useTranslation } from "react-i18next";
 
@@ -20,9 +20,9 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
 
   useEffect(() => {
     (async () => {
-      const formData = await fetchFormData(formId, "");
+      const formData = await fetchTypeformFormData(formId, "");
       setFormFields(formData.fields);
-      const responsesData = await fetchFormData(formId, "/responses");
+      const responsesData = await fetchTypeformFormData(formId, "/responses");
       const responsesMap = responsesData.items.reduce(
         (res: AnswerRecordMap, response: TypeformResponse) => {
           const answersMap: Map<string, Answer> = new Map();

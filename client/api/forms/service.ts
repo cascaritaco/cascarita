@@ -3,7 +3,7 @@ import { Form, GetFormsParams } from "./types";
 // TODO: Create a call to fetch all forms by groupId
 // TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
 
-export const getForms = async ({
+export const getTypeformForms = async ({
   page = 1,
   page_size = 10,
   search,
@@ -39,7 +39,10 @@ export const getForms = async ({
 };
 
 // fetches form data by endpoint (e.g. fetch form and/or form responses)
-export const fetchFormData = async (formId: string, endpoint: string) => {
+export const fetchTypeformFormData = async (
+  formId: string,
+  endpoint: string,
+) => {
   try {
     const response = await fetch(`/api/survey/${formId}${endpoint}`);
     if (!response.ok) {
@@ -52,7 +55,7 @@ export const fetchFormData = async (formId: string, endpoint: string) => {
   }
 };
 
-export const createForm = async (
+export const createMongoForm = async (
   data: Form,
   title: string,
   description: string,
@@ -89,7 +92,7 @@ export const createForm = async (
   }
 };
 
-export const updateForm = async (
+export const updateTypeformForm = async (
   data: Form,
   formId: string,
   title: string,
@@ -127,7 +130,7 @@ export const updateForm = async (
   }
 };
 
-export const deleteForm = async (id: string) => {
+export const deleteTypeformForm = async (id: string) => {
   try {
     const response = await fetch(`/api/survey/${id}`, {
       method: "DELETE",
@@ -138,5 +141,23 @@ export const deleteForm = async (id: string) => {
     }
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const getMongoForms = async (groupId: number) => {
+  try {
+    const response = await fetch(`/api/forms/${groupId}/forms`);
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      console.error("Error fetching forms:", responseBody);
+      throw new Error(`Error fetching forms: ${response.statusText}`);
+    }
+
+    return responseBody;
+  } catch (error) {
+    console.error("Server error:", error);
+    throw error;
   }
 };

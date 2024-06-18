@@ -9,19 +9,26 @@ import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { useTranslation } from "react-i18next";
-import { deleteForm, fetchFormData, getForms } from "../../api/forms/service";
+import {
+  deleteTypeformForm,
+  fetchTypeformFormData,
+  getTypeformForms,
+  getMongoForms,
+} from "../../api/forms/service";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
   const navigate = useNavigate();
-
+  const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   useEffect(() => {
     (async () => {
-      const fetchedForms = await getForms();
+      const fetchedForms = await getTypeformForms();
+      console.log(getMongoForms(currentUser?.group_id ?? -1));
       setForms(fetchedForms.items ?? []);
     })();
   }, []);
@@ -31,12 +38,12 @@ const Forms = () => {
   };
 
   const onDelete = async (id: string) => {
-    await deleteForm(id);
+    await deleteTypeformForm(id);
     setForms((forms) => forms.filter((form) => form.id !== id));
   };
 
   const onEdit = async (id: string) => {
-    const form = await fetchFormData(id, "");
+    const form = await fetchTypeformFormData(id, "");
     navigate("/forms/check", {
       state: {
         id,
