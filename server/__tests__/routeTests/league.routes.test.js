@@ -47,10 +47,8 @@ describe("League Routes", () => {
 
     const response = await request(app).get(`/leagues/${groupM.id}`).send();
 
-    expect(response.status).toBe(500);
-    expect(response.body).toMatchObject({
-      message: "group with given id has no leagues or not found",
-    });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
   });
 });
 
@@ -143,9 +141,8 @@ it("should not create if name is not unique POST /create", async () => {
 });
 
 it("should create a league with the same name from a different group POST /create", async () => {
-  const groupUno = await TestDataGenerator.createDummyGroup(
-    "Watsonville Corp."
-  );
+  const groupUno =
+    await TestDataGenerator.createDummyGroup("Watsonville Corp.");
   const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
   await testDb.League.create({ group_id: groupUno.id, name: "Summer 2024" });
@@ -156,7 +153,7 @@ it("should create a league with the same name from a different group POST /creat
 
   expect(response.status).toBe(201);
   expect(response.body).toEqual(
-    expect.objectContaining({ name: "Summer 2024" })
+    expect.objectContaining({ name: "Summer 2024" }),
   );
 });
 

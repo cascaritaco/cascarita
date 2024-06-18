@@ -1,23 +1,23 @@
 "use strict";
 
-const { League } = require("../models");
+const { League, Group } = require("../models");
+const modelByPk = require("./utility");
 
 const LeagueController = function () {
   var getLeagueByGroupId = async function (req, res, next) {
     const groupId = req.params.id;
 
     try {
+      await modelByPk(res, Group, groupId);
       const result = await League.findAll({
         where: {
           group_id: groupId,
         },
       });
 
-      if (Object.keys(result).length === 0) {
-        throw new Error("group with given id has no leagues or not found");
-      }
-
-      return res.status(200).json(result);
+      return res
+        .status(200)
+        .json(Object.keys(result).length === 0 ? [] : result);
     } catch (error) {
       next(error);
     }
@@ -41,7 +41,7 @@ const LeagueController = function () {
     try {
       const leagueFound = await isNameUniqueWithinGroup(
         newLeague.group_id,
-        newLeague.name
+        newLeague.name,
       );
 
       if (!leagueFound) {
@@ -81,7 +81,7 @@ const LeagueController = function () {
 
       const leagueFound = await isNameUniqueWithinGroup(
         currentLeague.group_id,
-        currentLeague.name
+        currentLeague.name,
       );
 
       if (!leagueFound) {
