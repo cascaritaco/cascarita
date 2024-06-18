@@ -23,7 +23,7 @@ const getLeagueByGroupId = async ({
 
 const createNewLeague = async (formData: object) => {
   try {
-    const response = await fetch("/api/leagues/", {
+    const response = await fetch("/api/leagues", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
