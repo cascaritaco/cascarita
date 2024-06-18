@@ -24,17 +24,14 @@ export const getTypeformForms = async ({
     const queryParams = new URLSearchParams(params).toString();
     const response = await fetch(`/api/surveys?${queryParams}`);
 
-    const responseBody = await response.json();
-
     if (!response.ok) {
-      console.error("Error fetching forms:", responseBody);
       throw new Error(`Error fetching forms: ${response.statusText}`);
     }
 
-    return responseBody;
-  } catch (error) {
-    console.error("Server error:", error);
-    throw error;
+    return response.json();
+  } catch (err) {
+    console.error("Error fetching forms:", err);
+    throw err;
   }
 };
 
@@ -45,13 +42,15 @@ export const fetchTypeformFormData = async (
 ) => {
   try {
     const response = await fetch(`/api/survey/${formId}${endpoint}`);
+
     if (!response.ok) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
+
     return response.json();
-  } catch (error) {
-    console.error("Error fetching form data:", error);
-    throw error;
+  } catch (err) {
+    console.error("Error fetching form data:", err);
+    throw err;
   }
 };
 
@@ -88,8 +87,9 @@ export const updateTypeformForm = async (
     }
 
     return response.json();
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error("Error updating form:", err);
+    throw err;
   }
 };
 
@@ -102,8 +102,9 @@ export const deleteTypeformForm = async (id: string) => {
     if (!response.ok) {
       throw new Error("Failed to delete form");
     }
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error("Error deleting form:", err);
+    throw err;
   }
 };
 
@@ -141,6 +142,7 @@ export const createMongoForm = async (
     return response.json();
   } catch (err) {
     console.error("Error creating form:", err);
+    throw err;
   }
 };
 
@@ -153,9 +155,9 @@ export const getMongoForms = async (groupId: number) => {
     }
 
     return response.json();
-  } catch (error) {
-    console.error("Error fetching forms:", error);
-    throw error;
+  } catch (err) {
+    console.error("Error fetching forms:", err);
+    throw err;
   }
 };
 
@@ -168,9 +170,9 @@ export const getMongoFormById = async (formId: string) => {
     }
 
     return response.json();
-  } catch (error) {
-    console.error("Error fetching forms:", error);
-    throw error;
+  } catch (err) {
+    console.error("Error fetching form:", err);
+    throw err;
   }
 };
 
@@ -183,8 +185,8 @@ export const getMongoFormResponses = async (formId: string) => {
     }
 
     return response.json();
-  } catch (error) {
-    console.error("Error fetching responses:", error);
-    throw error;
+  } catch (err) {
+    console.error("Error fetching responses:", err);
+    throw err;
   }
 };
