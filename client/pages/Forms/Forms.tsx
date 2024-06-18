@@ -9,20 +9,25 @@ import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { useTranslation } from "react-i18next";
-import { deleteForm, fetchFormData, getForms } from "../../api/forms/service";
+import {
+  deleteTypeformForm,
+  getMongoFormById,
+  getMongoForms,
+} from "../../api/forms/service";
+import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
   const navigate = useNavigate();
-
+  const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
 
   useEffect(() => {
     (async () => {
-      const fetchedForms = await getForms();
-      setForms(fetchedForms.items ?? []);
+      const mongoForms = await getMongoForms(currentUser?.group_id ?? -1);
+      setForms(mongoForms);
     })();
   }, []);
 
@@ -31,19 +36,26 @@ const Forms = () => {
   };
 
   const onDelete = async (id: string) => {
-    await deleteForm(id);
-    setForms((forms) => forms.filter((form) => form.id !== id));
+    await deleteTypeformForm(id);
+    setForms((forms) => forms.filter((form) => form.form_data.id !== id));
   };
 
   const onEdit = async (id: string) => {
-    const form = await fetchFormData(id, "");
+    const form = await getMongoFormById(id);
+
+    // TODO: Backend should return a form, not an array of forms
+    if (form[0] == null) {
+      throw new Error("Form not found");
+    }
+
     navigate("/forms/check", {
       state: {
         id,
-        title: form.title,
-        description: form.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form._links.display,
-        fields: form.fields,
+        title: form[0].form_data.title,
+        description:
+          form[0].form_data.welcome_screens?.[0]?.properties?.description ?? "",
+        link: form[0].form_data._links.display,
+        fields: form[0].form_data.fields,
       },
     });
   };
@@ -84,15 +96,15 @@ const Forms = () => {
         <div>
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
-              <p>{form.title}</p>
-              <p>{form.editedBy}</p>
-              <p>{new Date(form.last_updated_at).toLocaleString()}</p>
+              <p>{form.form_data.title}</p>
+              <p>{form.created_by?.first_name ?? ""}</p>
+              <p>{new Date(form.updatedAt).toLocaleString()}</p>
               <DropdownMenuButton
-                onDelete={() => onDelete(form.id)}
-                onEdit={() => onEdit(form.id)}
+                onDelete={() => onDelete(form.form_data.id)} // TODO: delete by mongo form ID, this is deleting form by typeform ID
+                onEdit={() => onEdit(form._id)}
               />
               <a
-                href={form._links.display}
+                href={form.form_data._links.display}
                 target="_blank"
                 rel="noopener noreferrer">
                 <ShareButton />

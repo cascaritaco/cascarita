@@ -11,7 +11,7 @@ import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
-import { createForm, updateForm } from "../../api/forms/service";
+import { createMongoForm, updateTypeformForm } from "../../api/forms/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -78,7 +78,7 @@ const NewForm = () => {
   };
 
   const onCreate = async (data: Form) => {
-    const response = await createForm(
+    const response = await createMongoForm(
       data,
       title,
       description,
@@ -94,7 +94,7 @@ const NewForm = () => {
     if (formId == null || formId === undefined) {
       throw new Error("Form ID is undefined");
     }
-    const response = await updateForm(data, formId, title, description);
+    const response = await updateTypeformForm(data, formId, title, description);
     setFields(response.fields);
   };
 
