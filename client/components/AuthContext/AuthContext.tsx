@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async (): Promise<void> => {
     try {
       setCurrentUser(null);
+      setCsrfToken("");
       await logoutUser();
     } catch (error) {
       console.error("Logout failed:", error);
