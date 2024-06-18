@@ -1,5 +1,3 @@
-import { Field } from "../../components/DNDCanvas/types";
-
 export interface WelcomeScreen {
   id: string;
   ref: string;
@@ -12,15 +10,25 @@ export interface WelcomeScreen {
 }
 
 export interface Form {
-  id: string;
-  editedBy: string;
-  last_updated_at: string;
-  title: string;
-  description: string;
-  welcome_screens: WelcomeScreen[];
-  fields: Field[];
-  _links: {
-    display: string;
-    responses: string;
+  _id: string;
+  created_by: {
+    id: string;
+    first_name: string;
+    last_name: string;
+  };
+  updated_by: {
+    id: string;
+    first_name: string;
+    last_name: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+  form_data: {
+    id: string;
+    title: string;
+    _links: {
+      display: string;
+      responses: string;
+    };
   };
 }

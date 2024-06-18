@@ -55,43 +55,6 @@ export const fetchTypeformFormData = async (
   }
 };
 
-export const createMongoForm = async (
-  data: Form,
-  title: string,
-  description: string,
-  groupId: number | undefined,
-  userId: number | undefined,
-) => {
-  const formData = {
-    title,
-    welcome_screens: [
-      {
-        title,
-        properties: {
-          description,
-        },
-      },
-    ],
-    ...data,
-  };
-  try {
-    const response = await fetch(`/api/forms/${groupId}/${userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (err) {
-    console.error("Error creating form:", err);
-  }
-};
-
 export const updateTypeformForm = async (
   data: Form,
   formId: string,
@@ -144,6 +107,43 @@ export const deleteTypeformForm = async (id: string) => {
   }
 };
 
+export const createMongoForm = async (
+  data: Form,
+  title: string,
+  description: string,
+  groupId: number | undefined,
+  userId: number | undefined,
+) => {
+  const formData = {
+    title,
+    welcome_screens: [
+      {
+        title,
+        properties: {
+          description,
+        },
+      },
+    ],
+    ...data,
+  };
+  try {
+    const response = await fetch(`/api/forms/${groupId}/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (err) {
+    console.error("Error creating form:", err);
+  }
+};
+
 export const getMongoForms = async (groupId: number) => {
   try {
     const response = await fetch(`/api/forms/${groupId}/forms`);
@@ -153,6 +153,24 @@ export const getMongoForms = async (groupId: number) => {
     if (!response.ok) {
       console.error("Error fetching forms:", responseBody);
       throw new Error(`Error fetching forms: ${response.statusText}`);
+    }
+
+    return responseBody;
+  } catch (error) {
+    console.error("Server error:", error);
+    throw error;
+  }
+};
+
+export const getMongoFormById = async (formId: string) => {
+  try {
+    const response = await fetch(`/api/forms/${formId}`);
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      console.error("Error fetching form:", responseBody);
+      throw new Error(`Error fetching form: ${response.statusText}`);
     }
 
     return responseBody;
