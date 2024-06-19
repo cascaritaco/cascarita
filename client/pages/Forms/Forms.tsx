@@ -43,19 +43,14 @@ const Forms = () => {
   const onEdit = async (id: string) => {
     const form = await getMongoFormById(id);
 
-    // TODO: Backend should return a form, not an array of forms
-    if (form[0] == null) {
-      throw new Error("Form not found");
-    }
-
     navigate("/forms/check", {
       state: {
         id,
-        title: form[0].form_data.title,
+        title: form.form_data.title,
         description:
-          form[0].form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form[0].form_data._links.display,
-        fields: form[0].form_data.fields,
+          form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
+        link: form.form_data._links.display,
+        fields: form.form_data.fields,
       },
     });
   };

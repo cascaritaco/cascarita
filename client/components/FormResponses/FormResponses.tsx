@@ -24,20 +24,13 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
   useEffect(() => {
     (async () => {
       const formData = await getMongoFormById(formId);
-      // TODO: Backend should return a form, not an array of forms
-      if (formData[0] == null) {
-        throw new Error("Form not found");
-      }
 
-      setFormFields(formData[0].form_data.fields);
-      const responsesData = await getMongoFormResponses(
-        formData[0].form_data.id,
-      );
+      setFormFields(formData.form_data.fields);
+      const responsesData = await getMongoFormResponses(formData.form_data.id);
       const responsesMap = responsesData.reduce(
         (result: AnswerRecordMap, res: FormResponse) => {
           const answersMap: Map<string, Answer> = new Map();
           res.response.answers?.forEach((answer: Answer) => {
-            console.log(answer);
             answersMap.set(answer.field.id, answer);
           });
           result.set(res.response.response_id, answersMap);
