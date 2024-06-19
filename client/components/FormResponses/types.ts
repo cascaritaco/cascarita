@@ -42,6 +42,12 @@ export interface TypeformResponse {
   answers: Answer[];
 }
 
+export interface FormResponse {
+  _id: string;
+  form_id: string;
+  response: TypeformResponse;
+}
+
 // Responses data type representing the structure of the response data object from Typeform
 export interface TypeformResponsesData {
   items: TypeformResponse[];
