@@ -86,7 +86,7 @@ const NewForm = () => {
       currentUser?.id,
     );
     setFormLink(response.form_data._links.display);
-    setFormId(response.form_data.id);
+    setFormId(response._id);
     setFields(response.form_data.fields);
   };
 
