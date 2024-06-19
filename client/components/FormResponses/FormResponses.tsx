@@ -4,12 +4,12 @@ import {
   Answer,
   AnswerRecordMap,
   Field,
+  FormResponse,
   FormResponsesProps,
-  TypeformResponse,
 } from "./types";
 import {
-  fetchTypeformFormData,
   getMongoFormById,
+  getMongoFormResponses,
 } from "../../api/forms/service";
 import { truncateText } from "../../util/truncateText";
 import { useTranslation } from "react-i18next";
@@ -28,22 +28,24 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
       if (formData[0] == null) {
         throw new Error("Form not found");
       }
+
       setFormFields(formData[0].form_data.fields);
-      const responsesData = await fetchTypeformFormData(
+      const responsesData = await getMongoFormResponses(
         formData[0].form_data.id,
-        "/responses",
       );
-      const responsesMap = responsesData.items.reduce(
-        (res: AnswerRecordMap, response: TypeformResponse) => {
+      const responsesMap = responsesData.reduce(
+        (result: AnswerRecordMap, res: FormResponse) => {
           const answersMap: Map<string, Answer> = new Map();
-          response.answers?.forEach((answer: Answer) => {
+          res.response.answers?.forEach((answer: Answer) => {
+            console.log(answer);
             answersMap.set(answer.field.id, answer);
           });
-          res.set(response.response_id, answersMap);
-          return res;
+          result.set(res.response.response_id, answersMap);
+          return result;
         },
         new Map(),
       );
+
       setFormResponsesMap(responsesMap);
     })();
   }, [formId]);
