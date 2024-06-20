@@ -148,7 +148,7 @@ export const createMongoForm = async (
 
 export const getMongoForms = async (groupId: number) => {
   try {
-    const response = await fetch(`/api/forms/${groupId}/forms`);
+    const response = await fetch(`/api/groups/${groupId}/forms`);
 
     if (!response.ok) {
       throw new Error(`Error fetching forms: ${response.statusText}`);
