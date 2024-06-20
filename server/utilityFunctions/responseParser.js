@@ -81,6 +81,8 @@ function newResponse(response_id, submitted_at, answers) {
 }
 
 async function storeUniqueResponseIds(uniqueResponseIds, form_id, emptyMap) {
+  var new_responses = uniqueResponseIds.size != 0;
+
   const response_id = new ResponseId({
     form_id: form_id,
     unique_ids: uniqueResponseIds,
@@ -90,7 +92,9 @@ async function storeUniqueResponseIds(uniqueResponseIds, form_id, emptyMap) {
     form_id: form_id,
   });
 
-  if (emptyMap) {
+  if (emptyMap && !new_responses) {
+    return
+  } else if (emptyMap && new_responses) {
     const responseResult = await response_id.save();
   } else {
     const responseResult = await ResponseId.updateOne(
