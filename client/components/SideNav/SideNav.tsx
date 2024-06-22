@@ -1,7 +1,7 @@
 import styles from "./SideNav.module.css";
 import { SideNavProps } from "./types";
 import { RiHomeLine } from "react-icons/ri";
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiUsers } from "react-icons/fi";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -32,6 +32,9 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
         route = "forms";
         break;
       case "item5":
+        route = "teams";
+        break;
+      case "item6":
         route = "settings";
         break;
       default:
@@ -73,15 +76,22 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           onItemClick={handleItemClick}
         />
         <NavItem
-          icon={<IoSettingsOutline />}
+          icon={<FiUsers />}
           label={t("item5")}
           labelType="item5"
+          selected={selectedItem === "teams"}
+          onItemClick={handleItemClick}
+        />
+        <NavItem
+          icon={<IoSettingsOutline />}
+          label={t("item6")}
+          labelType="item6"
           selected={selectedItem === "settings"}
           onItemClick={handleItemClick}
         />
       </ul>
       <div>
-        <LogoutButton icon={<TbLogout />} label={t("item6")} />
+        <LogoutButton icon={<TbLogout />} label={t("item7")} />
       </div>
     </nav>
   );

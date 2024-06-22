@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home";
 import Users from "./pages/Users/Users";
 import Schedule from "./pages/Schedule/Schedule";
 import Forms from "./pages/Forms/Forms";
+import Teams from "./pages/Teams/Teams";
 import Settings from "./pages/Settings/Settings";
 import Login from "./pages/Login/Login";
 import { AuthProvider } from "./components/AuthContext/AuthContext";
@@ -26,6 +27,7 @@ const App = () => {
               <Route path="/users" element={<Users />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/forms" element={<Forms />} />
+              <Route path="/teams" element={<Teams />} />
               <Route path="/forms/check" element={<NewForm />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/login" element={<Login />} />

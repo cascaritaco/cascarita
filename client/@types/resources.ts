@@ -3,6 +3,7 @@ import SideNav from "../i18n/en/components/SideNav.json";
 import Search from "../i18n/en/components/Search.json";
 import Leagues from "../i18n/en/pages/Leagues.json";
 import Forms from "../i18n/en/pages/Forms.json";
+import Teams from "../i18n/en/pages/Teams.json";
 import NewForms from "../i18n/en/pages/NewForms.json";
 import EmptyDNDCanvas from "../i18n/en/components/EmptyDNDCanvas.json";
 import DraggableButtons from "../i18n/en/components/DraggableButtons.json";
@@ -15,6 +16,7 @@ const resources = {
   Search,
   Leagues,
   Forms,
+  Teams,
   NewForms,
   EmptyDNDCanvas,
   DraggableButtons,

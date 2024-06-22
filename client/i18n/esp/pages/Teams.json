@@ -1,0 +1,16 @@
+{
+  "title": "Equipos",
+  "filter": "Filtro",
+  "filterOptions": {
+    "item1": "Activo",
+    "item2": "Inactivo"
+  },
+  "sort": "Ordenar Por",
+  "sortOptions": {
+    "item1": "Alfabético",
+    "item2": "Fecha"
+  },
+  "button": "Agregar Liga",
+  "col1": "Nombre",
+  "col2": "Opciones"
+}

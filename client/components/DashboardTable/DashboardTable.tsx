@@ -3,7 +3,7 @@ import styles from "./DashboardTable.module.css";
 
 interface TableProps {
   headers: string[];
-  children: (string | React.ReactNode)[][];
+  children: React.ReactNode;
   className?: string;
 }
 
