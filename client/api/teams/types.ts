@@ -26,8 +26,8 @@ interface SeasonType {
   start_date: Date;
   end_date: Date;
   is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
   league_id: number;
 }
 
