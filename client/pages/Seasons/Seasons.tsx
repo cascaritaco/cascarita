@@ -1,6 +1,6 @@
 import React from "react";
 import Page from "../../components/Page/Page";
-import SeasonForm from "../../components/Forms/SeasonForm";
+import SeasonForm from "../../components/Forms/SeasonForm/SeasonForm";
 import Modal from "../../components/Modal/Modal";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import styles from "./Seasons.module.css";

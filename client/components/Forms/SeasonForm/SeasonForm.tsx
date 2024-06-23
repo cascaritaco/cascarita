@@ -1,11 +1,11 @@
 import React from "react";
-import SelectMenu from "../SelectMenu/SelectMenu";
-import Modal from "../Modal/Modal";
-import { createSeason } from "../../api/teams/service";
-import { FormProps } from "../../api/teams/types";
-import styles from "./Form.module.css";
+import styles from "../Form.module.css";
+import Modal from "../../Modal/Modal";
+import SelectMenu from "../../SelectMenu/SelectMenu";
+import { SeasonFormProps } from "./types";
+import { createSeason } from "./services";
 
-const SeasonForm: React.FC<FormProps> = ({ afterSave }) => {
+const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave }) => {
   const [seasonName, setSeasonName] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
