@@ -11,12 +11,16 @@ import { I18nextProvider } from "react-i18next";
 import i18next from "./i18n/config";
 import NewForm from "./pages/NewForm/NewForm";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import FormPage from "./pages/FormPage/FormsPage";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/form/:formId" element={<FormPage />} />
+      </Routes>
       <AuthProvider>
         <I18nextProvider i18n={i18next}>
           <Layout>
