@@ -15,5 +15,6 @@
     "isolatedModules": true,
     "jsx": "react-jsx"
   },
-  "include": ["./**/*", "custom.d.ts"]
+  "include": ["./**/*", "custom.d.ts"],
+  "exclude": ["node_modules", "dist", "build", "postcss.config.js"]
 }

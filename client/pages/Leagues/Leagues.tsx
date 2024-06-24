@@ -6,12 +6,12 @@ import Page from "../../components/Page/Page";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import LeagueForm from "../../components/Forms/LeagueForm/LeagueForm";
-import { LeagueType } from "../../api/teams/types";
+import { LeagueType } from "./types";
 import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getLeagueByGroupId } from "../../api/leagues/service";
+import { getLeagueByGroupId } from "../../components/Forms/LeagueForm/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const Leagues = () => {

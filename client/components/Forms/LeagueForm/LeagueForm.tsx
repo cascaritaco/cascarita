@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./LeagueForm.module.css";
+import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNewLeague } from "../../../api/leagues/service";
+import { createNewLeague } from "./service";
 import { LeagueFormProps } from "./types";
 import { useAuth } from "../../AuthContext/AuthContext";
 
