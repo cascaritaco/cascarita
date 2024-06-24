@@ -2,7 +2,7 @@ import { TeamResponse } from "./types";
 
 const createTeam = async (
   group_id: string,
-  name: string
+  name: string,
 ): Promise<TeamResponse> => {
   try {
     const response = await fetch(`/api/team/create`, {

@@ -3,7 +3,7 @@ import { Form, GetFormsParams } from "./types";
 // TODO: Create a call to fetch all forms by groupId
 // TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
 
-export const getForms = async ({
+export const getTypeformForms = async ({
   page = 1,
   page_size = 10,
   search,
@@ -24,35 +24,91 @@ export const getForms = async ({
     const queryParams = new URLSearchParams(params).toString();
     const response = await fetch(`/api/surveys?${queryParams}`);
 
-    const responseBody = await response.json();
-
     if (!response.ok) {
-      console.error("Error fetching forms:", responseBody);
       throw new Error(`Error fetching forms: ${response.statusText}`);
     }
 
-    return responseBody;
-  } catch (error) {
-    console.error("Server error:", error);
-    throw error;
+    return response.json();
+  } catch (err) {
+    console.error("Error fetching forms:", err);
+    throw err;
   }
 };
 
 // fetches form data by endpoint (e.g. fetch form and/or form responses)
-export const fetchFormData = async (formId: string, endpoint: string) => {
+export const fetchTypeformFormData = async (
+  formId: string,
+  endpoint: string,
+) => {
   try {
     const response = await fetch(`/api/survey/${formId}${endpoint}`);
+
     if (!response.ok) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
+
     return response.json();
-  } catch (error) {
-    console.error("Error fetching form data:", error);
-    throw error;
+  } catch (err) {
+    console.error("Error fetching form data:", err);
+    throw err;
   }
 };
 
-export const createForm = async (
+export const updateTypeformForm = async (
+  data: Form,
+  formId: string,
+  title: string,
+  description: string,
+) => {
+  const formData = {
+    title,
+    welcome_screens: [
+      {
+        title,
+        properties: {
+          description,
+        },
+      },
+    ],
+    ...data,
+  };
+
+  try {
+    const response = await fetch(`/api/survey/${formId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update form");
+    }
+
+    return response.json();
+  } catch (err) {
+    console.error("Error updating form:", err);
+    throw err;
+  }
+};
+
+export const deleteTypeformForm = async (id: string) => {
+  try {
+    const response = await fetch(`/api/survey/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete form");
+    }
+  } catch (err) {
+    console.error("Error deleting form:", err);
+    throw err;
+  }
+};
+
+export const createMongoForm = async (
   data: Form,
   title: string,
   description: string,
@@ -86,57 +142,51 @@ export const createForm = async (
     return response.json();
   } catch (err) {
     console.error("Error creating form:", err);
+    throw err;
   }
 };
 
-export const updateForm = async (
-  data: Form,
-  formId: string,
-  title: string,
-  description: string,
-) => {
-  const formData = {
-    title,
-    welcome_screens: [
-      {
-        title,
-        properties: {
-          description,
-        },
-      },
-    ],
-    ...data,
-  };
-
+export const getMongoForms = async (groupId: number) => {
   try {
-    const response = await fetch(`/api/survey/${formId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch(`/api/groups/${groupId}/forms`);
 
     if (!response.ok) {
-      throw new Error("Failed to update form");
+      throw new Error(`Error fetching forms: ${response.statusText}`);
     }
 
     return response.json();
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error("Error fetching forms:", err);
+    throw err;
   }
 };
 
-export const deleteForm = async (id: string) => {
+export const getMongoFormById = async (formId: string) => {
   try {
-    const response = await fetch(`/api/survey/${id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(`/api/forms/${formId}`);
 
     if (!response.ok) {
-      throw new Error("Failed to delete form");
+      throw new Error(`Error fetching form: ${response.statusText}`);
     }
-  } catch (error) {
-    console.error(error);
+
+    return response.json();
+  } catch (err) {
+    console.error("Error fetching form:", err);
+    throw err;
+  }
+};
+
+export const getMongoFormResponses = async (formId: string) => {
+  try {
+    const response = await fetch(`/api/forms/${formId}/responses`);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching form responses: ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (err) {
+    console.error("Error fetching responses:", err);
+    throw err;
   }
 };
