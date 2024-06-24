@@ -8,6 +8,8 @@ import SearchEn from "./en/components/Search.json";
 import SearchEsp from "./esp/components/Search.json";
 import LeaguesEn from "./en/pages/Leagues.json";
 import LeaguesEsp from "./esp/pages/Leagues.json";
+import TeamEn from "./en/pages/Teams.json";
+import TeamEsp from "./esp/pages/Teams.json";
 import FormsEn from "./en/pages/Forms.json";
 import FormsEsp from "./esp/pages/Forms.json";
 import FormResponsesEn from "./en/components/FormResponses.json";
@@ -35,6 +37,7 @@ i18next.use(initReactI18next).init({
       Search: SearchEn,
       Leagues: LeaguesEn,
       Forms: FormsEn,
+      Teams: TeamEn,
       NewForms: NewFormsEn,
       EmptyDNDCanvas: EmptyDNDCanvasEn,
       DraggableButtons: DraggableButtonsEn,
@@ -47,6 +50,7 @@ i18next.use(initReactI18next).init({
       Search: SearchEsp,
       Leagues: LeaguesEsp,
       Forms: FormsEsp,
+      Teams: TeamEsp,
       NewForms: NewFormsEsp,
       EmptyDNDCanvas: EmptyDNDCanvasEsp,
       DraggableButtons: DraggableButtonsEsp,
