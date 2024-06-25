@@ -18,9 +18,6 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        <Route path="/form/:formId" element={<FormPage />} />
-      </Routes>
       <AuthProvider>
         <I18nextProvider i18n={i18next}>
           <Layout>
@@ -33,6 +30,7 @@ const App = () => {
               <Route path="/forms/check" element={<NewForm />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/form/:formId" element={<FormPage />} />
             </Routes>
           </Layout>
         </I18nextProvider>
