@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
 import { useForm } from "react-hook-form";
 import { Field, Form } from "./types";
+import FormHeader from "../../components/FormHeader/FormHeader";
 
 const FormPage = () => {
   const { formId } = useParams();
@@ -30,6 +31,7 @@ const FormPage = () => {
   // Render the form based on the fetched data
   return (
     <section>
+      <FormHeader />
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         {JSON.stringify(form, null, 2)}
         <button type="submit">Submit</button>
