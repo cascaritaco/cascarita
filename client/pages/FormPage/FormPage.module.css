@@ -1,0 +1,17 @@
+.container {
+  max-width: 900px;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  box-shadow: 0px 0px 4px 0px #00000040;
+  padding: 40px;
+  overflow-y: auto;
+}

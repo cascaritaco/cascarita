@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Field, Form } from "./types";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
+import styles from "./FormPage.module.css";
 
 const FormPage = () => {
   const { formId } = useParams();
@@ -31,15 +32,17 @@ const FormPage = () => {
 
   // Render the form based on the fetched data
   return (
-    <section>
+    <>
       <FormHeader />
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        {JSON.stringify(form, null, 2)}
-        <button type="submit">Submit</button>
-      </form>
+      <body className={styles.container}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          {JSON.stringify(form, null, 2)}
+          <button type="submit">Submit</button>
+        </form>
+      </body>
       {error && <div>Error in form submission</div>}
       <FormFooter />
-    </section>
+    </>
   );
 };
 

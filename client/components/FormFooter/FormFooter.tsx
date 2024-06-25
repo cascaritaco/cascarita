@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./FormFooter.module.css";
 
 function FormFooter() {
-  return <div className={styles.bottomNav} />;
+  return <footer className={styles.container} />;
 }
 
 export default FormFooter;
