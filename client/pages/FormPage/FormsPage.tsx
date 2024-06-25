@@ -5,6 +5,7 @@ import { getMongoFormById } from "../../api/forms/service";
 import { useForm } from "react-hook-form";
 import { Field, Form } from "./types";
 import FormHeader from "../../components/FormHeader/FormHeader";
+import FormFooter from "../../components/FormFooter/FormFooter";
 
 const FormPage = () => {
   const { formId } = useParams();
@@ -37,6 +38,7 @@ const FormPage = () => {
         <button type="submit">Submit</button>
       </form>
       {error && <div>Error in form submission</div>}
+      <FormFooter />
     </section>
   );
 };
