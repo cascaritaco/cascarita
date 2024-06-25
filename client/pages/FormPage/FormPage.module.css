@@ -24,7 +24,27 @@
   position: relative;
   font-size: 36px;
   font-weight: 700;
-  line-height: 46px;
+  line-height: 35px;
   color: #1e1e1e;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #dfe5ee;
+}
+
+.submitButton {
+  display: block;
+  margin: 0 auto;
+  color: #ffffff;
+  background: #170cb4;
+  font-family: "DM Sans";
+  width: 117px;
+  height: 43px;
+  font-size: 16px;
+  line-height: 21px;
+  border-radius: 21.5px;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+  outline: 1px solid blue;
+  background-color: #2f26b7;
 }

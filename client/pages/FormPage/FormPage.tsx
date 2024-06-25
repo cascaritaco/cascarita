@@ -60,7 +60,9 @@ const FormPage = () => {
                 if (!FieldComponent) return null;
                 return <FieldComponent key={field.id} field={field} />;
               })}
-            <button type="submit">Submit</button>
+            <button type="submit" className={styles.submitButton}>
+              Submit
+            </button>
           </form>
         </FormProvider>
       </div>
