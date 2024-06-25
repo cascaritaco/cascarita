@@ -44,7 +44,6 @@ const FormPage = () => {
   const onSubmit = (data: unknown) => {
     console.log(data);
   };
-
   // Render the form based on the fetched data
   return (
     <>
@@ -54,6 +53,7 @@ const FormPage = () => {
           <form
             className={styles.formContent}
             onSubmit={methods.handleSubmit(onSubmit)}>
+            <h1 className={styles.title}>{form?.form_data.title}</h1>
             {form != null &&
               form.form_data.fields.map((field: Field) => {
                 const FieldComponent = FieldComponents[field.type];
