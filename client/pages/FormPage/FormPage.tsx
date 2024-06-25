@@ -34,12 +34,14 @@ const FormPage = () => {
   return (
     <>
       <FormHeader />
-      <body className={styles.container}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <div className={styles.container}>
+        <form
+          className={styles.formContent}
+          onSubmit={methods.handleSubmit(onSubmit)}>
           {JSON.stringify(form, null, 2)}
           <button type="submit">Submit</button>
         </form>
-      </body>
+      </div>
       {error && <div>Error in form submission</div>}
       <FormFooter />
     </>
