@@ -6,7 +6,7 @@ const express = require("express");
 const session = require("express-session");
 const http = require("http");
 const path = require("path");
-
+const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
 const Middlewares = require("./middlewares");
 const passport = require("./passport");
 const { startMongoConnection } = require("./mongodb");
@@ -71,6 +71,19 @@ app.use("/api", SurveyController);
 app.use("/api/teams", TeamRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/forms", FormRoutes);
+
+app.get("/getCustomers", async function (req, res) {
+  const customers = await Stripe.customers.list();
+  return res.status(200).json(customers);
+});
+
+app.post("/customer", async function (req, res) {
+  const customer = await Stripe.customers.create({
+    name: "Jenny Rosen",
+    email: "jennyrosen@example.com",
+  });
+  return res.status(200).json(customer);
+});
 
 app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "../dist") });

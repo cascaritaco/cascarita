@@ -65,6 +65,7 @@
     "react-switch": "^7.0.0",
     "sequelize": "^6.35.1",
     "sequelize-cli": "^6.6.2",
+    "stripe": "^16.0.0",
     "style-loader": "^3.3.3",
     "supertest": "^6.3.3",
     "ts-loader": "^9.5.1",
