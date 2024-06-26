@@ -22,17 +22,12 @@ export interface Properties {
 }
 
 export interface Field {
-  // NOTE: See comment in DNDCanvas.tsx
-  id?: string;
+  id: string;
   title: string;
   ref: string;
   validations?: Validation;
   properties?: Properties;
   type: FieldType;
-}
-
-export interface FieldProps {
-  field: Field;
 }
 
 export interface Answer {
@@ -51,4 +46,9 @@ export interface Answer {
   choice?: { label: string };
   choices?: { labels: string[] };
   file_url?: string;
+}
+
+export interface FieldProps {
+  field: Field;
+  index: number;
 }

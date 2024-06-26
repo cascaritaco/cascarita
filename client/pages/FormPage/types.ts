@@ -22,8 +22,7 @@ export interface Properties {
 }
 
 export interface Field {
-  // NOTE: See comment in DNDCanvas.tsx
-  id?: string;
+  id: string;
   title: string;
   ref: string;
   validations?: Validation;
@@ -68,13 +67,24 @@ export interface Form {
   welcome_screen: WelcomeScreen;
 }
 
+export type AnswerType =
+  | "text"
+  | "number"
+  | "date"
+  | "choice"
+  | "choices"
+  | "email"
+  | "phone_number"
+  | "boolean"
+  | "file_url";
+
 export interface Answer {
   field: {
     id: string;
     type: string;
     ref: string;
   };
-  type: string;
+  type: AnswerType;
   number?: number;
   text?: string;
   phone_number?: string;
