@@ -17,10 +17,12 @@ const ShortText = ({ field, index }: FieldProps) => {
 
   return (
     <section className={styles.container}>
-      <h3 className={styles.question}>Question: {field.title}</h3>
-      {field.validations?.required && (
-        <span className={styles.required}>*</span>
-      )}
+      <div className={styles.questionContainer}>
+        <h3 className={styles.question}>Question: {field.title}</h3>
+        {field.validations?.required && (
+          <span className={styles.required}>*</span>
+        )}
+      </div>
       {fieldError && (
         <span className={styles.errorMessage}>{fieldError.message}</span>
       )}
