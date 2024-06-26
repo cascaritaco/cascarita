@@ -15,11 +15,36 @@ import {
   getMongoForms,
 } from "../../api/forms/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
+import Modal from "../../components/Modal/Modal";
+import React from "react";
+import ShareForm from "../../components/Forms/ShareForm/ShareForm";
+
+interface ShareModalProps {
+  formLink: string;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ShareModal: React.FC<ShareModalProps> = ({ formLink, open, setOpen }) => {
+  return (
+    <Modal open={open} onOpenChange={setOpen}>
+      <Modal.Button asChild className={styles.btn}>
+        <button onClick={() => setOpen(true)}>
+          <ShareButton />
+        </button>
+      </Modal.Button>
+      <Modal.Content title="Share Form">
+        <ShareForm afterClose={() => setOpen(false)} formLink={formLink} />
+      </Modal.Content>
+    </Modal>
+  );
+};
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -98,12 +123,17 @@ const Forms = () => {
                 onDelete={() => onDelete(form.form_data.id)} // TODO: delete by mongo form ID, this is deleting form by typeform ID
                 onEdit={() => onEdit(form._id)}
               />
-              <a
+              {/* <a
                 href={form.form_data._links.display}
                 target="_blank"
                 rel="noopener noreferrer">
                 <ShareButton />
-              </a>
+              </a> */}
+              <ShareModal
+                formLink={form.form_data._links.display}
+                open={open}
+                setOpen={setOpen}
+              />
             </div>
           ))}
         </div>
