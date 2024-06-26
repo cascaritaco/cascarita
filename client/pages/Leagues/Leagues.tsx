@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../components/Forms/LeagueForm/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
+import { Link } from "react-router-dom";
 
 const Leagues = () => {
   const { t } = useTranslation("Leagues");
@@ -101,7 +102,9 @@ const Leagues = () => {
           ) : (
             data?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
-                <td className={styles.tableData}>{league.name}</td>
+                <td className={styles.tableData}>
+                  <Link to={`/${league.id}/leagues`}>{league.name}</Link>
+                </td>
                 <td>
                   <DropdownMenuButton />
                 </td>
