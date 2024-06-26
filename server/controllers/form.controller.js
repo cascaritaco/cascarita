@@ -167,6 +167,56 @@ const FormController = {
       next(error);
     }
   },
+
+  async emailForm(req, res, next) {
+    try {
+      const apiKey = process.env.BREVO_API_KEY;
+      const url = "https://api.brevo.com/v3/smtp/email";
+
+      const typeformLink = req.body.formLink;
+      const recipientEmail = req.body.email;
+
+      const senderEmail = "abanuelos.cascarita@gmail.com";
+      const senderName = "Cascarita";
+      const subject = "Cascarita - Please fill out this form";
+      const type = "classic";
+
+      const emailContent = `
+        <html>
+          <body>
+            <p>Hello,</p>
+            <p>Please fill out the following form:</p>
+            <a href="${typeformLink}">Fill out the form</a>
+            <p>Thank you!</p>
+          </body>
+        </html>
+      `;
+
+      const body = JSON.stringify({
+        sender: { name: senderName, email: senderEmail },
+        to: [{ email: recipientEmail }],
+        type: type,
+        subject,
+        htmlContent: emailContent,
+      });
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "api-key": apiKey,
+        },
+        body,
+      });
+
+      const responseData = await response.json();
+      return res.status(200).json({ data: responseData });
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      next(error);
+    }
+  },
 };
 
 module.exports = FormController;

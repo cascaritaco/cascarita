@@ -1,12 +1,16 @@
 import React, { useRef, useState } from "react";
 import styles from "../Form.module.css";
 import { ShareFormProps } from "./types";
-import PrimaryButton from "../../PrimaryButton/PrimaryButton";
+import { sendEmail } from "../../../api/forms/service";
 
 const ShareForm: React.FC<ShareFormProps> = ({ afterClose, formLink }) => {
   const textBoxRef = useRef<HTMLInputElement>(null);
   const [copied, setCopied] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
+
+  const handleEmail = async (formLink: string, email: string) => {
+    await sendEmail(formLink, email);
+  };
 
   const handleCopy = () => {
     if (textBoxRef.current) {
@@ -53,7 +57,7 @@ const ShareForm: React.FC<ShareFormProps> = ({ afterClose, formLink }) => {
           />
           <button
             className={`${styles.btn} ${styles.sendBtn}`}
-            onClick={() => console.log("Send email")}>
+            onClick={() => handleEmail(formLink, email)}>
             send
           </button>
         </div>
