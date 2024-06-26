@@ -89,7 +89,6 @@ const FormPage = () => {
           </FormProvider>
         )}
       </div>
-      {error && <div>Error in form submission</div>}
       <FormFooter />
     </>
   );

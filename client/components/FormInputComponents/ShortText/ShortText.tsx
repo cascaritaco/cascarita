@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FieldProps } from "../types";
-import { useFormContext } from "react-hook-form";
+import { FieldError, useFormContext } from "react-hook-form";
+import styles from "./ShortText.module.css";
 
 const ShortText = ({ field, index }: FieldProps) => {
   const {
@@ -8,24 +9,33 @@ const ShortText = ({ field, index }: FieldProps) => {
     formState: { errors },
   } = useFormContext();
 
+  const { required, max_length: maxLength } = field.validations ?? {};
+
+  const fieldError = (
+    errors.answers as { [key: number]: { text?: FieldError } } | undefined
+  )?.[index]?.text;
+
   return (
-    <section>
-      <h3>Question: {field.title}</h3>
-      {field.validations?.required && <span>*</span>}
+    <section className={styles.container}>
+      <h3 className={styles.question}>Question: {field.title}</h3>
+      {field.validations?.required && (
+        <span className={styles.required}>*</span>
+      )}
+      {fieldError && (
+        <span className={styles.errorMessage}>{fieldError.message}</span>
+      )}
       <input
+        className={styles.input}
         type="text"
         placeholder="Type your answer here..."
         {...register(`answers.${index}.text`, {
-          required: field.validations?.required,
-          maxLength: field.validations?.max_length,
+          required: required && "This field is required",
+          maxLength: maxLength && {
+            value: maxLength,
+            message: `Answer has to be less than ${maxLength} characters`,
+          },
         })}
       />
-      {errors.fieldValidation && (
-        <span>
-          This field is required / response must be larger than
-          {field.validations?.max_length} characters
-        </span>
-      )}
     </section>
   );
 };
