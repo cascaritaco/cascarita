@@ -30,7 +30,7 @@ const FormPage = () => {
   const AnswerMap = {
     multiple_choice: "choice",
     short_text: "text",
-    dropdown: "choice",
+    dropdown: "text",
     long_text: "text",
     email: "email",
     phone_number: "phone_number",

@@ -12,6 +12,7 @@ export interface Validation {
 }
 
 export interface Label {
+  id: string;
   label: string;
   ref: string;
 }
