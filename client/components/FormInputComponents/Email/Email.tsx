@@ -9,7 +9,7 @@ const Email = ({ field, index }: FieldProps) => {
     formState: { errors },
   } = useFormContext();
 
-  const { required, max_length: maxLength } = field.validations ?? {};
+  const { required } = field.validations ?? {};
 
   const fieldError = (
     errors.answers as { [key: number]: { email?: FieldError } } | undefined
@@ -32,9 +32,9 @@ const Email = ({ field, index }: FieldProps) => {
         placeholder="name@example.com"
         {...register(`answers.${index}.email`, {
           required: required && "This field is required",
-          maxLength: maxLength && {
-            value: maxLength,
-            message: `Answer has to be less than ${maxLength} characters`,
+          pattern: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: "Please enter a valid email address",
           },
         })}
       />
