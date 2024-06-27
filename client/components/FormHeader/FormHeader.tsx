@@ -5,7 +5,7 @@ import { Text } from "@radix-ui/themes";
 
 function FormHeader() {
   return (
-    <header className={styles.topNav}>
+    <header className={styles.container}>
       <div className={styles.logoCon}>
         <span className={styles.logo}>
           <Logo />
