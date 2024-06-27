@@ -27,6 +27,7 @@ const FormPage = () => {
         ? getMongoFormById(formId)
         : Promise.reject(new Error("Form ID is undefined")),
   });
+
   const AnswerMap = {
     multiple_choice: "choice",
     short_text: "text",
@@ -49,21 +50,29 @@ const FormPage = () => {
     phone_number: PhoneNumber,
   };
 
+  // TODO: These will be components that have styles
   if (isLoading) return <div>Loading...</div>; // Show loading state
   if (error) return <div>An error occurred: {error.message}</div>; // Show error state
 
   const onSubmit = (data: { answers: Answer[] }) => {
     const normalizedAnswers: Answer[] =
-      form?.form_data.fields.map((field: Field, index: number) => ({
-        ...data.answers[index],
-        field: { id: field.id, type: field.type, ref: field.ref },
-        type: AnswerMap[field.type] as AnswerType,
-      })) ?? [];
+      form?.form_data.fields.map((field: Field, index: number) => {
+        const answerType =
+          field.type === "multiple_choice" &&
+          field.properties?.allow_multiple_selection
+            ? "choices"
+            : (AnswerMap[field.type] as AnswerType);
+
+        return {
+          ...data.answers[index],
+          field: { id: field.id, type: field.type, ref: field.ref },
+          type: answerType,
+        };
+      }) ?? [];
 
     console.log(normalizedAnswers);
   };
 
-  // Render the form based on the fetched data
   return (
     <>
       <FormHeader />
