@@ -30,7 +30,7 @@ const App = () => {
               <Route path="/forms/check" element={<NewForm />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/form/:formId" element={<FormPage />} />
+              <Route path="/forms/:formId" element={<FormPage />} />
             </Routes>
           </Layout>
         </I18nextProvider>
