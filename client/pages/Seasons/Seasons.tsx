@@ -10,14 +10,15 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../../components/AuthContext/AuthContext";
 import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services";
 import { LeagueType } from "../Leagues/types";
 import styles from "./Seasons.module.css";
 
 const Seasons = () => {
   const { leagueId } = useParams<{ leagueId: string }>();
-  console.log("leagueId from useParams:", leagueId);
+  const { leagueName } = useParams<{ leagueName: string }>();
+  const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
+  console.log("leagueName from useParams:", leagueName);
 
   const { t } = useTranslation("Leagues");
 
@@ -28,18 +29,14 @@ const Seasons = () => {
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [open, setOpen] = useState(false);
 
-  const { currentUser } = useAuth();
-
-  const groupId = currentUser?.group_id;
-
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["seasons", groupId ? groupId : 0],
+    queryKey: ["seasons", leagueIdNumber],
     queryFn: getSeasonsByLeagueId,
   });
 
   return (
     <Page>
-      <h1 className={styles.h1}>The Premier League </h1>
+      <h1 className={styles.h1}> {leagueName} </h1>
 
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>

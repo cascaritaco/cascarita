@@ -103,7 +103,9 @@ const Leagues = () => {
             data?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/${league.id}/leagues`}>{league.name}</Link>
+                  <Link to={`/league/${league.id}/${league.name}`}>
+                    {league.name}
+                  </Link>
                 </td>
                 <td>
                   <DropdownMenuButton />

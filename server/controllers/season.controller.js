@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const { League, Season, Session, Team, TeamsSession } = require("../models");
 
 const SeasonController = {
-  async getSeasonByLeagueId(req, res, next) {
+  async getSeasonsByLeagueId(req, res, next) {
     const leagueId = req.params.id;
 
     try {
@@ -137,7 +137,7 @@ const SeasonController = {
     try {
       const isUnique = await isNameUniqueWithinLeague(
         form.name,
-        form.league_id
+        form.league_id,
       );
       if (!isUnique) {
         res.status(400);
