@@ -11,6 +11,7 @@ import { I18nextProvider } from "react-i18next";
 import i18next from "./i18n/config";
 import NewForm from "./pages/NewForm/NewForm";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import Seasons from "./pages/Seasons/Seasons";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,10 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
+              <Route
+                path="/league/:leagueId/:leagueName"
+                element={<Seasons />}
+              />
               <Route path="/users" element={<Users />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/forms" element={<Forms />} />

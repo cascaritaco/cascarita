@@ -3,6 +3,7 @@ interface SeasonFormProps {
   afterSave: () => void;
 }
 
+// UPDATE THIS CREATE SEASON TYPE - needs to be deleted
 interface SeasonType {
   id: number;
   name: string;
