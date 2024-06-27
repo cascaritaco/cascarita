@@ -29,6 +29,20 @@
   text-decoration: underline;
 }
 
+.successText {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: green;
+  padding-top: 8px;
+}
+
+.errorText {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: red;
+  padding-top: 8px;
+}
+
 .removeBtn {
   display: flex;
   justify-content: center;

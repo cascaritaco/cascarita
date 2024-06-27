@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import styles from "./FileUpload.module.css";
-import { useDropzone } from "react-dropzone";
+import { FileRejection, useDropzone } from "react-dropzone";
 import { FileIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { FileUploadProps } from "./types";
 
@@ -18,8 +18,9 @@ const rejectStyle = {
 
 const FileUpload: React.FC<FileUploadProps> = ({ className }) => {
   const [filePreview, setFilePreview] = React.useState<string>("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDropAccepted = useCallback((acceptedFiles: File[]) => {
     const file = new FileReader();
 
     file.onload = () => {
@@ -27,6 +28,21 @@ const FileUpload: React.FC<FileUploadProps> = ({ className }) => {
     };
 
     file.readAsDataURL(acceptedFiles[0]);
+    setErrorMessage("");
+  }, []);
+
+  const onDropRejected = useCallback((rejectedFiles: FileRejection[]) => {
+    if (rejectedFiles && rejectedFiles.length > 0) {
+      const { errors } = rejectedFiles[0];
+      if (errors && errors.length > 0) {
+        const error = errors[0];
+        if (error.code === "file-too-large") {
+          setErrorMessage("Image size is too big");
+        } else {
+          setErrorMessage(error.message);
+        }
+      }
+    }
   }, []);
 
   const {
@@ -37,12 +53,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ className }) => {
     isDragReject,
     isFocused,
   } = useDropzone({
-    onDrop,
+    onDropAccepted,
+    onDropRejected,
     maxFiles: 1,
     accept: {
       "image/*": [],
     },
-    // maxSize: 1024 * 1000,
+    maxSize: 1024 * 1000,
   });
 
   const style = useMemo(
@@ -101,6 +118,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ className }) => {
           )}
         </div>
       )}
+
+      {isDragReject && <p className={styles.errorText}>File is not accepted</p>}
+      {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
 
       {filePreview && (
         <aside>
