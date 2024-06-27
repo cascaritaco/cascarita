@@ -22,19 +22,31 @@ import ShareForm from "../../components/Forms/ShareForm/ShareForm";
 interface ShareModalProps {
   formLink: string;
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onOpen: (open: boolean) => void;
 }
 
-const ShareModal: React.FC<ShareModalProps> = ({ formLink, open, setOpen }) => {
+const ShareModal: React.FC<ShareModalProps> = ({ formLink, open, onOpen }) => {
+  const handleOpenChange = (isOpen: boolean) => {
+    onOpen(isOpen);
+  };
+
+  const handleOpen = () => {
+    onOpen(true);
+  };
+
+  const handleClose = () => {
+    onOpen(false);
+  };
+
   return (
-    <Modal open={open} onOpenChange={setOpen}>
+    <Modal open={open} onOpenChange={handleOpenChange}>
       <Modal.Button asChild className={styles.btn}>
-        <button onClick={() => setOpen(true)}>
+        <button onClick={handleOpen}>
           <ShareButton />
         </button>
       </Modal.Button>
       <Modal.Content title="Share Form">
-        <ShareForm afterClose={() => setOpen(false)} formLink={formLink} />
+        <ShareForm afterClose={handleClose} formLink={formLink} />
       </Modal.Content>
     </Modal>
   );
@@ -123,16 +135,10 @@ const Forms = () => {
                 onDelete={() => onDelete(form.form_data.id)} // TODO: delete by mongo form ID, this is deleting form by typeform ID
                 onEdit={() => onEdit(form._id)}
               />
-              {/* <a
-                href={form.form_data._links.display}
-                target="_blank"
-                rel="noopener noreferrer">
-                <ShareButton />
-              </a> */}
               <ShareModal
                 formLink={form.form_data._links.display}
                 open={open}
-                setOpen={setOpen}
+                onOpen={(open: boolean) => setOpen(open)}
               />
             </div>
           ))}
