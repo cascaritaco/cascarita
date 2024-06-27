@@ -1,23 +1,22 @@
-import { TeamResponse } from "./types";
+// import { TeamResponse } from "./types";
+// import { QueryFunctionContext } from "@tanstack/react-query";
 
-const createTeam = async (
-  group_id: string,
-  name: string,
-): Promise<TeamResponse> => {
+// type UserQueryKey = [string, number];
+
+const createNewTeam = async (formData: object) => {
   try {
     const response = await fetch(`/api/team/create`, {
       method: "POST",
-      body: JSON.stringify({ group_id, name }),
+      body: JSON.stringify(formData),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const result = await response.json();
-    return result.data;
+    return response.json();
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error creating team: ", error);
     throw error;
   }
 };
 
-export { createTeam };
+export { createNewTeam };

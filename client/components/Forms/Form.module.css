@@ -27,12 +27,11 @@
   justify-content: center;
   border-radius: 4px;
   padding: 0 10px;
-  font-size: 15px;
+  font-size: 1rem;
   line-height: 1;
   background-color: #f4f7fb;
   color: var(--violet-11);
   box-shadow: 0 0 0 1px var(--violet-7);
-  height: 35px;
 }
 
 .input:focus {

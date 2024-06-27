@@ -74,10 +74,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({ afterSave }) => {
         </Modal.Close>
 
         <div>
-          <button
-            type="submit"
-            onClick={() => {}}
-            className={`${styles.btn} ${styles.submitBtn}`}>
+          <button type="submit" className={`${styles.btn} ${styles.submitBtn}`}>
             Submit
           </button>
         </div>

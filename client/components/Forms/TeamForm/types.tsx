@@ -3,4 +3,10 @@ interface TeamFormProps {
   afterSave: () => void;
 }
 
-export type { TeamFormProps };
+interface FormFields {
+  teamName: string;
+  teamDivision: string;
+  teamLogo: HTMLImageElement;
+}
+
+export type { TeamFormProps, FormFields };

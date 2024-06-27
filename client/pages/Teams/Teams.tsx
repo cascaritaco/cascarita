@@ -8,6 +8,7 @@ import Modal from "../../components/Modal/Modal";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
+import TeamForm from "../../components/Forms/TeamForm/TeamForm";
 
 const Teams = () => {
   const { t } = useTranslation("Teams");
@@ -46,7 +47,9 @@ const Teams = () => {
               onClick={() => setOpen(true)}></PrimaryButton>
           </Modal.Button>
 
-          <Modal.Content title="Create Team">Hello Noah</Modal.Content>
+          <Modal.Content title="Create Team">
+            <TeamForm afterSave={() => setOpen(false)} />
+          </Modal.Content>
         </Modal>
       </div>
 

@@ -1,0 +1,42 @@
+.imgContainer {
+  width: 100px;
+  height: 100px;
+}
+
+.img {
+  height: auto;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+.dropZoneContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.fileIcon {
+  margin-bottom: 16px;
+}
+
+.textSm {
+  font-size: 0.75rem;
+}
+
+.boldLogoText {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.removeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 3px;
+  background-color: #fa8072d9;
+  border-radius: 50px;
+}
