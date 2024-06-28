@@ -1,3 +1,10 @@
+import Dropdown from "../../components/FormInputComponents/Dropdown/Dropdown";
+import Email from "../../components/FormInputComponents/Email/Email";
+import LongText from "../../components/FormInputComponents/LongText/LongText";
+import MultipleChoice from "../../components/FormInputComponents/MultipleChoice/MultipleChoice";
+import PhoneNumber from "../../components/FormInputComponents/PhoneNumber/PhoneNumber";
+import ShortText from "../../components/FormInputComponents/ShortText/ShortText";
+
 export type FieldType =
   | "multiple_choice"
   | "short_text"
@@ -79,6 +86,24 @@ export type AnswerType =
   | "phone_number"
   | "boolean"
   | "file_url";
+
+export const FieldComponents = {
+  multiple_choice: MultipleChoice,
+  short_text: ShortText,
+  dropdown: Dropdown,
+  long_text: LongText,
+  email: Email,
+  phone_number: PhoneNumber,
+};
+
+export const AnswerMap = {
+  multiple_choice: "choice",
+  short_text: "text",
+  dropdown: "text",
+  long_text: "text",
+  email: "email",
+  phone_number: "phone_number",
+};
 
 export interface Answer {
   field: {

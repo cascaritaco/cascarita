@@ -38,7 +38,8 @@ const PhoneNumber = ({ field, index }: FieldProps) => {
         {...register(`answers.${index}.phone_number`, {
           required: required && "This field is required",
           pattern: {
-            value: /^\+?[1-9]\d{1,14}$/,
+            value:
+              /(\+?\d{1,3})?[-.\s]?(\(?\d{1,4}\)?)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
             message: "Invalid phone number",
           },
         })}

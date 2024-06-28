@@ -29,11 +29,12 @@ const LongText = ({ field, index }: FieldProps) => {
   const handleTextAreaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
     initialHeight: string = "auto",
+    maxHeight: number = 500,
   ) => {
     setTextAreaValue(event.target.value);
     const textArea = event.target;
     textArea.style.height = initialHeight;
-    textArea.style.height = `${textArea.scrollHeight}px`; // Set height
+    textArea.style.height = `${Math.min(textArea.scrollHeight, maxHeight)}px`;
     registerOnChange(event);
   };
 

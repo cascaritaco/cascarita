@@ -3,16 +3,17 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
 import { FormProvider, useForm } from "react-hook-form";
-import { Answer, AnswerType, Field, Form } from "./types";
+import {
+  Answer,
+  AnswerMap,
+  AnswerType,
+  Field,
+  FieldComponents,
+  Form,
+} from "./types";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
-import ShortText from "../../components/FormInputComponents/ShortText/ShortText";
-import MultipleChoice from "../../components/FormInputComponents/MultipleChoice/MultipleChoice";
-import Dropdown from "../../components/FormInputComponents/Dropdown/Dropdown";
-import Email from "../../components/FormInputComponents/Email/Email";
-import LongText from "../../components/FormInputComponents/LongText/LongText";
-import PhoneNumber from "../../components/FormInputComponents/PhoneNumber/PhoneNumber";
 
 const FormPage = () => {
   const { formId } = useParams();
@@ -28,27 +29,9 @@ const FormPage = () => {
         : Promise.reject(new Error("Form ID is undefined")),
   });
 
-  const AnswerMap = {
-    multiple_choice: "choice",
-    short_text: "text",
-    dropdown: "text",
-    long_text: "text",
-    email: "email",
-    phone_number: "phone_number",
-  };
-
   const methods = useForm<{ answers: Answer[] }>({
     defaultValues: { answers: [] },
   });
-
-  const FieldComponents = {
-    multiple_choice: MultipleChoice,
-    short_text: ShortText,
-    dropdown: Dropdown,
-    long_text: LongText,
-    email: Email,
-    phone_number: PhoneNumber,
-  };
 
   // TODO: These will be components that have styles
   if (isLoading) return <div>Loading...</div>; // Show loading state
@@ -69,8 +52,8 @@ const FormPage = () => {
           type: answerType,
         };
       }) ?? [];
-
-    console.log(normalizedAnswers);
+    // TODO: send this to the backend as an API call
+    return normalizedAnswers;
   };
 
   return (
