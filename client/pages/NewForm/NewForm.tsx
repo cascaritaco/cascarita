@@ -1,11 +1,14 @@
-import DraggableButton from "../../components/DraggableButton/DraggableButton";
+import DraggableButton from "../../components/DragAndDropComponents/DraggableButton/DraggableButton";
 import Page from "../../components/Page/Page";
 import { useRef, useState } from "react";
-import DNDCanvas from "../../components/DNDCanvas/DNDCanvas";
+import DNDCanvas from "../../components/DragAndDropComponents/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
 import { v4 as uuidv4 } from "uuid";
-import { Field, Form } from "../../components/DNDCanvas/types";
+import {
+  Field,
+  Form,
+} from "../../components/DragAndDropComponents/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useTranslation } from "react-i18next";

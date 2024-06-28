@@ -1,4 +1,4 @@
-import { DroppedItem } from "../../pages/NewForm/types";
+import { DroppedItem } from "../../../pages/NewForm/types";
 
 export type FieldType =
   | "multiple_choice"

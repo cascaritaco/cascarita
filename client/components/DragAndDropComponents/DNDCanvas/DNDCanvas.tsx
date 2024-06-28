@@ -10,12 +10,12 @@ import DraggableShortText from "../DraggableShortText/DraggableShortText";
 import DraggableDropdown from "../DraggableDropdown/DraggableDropdown";
 import DraggableLongText from "../DraggableLongText/DraggableLongText";
 import { DNDCanvasProps, Field, Form } from "./types";
-import { DroppedItem } from "../../pages/NewForm/types";
+import { DroppedItem } from "../../../pages/NewForm/types";
 import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 import { v4 as uuidv4 } from "uuid";
 import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
 import DraggableEmail from "../DraggableEmail/DraggableEmail";
-import { StrictModeDroppable } from "../StrictModeDroppable/StrictModeDroppable";
+import { StrictModeDroppable } from "../../StrictModeDroppable/StrictModeDroppable";
 
 const DNDCanvas = forwardRef(
   (
