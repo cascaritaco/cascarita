@@ -60,6 +60,6 @@
 }
 .selectItem[data-highlighted] {
   outline: none;
-  background-color: lightblue;
-  color: black;
+  background-color: #4238d5;
+  color: #ffffff;
 }

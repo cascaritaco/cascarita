@@ -1,9 +1,3 @@
-import { User } from "../../components/AuthContext/types";
-
-interface LeaguesProps {
-  currentUser: User;
-}
-
 interface LeagueType {
   id: number;
   group_id: number;
@@ -13,4 +7,4 @@ interface LeagueType {
   updated_at: Date;
 }
 
-export type { LeaguesProps, LeagueType };
+export type { LeagueType };

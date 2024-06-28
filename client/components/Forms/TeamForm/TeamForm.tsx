@@ -3,9 +3,12 @@ import styles from "./TeamForm.module.css";
 import { createNewTeam } from "../../../api/teams/service";
 import { TeamFormProps } from "./types";
 import SelectMenu from "../../SelectMenu/SelectMenu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import FileUpload from "../../FileUpload/FileUpload";
 import Modal from "../../Modal/Modal";
+import { useAuth } from "../../AuthContext/AuthContext";
+import { getLeagueByGroupId } from "../LeagueForm/service";
+import { TeamType } from "../../../pages/Teams/types";
 
 const TeamForm: React.FC<TeamFormProps> = ({ afterSave }) => {
   const [teamName, setTeamName] = React.useState("");
@@ -14,6 +17,13 @@ const TeamForm: React.FC<TeamFormProps> = ({ afterSave }) => {
   const [teamDivision, setTeamDivision] = React.useState("");
 
   const queryClient = useQueryClient();
+  const { currentUser } = useAuth();
+  const groupId = currentUser?.group_id;
+
+  const leaguesQuery = useQuery({
+    queryKey: ["league", groupId ? groupId : 0],
+    queryFn: getLeagueByGroupId,
+  });
 
   const teamFormMutation = useMutation({
     mutationFn: createNewTeam,
@@ -68,9 +78,11 @@ const TeamForm: React.FC<TeamFormProps> = ({ afterSave }) => {
           name="teamLeague"
           value={teamLeague}
           onValueChange={(teamLeague) => setTeamLeague(teamLeague)}>
-          <SelectMenu.Item value="league 1">League 1</SelectMenu.Item>
-          <SelectMenu.Item value="league 2">League 2</SelectMenu.Item>
-          <SelectMenu.Item value="league 3">League 3</SelectMenu.Item>
+          {leaguesQuery.data?.map((team: TeamType, idx: number) => (
+            <SelectMenu.Item key={idx} value={team.name}>
+              {team.name}
+            </SelectMenu.Item>
+          ))}
         </SelectMenu>
       </div>
 

@@ -9,11 +9,22 @@ import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import TeamForm from "../../components/Forms/TeamForm/TeamForm";
+import { TeamType } from "./types";
+import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { getTeamByGroupId } from "../../api/teams/service";
 
 const Teams = () => {
   const { t } = useTranslation("Teams");
   const [sorts, setSorts] = useState("");
   const [open, setOpen] = useState(false);
+
+  const { currentUser } = useAuth();
+  const groupId = currentUser?.group_id;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["teams", groupId ? groupId : 0],
+    queryFn: getTeamByGroupId,
+  });
 
   return (
     <Page>
@@ -54,21 +65,25 @@ const Teams = () => {
       </div>
 
       <DashboardTable headers={["Team Name", "Division", "Options"]}>
-        <tr className={styles.tableRow}>
-          <td className={styles.tableData}>Team Name</td>
-          <td className={styles.tableData}>Team Division</td>
-          <td className={styles.tableData}>
-            <DropdownMenuButton />
-          </td>
-        </tr>
-
-        <tr className={styles.tableRow}>
-          <td className={styles.tableData}>Team Name</td>
-          <td className={styles.tableData}>Team Division</td>
-          <td className={styles.tableData}>
-            <DropdownMenuButton />
-          </td>
-        </tr>
+        {isLoading ? (
+          <tr>
+            <td>Loading...</td>
+          </tr>
+        ) : isError || !data ? (
+          <tr>
+            <td>Error Fetching Data</td>
+          </tr>
+        ) : (
+          data?.map((team: TeamType, idx: number) => (
+            <tr key={idx} className={styles.tableRow}>
+              <td className={styles.tableData}>{team.name}</td>
+              <td className={styles.tableData}>Team Division</td>
+              <td>
+                <DropdownMenuButton />
+              </td>
+            </tr>
+          ))
+        )}
       </DashboardTable>
     </Page>
   );
