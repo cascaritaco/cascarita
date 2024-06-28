@@ -21,42 +21,32 @@ import ShareForm from "../../components/Forms/ShareForm/ShareForm";
 
 interface ShareModalProps {
   formLink: string;
-  open: boolean;
-  onOpen: (open: boolean) => void;
+  isOpen: boolean;
+  onOpen: (isOpen: boolean) => void;
 }
 
-const ShareModal: React.FC<ShareModalProps> = ({ formLink, open, onOpen }) => {
-  const handleOpenChange = (isOpen: boolean) => {
-    onOpen(isOpen);
-  };
-
-  const handleOpen = () => {
-    onOpen(true);
-  };
-
-  const handleClose = () => {
-    onOpen(false);
-  };
-
-  return (
-    <Modal open={open} onOpenChange={handleOpenChange}>
-      <Modal.Button asChild className={styles.btn}>
-        <button onClick={handleOpen}>
-          <ShareButton />
-        </button>
-      </Modal.Button>
-      <Modal.Content title="Share Form">
-        <ShareForm afterClose={handleClose} formLink={formLink} />
-      </Modal.Content>
-    </Modal>
-  );
-};
+const ShareModal: React.FC<ShareModalProps> = ({
+  formLink,
+  isOpen,
+  onOpen,
+}) => (
+  <Modal open={isOpen} onOpenChange={onOpen}>
+    <Modal.Button asChild className={styles.btn}>
+      <button onClick={() => onOpen(true)}>
+        <ShareButton />
+      </button>
+    </Modal.Button>
+    <Modal.Content title="Share Form">
+      <ShareForm afterClose={() => onOpen(false)} formLink={formLink} />
+    </Modal.Content>
+  </Modal>
+);
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -137,8 +127,8 @@ const Forms = () => {
               />
               <ShareModal
                 formLink={form.form_data._links.display}
-                open={open}
-                onOpen={(open: boolean) => setOpen(open)}
+                isOpen={isOpen}
+                onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
               />
             </div>
           ))}
