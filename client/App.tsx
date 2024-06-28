@@ -11,6 +11,7 @@ import { I18nextProvider } from "react-i18next";
 import i18next from "./i18n/config";
 import NewForm from "./pages/NewForm/NewForm";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import FormPage from "./pages/FormPage/FormPage";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => {
               <Route path="/forms/check" element={<NewForm />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/forms/:formId" element={<FormPage />} />
             </Routes>
           </Layout>
         </I18nextProvider>

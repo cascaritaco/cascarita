@@ -35,6 +35,7 @@ const Forms = () => {
     navigate("/forms/check");
   };
 
+  // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
     await deleteTypeformForm(id);
     setForms((forms) => forms.filter((form) => form.form_data.id !== id));
@@ -91,11 +92,15 @@ const Forms = () => {
         <div>
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
-              <p>{form.form_data.title}</p>
+              <p>
+                <a href={`/forms/${form._id}`} style={{ cursor: "pointer" }}>
+                  {form.form_data.title}
+                </a>
+              </p>
               <p>{form.created_by?.first_name ?? ""}</p>
               <p>{new Date(form.updatedAt).toLocaleString()}</p>
               <DropdownMenuButton
-                onDelete={() => onDelete(form.form_data.id)} // TODO: delete by mongo form ID, this is deleting form by typeform ID
+                onDelete={() => onDelete(form._id)}
                 onEdit={() => onEdit(form._id)}
               />
               <a
