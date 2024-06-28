@@ -174,7 +174,7 @@ const DNDCanvas = forwardRef(
                           index={index}
                           title={field.title}
                           validations={field.validations}
-                          control={methods.control} // Assuming control comes from useForm
+                          control={methods.control}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
                         />
