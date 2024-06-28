@@ -2,7 +2,6 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import {
   DragDropContext,
-  Droppable,
   DropResult,
   DroppableProvided,
 } from "react-beautiful-dnd";
@@ -16,6 +15,7 @@ import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 import { v4 as uuidv4 } from "uuid";
 import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
 import DraggableEmail from "../DraggableEmail/DraggableEmail";
+import { StrictModeDroppable } from "../StrictModeDroppable/StrictModeDroppable";
 
 const DNDCanvas = forwardRef(
   (
@@ -145,25 +145,25 @@ const DNDCanvas = forwardRef(
     };
 
     return (
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="canvas">
-              {(provided: DroppableProvided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  // onDrop={handleDrop}
-                  onDragOver={(e) => e.preventDefault()}
-                  style={{
-                    padding: "16px",
-                    background: "white",
-                    minHeight: "400px",
-                  }}>
-                  {items.length === 0 ? (
-                    <EmptyDNDCanvas />
-                  ) : (
-                    fields.map((field: Field, index: number) => {
+      <DragDropContext onDragEnd={onDragEnd}>
+        <StrictModeDroppable droppableId="canvas">
+          {(provided: DroppableProvided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              // onDrop={handleDrop}
+              onDragOver={(e) => e.preventDefault()}
+              style={{
+                padding: "16px",
+                background: "white",
+                minHeight: "400px",
+              }}>
+              {items.length === 0 ? (
+                <EmptyDNDCanvas />
+              ) : (
+                <FormProvider {...methods}>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    {fields.map((field: Field, index: number) => {
                       const Component = componentMap[field.type];
                       if (!Component) return null;
 
@@ -174,20 +174,20 @@ const DNDCanvas = forwardRef(
                           index={index}
                           title={field.title}
                           validations={field.validations}
-                          control={control}
+                          control={methods.control} // Assuming control comes from useForm
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
                         />
                       );
-                    })
-                  )}
-                  {provided.placeholder}
-                </div>
+                    })}
+                    {provided.placeholder}
+                  </form>
+                </FormProvider>
               )}
-            </Droppable>
-          </DragDropContext>
-        </form>
-      </FormProvider>
+            </div>
+          )}
+        </StrictModeDroppable>
+      </DragDropContext>
     );
   },
 );
