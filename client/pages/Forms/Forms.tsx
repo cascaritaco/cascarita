@@ -92,7 +92,11 @@ const Forms = () => {
         <div>
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
-              <p>{form.form_data.title}</p>
+              <p>
+                <a href={`/forms/${form._id}`} style={{ cursor: "pointer" }}>
+                  {form.form_data.title}
+                </a>
+              </p>
               <p>{form.created_by?.first_name ?? ""}</p>
               <p>{new Date(form.updatedAt).toLocaleString()}</p>
               <DropdownMenuButton
