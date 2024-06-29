@@ -11,6 +11,39 @@
   align-items: baseline;
 }
 
+.inputShare {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  width: 100%; /* Optional: Adjust width as needed */
+}
+
+.copiedMessage {
+  color: #aaaaaa;
+  font-weight: 500;
+}
+
+.shareContainer {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f4f7fb;
+  color: #aaaaaa;
+  height: auto;
+  margin-top: 10px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+}
+
+.boldLabel {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: black;
+}
+
 .label {
   font-size: 1.1rem;
   color: black;
@@ -91,12 +124,43 @@
   outline: 1px solid black;
   color: black;
 }
-
 .cancelBtn:hover,
 .cancelBtn:focus {
   outline: 1px solid blue;
   background-color: transparent;
   color: black;
+}
+
+.copyBtn {
+  width: 100px;
+  height: 27px;
+  color: #170cb4;
+  background-color: white;
+  padding: 0%;
+  outline: 0px solid transparent;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+.copyBtn:hover,
+.copyBtn:focus {
+  color: #170cb4;
+  background-color: white;
+  outline: 0px solid transparent;
+}
+
+.sendBtn {
+  width: 100px;
+  height: 27px;
+  color: white;
+  background-color: #170cb4;
+  padding: 0%;
+  outline: 0px solid transparent;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+.sendBtn:hover,
+.sendBtn:focus {
+  color: white;
+  background-color: #170cb4;
+  outline: 0px solid transparent;
 }
 
 .submitBtn {
