@@ -11,12 +11,18 @@ const app = express();
 app.use(express.json());
 app.use("/teams", LeagueRoutes);
 app.use(Middlewares.errorHandler);
-const testDb = require("../../models/index.js");
+const testDb = require("../../models");
+const { Session, TeamSession, sequelize } = require("../../models");
 
 describe("Team Routes", () => {
   beforeEach(async () => {
     await testDb.Group.sync();
+    await testDb.League.sync();
+    await testDb.Division.sync();
+    await testDb.Season.sync();
+    await testDb.Session.sync();
     await testDb.Team.sync();
+    await testDb.TeamsSession.sync();
   });
 
   // ------------------- Get Team by Group ID Tests ----------------
@@ -36,7 +42,7 @@ describe("Team Routes", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
-      expect.arrayContaining([expect.objectContaining({ name: team.name })])
+      expect.arrayContaining([expect.objectContaining({ name: team.name })]),
     );
   });
 
@@ -51,6 +57,87 @@ describe("Team Routes", () => {
     expect(response.body).toMatchObject({
       message: "group with given id has no teams",
     });
+  });
+
+  it("should handle GET /getTeamsBySeasonDivisionId", async () => {
+    const groupM = await TestDataGenerator.createDummyGroup("Group Uno");
+    const leagueM = await TestDataGenerator.createLeague(
+      "Dummy League",
+      groupM.id,
+    );
+    const seasonM = await TestDataGenerator.createSeason(
+      leagueM.id,
+      "Dummy Season",
+    );
+    const divisionM = await TestDataGenerator.createDivision(
+      groupM.id,
+      "Dummy Division",
+    );
+
+    const sessionM = await testDb.Session.create({
+      division_id: divisionM.id,
+      season_id: seasonM.id,
+    });
+
+    const team = await testDb.Team.create({
+      name: "Sussy Sauls",
+      group_id: groupM.id,
+      team_logo: "www.google.com",
+    });
+
+    const teamsSessionM = await testDb.TeamsSession.create({
+      team_id: team.id,
+      session_id: sessionM.id,
+    });
+
+    const response = await request(app)
+      .get(`/teams/seasons/${seasonM.id}/divisions/${divisionM.id}`)
+      .send();
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: team.name })]),
+    );
+  });
+
+  it("should get empty array with GET /getTeamsBySeasonDivisionId", async () => {
+    const groupM = await TestDataGenerator.createDummyGroup("Group Uno");
+
+    const leagueM = await TestDataGenerator.createLeague(
+      "Dummy League",
+      groupM.id,
+    );
+    const seasonM = await TestDataGenerator.createSeason(
+      leagueM.id,
+      "Dummy Season",
+    );
+    const divisionM = await TestDataGenerator.createDivision(
+      groupM.id,
+      "Dummy Division",
+    );
+
+    const sessionM = await testDb.Session.create({
+      division_id: divisionM.id,
+      season_id: seasonM.id,
+    });
+
+    const team = await testDb.Team.create({
+      name: "Sussy Sauls",
+      group_id: groupM.id,
+      team_logo: "www.google.com",
+    });
+
+    const teamsSessionM = await testDb.TeamsSession.create({
+      team_id: team.id,
+      session_id: sessionM.id,
+    });
+
+    const response = await request(app)
+      .get(`/teams/seasons/${seasonM.id}/divisions/860`)
+      .send();
+
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject([]);
   });
 
   // ------------------- Create Tests ----------------
@@ -198,7 +285,12 @@ describe("Team Routes", () => {
   // ------------------------------------------------
 
   afterEach(async () => {
+    await testDb.TeamsSession.destroy({ where: {} });
     await testDb.Team.destroy({ where: {} });
+    await testDb.Session.destroy({ where: {} });
+    await testDb.Season.destroy({ where: {} });
+    await testDb.Division.destroy({ where: {} });
+    await testDb.League.destroy({ where: {} });
     await testDb.Group.destroy({ where: {} });
   });
 
