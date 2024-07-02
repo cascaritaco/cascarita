@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { DraggableSubMenuProps } from "./types";
-import TrashBinIcon from "../../assets/TrashBinIcon";
+import TrashBinIcon from "../../../assets/TrashBinIcon";
 import { CopyIcon } from "@radix-ui/react-icons";
 
 const DraggableSubMenu: React.FC<DraggableSubMenuProps> = ({

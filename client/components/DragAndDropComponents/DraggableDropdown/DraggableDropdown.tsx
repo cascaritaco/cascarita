@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { Controller, useFieldArray } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableMultipleChoiceProps } from "./types";
-import styles from "./DraggableMultipleChoice.module.css";
-import PlusCircleIcon from "../../assets/PlusCircleIcon";
-import MinusCircleIcon from "../../assets/MinusCircleIcon";
-import EllipseIcon from "../../assets/EllipseIcon";
+import { DraggableDropdownProps } from "./types";
+import { useEffect, useState } from "react";
+import styles from "./DraggableDropdown.module.css";
+import MinusCircleIcon from "../../../assets/MinusCircleIcon";
+import PlusCircleIcon from "../../../assets/PlusCircleIcon";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 
-const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
+const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   id,
   index,
   title,
@@ -31,12 +31,27 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
     name: `fields.${index}.properties.choices`,
   });
 
+  const [options, setOptions] = useState(fields);
+
+  useEffect(() => {
+    setOptions(fields);
+  }, [fields]);
+
   const addOption = () => {
     append({ ref: `option-${fields.length + 1}`, label: "" });
   };
 
   const removeOption = (optionIndex: number) => {
     remove(optionIndex);
+  };
+
+  const changeOptionsIndex = (label: string, optionIndex: number) => {
+    const updatedOptions = [...options];
+    updatedOptions[optionIndex] = {
+      ...updatedOptions[optionIndex],
+      label,
+    };
+    setOptions(updatedOptions);
   };
 
   return (
@@ -49,7 +64,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
-            <p className={styles.textElementTypeText}>{t("multipleChoice")}</p>
+            <p className={styles.textElementTypeText}>{t("dropDown")}</p>
             <div
               style={{
                 padding: 16,
@@ -84,9 +99,10 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                 </div>
               )}
               <Controller
+                key={index}
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title} // Ensure the default value is set
+                defaultValue={title}
                 render={({ field }) => (
                   <>
                     <input
@@ -107,12 +123,6 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                     gap: 10,
                     marginTop: 10,
                   }}>
-                  <EllipseIcon
-                    width={15}
-                    height={15}
-                    color={"#AAAAAA"}
-                    fill={"white"}
-                  />
                   <Controller
                     key={index}
                     name={`fields.${index}.properties.choices.${idx}.label`}
@@ -120,6 +130,10 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                     render={({ field }) => (
                       <input
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e); // Ensure the field value is updated in react-hook-form
+                          changeOptionsIndex(e.target.value, idx); // Update the selectOptions state
+                        }}
                         placeholder={`Option ${idx + 1}`}
                         style={{
                           marginLeft: -5,
@@ -130,7 +144,10 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                       />
                     )}
                   />
-                  <button type="button" onClick={() => removeOption(idx)}>
+                  <button
+                    type="button"
+                    onClick={() => removeOption(idx)}
+                    style={{ marginLeft: "8px" }}>
                     <MinusCircleIcon width={20} height={20} color={"#FF0000"} />
                   </button>
                 </div>
@@ -159,4 +176,4 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   );
 };
 
-export default DraggableMultipleChoice;
+export default DraggableDropdown;
