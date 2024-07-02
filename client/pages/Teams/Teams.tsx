@@ -59,12 +59,13 @@ const Teams = () => {
           </Modal.Button>
 
           <Modal.Content title="Create Team">
+            <p>Creating team in:</p>
             <TeamForm afterSave={() => setOpen(false)} />
           </Modal.Content>
         </Modal>
       </div>
 
-      <DashboardTable headers={["Team Name", "Division", "Options"]}>
+      <DashboardTable headers={["Team Name", "Options"]}>
         {isLoading ? (
           <tr>
             <td>Loading...</td>
@@ -77,7 +78,6 @@ const Teams = () => {
           data?.map((team: TeamType, idx: number) => (
             <tr key={idx} className={styles.tableRow}>
               <td className={styles.tableData}>{team.name}</td>
-              <td className={styles.tableData}>Team Division</td>
               <td>
                 <DropdownMenuButton />
               </td>
