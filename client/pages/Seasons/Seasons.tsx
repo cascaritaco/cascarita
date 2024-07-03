@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services";
-import { LeagueType } from "../Leagues/types";
-import styles from "./Seasons.module.css";
+import { SeasonType } from "./types";
+import styles from "../Leagues/Leagues.module.css";
 
 const Seasons = () => {
   const { leagueId } = useParams<{ leagueId: string }>();
@@ -33,6 +33,15 @@ const Seasons = () => {
     queryKey: ["seasons", leagueIdNumber],
     queryFn: getSeasonsByLeagueId,
   });
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   return (
     <Page>
@@ -91,7 +100,7 @@ const Seasons = () => {
       {data == null || data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a League to Display...</p>
       ) : (
-        <DashboardTable headers={["Name", "Options"]}>
+        <DashboardTable headers={["Name", "Start", "End", "Options"]}>
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -101,9 +110,15 @@ const Seasons = () => {
               <td>Error Fetching Data</td>
             </tr>
           ) : (
-            data?.map((league: LeagueType, idx: number) => (
+            data?.map((season: SeasonType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
-                <td className={styles.tableData}>{league.name}</td>
+                <td className={styles.tableData}>{season.name}</td>
+                <td className={styles.tableData}>
+                  {formatDate(season.start_date)}
+                </td>
+                <td className={styles.tableData}>
+                  {formatDate(season.end_date)}
+                </td>
                 <td>
                   <DropdownMenuButton />
                 </td>
