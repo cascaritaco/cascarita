@@ -9,10 +9,14 @@ const LanguagePreferenceButton = () => {
     setShowDropdown(!showDropdown);
   };
 
+  const handleSelect = () => {
+    setShowDropdown(false);
+  };
+
   return (
     <div>
       <TfiWorld onClick={handleIconClick} style={{ cursor: "pointer" }} />
-      {showDropdown && <LanguageDropdown handleSelect={handleIconClick} />}
+      {showDropdown && <LanguageDropdown handleSelect={handleSelect} />}
     </div>
   );
 };
