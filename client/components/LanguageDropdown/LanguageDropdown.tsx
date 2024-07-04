@@ -25,7 +25,15 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
     if (currLanguage) {
       setSelectedLanguage(currLanguage);
     }
-  }, []);
+
+    const timeout = setTimeout(() => {
+      handleSelect();
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [handleSelect]);
 
   const handleLanguageChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
