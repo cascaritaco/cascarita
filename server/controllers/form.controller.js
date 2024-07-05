@@ -4,6 +4,8 @@ require("dotenv").config();
 
 const jsonParser = require("../utilityFunctions/responseParser");
 
+const RawResponse = require("./../mongoModels/raw_response");
+const ResponseId = require("./../mongoModels/response_id");
 const Response = require("./../mongoModels/response");
 const FormMongo = require("./../mongoModels/form");
 const { Form, User } = require("../models");
@@ -22,27 +24,77 @@ const FormController = {
       next(error);
     }
   },
-  async createResponse(req, res, next) {
+  async getResponses(req, res, next) {
     try {
-      const insertedResponse = new Response({
-        form_id: req.body.form_id,
-        response: req.body.data,
+      const response = await fetch(
+        `https://api.typeform.com/forms/${req.params.form_id}/responses`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "typeform api call failed with status code of: " + response.status,
+        );
+      }
+
+      const responseBody = await response.json();
+
+      const rawResponse = new RawResponse({
+        form_id: req.params.form_id,
+        raw_response_data: responseBody,
       });
 
-      await insertedResponse.save();
-
-      return res.status(201).json(insertedResponse);
-    } catch (error) {
-      next(error);
-    }
-  },
-  async getResponsesByFormId(req, res, next) {
-    try {
-      const responses = await Response.find({
+      const results = await RawResponse.find({
         form_id: req.params.form_id,
       });
 
-      return res.status(201).json(responses);
+      if (results.length === 0) {
+        await rawResponse.save();
+      } else {
+        await rawResponse.updateOne(
+          { _id: results._id },
+          { $set: { raw_response_data: responseBody } },
+        );
+      }
+
+      const responseIdEntries = await ResponseId.findOne({
+        form_id: req.params.form_id,
+      });
+
+      const uniqueResponseIds =
+        jsonParser.loadMapWithDocument(responseIdEntries);
+
+      const jsonResponseBody = JSON.stringify(responseBody);
+
+      const parsedResponse = jsonParser.parseResponseJSON(
+        jsonResponseBody,
+        uniqueResponseIds,
+        req.params.form_id,
+      );
+
+      const sortedResponses = new Response({
+        form_id: req.params.form_id,
+        response: parsedResponse,
+      });
+
+      const responsesToInsert = sortedResponses.response.map((res) => ({
+        form_id: req.params.form_id,
+        response: res,
+      }));
+
+      await Response.insertMany(responsesToInsert);
+
+      const individualResponses = await Response.find({
+        form_id: req.params.form_id,
+      });
+
+      return res.status(201).json(individualResponses);
     } catch (error) {
       next(error);
     }
