@@ -8,7 +8,7 @@ import SeasonForm from "../../components/Forms/SeasonForm/SeasonForm";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services";
 import { SeasonType } from "./types";
@@ -45,6 +45,12 @@ const Seasons = () => {
 
   return (
     <Page>
+      <div className={styles.breadcrumb}>
+        <Link to={`/home`}>Dashboard</Link>
+        <h3> / </h3>
+        <Link to={window.location.pathname}>{leagueName}</Link>
+      </div>
+
       <h1 className={styles.h1}> {leagueName} </h1>
 
       <div className={styles.filterSearch}>

@@ -38,6 +38,27 @@
   position: relative;
 }
 
+.breadcrumb {
+  display: flex;
+  font-size: 0.8rem;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.breadcrumb a:last-child {
+  font-weight: bold;
+}
+
+.breadcrumb a:not(:last-child),
+.breadcrumb h3:not(:last-child) {
+  color: #ccc;
+}
+
+.breadcrumb a:not(:last-child):hover {
+  color: black;
+  text-decoration: underline;
+}
+
 .groupLabel {
   font-weight: 600;
   padding: 0 16px;
