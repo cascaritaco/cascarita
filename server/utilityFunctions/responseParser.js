@@ -1,4 +1,6 @@
-const ResponseId = require("../mongoModels/response_id");
+// ** DEPRECATED **
+
+// const ResponseId = require("../mongoModels/response_id");
 
 // parseResponseJSON will take in the raw responses json and break it into individual responses:
 function parseResponseJSON(jsonStr, uniqueResponseIds, formId) {
@@ -93,7 +95,7 @@ async function storeUniqueResponseIds(uniqueResponseIds, form_id, emptyMap) {
   });
 
   if (emptyMap && !new_responses) {
-    return
+    return;
   } else if (emptyMap && new_responses) {
     const responseResult = await response_id.save();
   } else {
