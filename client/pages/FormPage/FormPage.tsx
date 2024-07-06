@@ -55,7 +55,7 @@ const FormPage = () => {
       }) ?? [];
 
     const responsesData = await createMongoResponse(
-      form?.form_data.id ?? "",
+      formId ?? "",
       normalizedAnswers,
     );
     return responsesData;
