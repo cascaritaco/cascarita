@@ -1,4 +1,4 @@
-import { Form, GetFormsParams } from "./types";
+import { Answer, Form, GetFormsParams } from "./types";
 
 // TODO: Create a call to fetch all forms by groupId
 // TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
@@ -187,6 +187,31 @@ export const getMongoFormResponses = async (formId: string) => {
     return response.json();
   } catch (err) {
     console.error("Error fetching responses:", err);
+    throw err;
+  }
+};
+
+export const createMongoResponse = async (formId: string, answer: Answer[]) => {
+  const data = {
+    form_id: formId,
+    data: answer,
+  };
+
+  try {
+    const response = await fetch("/api/forms/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (err) {
+    console.error("Error creating response:", err);
     throw err;
   }
 };
