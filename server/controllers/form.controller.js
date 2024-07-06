@@ -24,7 +24,9 @@ const FormController = {
     try {
       const insertedResponse = new Response({
         form_id: req.body.form_id,
-        response: req.body.data,
+        response: {
+          answers: req.body.data,
+        },
       });
 
       await insertedResponse.save();
