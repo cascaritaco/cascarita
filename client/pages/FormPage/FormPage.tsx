@@ -12,7 +12,6 @@ import {
   Form,
 } from "./types";
 import { createMongoResponse } from "../../api/forms/service";
-// ../../api/forms/service
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
@@ -54,10 +53,9 @@ const FormPage = () => {
           type: answerType,
         };
       }) ?? [];
-    // TODO: send this to the backend as an API call
-    console.log(normalizedAnswers);
+
     const responsesData = await createMongoResponse(
-      "testFormId",
+      form?.form_data.id ?? "",
       normalizedAnswers,
     );
     return responsesData;
