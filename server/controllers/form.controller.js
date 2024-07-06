@@ -2,8 +2,6 @@
 
 require("dotenv").config();
 
-const jsonParser = require("../utilityFunctions/responseParser");
-
 const Response = require("./../mongoModels/response");
 const FormMongo = require("./../mongoModels/form");
 const { Form, User } = require("../models");
