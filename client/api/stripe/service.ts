@@ -1,11 +1,12 @@
-const connectStripe = async () => {
+const connectStripe = async (formData: object) => {
   try {
-    const response = await fetch("/api/accounts/stripe-oauth", {
-      method: "GET",
+    const response = await fetch("/api/accounts/connect", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {
@@ -13,12 +14,8 @@ const connectStripe = async () => {
     }
 
     const data = await response.json();
-
-    if (data.redirectUrl) {
-      window.location.href = data.redirectUrl;
-    } else {
-      throw new Error("Missing redirect URL from server");
-    }
+    const stripeUrl = data.url;
+    window.open(stripeUrl, "_blank", "noopener,noreferrer");
   } catch (error) {
     console.error("Error connecting to Stripe:", error);
   }
