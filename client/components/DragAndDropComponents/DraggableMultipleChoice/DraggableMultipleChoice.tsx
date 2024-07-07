@@ -87,7 +87,9 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                 )}
                 {properties?.allow_multiple_selection != null && (
                   <>
-                    <p className={styles.requiredText}>Multiple Selection</p>
+                    <p className={styles.requiredText}>
+                      {t("multipleSelection")}
+                    </p>
                     <Controller
                       name={`fields.${index}.properties.allow_multiple_selection`}
                       control={control}
