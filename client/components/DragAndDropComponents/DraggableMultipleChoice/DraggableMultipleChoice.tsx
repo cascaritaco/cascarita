@@ -15,6 +15,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   index,
   title,
   validations,
+  properties,
   control,
   onDelete,
   onCopy,
@@ -58,31 +59,58 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                 border: "1px solid #DFE5EE",
                 borderRadius: 10,
               }}>
-              {validations?.required != null && (
-                <div className={styles.requiredSwitch}>
-                  <p className={styles.requiredText}>{t("requiredText")}</p>
-                  <Controller
-                    name={`fields.${index}.validations.required`}
-                    control={control}
-                    defaultValue={validations.required}
-                    render={({ field }) => (
-                      <Switch
-                        checked={field.value}
-                        onChange={(checked) => field.onChange(checked)}
-                        offColor="#DFE5EE"
-                        onColor="#DFE5EE"
-                        offHandleColor="#AAAAAA"
-                        onHandleColor="#B01254"
-                        handleDiameter={24}
-                        uncheckedIcon={false}
-                        checkedIcon={false}
-                        height={16}
-                        width={44}
-                      />
-                    )}
-                  />
-                </div>
-              )}
+              <div className={styles.switches}>
+                {validations?.required != null && (
+                  <>
+                    <p className={styles.requiredText}>{t("requiredText")}</p>
+                    <Controller
+                      name={`fields.${index}.validations.required`}
+                      control={control}
+                      defaultValue={validations.required}
+                      render={({ field }) => (
+                        <Switch
+                          checked={field.value}
+                          onChange={(checked) => field.onChange(checked)}
+                          offColor="#DFE5EE"
+                          onColor="#DFE5EE"
+                          offHandleColor="#AAAAAA"
+                          onHandleColor="#B01254"
+                          handleDiameter={24}
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          height={16}
+                          width={44}
+                        />
+                      )}
+                    />
+                  </>
+                )}
+                {properties?.allow_multiple_selection != null && (
+                  <>
+                    <p className={styles.requiredText}>Multiple Selection</p>
+                    <Controller
+                      name={`fields.${index}.properties.allow_multiple_selection`}
+                      control={control}
+                      defaultValue={properties.allow_multiple_selection}
+                      render={({ field }) => (
+                        <Switch
+                          checked={field.value == null ? false : field.value}
+                          onChange={(checked) => field.onChange(checked)}
+                          offColor="#DFE5EE"
+                          onColor="#DFE5EE"
+                          offHandleColor="#AAAAAA"
+                          onHandleColor="#B01254"
+                          handleDiameter={24}
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          height={16}
+                          width={44}
+                        />
+                      )}
+                    />
+                  </>
+                )}
+              </div>
               <Controller
                 name={`fields.${index}.title`}
                 control={control}
