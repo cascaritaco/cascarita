@@ -52,7 +52,7 @@ const DNDCanvas = forwardRef(
         multiple_choice: {
           title: "",
           ref: item.id,
-          properties: { choices: [] },
+          properties: { choices: [], allow_multiple_selection: false },
           validations: { required: false },
           type: item.type,
         },
@@ -138,6 +138,11 @@ const DNDCanvas = forwardRef(
         `fields.${index + 1}.validations`,
         methods.getValues(`fields.${index}.validations`),
       );
+
+      methods.setValue(
+        `fields.${index + 1}.properties`,
+        methods.getValues(`fields.${index}.properties`),
+      );
     };
 
     const onSubmit = (data: Form) => {
@@ -174,7 +179,8 @@ const DNDCanvas = forwardRef(
                           index={index}
                           title={field.title}
                           validations={field.validations}
-                          control={methods.control}
+                          properties={field.properties}
+                          control={control}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
                         />

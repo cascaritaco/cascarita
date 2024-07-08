@@ -1,5 +1,5 @@
 import { Control } from "react-hook-form";
-import { Field, Validation } from "../DNDCanvas/types";
+import { Field, Properties, Validation } from "../DNDCanvas/types";
 
 export interface Option {
   ref: string;
@@ -10,6 +10,7 @@ export interface DraggableDropdownProps {
   id: string;
   index: number;
   validations: Validation | undefined;
+  properties: Properties | undefined;
   title: string;
   control: Control<{ fields: Field[] }>; // Type as appropriate
   onDelete: () => void;
