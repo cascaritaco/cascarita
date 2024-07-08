@@ -54,11 +54,16 @@ const FormPage = () => {
         };
       }) ?? [];
 
-    const responsesData = await createMongoResponse(
-      formId ?? "",
-      normalizedAnswers,
-    );
-    return responsesData;
+    try {
+      const responsesData = await createMongoResponse(
+        formId ?? "",
+        normalizedAnswers,
+      );
+      return responsesData;
+    } catch (error) {
+      console.error("Error creating responses:", error);
+      throw error;
+    }
   };
 
   return (
