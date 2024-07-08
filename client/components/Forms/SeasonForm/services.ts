@@ -1,5 +1,3 @@
-import { SeasonType } from "./types"; // need to delete this line
-
 import { QueryFunctionContext } from "@tanstack/react-query";
 
 type UserQueryKey = [string, number];
@@ -8,7 +6,6 @@ const getSeasonsByLeagueId = async ({
   queryKey,
 }: QueryFunctionContext<UserQueryKey>) => {
   const [, leagueId] = queryKey;
-  console.log(leagueId);
   try {
     const response = await fetch(`/api/seasons/${leagueId}/leagues`, {
       method: "GET",
@@ -24,30 +21,16 @@ const getSeasonsByLeagueId = async ({
   }
 };
 
-// UPDATE THIS CREATE SEASON TYPE - needs to be deleted
-const createSeason = async (
-  name: string,
-  start_date: string,
-  end_date: string,
-  is_active: boolean = true,
-  league_id: number = 1,
-): Promise<SeasonType> => {
+const createSeason = async (formData: object) => {
   try {
     const response = await fetch("/api/seasons", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name,
-        start_date,
-        end_date,
-        is_active,
-        league_id,
-      }),
+      body: JSON.stringify(formData),
     });
-    const result = await response.json();
-    return result.data;
+    return response.json();
   } catch (error) {
     console.error("error fetching data:", error);
     throw error;

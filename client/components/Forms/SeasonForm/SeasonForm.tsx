@@ -1,17 +1,25 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
-import SelectMenu from "../../SelectMenu/SelectMenu";
 import { SeasonFormProps } from "./types";
 import { createSeason } from "./services";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave }) => {
+const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave, ...delegated }) => {
   const [seasonName, setSeasonName] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const TEST_LEAGUES = ["The Premier League"];
+  const queryClient = useQueryClient();
+  const seasonFormMutation = useMutation({
+    mutationFn: createSeason,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["seasons"],
+      });
+    },
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,39 +28,17 @@ const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave }) => {
       new FormData(event.currentTarget),
     );
 
-    try {
-      await createSeason(
-        seasonName as string,
-        startDate as string,
-        endDate as string,
-      );
-      afterSave();
-    } catch (error) {
-      console.error("failed to create season:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    seasonFormMutation.mutate({
+      name: seasonName,
+      start_date: startDate,
+      end_date: endDate,
+    });
+
+    afterSave();
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.inputContainer}>
-        <label className={styles.label} htmlFor="seasonName">
-          Assign League
-        </label>
-        <SelectMenu
-          className={styles.input}
-          name="existingLeague"
-          value="The Premier League">
-          <SelectMenu.Group>
-            {TEST_LEAGUES.map((league, idx) => (
-              <SelectMenu.Item key={idx} value={league}>
-                {league}
-              </SelectMenu.Item>
-            ))}
-          </SelectMenu.Group>
-        </SelectMenu>
-      </div>
       <div className={styles.inputContainer}>
         <label className={styles.label} htmlFor="seasonName">
           Season Name

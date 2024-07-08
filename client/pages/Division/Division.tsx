@@ -1,24 +1,23 @@
-import Search from "../../components/Search/Search";
-import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
-import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
+import { useState } from "react";
+import styles from "./Division.module.css";
+import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { DivisionType } from "./types";
 import Page from "../../components/Page/Page";
+import Search from "../../components/Search/Search";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
-import SeasonForm from "../../components/Forms/SeasonForm/SeasonForm";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
+import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
+import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import { useQuery } from "@tanstack/react-query";
-import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services";
-import { SeasonType } from "./types";
-import styles from "../Leagues/Leagues.module.css";
 
-const Seasons = () => {
-  const { leagueId } = useParams<{ leagueId: string }>();
-  const { leagueName } = useParams<{ leagueName: string }>();
-  const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
-  console.log("leagueName from useParams:", leagueName);
+const Divisions = () => {
+  const { seasonId } = useParams<{ seasonId: string }>();
+  const { seasonName } = useParams<{ seasonName: string }>();
+  // const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
+  console.log("Season Name from useParams:", seasonName);
+  console.log("Season Id from useParams:", seasonId);
 
   const { t } = useTranslation("Leagues");
 
@@ -30,8 +29,8 @@ const Seasons = () => {
   const [open, setOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["seasons", leagueIdNumber],
-    queryFn: getSeasonsByLeagueId,
+    queryKey: ["season", seasonId],
+    // queryFn: getDivisionsBySeasonId,
   });
 
   const formatDate = (dateString: string): string => {
@@ -45,13 +44,7 @@ const Seasons = () => {
 
   return (
     <Page>
-      <div className={styles.breadcrumb}>
-        <Link to={`/home`}>Dashboard</Link>
-        <h3> / </h3>
-        <Link to={window.location.pathname}>{leagueName}</Link>
-      </div>
-
-      <h1 className={styles.h1}> {leagueName} </h1>
+      <h1 className={styles.h1}>{seasonName}</h1>
 
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
@@ -94,17 +87,17 @@ const Seasons = () => {
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton
-              label="Add Season"
+              label="Add Divison"
               onClick={() => setOpen(true)}></PrimaryButton>
           </Modal.Button>
-          <Modal.Content title="Create Season">
-            <SeasonForm afterSave={() => setOpen(false)} />
+          <Modal.Content title="Create Division">
+            Create Season Here
           </Modal.Content>
         </Modal>
       </div>
 
       {data == null || data?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a League to Display...</p>
+        <p className={styles.noLeagueMessage}>Add a Season to Display...</p>
       ) : (
         <DashboardTable headers={["Name", "Start", "End", "Options"]}>
           {isLoading ? (
@@ -116,16 +109,18 @@ const Seasons = () => {
               <td>Error Fetching Data</td>
             </tr>
           ) : (
-            data?.map((season: SeasonType, idx: number) => (
+            data?.map((division: DivisionType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/seasons/${season.id}`}>{season.name}</Link>
+                  <Link to={`/seasons/:seasonId/:seasonName`}>
+                    {division.name}
+                  </Link>
                 </td>
                 <td className={styles.tableData}>
-                  {formatDate(season.start_date)}
+                  {formatDate(division.start_date)}
                 </td>
                 <td className={styles.tableData}>
-                  {formatDate(season.end_date)}
+                  {formatDate(division.end_date)}
                 </td>
                 <td>
                   <DropdownMenuButton />
@@ -139,4 +134,4 @@ const Seasons = () => {
   );
 };
 
-export default Seasons;
+export default Divisions;
