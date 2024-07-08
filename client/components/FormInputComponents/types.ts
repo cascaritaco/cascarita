@@ -1,5 +1,3 @@
-import { DroppedItem } from "../../pages/NewForm/types";
-
 export type FieldType =
   | "multiple_choice"
   | "short_text"
@@ -14,18 +12,19 @@ export interface Validation {
 }
 
 export interface Label {
+  id: string;
   label: string;
   ref: string;
 }
 
 export interface Properties {
   choices?: Label[];
+  allow_multiple_selection?: boolean;
   default_country_code?: string;
 }
 
 export interface Field {
-  // NOTE: See comment in DNDCanvas.tsx
-  id?: string;
+  id: string;
   title: string;
   ref: string;
   validations?: Validation;
@@ -33,14 +32,25 @@ export interface Field {
   type: FieldType;
 }
 
-export interface Form {
-  fields: Field[];
+export interface Answer {
+  field: {
+    id: string;
+    type: string;
+    ref: string;
+  };
+  type: string;
+  number?: number;
+  text?: string;
+  phone_number?: string;
+  email?: string;
+  date?: Date;
+  boolean?: boolean;
+  choice?: { label: string };
+  choices?: { labels: string[] };
+  file_url?: string;
 }
 
-export interface DNDCanvasProps {
-  items: DroppedItem[];
-  importedFields?: Field[];
-  handleDelete: (name: string) => void;
-  handleCopy: (index: number, copiedItem: DroppedItem) => void;
-  saveForm: (data: Form) => void;
+export interface FieldProps {
+  field: Field;
+  index: number;
 }

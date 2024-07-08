@@ -190,3 +190,27 @@ export const getMongoFormResponses = async (formId: string) => {
     throw err;
   }
 };
+
+export const sendEmail = async (formLink: string, email: string) => {
+  try {
+    const data = {
+      formLink: formLink,
+      email: email,
+    };
+    const response = await fetch(`/api/forms/email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error emailing form: ${response.statusText}`);
+    }
+    return response.json();
+  } catch (err) {
+    console.error("Error emailing responses:", err);
+    throw err;
+  }
+};

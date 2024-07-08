@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  gap: 10px;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 28px;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  padding-bottom: 9px;
+  font-weight: 400;
+}
+
+.required {
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.questionContainer {
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+}
+
+.choicesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.choiceLabel > input[type="radio"],
+.choiceLabel > input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.choiceLabel {
+  font-size: 18px;
+}

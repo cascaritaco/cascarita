@@ -13,6 +13,7 @@ import NewForm from "./pages/NewForm/NewForm";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import Seasons from "./pages/Seasons/Seasons";
 import Divisions from "./pages/Division/Division";
+import FormPage from "./pages/FormPage/FormPage";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => {
               <Route path="/forms/check" element={<NewForm />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/forms/:formId" element={<FormPage />} />
             </Routes>
           </Layout>
         </I18nextProvider>

@@ -1,17 +1,23 @@
 import styles from "./Layout.module.css";
-import { LayoutProps } from "./types";
+import { LayoutProps, blackListExceptions } from "./types";
 import TopNav from "../TopNav/TopNav";
 import SideNav from "../SideNav/SideNav";
 import { useState } from "react";
 import { blackListRoutes } from "./blacklist";
 import { useAuth } from "../AuthContext/AuthContext";
+import { matchPath } from "../../util/matchPath";
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { currentUser } = useAuth();
   const [selectedItem, setSelectedItem] = useState("home");
+
+  const isBlacklisted = blackListRoutes.some((pattern) =>
+    matchPath(window.location.pathname, pattern, blackListExceptions),
+  );
+
   return (
     <div>
-      {!blackListRoutes.includes(window.location.pathname) && currentUser ? (
+      {!isBlacklisted && currentUser ? (
         <div>
           <TopNav />
           <SideNav

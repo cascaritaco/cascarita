@@ -1,6 +1,6 @@
 "use strict";
 
-const { Division, Group } = require("../models");
+const { Session, Season, Division, Group } = require("../models");
 const modelByPk = require("./utility");
 
 const isDivisionNameUnique = async (groupId, name) => {
@@ -25,6 +25,26 @@ const DivisionController = {
           group_id: groupId,
         },
       });
+      res.json(divisions);
+    } catch (error) {
+      next(error);
+    }
+  },
+  getBySeasonId: async function (req, res, next) {
+    const seasonId = req.params.id;
+
+    try {
+      const divisions = await Division.findAll({
+        include: [
+          {
+            model: Session,
+            where: { season_id: seasonId },
+            required: true,
+            attributes: [],
+          },
+        ],
+      });
+
       res.json(divisions);
     } catch (error) {
       next(error);
