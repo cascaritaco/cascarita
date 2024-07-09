@@ -11,13 +11,13 @@ import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import { useQuery } from "@tanstack/react-query";
+import { getDivisionsBySeasonId } from "../../components/Forms/DivisionForm/service";
+import DivisionForm from "../../components/Forms/DivisionForm/DivisionForm";
 
 const Divisions = () => {
   const { seasonId } = useParams<{ seasonId: string }>();
   const { seasonName } = useParams<{ seasonName: string }>();
-  // const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
-  console.log("Season Name from useParams:", seasonName);
-  console.log("Season Id from useParams:", seasonId);
+  const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
 
   const { t } = useTranslation("Leagues");
 
@@ -29,8 +29,8 @@ const Divisions = () => {
   const [open, setOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["season", seasonId],
-    // queryFn: getDivisionsBySeasonId,
+    queryKey: ["divisions", seasonIdNumber],
+    queryFn: getDivisionsBySeasonId,
   });
 
   const formatDate = (dateString: string): string => {
@@ -44,6 +44,14 @@ const Divisions = () => {
 
   return (
     <Page>
+      <div className={styles.breadcrumb}>
+        <Link to={`/home`}>Home</Link>
+        <h3> / </h3>
+        <Link to={window.location.pathname}>Seasons</Link>
+        <h3> / </h3>
+        <Link to={window.location.pathname}>{seasonName}</Link>
+      </div>
+
       <h1 className={styles.h1}>{seasonName}</h1>
 
       <div className={styles.filterSearch}>
@@ -91,13 +99,13 @@ const Divisions = () => {
               onClick={() => setOpen(true)}></PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Division">
-            Create Season Here
+            <DivisionForm afterSave={() => setOpen(false)} />
           </Modal.Content>
         </Modal>
       </div>
 
       {data == null || data?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a Season to Display...</p>
+        <p className={styles.noLeagueMessage}>Add a Division to Display...</p>
       ) : (
         <DashboardTable headers={["Name", "Start", "End", "Options"]}>
           {isLoading ? (
@@ -112,9 +120,7 @@ const Divisions = () => {
             data?.map((division: DivisionType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/seasons/:seasonId/:seasonName`}>
-                    {division.name}
-                  </Link>
+                  <Link to={`/seasons/${seasonIdNumber}`}>{division.name}</Link>
                 </td>
                 <td className={styles.tableData}>
                   {formatDate(division.start_date)}

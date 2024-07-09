@@ -35,6 +35,10 @@ const Leagues = () => {
 
   return (
     <Page>
+      <div className={styles.breadcrumb}>
+        <Link to={`/home`}>Home</Link>
+      </div>
+
       <h1 className={styles.h1}>{t("title")}</h1>
 
       <div className={styles.filterSearch}>

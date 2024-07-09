@@ -15,10 +15,11 @@ import { SeasonType } from "./types";
 import styles from "../Leagues/Leagues.module.css";
 
 const Seasons = () => {
-  const { leagueId } = useParams<{ leagueId: string }>();
-  const { leagueName } = useParams<{ leagueName: string }>();
+  const { leagueId, leagueName } = useParams<{
+    leagueId: string;
+    leagueName: string;
+  }>();
   const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
-  console.log("leagueName from useParams:", leagueName);
 
   const { t } = useTranslation("Leagues");
 
@@ -46,7 +47,7 @@ const Seasons = () => {
   return (
     <Page>
       <div className={styles.breadcrumb}>
-        <Link to={`/home`}>Dashboard</Link>
+        <Link to={`/home`}>Home</Link>
         <h3> / </h3>
         <Link to={window.location.pathname}>{leagueName}</Link>
       </div>
@@ -98,15 +99,18 @@ const Seasons = () => {
               onClick={() => setOpen(true)}></PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Season">
-            <SeasonForm afterSave={() => setOpen(false)} />
+            <SeasonForm
+              afterSave={() => setOpen(false)}
+              leagueId={leagueIdNumber}
+            />
           </Modal.Content>
         </Modal>
       </div>
 
       {data == null || data?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a League to Display...</p>
+        <p className={styles.noLeagueMessage}>Add a Season to Display...</p>
       ) : (
-        <DashboardTable headers={["Name", "Start", "End", "Options"]}>
+        <DashboardTable headers={["Season Name", "Start", "End", "Options"]}>
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -119,7 +123,9 @@ const Seasons = () => {
             data?.map((season: SeasonType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/seasons/${season.id}`}>{season.name}</Link>
+                  <Link to={`/seasons/${season.id}/${season.name}`}>
+                    {season.name}
+                  </Link>
                 </td>
                 <td className={styles.tableData}>
                   {formatDate(season.start_date)}

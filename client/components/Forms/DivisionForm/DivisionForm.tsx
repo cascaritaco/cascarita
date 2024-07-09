@@ -1,22 +1,24 @@
 import React from "react";
 import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
-import { SeasonFormProps } from "./types";
-import { createSeason } from "./services";
+import { DivisionFormProps } from "./types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createDivision } from "./service";
+import { useAuth } from "../../AuthContext/AuthContext";
 
-const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave, leagueId }) => {
-  const [seasonName, setSeasonName] = React.useState("");
+const DivisionForm: React.FC<DivisionFormProps> = ({ afterSave }) => {
+  const [divisionName, setDivisionName] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const { currentUser } = useAuth();
   const queryClient = useQueryClient();
-  const seasonFormMutation = useMutation({
-    mutationFn: createSeason,
+  const divisionFormMutation = useMutation({
+    mutationFn: createDivision,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["seasons"],
+        queryKey: ["divisions"],
       });
     },
   });
@@ -24,15 +26,15 @@ const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave, leagueId }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const { seasonName, startDate, endDate } = Object.fromEntries(
+    const { divisionName, startDate, endDate } = Object.fromEntries(
       new FormData(event.currentTarget),
     );
 
-    seasonFormMutation.mutate({
-      name: seasonName,
+    divisionFormMutation.mutate({
+      name: divisionName,
       start_date: startDate,
       end_date: endDate,
-      league_id: leagueId,
+      group_id: currentUser?.group_id,
     });
 
     afterSave();
@@ -42,16 +44,16 @@ const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave, leagueId }) => {
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputContainer}>
         <label className={styles.label} htmlFor="seasonName">
-          Season Name
+          Division Name
         </label>
         <input
           className={styles.input}
           required
-          placeholder="Season Name"
-          id="seasonName"
-          name="seasonName"
-          value={seasonName}
-          onChange={(event) => setSeasonName(event.target.value)}
+          placeholder="Division Name"
+          id="divisionName"
+          name="divisionName"
+          value={divisionName}
+          onChange={(event) => setDivisionName(event.target.value)}
         />
       </div>
 
@@ -99,4 +101,4 @@ const SeasonForm: React.FC<SeasonFormProps> = ({ afterSave, leagueId }) => {
   );
 };
 
-export default SeasonForm;
+export default DivisionForm;

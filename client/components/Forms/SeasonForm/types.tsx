@@ -1,6 +1,7 @@
 interface SeasonFormProps {
   //Use to set open state from true to false after form submission
   afterSave: () => void;
+  leagueId: number;
 }
 
 // UPDATE THIS CREATE SEASON TYPE - needs to be deleted

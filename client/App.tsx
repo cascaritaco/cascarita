@@ -30,7 +30,10 @@ const App = () => {
                 path="/league/:leagueId/:leagueName"
                 element={<Seasons />}
               />
-              <Route path="/season/:seasonId" element={<Divisions />} />
+              <Route
+                path="/seasons/:seasonId/:seasonName"
+                element={<Divisions />}
+              />
               <Route path="/users" element={<Users />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/forms" element={<Forms />} />
