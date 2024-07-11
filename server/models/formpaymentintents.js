@@ -12,25 +12,33 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_stripe_account_id",
         targetKey: "id",
       });
+      FormPaymentIntents.belongsTo(models.Form, {
+        foreignKey: "form_id",
+        targetKey: "id",
+      });
     }
   }
-  FormPaymentIntents.init({
-    payment_intent_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
+  FormPaymentIntents.init(
+    {
+      payment_intent_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      form_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      user_stripe_account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
-    form_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    {
+      sequelize,
+      modelName: "FormPaymentIntents",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     },
-    user_stripe_account_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    sequelize,
-    modelName: "FormPaymentIntents",
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  });
+  );
   return FormPaymentIntents;
 };

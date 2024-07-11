@@ -2,10 +2,10 @@
 
 require("dotenv").config();
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
-const { Group } = require("../models");
+const { Group, UserStripeAccounts, FormPaymentIntents } = require("../models");
 
-const AccountController = {
-  async createAccountConnection(req, res, next) {
+const AccountController = function () {
+  var createAccountConnection = async function (req, res, next) {
     try {
       const user = req.body;
       const group = await Group.findByPk(user.group_id);
@@ -24,18 +24,24 @@ const AccountController = {
         type: "account_onboarding",
       });
 
-      // TODO: create a db table to store user id and connected_account_id !
+      await UserStripeAccounts.create({
+        user_id: user.id,
+        stripe_account_id: account.id,
+      });
 
       res.status(201).json({ url: accountLink.url });
     } catch (error) {
       next(error);
     }
-  },
+  };
 
-  async createPaymentIntent(req, res, next) {
+  var createPaymentIntent = async function (req, res, next) {
     try {
       const productObj = req.body;
-      const connected_account_id = "acct_1Pa1lpQoFQqkG3tl"; // this need to be retried form db, we should be able to find it by user_id
+      const stripeAccountId = await getStripeAccountId(
+        req.params["account_id"],
+      );
+
       const paymentIntent = await Stripe.paymentIntents.create(
         {
           amount: productObj.price,
@@ -46,27 +52,55 @@ const AccountController = {
           application_fee_amount: productObj.fee,
         },
         {
-          stripeAccount: connected_account_id,
+          stripeAccount: stripeAccountId,
         },
       );
 
-      const clientSecret = paymentIntent.client_secret;
-      const paymentIntentId = paymentIntent.id;
-      // TODO: store payment intent id and form id and connected account id.
-      // this will tell us which account created what product for what form
-      // store here :
+      await FormPaymentIntents.create({
+        payment_intent_id: paymentIntent.id,
+        form_id: productObj.form_id,
+        user_stripe_account_id: req.params["account_id"],
+      });
+
+      res.status(201).json(paymentIntent);
     } catch (error) {
       next(error);
     }
-  },
-  async getClientSecret(req, res, next) {
+  };
+
+  var getStripeAccountId = async function (accountId) {
+    const stripeAccount = await UserStripeAccounts.findByPk(accountId);
+    return stripeAccount.stripe_account_id;
+  };
+
+  var getClientSecret = async function (req, res, next) {
     try {
-      const formid = reg.params["formId"];
-      // look up client secrent by form id ?
+      const paymentIntentId = req.params["paymentIntentId"];
+      const stripeAccountId = await getStripeAccountId(
+        req.params["account_id"],
+      );
+
+      console.log(stripeAccountId);
+      let paymentIntentIdStr = paymentIntentId.toString();
+      const paymentIntent = await Stripe.paymentIntents.retrieve(
+        paymentIntentIdStr,
+        {
+          stripeAccount: stripeAccountId,
+        },
+      );
+
+      res.status(200).json({ cleintSecret: paymentIntent.client_secret });
     } catch (error) {
       next(error);
     }
-  },
+  };
+
+  return {
+    createAccountConnection,
+    createPaymentIntent,
+    getStripeAccountId,
+    getClientSecret,
+  };
 };
 
-module.exports = AccountController;
+module.exports = AccountController();

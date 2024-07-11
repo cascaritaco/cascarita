@@ -11,20 +11,29 @@ module.exports = {
       },
       payment_intent_id: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      form_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Forms",
+          key: "id",
+        },
       },
       user_stripe_account_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: "UserStripeAccounts",
           key: "id",
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },

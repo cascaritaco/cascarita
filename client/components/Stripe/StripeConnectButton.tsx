@@ -11,6 +11,7 @@ const ConnectWithStripeButton = () => {
     setIsConnecting(true);
     try {
       await connectStripe({
+        id: currentUser?.id,
         group_id: currentUser?.group_id,
         email: currentUser?.email,
       });
