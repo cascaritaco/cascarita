@@ -14,6 +14,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import Seasons from "./pages/Seasons/Seasons";
 import Divisions from "./pages/Division/Division";
 import FormPage from "./pages/FormPage/FormPage";
+import Teams from "./pages/Teams/Teams";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,10 @@ const App = () => {
               <Route
                 path="/seasons/:seasonId/:seasonName"
                 element={<Divisions />}
+              />
+              <Route
+                path="/divisions/:divisionId/:divisionName"
+                element={<Teams />}
               />
               <Route path="/users" element={<Users />} />
               <Route path="/schedule" element={<Schedule />} />

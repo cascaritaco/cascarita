@@ -99,7 +99,10 @@ const Divisions = () => {
               onClick={() => setOpen(true)}></PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Division">
-            <DivisionForm afterSave={() => setOpen(false)} />
+            <DivisionForm
+              afterSave={() => setOpen(false)}
+              seasonId={seasonIdNumber}
+            />
           </Modal.Content>
         </Modal>
       </div>
@@ -107,7 +110,7 @@ const Divisions = () => {
       {data == null || data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a Division to Display...</p>
       ) : (
-        <DashboardTable headers={["Name", "Start", "End", "Options"]}>
+        <DashboardTable headers={["Name", "Options"]}>
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -120,13 +123,9 @@ const Divisions = () => {
             data?.map((division: DivisionType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/seasons/${seasonIdNumber}`}>{division.name}</Link>
-                </td>
-                <td className={styles.tableData}>
-                  {formatDate(division.start_date)}
-                </td>
-                <td className={styles.tableData}>
-                  {formatDate(division.end_date)}
+                  <Link to={`/divisions/${seasonIdNumber}/${seasonName}`}>
+                    {division.name}
+                  </Link>
                 </td>
                 <td>
                   <DropdownMenuButton />

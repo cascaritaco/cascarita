@@ -41,17 +41,16 @@ const SessionController = function () {
     }
   };
 
-  var createSession = async function (req, res, next) {
-    const { division_id, season_id } = req.body;
+  var createSession = async function (division_id, season_id) {
     const newSession = { division_id, season_id };
 
     try {
       await Session.build(newSession).validate();
       const result = await Session.create(newSession);
 
-      return res.status(201).json(result);
+      return result;
     } catch (error) {
-      next(error);
+      throw new Error(`creating session error: ${error}`);
     }
   };
 

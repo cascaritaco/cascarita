@@ -6,10 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDivision } from "./service";
 import { useAuth } from "../../AuthContext/AuthContext";
 
-const DivisionForm: React.FC<DivisionFormProps> = ({ afterSave }) => {
+const DivisionForm: React.FC<DivisionFormProps> = ({ afterSave, seasonId }) => {
   const [divisionName, setDivisionName] = React.useState("");
-  const [startDate, setStartDate] = React.useState("");
-  const [endDate, setEndDate] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { currentUser } = useAuth();
@@ -26,15 +24,14 @@ const DivisionForm: React.FC<DivisionFormProps> = ({ afterSave }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const { divisionName, startDate, endDate } = Object.fromEntries(
+    const { divisionName } = Object.fromEntries(
       new FormData(event.currentTarget),
     );
 
     divisionFormMutation.mutate({
       name: divisionName,
-      start_date: startDate,
-      end_date: endDate,
       group_id: currentUser?.group_id,
+      season_id: seasonId,
     });
 
     afterSave();
@@ -59,31 +56,27 @@ const DivisionForm: React.FC<DivisionFormProps> = ({ afterSave }) => {
 
       <div className={styles.inputContainer}>
         <div className={styles.inputContainer}>
-          <label className={styles.label} htmlFor="startDate">
-            Start Date
+          <label className={styles.label} htmlFor="league">
+            League
           </label>
           <input
             className={styles.input}
-            required
-            type="date"
-            id="startDate"
-            name="startDate"
-            value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
+            disabled
+            type="text"
+            id="league"
+            name="league"
           />
         </div>
         <div className={styles.inputContainer}>
-          <label className={styles.label} htmlFor="endDate">
-            End Date
+          <label className={styles.label} htmlFor="league">
+            Season
           </label>
           <input
             className={styles.input}
-            required
-            type="date"
-            id="endDate"
-            name="endDate"
-            value={endDate}
-            onChange={(event) => setEndDate(event.target.value)}
+            disabled
+            type="text"
+            id="season"
+            name="season"
           />
         </div>
       </div>

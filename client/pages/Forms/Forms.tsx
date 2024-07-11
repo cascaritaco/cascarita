@@ -47,6 +47,7 @@ const Forms = () => {
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [currentFormLink, setCurrentFormLink] = useState("");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -60,6 +61,11 @@ const Forms = () => {
 
   const handleNewFormClick = () => {
     navigate("/forms/check");
+  };
+
+  const handleShareClick = (formLink: string) => {
+    setCurrentFormLink(formLink);
+    setIsOpen(true);
   };
 
   // TODO: delete by mongo form ID
@@ -130,15 +136,22 @@ const Forms = () => {
                 onDelete={() => onDelete(form._id)}
                 onEdit={() => onEdit(form._id)}
               />
-              <ShareModal
-                formLink={form.form_data._links.display}
-                isOpen={isOpen}
-                onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
-              />
+              <button
+                onClick={() => handleShareClick(form.form_data._links.display)}>
+                <ShareButton />
+              </button>
             </div>
           ))}
         </div>
       </div>
+
+      {isOpen && (
+        <ShareModal
+          formLink={currentFormLink}
+          isOpen={isOpen}
+          onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
+        />
+      )}
     </Page>
   );
 };
