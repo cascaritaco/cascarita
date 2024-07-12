@@ -16,11 +16,38 @@ import {
 } from "../../api/forms/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
+import Modal from "../../components/Modal/Modal";
+import React from "react";
+import ShareForm from "../../components/Forms/ShareForm/ShareForm";
+
+interface ShareModalProps {
+  formLink: string;
+  isOpen: boolean;
+  onOpen: (isOpen: boolean) => void;
+}
+
+const ShareModal: React.FC<ShareModalProps> = ({
+  formLink,
+  isOpen,
+  onOpen,
+}) => (
+  <Modal open={isOpen} onOpenChange={onOpen}>
+    <Modal.Button asChild className={styles.btn}>
+      <button onClick={() => onOpen(true)}>
+        <ShareButton />
+      </button>
+    </Modal.Button>
+    <Modal.Content title="Share Form">
+      <ShareForm afterClose={() => onOpen(false)} formLink={formLink} />
+    </Modal.Content>
+  </Modal>
+);
 
 const Forms = () => {
   const { t } = useTranslation("Forms");
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -36,6 +63,7 @@ const Forms = () => {
     navigate("/forms/check");
   };
 
+  // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
     await deleteTypeformForm(id);
     setForms((forms) => forms.filter((form) => form.form_data.id !== id));
@@ -93,19 +121,22 @@ const Forms = () => {
         <div>
           {forms.map((form, index) => (
             <div className={styles.cols} key={index}>
-              <p>{form.form_data.title}</p>
+              <p>
+                <a href={`/forms/${form._id}`} style={{ cursor: "pointer" }}>
+                  {form.form_data.title}
+                </a>
+              </p>
               <p>{form.created_by?.first_name ?? ""}</p>
               <p>{new Date(form.updatedAt).toLocaleString()}</p>
               <DropdownMenuButton
-                onDelete={() => onDelete(form.form_data.id)} // TODO: delete by mongo form ID, this is deleting form by typeform ID
+                onDelete={() => onDelete(form._id)}
                 onEdit={() => onEdit(form._id)}
               />
-              <a
-                href={form.form_data._links.display}
-                target="_blank"
-                rel="noopener noreferrer">
-                <ShareButton />
-              </a>
+              <ShareModal
+                formLink={form.form_data._links.display}
+                isOpen={isOpen}
+                onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
+              />
             </div>
           ))}
         </div>

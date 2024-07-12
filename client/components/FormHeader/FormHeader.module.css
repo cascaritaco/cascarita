@@ -1,0 +1,28 @@
+.logo {
+  scale: 1.75;
+}
+
+.logoText {
+  font-size: 20px;
+  padding-left: 25px;
+}
+
+.logoCon {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 80px;
+  margin-left: 50px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  height: 80px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  z-index: 6;
+}

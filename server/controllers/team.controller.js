@@ -1,5 +1,5 @@
 "use strict";
-const { Team, Group, Division } = require("./../models");
+const { Team, Group, Division, TeamsSession, Session } = require("./../models");
 const TeamsSessionController = require("../controllers/teamSession.controller");
 
 const TeamController = function () {
@@ -15,6 +15,42 @@ const TeamController = function () {
 
       if (Object.keys(result).length === 0) {
         throw new Error("group with given id has no teams");
+      }
+
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var getTeamsBySeasonDivisionId = async function (req, res, next) {
+    const seasonId = req.params["seasonId"];
+    const divisionId = req.params["divisionId"];
+
+    try {
+      const result = await Team.findAll({
+        include: [
+          {
+            model: TeamsSession,
+            required: true,
+            attributes: [],
+            include: [
+              {
+                model: Session,
+                required: true,
+                attributes: [],
+                where: {
+                  season_id: seasonId,
+                  division_id: divisionId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      if (Object.keys(result).length === 0) {
+        return res.status(200).json([]);
       }
 
       return res.status(200).json(result);
@@ -51,7 +87,7 @@ const TeamController = function () {
 
       const teamNameUnique = await isNameUniqueWithinDivision(
         newTeam.group_id,
-        newTeam.name
+        newTeam.name,
       );
 
       if (!teamNameUnique) {
@@ -84,7 +120,7 @@ const TeamController = function () {
       if (req.body.name && req.body.name !== currentTeam.name) {
         const nameUnique = await isNameUniqueWithinDivision(
           currentTeam.group_id,
-          req.body.name
+          req.body.name,
         );
 
         if (!nameUnique) {
@@ -127,6 +163,7 @@ const TeamController = function () {
 
   return {
     getTeamsByGroupId,
+    getTeamsBySeasonDivisionId,
     createTeam,
     updateTeam,
     deleteTeam,

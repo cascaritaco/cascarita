@@ -26,7 +26,7 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
       const formData = await getMongoFormById(formId);
 
       setFormFields(formData.form_data.fields);
-      const responsesData = await getMongoFormResponses(formData.form_data.id);
+      const responsesData = await getMongoFormResponses(formData._id);
       const responsesMap = responsesData.reduce(
         (result: AnswerRecordMap, res: FormResponse) => {
           const answersMap: Map<string, Answer> = new Map();
