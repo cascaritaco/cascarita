@@ -12,9 +12,7 @@ const AccountController = function () {
       const account = await Stripe.accounts.create({
         country: "US",
         email: user.email,
-        business_profile: {
-          name: group.name,
-        },
+        type: "standard",
       });
 
       const accountLink = await Stripe.accountLinks.create({
