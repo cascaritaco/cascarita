@@ -77,7 +77,6 @@ const AccountController = function () {
         req.params["account_id"],
       );
 
-      console.log(stripeAccountId);
       let paymentIntentIdStr = paymentIntentId.toString();
       const paymentIntent = await Stripe.paymentIntents.retrieve(
         paymentIntentIdStr,

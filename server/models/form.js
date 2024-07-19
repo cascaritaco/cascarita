@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Form.hasMany(models.FormPaymentIntents, {
         foreignKey: "form_id",
-        targetKey: "id",
+        sourceKey: "id",
       });
     }
   }
