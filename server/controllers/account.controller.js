@@ -8,7 +8,6 @@ const AccountController = function () {
   var createAccountConnection = async function (req, res, next) {
     try {
       const user = req.body;
-      const group = await Group.findByPk(user.group_id);
       const account = await Stripe.accounts.create({
         country: "US",
         email: user.email,
