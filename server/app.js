@@ -29,6 +29,9 @@ const sessionMiddleware = session({
     maxAge: secondsInAnHour * 1000,
   },
 });
+
+app.get("/api/health", (req, res) => res.sendStatus(200));
+
 app.use(sessionMiddleware);
 
 app.use(cookieParser());
