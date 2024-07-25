@@ -5,20 +5,24 @@ import { QuestionContent } from "../../QuestionComponents/QuestionContent/Questi
 import { QuestionNavigation } from "../../QuestionComponents/QuestionNavigation/QuestionNavigation";
 import { QuestionInputText } from "../../QuestionComponents/QuestionInputText/QuestionInputText";
 import { ChangeEventHandler } from "react";
-import { SET_PHONE_NUMBER } from "../../reducers/actions/questionsActions";
 
-export function PhoneNumber() {
-  const { errorMsg: error, setErrorMsg, handleOkClick } = useSharedStates();
+type PhoneNumberProps = {
+  type: string;
+};
+
+export function PhoneNumber({ type }: PhoneNumberProps) {
+  const {
+    errorMsg: error,
+    setErrorMsg,
+    handleOkClick,
+    handleBackClick,
+  } = useSharedStates();
   const { state, dispatch } = useQuestions();
 
-  console.log("STATE: ", state);
-  console.log("DISPATCH FUNCTION: ", dispatch);
-
   const errorMsg = error.phoneNumber ?? "";
-  const { phoneNumber } = state;
+  const phoneNumber = state.phoneNumbers[type] || "";
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    console.log("Inside handleInputChange: ", errorMsg, phoneNumber);
     errorMsg &&
       //   setErrorMsg &&
       setErrorMsg((prevValue) => {
@@ -27,8 +31,10 @@ export function PhoneNumber() {
         return prevValue;
       });
 
-    console.log("handling the dispatch", event.target.value);
-    dispatch({ type: SET_PHONE_NUMBER, payload: event.target.value });
+    dispatch({
+      type: "SET_PHONE_NUMBER",
+      payload: { type: type, value: event.target.value },
+    });
   };
 
   return (
@@ -41,7 +47,10 @@ export function PhoneNumber() {
         onChange={handleInputChange}
       />
       {/* {errorMsg && <Error message={errorMsg} />} */}
-      <QuestionNavigation showPressEnter={true} onClick={handleOkClick}>
+      <QuestionNavigation
+        onBackClick={handleBackClick}
+        showPressEnter={true}
+        onClick={handleOkClick}>
         Next
       </QuestionNavigation>
     </>

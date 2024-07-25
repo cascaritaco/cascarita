@@ -1,5 +1,5 @@
 export const questionsInitialState = {
-  phoneNumber: "",
+  phoneNumbers: {},
   lastName: "",
   industry: "",
   role: "",
@@ -8,7 +8,7 @@ export const questionsInitialState = {
 };
 
 export type QuestionsStateType = {
-  phoneNumber: string;
+  phoneNumbers: { [key: string]: string };
   lastName: string;
   industry: string;
   role: string;

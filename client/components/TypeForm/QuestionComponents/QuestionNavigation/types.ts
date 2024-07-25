@@ -5,4 +5,5 @@ export type QuestionNavigationProps = {
   readonly showPressEnter: boolean;
   readonly className?: string;
   readonly onClick?: MouseEventHandler;
+  readonly onBackClick?: MouseEventHandler;
 };

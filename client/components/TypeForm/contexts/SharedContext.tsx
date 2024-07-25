@@ -15,6 +15,7 @@ const SharedStatesContext = createContext<SharedStatesContextType>({
   setErrorMsg: () => {},
   handleQuestionNumUpdate: () => {},
   handleOkClick: () => {},
+  handleBackClick: () => {},
 });
 
 type SharedStatesProviderType = {
@@ -37,8 +38,16 @@ export function SharedStatesProvider({ children }: SharedStatesProviderType) {
     );
   }
 
+  function handleBackClick() {
+    setErrorMsg({});
+    setQuestionNum((prevValue) =>
+      prevValue.now - 1 < 0
+        ? { ...prevValue }
+        : { prev: prevValue.now, now: prevValue.now - 1 },
+    );
+  }
+
   function handleOkClick() {
-    console.log("Inside the handleOkClick function");
     document.dispatchEvent(
       new KeyboardEvent("keypress", {
         key: "Enter",
@@ -53,6 +62,7 @@ export function SharedStatesProvider({ children }: SharedStatesProviderType) {
     setErrorMsg,
     handleQuestionNumUpdate,
     handleOkClick,
+    handleBackClick,
   };
 
   return (

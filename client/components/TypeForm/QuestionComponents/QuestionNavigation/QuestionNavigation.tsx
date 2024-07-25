@@ -5,6 +5,7 @@ import styles from "./QuestionNavigation.module.css";
 export function QuestionNavigation({
   children,
   showPressEnter,
+  onBackClick,
   onClick,
 }: QuestionNavigationProps) {
   const [isOnMobile, setIsOnMobile] = useState(false);
@@ -27,6 +28,7 @@ export function QuestionNavigation({
 
   return (
     <div className={styles.questionNavigation}>
+      {onBackClick && <button onClick={onBackClick}>Back</button>}
       <button onClick={onClick}>{children}</button>
       {isOnMobile || !showPressEnter || (
         <span>

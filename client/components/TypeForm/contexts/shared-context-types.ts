@@ -28,4 +28,5 @@ export type SharedStatesContextType = {
   readonly setErrorMsg: Dispatch<SetStateAction<ObjectType>>;
   readonly handleQuestionNumUpdate: () => void;
   readonly handleOkClick: () => void;
+  readonly handleBackClick: () => void;
 };

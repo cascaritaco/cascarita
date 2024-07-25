@@ -9,7 +9,7 @@ export function useHandleKeypress() {
 
   const { now } = questionNum;
   const { state } = useQuestions();
-  const { phoneNumber, lastName, industry, role, goals, email } = state;
+  const { phoneNumbers, lastName, industry, role, goals, email } = state;
 
   console.log("Inside useHandleKeyPress Hook", now, state);
 
@@ -18,13 +18,14 @@ export function useHandleKeypress() {
       if (event.key === "Enter") {
         event.preventDefault();
 
-        if (now + 1 === 2 && phoneNumber === "") {
-          setErrorMsg((prevValue) => ({
-            ...prevValue,
-            phoneNumber: "Please fill this in",
-          }));
-          return;
-        } else if (now + 1 === 3 && lastName === "") {
+        //TODO ADD IF CONDITION TO CHECK IF PHONE NUMBERS IS INCORRECT
+        // if (now + 1 === 2 && phoneNumbers === {}) {
+        //   setErrorMsg((prevValue) => ({
+        //     ...prevValue,
+        //     phoneNumber: "Please fill this in",
+        //   }));
+        //   return;
+        if (now + 1 === 3 && lastName === "") {
           setErrorMsg((prevValue) => ({
             ...prevValue,
             lastName: "Please fill this in",
@@ -83,5 +84,5 @@ export function useHandleKeypress() {
     return function () {
       document.removeEventListener("keypress", handleKeypress);
     };
-  }, [phoneNumber, industry, lastName, now, role, goals, email]);
+  }, [phoneNumbers, industry, lastName, now, role, goals, email]);
 }

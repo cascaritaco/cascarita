@@ -24,7 +24,7 @@ export function Question({
         [styles["rendered"]]: isRendered,
       })}>
       {type === "intro" && <Intro />}
-      {type === "phoneNumber" && <PhoneNumber />}
+      {type.startsWith("phoneNumber") && <PhoneNumber type={type} />}
       {/* {type === "firstName" && <FirstNameInput />}
       {type === "lastName" && <LastNameInput />}
       {type === "industry" && <IndustryInput />}

@@ -4,5 +4,5 @@ export type QuestionProps = {
   readonly outView: boolean;
   readonly outViewSlide: "up" | "down" | "";
   readonly isRendered?: boolean;
-  readonly type: "phoneNumber" | "intro";
+  readonly type: "intro" | `phoneNumber${number}`;
 };

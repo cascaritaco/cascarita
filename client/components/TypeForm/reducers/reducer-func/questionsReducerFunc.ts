@@ -17,10 +17,13 @@ export function questionsReducerFunc(
 ) {
   switch (action.type) {
     case SET_PHONE_NUMBER:
-      console.log("I am setting the state here", action.payload);
-      console.log(action.type);
-      return { ...state, phoneNumber: action.payload };
-
+      return {
+        ...state,
+        phoneNumbers: {
+          ...state.phoneNumbers,
+          [action.payload.type]: action.payload.value,
+        },
+      };
     case SET_LAST_NAME:
       return { ...state, lastName: action.payload };
 
