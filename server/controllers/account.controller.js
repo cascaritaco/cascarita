@@ -2,29 +2,46 @@
 
 require("dotenv").config();
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
-const { Group, UserStripeAccounts, FormPaymentIntents } = require("../models");
+const { UserStripeAccounts, FormPaymentIntents } = require("../models");
 
 const AccountController = function () {
   var createAccountConnection = async function (req, res, next) {
     try {
       const user = req.body;
-      const account = await Stripe.accounts.create({
-        country: "US",
-        email: user.email,
-        type: "standard",
+      let account;
+      let accountId;
+
+      const existingStripeAccount = await UserStripeAccounts.findOne({
+        where: {
+          user_id: user.id,
+        },
       });
 
+      if (existingStripeAccount) {
+        accountId = existingStripeAccount.stripe_account_id;
+      } else {
+        account = await Stripe.accounts.create({
+          country: "US",
+          email: user.email,
+          type: "standard",
+        });
+
+        accountId = account.id;
+      }
+
       const accountLink = await Stripe.accountLinks.create({
-        account: account.id,
+        account: accountId,
         refresh_url: "http://localhost:3000/forms",
         return_url: "http://localhost:3000/home",
         type: "account_onboarding",
       });
 
-      await UserStripeAccounts.create({
-        user_id: user.id,
-        stripe_account_id: account.id,
-      });
+      if (!existingStripeAccount) {
+        await UserStripeAccounts.create({
+          user_id: user.id,
+          stripe_account_id: accountId,
+        });
+      }
 
       res.status(201).json({ url: accountLink.url });
     } catch (error) {
