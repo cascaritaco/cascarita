@@ -1,6 +1,7 @@
 import { useSharedStates } from "../contexts/SharedContext";
 import { useHandleKeypress } from "../hooks/useHandleKeyPress";
 import { Question } from "../Question/Question";
+import { QuestionType } from "../Question/types";
 
 export function FormWalkthrough() {
   const { questionNum } = useSharedStates();
@@ -9,10 +10,34 @@ export function FormWalkthrough() {
   useHandleKeypress();
   //   useHandleScroll();
 
+  const questions: { type: QuestionType; index: number }[] = [
+    { type: "intro", index: 0 },
+    { type: "phoneNumber0", index: 1 },
+    { type: "phoneNumber1", index: 2 },
+    // Add more questions as needed
+  ];
+
   return (
     <section>
       <div>
-        <Question
+        {questions.map((question, index) => {
+          const isVisible = index === now;
+
+          return (
+            isVisible && (
+              <Question
+                key={question.index}
+                type={question.type}
+                outView={now - 1 === index || now > index + 1}
+                outViewSlide={now - 1 === index ? "up" : "down"}
+                inView={now === index}
+                inViewSlide={prev === index + 1 ? "down" : "up"}
+                isRendered={prev === null && index === 0}
+              />
+            )
+          );
+        })}
+        {/* <Question
           type="intro"
           outView={now - 1 === 0 || now > 1}
           outViewSlide="up"
@@ -39,7 +64,7 @@ export function FormWalkthrough() {
             inView={now === 2}
             inViewSlide={prev === 3 ? "down" : "up"}
           />
-        )}
+        )} */}
       </div>
     </section>
   );
