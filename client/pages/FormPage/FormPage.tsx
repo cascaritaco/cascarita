@@ -13,8 +13,11 @@ import {
 } from "./types";
 import { createMongoResponse } from "../../api/forms/service";
 import FormHeader from "../../components/FormHeader/FormHeader";
-import FormFooter from "../../components/FormFooter/FormFooter";
+// import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
+import { FormWalkthrough } from "../../components/TypeForm/FormWalkthrough/FormWalkthrough";
+import { QuestionsProvider } from "../../components/TypeForm/contexts/QuestionContext";
+import { SharedStatesProvider } from "../../components/TypeForm/contexts/SharedContext";
 
 const FormPage = () => {
   const { formId } = useParams();
@@ -69,7 +72,7 @@ const FormPage = () => {
   return (
     <>
       <FormHeader />
-      <div className={styles.container}>
+      {/* <div className={styles.container}>
         {form != null && (
           <FormProvider {...methods}>
             <form
@@ -90,8 +93,19 @@ const FormPage = () => {
             </form>
           </FormProvider>
         )}
-      </div>
-      <FormFooter />
+      </div> */}
+      {/* <BtnContainer showPressEnter={true} onClick={handleOkClick}>
+        Next
+      </BtnContainer> */}
+
+      <main className={styles.main}>
+        <QuestionsProvider>
+          <SharedStatesProvider>
+            <FormWalkthrough />
+          </SharedStatesProvider>
+        </QuestionsProvider>
+      </main>
+      {/* <FormFooter /> */}
     </>
   );
 };
