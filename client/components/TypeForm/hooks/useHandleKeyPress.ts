@@ -9,7 +9,8 @@ export function useHandleKeypress() {
 
   const { now } = questionNum;
   const { state } = useQuestions();
-  const { phoneNumbers, lastName, industry, role, goals, email } = state;
+  const { phoneNumbers, shortTextResponses, industry, role, goals, email } =
+    state;
 
   console.log("Inside useHandleKeyPress Hook", now, state);
 
@@ -25,13 +26,14 @@ export function useHandleKeypress() {
         //     phoneNumber: "Please fill this in",
         //   }));
         //   return;
-        if (now + 1 === 3 && lastName === "") {
-          setErrorMsg((prevValue) => ({
-            ...prevValue,
-            lastName: "Please fill this in",
-          }));
-          return;
-        } else if (now + 1 === 4 && industry === "") {
+        // if (now + 1 === 3 && lastName === "") {
+        //   setErrorMsg((prevValue) => ({
+        //     ...prevValue,
+        //     lastName: "Please fill this in",
+        //   }));
+        //   return;
+        //}
+        if (now + 1 === 4 && industry === "") {
           setErrorMsg((prevValue) => ({
             ...prevValue,
             industry: "Oops! Please make a selection",
@@ -84,5 +86,5 @@ export function useHandleKeypress() {
     return function () {
       document.removeEventListener("keypress", handleKeypress);
     };
-  }, [phoneNumbers, industry, lastName, now, role, goals, email]);
+  }, [phoneNumbers, industry, shortTextResponses, now, role, goals, email]);
 }

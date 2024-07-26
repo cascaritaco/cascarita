@@ -1,6 +1,6 @@
 export const questionsInitialState = {
   phoneNumbers: {},
-  lastName: "",
+  shortTextResponses: {},
   industry: "",
   role: "",
   goals: [],
@@ -9,7 +9,7 @@ export const questionsInitialState = {
 
 export type QuestionsStateType = {
   phoneNumbers: { [key: string]: string };
-  lastName: string;
+  shortTextResponses: { [key: string]: string };
   industry: string;
   role: string;
   goals: string[];

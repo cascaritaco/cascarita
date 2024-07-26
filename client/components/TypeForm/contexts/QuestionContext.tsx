@@ -33,10 +33,11 @@ export function QuestionsProvider({ children }: QuestionsProviderType) {
     function () {
       let answeredQues = 0;
       console.log("Asking for increment the answeredQues: ", answeredQues);
-      const { phoneNumbers, lastName, industry, role, goals, email } = state;
+      const { phoneNumbers, shortTextResponses, industry, role, goals, email } =
+        state;
 
       if (phoneNumbers) answeredQues += 1;
-      if (lastName) answeredQues += 1;
+      if (shortTextResponses) answeredQues += 1;
       if (industry) answeredQues += 1;
       if (role) answeredQues += 1;
       if (goals.length !== 0) answeredQues += 1;

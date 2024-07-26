@@ -2,20 +2,37 @@ import { useSharedStates } from "../contexts/SharedContext";
 import { useHandleKeypress } from "../hooks/useHandleKeyPress";
 import { Question } from "../Question/Question";
 import { QuestionType } from "../Question/types";
+import { FormQuestionProps } from "./types";
 
-export function FormWalkthrough() {
+export function FormWalkthrough({ data }: FormQuestionProps) {
   const { questionNum } = useSharedStates();
   const { prev, now } = questionNum;
 
   useHandleKeypress();
   //   useHandleScroll();
+  // TODO: Add a way to pass through data
+  console.log("DATA!!!!!!!!!!!!: ", data);
 
-  const questions: { type: QuestionType; index: number }[] = [
-    { type: "intro", index: 0 },
-    { type: "phoneNumber0", index: 1 },
-    { type: "phoneNumber1", index: 2 },
-    // Add more questions as needed
-  ];
+  const questions: { type: QuestionType; index: number }[] = data.map(
+    (field, index) => {
+      let type: QuestionType;
+      console.log("field: ", field, index);
+      if (index === 0) {
+        type = "intro";
+      } else if (field.type === "short_text") {
+        console.log("I AM IN SHORT TEXT");
+        type = `shortTextResponse${index}` as QuestionType;
+      } else if (field.type === "phone_number") {
+        type = `phoneNumber${index}` as QuestionType;
+      } else {
+        // Handle other types if necessary
+        type = `otherType${index}` as QuestionType;
+        console.log("error");
+      }
+
+      return { type, index };
+    },
+  );
 
   return (
     <section>
@@ -28,6 +45,7 @@ export function FormWalkthrough() {
               <Question
                 key={question.index}
                 type={question.type}
+                data={data[index]}
                 outView={now - 1 === index || now > index + 1}
                 outViewSlide={now - 1 === index ? "up" : "down"}
                 inView={now === index}

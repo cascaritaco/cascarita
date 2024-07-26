@@ -2,7 +2,7 @@ import {
   QuestionsActionsType,
   REMOVE_GOAL,
   SET_PHONE_NUMBER,
-  SET_LAST_NAME,
+  SET_SHORT_TEXT_RESPONSE,
   SET_INDUSTRY,
   SET_ROLE,
   SET_GOALS,
@@ -24,8 +24,14 @@ export function questionsReducerFunc(
           [action.payload.type]: action.payload.value,
         },
       };
-    case SET_LAST_NAME:
-      return { ...state, lastName: action.payload };
+    case SET_SHORT_TEXT_RESPONSE:
+      return {
+        ...state,
+        shortTextResponses: {
+          ...state.shortTextResponses,
+          [action.payload.type]: action.payload.value,
+        },
+      };
 
     case SET_INDUSTRY:
       return { ...state, industry: action.payload };

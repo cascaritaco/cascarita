@@ -1,4 +1,8 @@
-export type QuestionType = "intro" | `phoneNumber${number}`;
+import { Field } from "../../../pages/FormPage/types";
+export type QuestionType =
+  | "intro"
+  | `phoneNumber${number}`
+  | `shortTextResponse${number}`;
 
 export type QuestionProps = {
   readonly inView: boolean;
@@ -7,4 +11,5 @@ export type QuestionProps = {
   readonly outViewSlide: "up" | "down" | "";
   readonly isRendered?: boolean;
   readonly type: QuestionType;
+  readonly data: Field;
 };
