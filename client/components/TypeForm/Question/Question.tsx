@@ -13,6 +13,7 @@ export function Question({
   isRendered,
   type,
   data,
+  index,
 }: QuestionProps) {
   return (
     <div
@@ -25,10 +26,12 @@ export function Question({
         [styles["in-view__down"]]: inViewSlide === "down",
         [styles["rendered"]]: isRendered,
       })}>
-      {type === "intro" && <Intro type="intro" data={data} />}
-      {type.startsWith("phoneNumber") && <PhoneNumber type={type} />}
+      {type === "intro" && <Intro type="intro" data={data} index={index} />}
+      {type.startsWith("phoneNumber") && (
+        <PhoneNumber type={type} index={index} />
+      )}
       {type.startsWith("shortTextResponse") && (
-        <ShortText type={type} data={data} />
+        <ShortText type={type} data={data} index={index} />
       )}
       {/* {type === "firstName" && <FirstNameInput />}
       {type === "lastName" && <LastNameInput />}

@@ -7,15 +7,17 @@ import { QuestionInputText } from "../../QuestionComponents/QuestionInputText/Qu
 import { ChangeEventHandler } from "react";
 
 type PhoneNumberProps = {
+  index: number;
   type: string;
 };
 
-export function PhoneNumber({ type }: PhoneNumberProps) {
+export function PhoneNumber({ type, index }: PhoneNumberProps) {
   const {
     errorMsg: error,
     setErrorMsg,
     handleOkClick,
     handleBackClick,
+    totalQuestions,
   } = useSharedStates();
   const { state, dispatch } = useQuestions();
 
@@ -48,6 +50,7 @@ export function PhoneNumber({ type }: PhoneNumberProps) {
       />
       {/* {errorMsg && <Error message={errorMsg} />} */}
       <QuestionNavigation
+        isFinal={index + 1 === totalQuestions}
         onBackClick={handleBackClick}
         showPressEnter={true}
         onClick={handleOkClick}>

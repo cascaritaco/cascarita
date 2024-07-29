@@ -5,6 +5,7 @@ export type QuestionType =
   | `shortTextResponse${number}`;
 
 export type QuestionProps = {
+  readonly index: number;
   readonly inView: boolean;
   readonly inViewSlide: "up" | "down" | "";
   readonly outView: boolean;

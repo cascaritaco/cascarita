@@ -1,15 +1,17 @@
 import { useSharedStates } from "../../contexts/SharedContext";
 import { useQuestions } from "../../contexts/QuestionContext";
-// import { QuestionHeading } from "../../QuestionComponents/QuestionHeading/QuestionHeading";
 import { QuestionContent } from "../../QuestionComponents/QuestionContent/QuestionContent";
 import { QuestionNavigation } from "../../QuestionComponents/QuestionNavigation/QuestionNavigation";
 import { QuestionInputText } from "../../QuestionComponents/QuestionInputText/QuestionInputText";
+import { Error } from "../../QuestionComponents/Error/Error";
 import { ChangeEventHandler } from "react";
 import { QuestionTemplateProps } from "../types";
+import styles from "./ShortText.module.css";
 import { SET_SHORT_TEXT_RESPONSE } from "../../reducers/actions/questionsActions";
 
-export function ShortText({ type, data }: QuestionTemplateProps) {
+export function ShortText({ type, data, index }: QuestionTemplateProps) {
   const {
+    totalQuestions,
     errorMsg: error,
     setErrorMsg,
     handleOkClick,
@@ -22,9 +24,8 @@ export function ShortText({ type, data }: QuestionTemplateProps) {
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     errorMsg &&
-      //   setErrorMsg &&
       setErrorMsg((prevValue) => {
-        delete prevValue.shortTextResponse;
+        delete prevValue.shortTextResponses;
         return prevValue;
       });
 
@@ -34,22 +35,39 @@ export function ShortText({ type, data }: QuestionTemplateProps) {
     });
   };
 
+  const hasError = () => {
+    return (
+      typeof errorMsg === "object" &&
+      errorMsg !== null &&
+      Object.keys(errorMsg).includes(type)
+    );
+  };
+
   return (
     <>
-      {/* <QuestionHeading>Heading</QuestionHeading> */}
-      <QuestionContent>{data.title}</QuestionContent>
+      <QuestionContent>
+        {data.title}
+        {data.validations?.required && (
+          <span className={styles.asterisk}>*</span>
+        )}
+      </QuestionContent>
       <QuestionInputText
         placeholder="Type your response here..."
         value={shortTextResponse}
         onChange={handleInputChange}
       />
-      {/* {errorMsg && <Error message={errorMsg} />} */}
-      <QuestionNavigation
-        onBackClick={handleBackClick}
-        showPressEnter={true}
-        onClick={handleOkClick}>
-        Next
-      </QuestionNavigation>
+      {hasError() && (
+        <Error message={(errorMsg as { [key: string]: string })[type]} />
+      )}
+      {errorMsg === "" && (
+        <QuestionNavigation
+          isFinal={index + 1 === totalQuestions}
+          onBackClick={handleBackClick}
+          showPressEnter={true}
+          onClick={handleOkClick}>
+          Next
+        </QuestionNavigation>
+      )}
     </>
   );
 }

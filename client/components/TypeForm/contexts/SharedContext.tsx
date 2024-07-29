@@ -4,11 +4,11 @@ import {
   QuestionNumType,
   SharedStatesContextType,
 } from "./shared-context-types";
-
-// TODO: Make this filtered out later
-const TOTAL_QUESTIONS = 3;
+import { useNavigate } from "react-router-dom";
 
 const SharedStatesContext = createContext<SharedStatesContextType>({
+  totalQuestions: 0,
+  setTotalQuestions: () => {},
   questionNum: { prev: null, now: 0 },
   setQuestionNum: () => {},
   errorMsg: {},
@@ -23,16 +23,18 @@ type SharedStatesProviderType = {
 };
 
 export function SharedStatesProvider({ children }: SharedStatesProviderType) {
+  const navigate = useNavigate();
+
   const [questionNum, setQuestionNum] = useState<QuestionNumType>({
     prev: null,
     now: 0,
   });
-
   const [errorMsg, setErrorMsg] = useState<ObjectType>({});
+  const [totalQuestions, setTotalQuestions] = useState<number>(0);
 
   function handleQuestionNumUpdate() {
     setQuestionNum((prevValue) =>
-      prevValue.now + 1 >= TOTAL_QUESTIONS + 1
+      prevValue.now + 1 >= totalQuestions + 1
         ? { ...prevValue }
         : { prev: prevValue.now, now: prevValue.now + 1 },
     );
@@ -47,7 +49,11 @@ export function SharedStatesProvider({ children }: SharedStatesProviderType) {
     );
   }
 
-  function handleOkClick() {
+  function handleOkClick(isFinal?: boolean) {
+    if (isFinal) {
+      console.log("isFinal: ", isFinal);
+      navigate("/forms");
+    }
     document.dispatchEvent(
       new KeyboardEvent("keypress", {
         key: "Enter",
@@ -56,6 +62,8 @@ export function SharedStatesProvider({ children }: SharedStatesProviderType) {
   }
 
   const value: SharedStatesContextType = {
+    totalQuestions,
+    setTotalQuestions,
     questionNum,
     setQuestionNum,
     errorMsg,

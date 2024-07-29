@@ -3,6 +3,7 @@ import { QuestionNavigationProps } from "./types";
 import styles from "./QuestionNavigation.module.css";
 
 export function QuestionNavigation({
+  isFinal,
   children,
   showPressEnter,
   onBackClick,
@@ -26,10 +27,14 @@ export function QuestionNavigation({
     };
   }, []);
 
+  const handleClick = () => {
+    onClick(isFinal);
+  };
+
   return (
     <div className={styles.questionNavigation}>
       {onBackClick && <button onClick={onBackClick}>Back</button>}
-      <button onClick={onClick}>{children}</button>
+      <button onClick={handleClick}>{isFinal ? "Submit" : children}</button>
       {isOnMobile || !showPressEnter || (
         <span>
           press <strong>Enter ↵</strong>
