@@ -172,7 +172,13 @@ const FormController = {
    * @param {import("express").Response} res The response of the request.
    * @param {import("express").NextFunction} next The next function to call.
    */
-  async update(req, res, next) { },
+  async update(req, res, next) {
+    // 1. Fetch the corresponding Form from persistent memory.
+    // 2. If the form has responses, the form cannot be updated.
+    // 3. Update the Forms SQL table and MongoDB collection.
+    // 4. Send the updated Form object back to the response.
+    // 5. Gracefully handle any errors.
+  },
   /**
    * Deletes the Form with an id of `form_id`. Attempting to delete a Form that
    * does not exist will have no effect.
@@ -180,7 +186,12 @@ const FormController = {
    * @param {import("express").Response} res The response of the request.
    * @param {import("express").NextFunction} next The next function to call.
    */
-  async delete(req, res, next) { }
+  async delete(req, res, next) {
+    // 1. Fetch the corresponding Form from persistent memory.
+    // 2. Delete all responses from the Form.
+    // 3. Delete the Form from the SQL table and MongoDB collection.
+    // 4. Gracefully handle any errors.
+  }
 };
 
 module.exports = FormController;
