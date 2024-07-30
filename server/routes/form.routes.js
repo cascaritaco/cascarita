@@ -9,4 +9,7 @@ router.post("/responses", FormController.createResponse);
 router.get("/:form_id/responses", FormController.getResponsesByFormId);
 router.get("/:document_id", FormController.getFormByDocumentId);
 router.post("/email", FormController.emailForm);
+router.patch("/:form_id", FormController.update);
+router.delete("/:form_id", FormController.delete);
+
 module.exports = router;
