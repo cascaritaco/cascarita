@@ -13,8 +13,8 @@ export function useQuestionsData(data: FormQuestionProps["data"]) {
         type = "intro";
       } else if (field.type === "short_text") {
         type = `shortTextResponses${index}` as QuestionType;
-      } else if (field.type === "phone_number") {
-        type = `phoneNumber${index}` as QuestionType;
+      } else if (field.type === "dropdown") {
+        type = `dropdownResponses${index}` as QuestionType;
       } else {
         type = `otherType${index}` as QuestionType;
       }

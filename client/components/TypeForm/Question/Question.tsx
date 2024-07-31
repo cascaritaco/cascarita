@@ -1,9 +1,9 @@
 import { QuestionProps } from "./types";
 import classNames from "classnames";
-import { PhoneNumber } from "../QuestionTemplates/PhoneNumber/PhoneNumber";
 import styles from "./Question.module.css";
 import { Intro } from "../QuestionTemplates/Intro/Intro";
 import { ShortText } from "../QuestionTemplates/ShortText/ShortText";
+import { Dropdown } from "../QuestionTemplates/Dropdown/Dropdown";
 
 export function Question({
   inView,
@@ -15,6 +15,8 @@ export function Question({
   data,
   index,
 }: QuestionProps) {
+  console.log("type: ", type);
+  console.log("data: ", data);
   return (
     <div
       className={classNames(styles["question-box"], {
@@ -27,18 +29,12 @@ export function Question({
         [styles["rendered"]]: isRendered,
       })}>
       {type === "intro" && <Intro type="intro" data={data} index={index} />}
-      {type.startsWith("phoneNumber") && (
-        <PhoneNumber type={type} index={index} />
-      )}
       {type.startsWith("shortTextResponse") && (
         <ShortText type={type} data={data} index={index} />
       )}
-      {/* {type === "firstName" && <FirstNameInput />}
-      {type === "lastName" && <LastNameInput />}
-      {type === "industry" && <IndustryInput />}
-      {type === "role" && <RoleInput />}
-      {type === "goal" && <GoalInput />}
-      {type === "email" && <EmailInput />} */}
+      {type.startsWith("dropdown") && (
+        <Dropdown type={type} data={data} index={index} />
+      )}
     </div>
   );
 }

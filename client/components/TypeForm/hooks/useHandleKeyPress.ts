@@ -1,25 +1,22 @@
 import { useSharedStates } from "../contexts/SharedContext";
 import { useQuestions } from "../contexts/QuestionContext";
 import { useEffect } from "react";
-import { QuestionType } from "../Question/types";
+import { Question } from "../Question/types";
 import { useNavigate } from "react-router-dom";
 
-export function useHandleKeypress(
-  questions: {
-    type: QuestionType;
-    index: number;
-    required: boolean;
-  }[],
-) {
+export function useHandleKeypress(questions: Question[]) {
   const navigate = useNavigate();
   const { totalQuestions, questionNum, setErrorMsg, handleQuestionNumUpdate } =
     useSharedStates();
   const { now } = questionNum;
   const { state } = useQuestions();
-  const { phoneNumbers, shortTextResponses, industry, role, goals, email } =
-    state;
+  const { shortTextResponses, dropdownResponses } = state;
 
   const currentQuestion = questions.find((q) => q.index === now);
+  console.log("currentQuestion: ", currentQuestion);
+  console.log("dropdownResponses: ", dropdownResponses);
+  console.log("shortTextResponses: ", shortTextResponses);
+
   const isRequired = currentQuestion?.required;
 
   useEffect(() => {
@@ -30,7 +27,8 @@ export function useHandleKeypress(
         if (now !== 0 && isRequired) {
           //skipping the intro and or validaton on required questions
           if (
-            !(`shortTextResponses${now}` in shortTextResponses) ||
+            (!(`shortTextResponses${now}` in shortTextResponses) &&
+              currentQuestion.type === `shortTextResponses${now}`) ||
             shortTextResponses[`shortTextResponses${now}`] === ""
           ) {
             setErrorMsg((prevValue) => {
@@ -45,65 +43,25 @@ export function useHandleKeypress(
               };
             });
             return;
-          } else if (now + 1 === 4 && industry === "") {
+          } else if (
+            (!(`dropdownResponses${now}` in dropdownResponses) &&
+              currentQuestion.type === `dropdownResponses${now}`) ||
+            dropdownResponses[`dropdownResponses${now}`] === ""
+          ) {
             setErrorMsg((prevValue) => {
               return {
                 ...prevValue,
-                industry: "Oops! Please make a selection",
-              };
-            });
-            return;
-          } else if (now + 1 === 5 && role === "") {
-            setErrorMsg((prevValue) => {
-              return {
-                ...prevValue,
-                role: "Oops! Please make a selection",
-              };
-            });
-            return;
-          } else if (now + 1 === 6 && goals.length === 0) {
-            setErrorMsg((prevValue) => {
-              return {
-                ...prevValue,
-                goals: "Oops! Please make a selection",
-              };
-            });
-            return;
-          } else if (now + 1 === 6 && goals.length === 1) {
-            setErrorMsg((prevValue) => {
-              return {
-                ...prevValue,
-                goals: "Please select more choices",
-              };
-            });
-            return;
-          } else if (now + 1 === 7 && email === "") {
-            setErrorMsg((prevValue) => {
-              return {
-                ...prevValue,
-                email: "Please fill this in",
-              };
-            });
-            return;
-          } else if (now + 1 === 7 && email && true) {
-            setErrorMsg((prevValue) => {
-              return {
-                ...prevValue,
-                email: "Hmm... that email doesn't look right",
-              };
-            });
-            return;
-          } else if (now + 1 === 7 && email) {
-            setErrorMsg((prevValue) => {
-              return {
-                ...prevValue,
-                email: "Hmm... task specific emails are not allowed",
+                dropdownResponses: {
+                  ...((prevValue.dropdownResponses as {
+                    [key: string]: string;
+                  }) || {}),
+                  [`dropdownResponses${now}`]: "Please select a value!",
+                },
               };
             });
             return;
           }
         }
-
         handleQuestionNumUpdate();
       }
     }
@@ -114,13 +72,9 @@ export function useHandleKeypress(
       document.removeEventListener("keypress", handleKeypress);
     };
   }, [
-    phoneNumbers,
-    industry,
+    dropdownResponses,
     shortTextResponses,
     now,
-    role,
-    goals,
-    email,
     setErrorMsg,
     handleQuestionNumUpdate,
   ]);
