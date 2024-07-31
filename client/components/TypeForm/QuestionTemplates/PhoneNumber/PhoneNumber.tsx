@@ -26,10 +26,8 @@ export function PhoneNumber({ type, index }: PhoneNumberProps) {
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     errorMsg &&
-      //   setErrorMsg &&
       setErrorMsg((prevValue) => {
         delete prevValue.phoneNumber;
-        console.log("Inside the setErrorMsg");
         return prevValue;
       });
 

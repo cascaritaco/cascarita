@@ -46,11 +46,11 @@ const FormPage = () => {
       <FormHeader />
       {!isLoading && !error && form && (
         <main className={styles.main}>
-          <QuestionsProvider>
-            <SharedStatesProvider>
+          <SharedStatesProvider>
+            <QuestionsProvider>
               <FormWalkthrough data={buildFormData(form)} />
-            </SharedStatesProvider>
-          </QuestionsProvider>
+            </QuestionsProvider>
+          </SharedStatesProvider>
         </main>
       )}
       <FormFooter />

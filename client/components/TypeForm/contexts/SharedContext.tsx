@@ -51,7 +51,6 @@ export function SharedStatesProvider({ children }: SharedStatesProviderType) {
 
   function handleOkClick(isFinal?: boolean) {
     if (isFinal) {
-      console.log("isFinal: ", isFinal);
       navigate("/forms");
     }
     document.dispatchEvent(

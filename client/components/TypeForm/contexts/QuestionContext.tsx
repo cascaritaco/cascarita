@@ -9,12 +9,10 @@ import {
   useMemo,
   useReducer,
 } from "react";
-
-const TOTAL_QUESTIONS = 3;
+import { useSharedStates } from "./SharedContext";
 
 const QuestionsContext = createContext<QuestionsContextType>({
   state: questionsInitialState,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   dispatch: () => {},
   percent: 0,
 });
@@ -24,6 +22,9 @@ type QuestionsProviderType = {
 };
 
 export function QuestionsProvider({ children }: QuestionsProviderType) {
+  const { questionNum, totalQuestions } = useSharedStates();
+  const { now } = questionNum;
+
   const [state, dispatch] = useReducer(
     questionsReducerFunc,
     questionsInitialState,
@@ -31,19 +32,7 @@ export function QuestionsProvider({ children }: QuestionsProviderType) {
 
   const percent = useMemo(
     function () {
-      let answeredQues = 0;
-      console.log("Asking for increment the answeredQues: ", answeredQues);
-      const { phoneNumbers, shortTextResponses, industry, role, goals, email } =
-        state;
-
-      if (phoneNumbers) answeredQues += 1;
-      if (shortTextResponses) answeredQues += 1;
-      if (industry) answeredQues += 1;
-      if (role) answeredQues += 1;
-      if (goals.length !== 0) answeredQues += 1;
-      if (email) answeredQues += 1;
-
-      return (answeredQues * 100) / TOTAL_QUESTIONS;
+      return (now * 100) / totalQuestions;
     },
     [state],
   );

@@ -47,7 +47,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 4 && industry === "") {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 industry: "Oops! Please make a selection",
@@ -56,7 +55,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 5 && role === "") {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 role: "Oops! Please make a selection",
@@ -65,7 +63,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 6 && goals.length === 0) {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 goals: "Oops! Please make a selection",
@@ -74,7 +71,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 6 && goals.length === 1) {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 goals: "Please select more choices",
@@ -83,7 +79,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 7 && email === "") {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 email: "Please fill this in",
@@ -92,7 +87,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 7 && email && true) {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 email: "Hmm... that email doesn't look right",
@@ -101,7 +95,6 @@ export function useHandleKeypress(
             return;
           } else if (now + 1 === 7 && email) {
             setErrorMsg((prevValue) => {
-              console.log("Previous error message value:", prevValue); // Log the previous value
               return {
                 ...prevValue,
                 email: "Hmm... task specific emails are not allowed",

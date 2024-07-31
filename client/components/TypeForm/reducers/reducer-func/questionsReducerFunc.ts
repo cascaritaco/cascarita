@@ -52,7 +52,6 @@ export function questionsReducerFunc(
       return { ...state, email: action.payload };
 
     default:
-      console.log("Within default with state: ", state);
       return state;
   }
 }
