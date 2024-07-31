@@ -34,7 +34,7 @@ export function QuestionsProvider({ children }: QuestionsProviderType) {
     function () {
       return (now * 100) / totalQuestions;
     },
-    [state],
+    [state, now],
   );
 
   const value = { state, dispatch, percent };
