@@ -4,10 +4,11 @@ import { QuestionContent } from "../../QuestionComponents/QuestionContent/Questi
 import { QuestionNavigation } from "../../QuestionComponents/QuestionNavigation/QuestionNavigation";
 import { Error } from "../../QuestionComponents/Error/Error";
 import { QuestionTemplateProps } from "../types";
-import styles from "./Dropdown.module.css";
 import { SET_DROPDOWN_RESPONSE } from "../../reducers/actions/questionsActions";
 import { QuestionDropdownOption } from "../../QuestionComponents/QuestionDropdownOption/QuestionDropdownOption";
 import { QuestionDropdown } from "../../QuestionComponents/QuestionDropdown/QuestionDropdown";
+import styles from "./Dropdown.module.css";
+import classNames from "classnames";
 
 export function Dropdown({ type, data, index }: QuestionTemplateProps) {
   console.log("HERE IS THE DATA: ", data);
@@ -69,20 +70,18 @@ export function Dropdown({ type, data, index }: QuestionTemplateProps) {
               //   const _role = ROLES[roleKey];
               console.log("CHOICES: ", item, index);
               return (
-                <></>
-                // <QuestionDropdownOption
-                //   key={roleKey}
-                //   className={styles["role-option"]}
-                //   onClick={() => handleDropdownOptionClick(_role)}
-                //   isSelected={_role === role}>
-                //   <span
-                //     className={classNames({
-                //       [styles["selected"]]: _role === role,
-                //     })}>
-                //     {roleKey}
-                //   </span>
-                //   {_role}
-                // </QuestionDropdownOption>
+                <QuestionDropdownOption
+                  key={item.ref}
+                  className={styles["role-option"]}
+                  onClick={() => handleDropdownOptionClick(item.label)}
+                  isSelected={item.label === dropdownResponse}>
+                  <span
+                    className={classNames({
+                      [styles["selected"]]: item.label === dropdownResponse,
+                    })}>
+                    {item.label}
+                  </span>
+                </QuestionDropdownOption>
               );
             })}
         </div>
