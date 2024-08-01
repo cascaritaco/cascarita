@@ -65,7 +65,7 @@ export function Dropdown({ type, data, index }: QuestionTemplateProps) {
         <div>
           {data.properties &&
             data.properties.choices &&
-            data.properties.choices.map((item, index) => {
+            data.properties.choices.map((item) => {
               return (
                 <QuestionDropdownOption
                   key={item.ref}
