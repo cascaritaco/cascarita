@@ -15,8 +15,6 @@ export function Question({
   data,
   index,
 }: QuestionProps) {
-  console.log("type: ", type);
-  console.log("data: ", data);
   return (
     <div
       className={classNames(styles["question-box"], {

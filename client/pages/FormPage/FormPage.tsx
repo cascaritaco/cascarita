@@ -38,7 +38,6 @@ const FormPage = () => {
       type: "short_text",
     };
     const data = [introField, ...formData.form_data.fields];
-    console.log("all data: ", data);
     return data;
   };
 

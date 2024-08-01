@@ -11,7 +11,6 @@ import styles from "./Dropdown.module.css";
 import classNames from "classnames";
 
 export function Dropdown({ type, data, index }: QuestionTemplateProps) {
-  console.log("HERE IS THE DATA: ", data);
   const {
     totalQuestions,
     errorMsg: error,
@@ -66,9 +65,7 @@ export function Dropdown({ type, data, index }: QuestionTemplateProps) {
         <div>
           {data.properties &&
             data.properties.choices &&
-            (data.properties?.choices).map((item, index) => {
-              //   const _role = ROLES[roleKey];
-              console.log("CHOICES: ", item, index);
+            data.properties.choices.map((item, index) => {
               return (
                 <QuestionDropdownOption
                   key={item.ref}

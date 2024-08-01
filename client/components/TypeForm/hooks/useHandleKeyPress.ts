@@ -13,9 +13,6 @@ export function useHandleKeypress(questions: Question[]) {
   const { shortTextResponses, dropdownResponses } = state;
 
   const currentQuestion = questions.find((q) => q.index === now);
-  console.log("currentQuestion: ", currentQuestion);
-  console.log("dropdownResponses: ", dropdownResponses);
-  console.log("shortTextResponses: ", shortTextResponses);
 
   const isRequired = currentQuestion?.required;
 
