@@ -33,6 +33,7 @@ export interface Properties {
 export interface Field {
   id: string;
   title: string;
+  description?: string;
   ref: string;
   validations?: Validation;
   properties?: Properties;
@@ -72,6 +73,7 @@ export interface Form {
       responses: string;
     };
     fields: Field[];
+    welcome_screens: WelcomeScreen[];
   };
   welcome_screen: WelcomeScreen;
 }

@@ -1,0 +1,229 @@
+.question-box {
+  margin: 0 auto;
+  max-width: 72rem;
+}
+
+/***** btn-container *****/
+
+.btn-container.ok {
+  margin-top: 15px;
+}
+
+.btn-container.ok > button {
+  padding-right: 38px;
+  position: relative;
+}
+
+.btn-container > button > img {
+  bottom: 2.5px;
+  position: absolute;
+  right: 5px;
+}
+
+/***** role-dropdown *****/
+
+.role-dropdown {
+  display: inline-flex;
+  margin-top: 30px;
+}
+
+.role-dropdown .role-option {
+  margin-top: 10px;
+  max-width: 100%;
+  min-width: 225px;
+}
+
+.role-option > img {
+  margin-right: -8px;
+}
+
+.role-option > span:not(.goal) {
+  align-items: center;
+  background-color: var(--body-background-color);
+  border: thin solid var(--para-text-color);
+  border-radius: 4px;
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 700;
+  height: 24px;
+  justify-content: center;
+  margin-right: 10px;
+  transition: background-color 0.5s, color 0.5s;
+  width: 24px;
+}
+
+.role-option > span:not(.goal).selected {
+  background-color: var(--btn-text-color);
+  color: var(--body-background-color);
+}
+
+/***** goal-option *****/
+
+.role-dropdown.goal-dropdown.remove-margin__top {
+  margin-top: 0;
+}
+
+.role-dropdown.goal-dropdown > div {
+  width: 38rem;
+}
+
+.goal-option.not-selected {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.choose-num {
+  color: var(--btn-text-color);
+  display: block;
+  margin-top: 30px;
+}
+
+/***** media-queries *****/
+
+@media screen and (max-width: 599px) {
+  .btn-container.ok {
+    margin-top: 22px;
+  }
+
+  .btn-container > button > img {
+    margin-top: -9px;
+  }
+}
+
+@media screen and (max-width: 403px) {
+  .role-dropdown.goal-dropdown > div {
+    width: 36rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .role-dropdown.goal-dropdown > div {
+    width: 100%;
+  }
+
+  .goal-option > span:not(.goal) {
+    align-self: flex-start;
+    margin-top: 7.5px;
+  }
+
+  .goal-option > .goal {
+    display: block;
+    line-height: 1.25em;
+    padding: 6px 0;
+    width: 27rem;
+  }
+}
+
+@media screen and (max-width: 368px) {
+  .goal-option > .goal {
+    width: 23rem;
+  }
+}
+
+/***** animation *****/
+
+.slide-in,
+.slide-out {
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+/***** slide-in-animation *****/
+
+.slide-in {
+  animation-timing-function: ease-out;
+}
+
+.slide-in.in-view__up {
+  animation-name: in-up;
+}
+
+@keyframes in-up {
+  from {
+    transform: translateY(100vh);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.slide-in.in-view__down {
+  animation-name: in-down;
+}
+
+@keyframes in-down {
+  from {
+    transform: translateY(-100vh);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/***** slide-out-animation *****/
+
+.slide-out {
+  animation-timing-function: linear;
+  pointer-events: none;
+}
+
+.slide-out.out-view__up {
+  animation-name: out-up;
+}
+
+@keyframes out-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  to {
+    height: 0;
+    opacity: 0;
+    transform: translateY(-100vh);
+  }
+}
+
+.slide-out.out-view__down {
+  animation-name: out-down;
+}
+
+@keyframes out-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  to {
+    height: 0;
+    opacity: 0;
+    transform: translateY(100vh);
+  }
+}
+
+/***** rendered-animation  *****/
+
+.rendered {
+  animation: visible 1.25s ease-out 1 forwards;
+}
+
+@keyframes visible {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

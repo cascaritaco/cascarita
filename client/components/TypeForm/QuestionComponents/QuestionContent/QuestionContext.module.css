@@ -1,0 +1,13 @@
+.questionContent {
+  color: var(--para-text-color);
+  font-size: 2rem;
+  font-weight: unset;
+  line-height: 1.4em;
+  margin-top: 12px;
+}
+
+@media screen and (max-width: 599px) {
+  .questionContent {
+    font-size: 1.9rem;
+  }
+}

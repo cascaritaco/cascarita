@@ -1,0 +1,35 @@
+.role-dropdown {
+  display: inline-flex;
+  margin-top: 30px;
+}
+
+.role-dropdown .role-option {
+  margin-top: 10px;
+  max-width: 100%;
+  min-width: 225px;
+}
+
+.role-option > img {
+  margin-right: -8px;
+  transition: all 0.3s ease; /* Adjust the duration and easing as needed */
+}
+
+.role-option > span:not(.goal) {
+  align-items: center;
+  background-color: var(--body-background-color);
+  border: thin solid var(--para-text-color);
+  border-radius: 4px;
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 700;
+  height: 24px;
+  justify-content: center;
+  margin-right: 10px;
+  transition: background-color 0.5s, color 0.5s;
+  width: 24px;
+}
+
+.role-option > span:not(.goal).selected {
+  background-color: var(--btn-text-color);
+  color: var(--body-background-color);
+}

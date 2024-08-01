@@ -1,4 +1,4 @@
-.container {
+/* .container {
   top: 50%;
   display: flex;
   flex-direction: column;
@@ -48,4 +48,56 @@
 .submitButton:focus {
   outline: 1px solid blue;
   background-color: #2f26b7;
+} */
+
+.header {
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+}
+
+.header > img {
+  animation: slide-up 1s ease-out 1 forwards;
+  margin: 18px 16px;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(90%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 80px;
+  min-width: 100vw;
+  -webkit-font-smoothing: antialiased; /* to smooth pixels, works on macOS only */
+}
+
+.main > section {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.main > section > div {
+  padding: 0 80px;
+}
+
+@media screen and (max-width: 599px) {
+  .main > section > div {
+    padding: 0 40px;
+  }
 }
