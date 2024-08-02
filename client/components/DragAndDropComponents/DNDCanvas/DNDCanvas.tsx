@@ -51,6 +51,7 @@ const DNDCanvas = forwardRef(
       const fieldTemplate = {
         multiple_choice: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { choices: [], allow_multiple_selection: false },
           validations: { required: false },
@@ -58,12 +59,14 @@ const DNDCanvas = forwardRef(
         },
         short_text: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { max_length: 20, required: false },
           type: item.type,
         },
         dropdown: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { choices: [] },
           validations: { required: false },
@@ -71,18 +74,21 @@ const DNDCanvas = forwardRef(
         },
         long_text: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { max_length: 100, required: false },
           type: item.type,
         },
         email: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { required: false },
           type: item.type,
         },
         phone_number: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { default_country_code: "US" },
           validations: { required: false },

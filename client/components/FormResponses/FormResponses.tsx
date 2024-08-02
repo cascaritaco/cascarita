@@ -33,7 +33,9 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
           res.response.answers?.forEach((answer: Answer) => {
             answersMap.set(answer.field.id, answer);
           });
-          result.set(res.response.response_id, answersMap);
+
+          const responseId = res._id;
+          result.set(responseId, answersMap);
           return result;
         },
         new Map(),

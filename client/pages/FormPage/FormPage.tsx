@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
 import { FormProvider, useForm } from "react-hook-form";
@@ -18,6 +18,8 @@ import styles from "./FormPage.module.css";
 
 const FormPage = () => {
   const { formId } = useParams();
+  const navigate = useNavigate();
+
   const {
     data: form,
     isLoading,
@@ -59,6 +61,7 @@ const FormPage = () => {
         formId ?? "",
         normalizedAnswers,
       );
+      navigate("/forms");
       return responsesData;
     } catch (error) {
       console.error("Error creating responses:", error);
