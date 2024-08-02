@@ -34,7 +34,7 @@ const FormResponses = ({ formId }: FormResponsesProps) => {
             answersMap.set(answer.field.id, answer);
           });
 
-          const responseId = res._id || res.response.response_id;
+          const responseId = res._id;
           result.set(responseId, answersMap);
           return result;
         },
