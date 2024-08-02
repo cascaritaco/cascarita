@@ -11,9 +11,7 @@ const FormController = {
     try {
       const mongoForms = await FormMongo.find({
         group_id: { $in: req.params.id },
-      }).select(
-        "form_data.id form_data.title form_data._links.display created_by updated_by createdAt updatedAt",
-      );
+      }).select("form_data.title created_by updated_by createdAt updatedAt");
 
       return res.status(201).json(mongoForms);
     } catch (error) {
@@ -49,22 +47,8 @@ const FormController = {
   },
   async createForm(req, res, next) {
     try {
-      const response = await fetch("https://api.typeform.com/forms", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req.body),
-      });
+      const form_data = { title: req.body.title, fields: req.body.fields };
 
-      if (!response.ok) {
-        throw new Error(
-          "typeform api call failed with status code of: " + response.status,
-        );
-      }
-
-      const responseBody = await response.json();
       const user = await User.findByPk(req.params.user_id, {
         attributes: { exclude: ["password"] },
       });
@@ -84,7 +68,7 @@ const FormController = {
         group_id: req.params.group_id,
         created_by: createdBy,
         updated_by: null,
-        form_data: responseBody,
+        form_data: form_data,
         form_blueprint: req.body,
       });
 

@@ -77,7 +77,7 @@ const Forms = () => {
         title: form.form_data.title,
         description:
           form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form.form_data._links.display,
+        link: form.form_data.title,
         fields: form.form_data.fields,
       },
     });
@@ -131,7 +131,7 @@ const Forms = () => {
                 onEdit={() => onEdit(form._id)}
               />
               <ShareModal
-                formLink={form.form_data._links.display}
+                formLink={`${window.location.origin}/forms/${form._id}`}
                 isOpen={isOpen}
                 onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
               />
