@@ -15,6 +15,7 @@ import {
   getMongoForms,
 } from "../../api/forms/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
+import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
 import ShareForm from "../../components/Forms/ShareForm/ShareForm";
@@ -107,6 +108,7 @@ const Forms = () => {
           </div>
         </div>
         <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
+        <ConnectWithStripeButton />
       </div>
       <div className={styles.cols}>
         <h3>{t("col1")}</h3>

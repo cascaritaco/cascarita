@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "updated_by_id",
         sourceKey: "id",
       });
+      User.hasMany(models.UserStripeAccounts, {
+        foreignKey: "user_id",
+        sourceKey: "id",
+      });
     }
   }
   User.init(
