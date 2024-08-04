@@ -1,5 +1,6 @@
 "use strict";
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
+const { UserStripeAccounts } = require("../../models");
 
 const ConnectAccountController = function () {
   const endpointSecret = process.env.STRIPE_CONNECTED_ACCOUNTS_WEBHOOK_SECRET;
@@ -24,17 +25,57 @@ const ConnectAccountController = function () {
         endpointSecret,
       );
 
-      // sample event types. TODO : use connect account type of events
+      let statusCode = 200;
+      let responseBody = { message: "Event handled!" };
+
       switch (event.type) {
-        case "payment_intent.succeeded":
-          const paymentIntent = event.data.object;
+        case "account.updated":
+          const accountInfo = event.data.object;
+          const updated = await _updateAccount(accountInfo);
+          if (!updated) {
+            statusCode = 500;
+            responseBody = { message: "Error updating account" };
+          }
           break;
         default:
-          console.log(`Unhandled event type ${event.type}`);
+          statusCode = 400;
+          responseBody = { message: "Unhandled event type" };
       }
-      return res.status(200).json({ message: "event handled !" });
+
+      return res.status(statusCode).json(responseBody);
     } catch (error) {
       return res.status(400).send(`Webhook Error: ${error.message}`);
+    }
+  };
+
+  var _updateAccount = async function (account) {
+    const stripeId = account.id;
+
+    try {
+      const currentAccount = await UserStripeAccounts.findOne({
+        where: {
+          stripe_account_id: stripeId,
+        },
+      });
+
+      const updates = {
+        stripe_account_name: account.business_profile.name,
+        platform_account_name: account.metadata.cascarita_account_name || null,
+        platform_account_description:
+          account.metadata.cascarita_account_description || null,
+        account_email: account.email,
+        support_email: account.business_profile.support_email,
+        details_submitted: account.details_submitted,
+        requires_verification: account.requirements.currently_due.length > 0,
+        charges_enabled: account.charges_enabled,
+        payouts_enabled: account.payouts_enabled,
+      };
+
+      await currentAccount.update(updates, { validate: true });
+      return true;
+    } catch (error) {
+      console.error("error updating stripe account: " + error.message);
+      return false;
     }
   };
 
