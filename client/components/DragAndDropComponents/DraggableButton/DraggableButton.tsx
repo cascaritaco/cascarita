@@ -13,6 +13,7 @@ import { DraggableButtonKeys, DraggableButtonProps } from "./types";
 import { GrTextAlignFull } from "react-icons/gr";
 import { TiPhoneOutline } from "react-icons/ti";
 import { useTranslation } from "react-i18next";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 const iconMapping: { [key: string]: IconType } = {
   shorttext: MdOutlineShortText,
@@ -55,15 +56,20 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
       : "styles.baseStyle";
 
   return (
-    <Draggable
-      position={dragPosition}
-      onStop={handleDragStop}
-      onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
-      <button className={`${styles.buttonContainer} ${additionalClass}`}>
-        {IconComponent && <IconComponent />}
-        {t(`draggableButtons.${label}` as DraggableButtonKeys)}
-      </button>
-    </Draggable>
+    <div className={styles.container}>
+      <Draggable
+        position={dragPosition}
+        onStop={handleDragStop}
+        onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
+        <button className={`${styles.buttonContainer} ${additionalClass}`}>
+          {IconComponent && <IconComponent />}
+          <span className={styles.buttonText}>
+            {t(`draggableButtons.${label}` as DraggableButtonKeys)}
+          </span>
+        </button>
+      </Draggable>
+      <PlusCircledIcon onClick={onDrop} className={styles.plusIcon} />
+    </div>
   );
 };
 
