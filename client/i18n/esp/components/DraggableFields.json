@@ -7,5 +7,6 @@
   "shortText": "Texto Corto",
   "questionPlaceholder": "Pregunta",
   "requiredText": "Requerido",
-  "multipleSelection": "Selección Múltiple"
+  "multipleSelection": "Selección Múltiple",
+  "maxCharacters": "Máximo de Caracteres"
 }
