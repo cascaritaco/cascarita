@@ -16,7 +16,9 @@ router.post(
   passport.authenticate("local", {
     failureRedirect: "/user/loginReactPageHere",
   }),
-  UserController.logInUser
+  UserController.logInUser,
 );
+router.post("/email", UserController.sendEmail);
+router.post("/verifyOTP", UserController.verifyOTP);
 
 module.exports = router;
