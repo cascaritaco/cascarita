@@ -36,3 +36,9 @@
 .requiredText {
   line-height: 2;
 }
+
+.containerSmall.extraOptions {
+  flex-direction: column;
+  position: static;
+  padding: 0;
+}

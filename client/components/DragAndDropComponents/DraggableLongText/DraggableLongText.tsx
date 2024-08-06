@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
 import { DraggableLongTextProps } from "./types";
@@ -6,6 +6,7 @@ import styles from "./DraggableLongText.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
+import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
 
 const DraggableLongText: React.FC<DraggableLongTextProps> = ({
   id,
@@ -18,6 +19,25 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isContainerWidthMaxed, setIsContainerWidthMaxed] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setIsContainerWidthMaxed(
+          containerRef.current.offsetWidth < SMALL_DRAGGABLE_CONTAINER_WIDTH,
+        );
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleClick = () => {
     setIsMenuOpen((prev) => !prev);
@@ -32,7 +52,7 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
           {...provided.dragHandleProps}
           style={provided.draggableProps.style}
           onClick={handleClick}>
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative" }} ref={containerRef}>
             <p className={styles.textElementTypeText}>{t("longText")}</p>
             <div
               style={{
@@ -42,7 +62,26 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
                 border: "1px solid #DFE5EE",
                 borderRadius: 10,
               }}>
-              <div className={styles.extraOptions}>
+              <Controller
+                key={index}
+                name={`fields.${index}.title`}
+                control={control}
+                defaultValue={title} // Ensure the default value is set
+                render={({ field }) => (
+                  <>
+                    <input
+                      {...field}
+                      placeholder={t("questionPlaceholder")}
+                      className={styles.question}
+                    />
+                    <hr />
+                  </>
+                )}
+              />
+              <div
+                className={`${styles.extraOptions} ${
+                  isContainerWidthMaxed ? styles.containerSmall : ""
+                }`}>
                 {validations?.max_length != null && (
                   <>
                     <p className={styles.requiredText}>{t("maxCharacters")}</p>
@@ -92,22 +131,6 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
                   </>
                 )}
               </div>
-              <Controller
-                key={index}
-                name={`fields.${index}.title`}
-                control={control}
-                defaultValue={title} // Ensure the default value is set
-                render={({ field }) => (
-                  <>
-                    <input
-                      {...field}
-                      placeholder={t("questionPlaceholder")}
-                      className={styles.question}
-                    />
-                    <hr />
-                  </>
-                )}
-              />
               {isMenuOpen && (
                 <DraggableSubMenu
                   onDelete={onDelete}
