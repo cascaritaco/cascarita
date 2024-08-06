@@ -7,5 +7,6 @@
   "shortText": "Short Text",
   "questionPlaceholder": "Question",
   "requiredText": "Required",
-  "multipleSelection": "Multiple Selection"
+  "multipleSelection": "Multiple Selection",
+  "maxCharacters": "Max Characters"
 }

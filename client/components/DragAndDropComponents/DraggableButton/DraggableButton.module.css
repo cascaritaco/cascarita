@@ -1,3 +1,13 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 15px;
+  margin-top: 5px;
+  gap: 5px;
+}
+
 .buttonContainer {
   display: flex;
   border-radius: 10px;
@@ -6,9 +16,7 @@
   color: white;
   align-items: center;
   height: 51px;
-  width: 170px;
-  margin-bottom: 15px;
-  margin-top: 5px;
+  width: 185px;
 }
 
 .baseStyle {
@@ -23,8 +31,29 @@
   background-color: #b01254ff;
 }
 
-.buttonContainer > svg {
-  height: 17px;
-  width: 17px;
-  margin-right: 10px;
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonText {
+  flex: 1;
+  text-align: center;
+}
+
+.buttonContent {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.plusIcon {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  color: #4171ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
