@@ -100,7 +100,7 @@ const Leagues = () => {
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton
-              label="Add League"
+              label={t("button")}
               onClick={() => setIsCreateOpen(true)}
             />
           </Modal.Button>

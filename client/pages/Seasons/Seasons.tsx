@@ -21,7 +21,7 @@ const Seasons = () => {
   }>();
   const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
 
-  const { t } = useTranslation("Leagues");
+  const { t } = useTranslation("Seasons");
 
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
@@ -105,10 +105,10 @@ const Seasons = () => {
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton
-              label="Add Season"
+              label={t("button")}
               onClick={() => setIsCreateOpen(true)}></PrimaryButton>
           </Modal.Button>
-          <Modal.Content title="Create Season">
+          <Modal.Content title={t("formContent.title")}>
             <SeasonForm
               afterSave={() => setIsCreateOpen(false)}
               requestType="POST"
@@ -121,7 +121,7 @@ const Seasons = () => {
       {data == null || data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a Season to Display...</p>
       ) : (
-        <DashboardTable headers={["Season Name", "Start", "End", "Options"]}>
+        <DashboardTable headers={[t("col1"), t("col2"), t("col3"), t("col4")]}>
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -148,7 +148,7 @@ const Seasons = () => {
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
                       onClick={() => handleEdit(season.name, season.id)}>
-                      Edit
+                      {t("edit")}
                     </DropdownMenuButton.Item>
 
                     <DropdownMenuButton.Separator
@@ -157,7 +157,7 @@ const Seasons = () => {
 
                     <DropdownMenuButton.Item
                       onClick={() => handleDelete(season.name, season.id)}>
-                      Delete
+                      {t("delete")}
                     </DropdownMenuButton.Item>
                   </DropdownMenuButton>
                 </td>

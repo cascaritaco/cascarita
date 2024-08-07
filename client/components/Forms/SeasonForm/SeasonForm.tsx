@@ -13,6 +13,7 @@ import {
   useUpdateSeason,
 } from "./services/mutations";
 import DeleteForm from "../DeleteForm/DeleteForm";
+import { useTranslation } from "react-i18next";
 
 const SeasonForm: React.FC<SeasonFormProps> = ({
   afterSave,
@@ -20,6 +21,8 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
   seasonId,
   leagueId,
 }) => {
+  const { t } = useTranslation("Seasons");
+
   const [seasonName, setSeasonName] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
@@ -81,12 +84,12 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputContainer}>
             <label className={styles.label} htmlFor="seasonName">
-              Season Name
+              {t("formContent.name")}
             </label>
             <input
               className={styles.input}
               required
-              placeholder="Season Name"
+              placeholder={t("formContent.name")}
               id="seasonName"
               name="seasonName"
               value={seasonName}
@@ -97,7 +100,7 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
           <div className={styles.inputContainer}>
             <div className={styles.inputContainer}>
               <label className={styles.label} htmlFor="startDate">
-                Start Date
+                {t("formContent.start")}
               </label>
               <input
                 className={styles.input}
@@ -111,7 +114,7 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
             </div>
             <div className={styles.inputContainer}>
               <label className={styles.label} htmlFor="endDate">
-                End Date
+                {t("formContent.end")}
               </label>
               <input
                 className={styles.input}
@@ -127,13 +130,13 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
 
           <div className={styles.formBtnContainer}>
             <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
-              Cancel
+              {t("formContent.cancel")}
             </Modal.Close>
 
             <button
               type="submit"
               className={`${styles.btn} ${styles.submitBtn}`}>
-              {isLoading === true ? "Saving..." : "Submit"}
+              {isLoading === true ? "Saving..." : t("formContent.submit")}
             </button>
           </div>
         </form>
