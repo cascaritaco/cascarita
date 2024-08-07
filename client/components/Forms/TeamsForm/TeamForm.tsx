@@ -24,7 +24,6 @@ const TeamForm: React.FC<TeamFormProps> = ({
   divisionId,
 }) => {
   const [teamName, setTeamName] = React.useState("");
-  const [teamLogo, setTeamLogo] = React.useState<string | undefined>(undefined);
   const currentUser = useAuth();
 
   const createTeamMutation = useCreateTeam();

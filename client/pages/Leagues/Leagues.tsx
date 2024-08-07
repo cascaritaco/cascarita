@@ -21,7 +21,6 @@ const Leagues = () => {
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
   const [currentLeagueName, setCurrentLeagueName] = useState("");
-  const [currentLeagueDescription, setCurrentLeagueDescription] = useState("");
   const [currentLeagueId, setCurrentLeagueId] = useState(0);
 
   const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
@@ -38,13 +37,8 @@ const Leagues = () => {
     queryFn: getLeagueByGroupId,
   });
 
-  const handleEdit = (
-    leagueName: string,
-    leagueDescription: string,
-    leagueId: number,
-  ) => {
+  const handleEdit = (leagueName: string, leagueId: number) => {
     setCurrentLeagueName(leagueName);
-    setCurrentLeagueDescription(leagueDescription);
     setCurrentLeagueId(leagueId);
     setIsEditOpen(true);
   };
@@ -136,9 +130,7 @@ const Leagues = () => {
                 <td>
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
-                      onClick={() =>
-                        handleEdit(league.name, league.description, league.id)
-                      }>
+                      onClick={() => handleEdit(league.name, league.id)}>
                       Edit
                     </DropdownMenuButton.Item>
 
