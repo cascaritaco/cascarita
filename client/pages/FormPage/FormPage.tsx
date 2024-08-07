@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
 import { FormProvider, useForm } from "react-hook-form";
@@ -11,12 +11,15 @@ import {
   FieldComponents,
   Form,
 } from "./types";
+import { createMongoResponse } from "../../api/forms/service";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
 
 const FormPage = () => {
   const { formId } = useParams();
+  const navigate = useNavigate();
+
   const {
     data: form,
     isLoading,
@@ -37,7 +40,7 @@ const FormPage = () => {
   if (isLoading) return <div>Loading...</div>; // Show loading state
   if (error) return <div>An error occurred: {error.message}</div>; // Show error state
 
-  const onSubmit = (data: { answers: Answer[] }) => {
+  const onSubmit = async (data: { answers: Answer[] }) => {
     const normalizedAnswers: Answer[] =
       form?.form_data.fields.map((field: Field, index: number) => {
         const answerType =
@@ -52,8 +55,18 @@ const FormPage = () => {
           type: answerType,
         };
       }) ?? [];
-    // TODO: send this to the backend as an API call
-    return normalizedAnswers;
+
+    try {
+      const responsesData = await createMongoResponse(
+        formId ?? "",
+        normalizedAnswers,
+      );
+      navigate("/forms");
+      return responsesData;
+    } catch (error) {
+      console.error("Error creating responses:", error);
+      throw error;
+    }
   };
 
   return (

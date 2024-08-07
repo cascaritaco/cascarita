@@ -47,3 +47,32 @@ export interface GetFormsParams {
   sort_by?: SortBy | null;
   order_by?: OrderBy | null;
 }
+
+export type AnswerType =
+  | "text"
+  | "number"
+  | "date"
+  | "choice"
+  | "choices"
+  | "email"
+  | "phone_number"
+  | "boolean"
+  | "file_url";
+
+export interface Answer {
+  field: {
+    id: string;
+    type: string;
+    ref: string;
+  };
+  type: AnswerType;
+  number?: number;
+  text?: string;
+  phone_number?: string;
+  email?: string;
+  date?: Date;
+  boolean?: boolean;
+  choice?: { label: string };
+  choices?: { labels: string[] };
+  file_url?: string;
+}

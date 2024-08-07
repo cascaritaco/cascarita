@@ -2,10 +2,6 @@
 
 require("dotenv").config();
 
-const jsonParser = require("../utilityFunctions/responseParser");
-
-const RawResponse = require("./../mongoModels/raw_response");
-const ResponseId = require("./../mongoModels/response_id");
 const Response = require("./../mongoModels/response");
 const FormMongo = require("./../mongoModels/form");
 const { Form, User } = require("../models");
@@ -15,108 +11,44 @@ const FormController = {
     try {
       const mongoForms = await FormMongo.find({
         group_id: { $in: req.params.id },
-      }).select(
-        "form_data.id form_data.title form_data._links.display created_by updated_by createdAt updatedAt",
-      );
+      }).select("form_data.title created_by updated_by createdAt updatedAt");
 
       return res.status(201).json(mongoForms);
     } catch (error) {
       next(error);
     }
   },
-  async getResponses(req, res, next) {
+  async createResponse(req, res, next) {
     try {
-      const response = await fetch(
-        `https://api.typeform.com/forms/${req.params.form_id}/responses`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
-            "Content-Type": "application/json",
-          },
+      const insertedResponse = new Response({
+        form_id: req.body.form_id,
+        response: {
+          answers: req.body.data,
         },
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "typeform api call failed with status code of: " + response.status,
-        );
-      }
-
-      const responseBody = await response.json();
-
-      const rawResponse = new RawResponse({
-        form_id: req.params.form_id,
-        raw_response_data: responseBody,
       });
 
-      const results = await RawResponse.find({
+      await insertedResponse.save();
+
+      return res.status(201).json(insertedResponse);
+    } catch (error) {
+      next(error);
+    }
+  },
+  async getResponsesByFormId(req, res, next) {
+    try {
+      const responses = await Response.find({
         form_id: req.params.form_id,
       });
 
-      if (results.length === 0) {
-        await rawResponse.save();
-      } else {
-        await rawResponse.updateOne(
-          { _id: results._id },
-          { $set: { raw_response_data: responseBody } },
-        );
-      }
-
-      const responseIdEntries = await ResponseId.findOne({
-        form_id: req.params.form_id,
-      });
-
-      const uniqueResponseIds =
-        jsonParser.loadMapWithDocument(responseIdEntries);
-
-      const jsonResponseBody = JSON.stringify(responseBody);
-
-      const parsedResponse = jsonParser.parseResponseJSON(
-        jsonResponseBody,
-        uniqueResponseIds,
-        req.params.form_id,
-      );
-
-      const sortedResponses = new Response({
-        form_id: req.params.form_id,
-        response: parsedResponse,
-      });
-
-      const responsesToInsert = sortedResponses.response.map((res) => ({
-        form_id: req.params.form_id,
-        response: res,
-      }));
-
-      await Response.insertMany(responsesToInsert);
-
-      const individualResponses = await Response.find({
-        form_id: req.params.form_id,
-      });
-
-      return res.status(201).json(individualResponses);
+      return res.status(201).json(responses);
     } catch (error) {
       next(error);
     }
   },
   async createForm(req, res, next) {
     try {
-      const response = await fetch("https://api.typeform.com/forms", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req.body),
-      });
+      const form_data = { title: req.body.title, fields: req.body.fields };
 
-      if (!response.ok) {
-        throw new Error(
-          "typeform api call failed with status code of: " + response.status,
-        );
-      }
-
-      const responseBody = await response.json();
       const user = await User.findByPk(req.params.user_id, {
         attributes: { exclude: ["password"] },
       });
@@ -136,7 +68,7 @@ const FormController = {
         group_id: req.params.group_id,
         created_by: createdBy,
         updated_by: null,
-        form_data: responseBody,
+        form_data: form_data,
         form_blueprint: req.body,
       });
 

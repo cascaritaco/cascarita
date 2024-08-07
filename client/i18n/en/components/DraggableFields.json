@@ -6,5 +6,7 @@
   "phoneNumber": "Phone Number",
   "shortText": "Short Text",
   "questionPlaceholder": "Question",
-  "requiredText": "Required"
+  "requiredText": "Required",
+  "multipleSelection": "Multiple Selection",
+  "maxCharacters": "Max Characters"
 }

@@ -88,7 +88,7 @@ const NewForm = () => {
       currentUser?.group_id,
       currentUser?.id,
     );
-    setFormLink(response.form_data._links.display);
+    setFormLink(`${window.location.origin}/forms/${response._id}`);
     setFormId(response._id);
     setFields(response.form_data.fields);
   };

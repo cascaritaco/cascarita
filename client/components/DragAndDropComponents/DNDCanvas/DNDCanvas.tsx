@@ -51,19 +51,22 @@ const DNDCanvas = forwardRef(
       const fieldTemplate = {
         multiple_choice: {
           title: "",
+          id: item.id,
           ref: item.id,
-          properties: { choices: [] },
+          properties: { choices: [], allow_multiple_selection: false },
           validations: { required: false },
           type: item.type,
         },
         short_text: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { max_length: 20, required: false },
           type: item.type,
         },
         dropdown: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { choices: [] },
           validations: { required: false },
@@ -71,18 +74,21 @@ const DNDCanvas = forwardRef(
         },
         long_text: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { max_length: 100, required: false },
           type: item.type,
         },
         email: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { required: false },
           type: item.type,
         },
         phone_number: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { default_country_code: "US" },
           validations: { required: false },
@@ -138,6 +144,11 @@ const DNDCanvas = forwardRef(
         `fields.${index + 1}.validations`,
         methods.getValues(`fields.${index}.validations`),
       );
+
+      methods.setValue(
+        `fields.${index + 1}.properties`,
+        methods.getValues(`fields.${index}.properties`),
+      );
     };
 
     const onSubmit = (data: Form) => {
@@ -174,7 +185,8 @@ const DNDCanvas = forwardRef(
                           index={index}
                           title={field.title}
                           validations={field.validations}
-                          control={methods.control}
+                          properties={field.properties}
+                          control={control}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
                         />

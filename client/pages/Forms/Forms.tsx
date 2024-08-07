@@ -15,6 +15,7 @@ import {
   getMongoForms,
 } from "../../api/forms/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
+import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
 import ShareForm from "../../components/Forms/ShareForm/ShareForm";
@@ -83,7 +84,7 @@ const Forms = () => {
         title: form.form_data.title,
         description:
           form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form.form_data._links.display,
+        link: form.form_data.title,
         fields: form.form_data.fields,
       },
     });
@@ -113,6 +114,7 @@ const Forms = () => {
           </div>
         </div>
         <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
+        <ConnectWithStripeButton />
       </div>
       <div className={styles.cols}>
         <h3>{t("col1")}</h3>
