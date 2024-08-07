@@ -1,0 +1,18 @@
+{
+  "title": "Seasons",
+  "filter": "Filter",
+  "filterOptions": {
+    "item1": "Active",
+    "item2": "Inactive"
+  },
+  "sort": "Sort By",
+  "sortOptions": {
+    "item1": "Alphabetical",
+    "item2": "Date"
+  },
+  "button": "Add Season",
+  "col1": "Name",
+  "col2": "Start",
+  "col3": "End",
+  "col4": "Options"
+}

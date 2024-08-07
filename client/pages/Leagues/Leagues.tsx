@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getLeagueByGroupId } from "../../components/Forms/LeagueForm/service";
+import { getLeagueByGroupId } from "../../components/Forms/LeagueForm/services/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import { Link } from "react-router-dom";
 
@@ -20,10 +20,15 @@ const Leagues = () => {
 
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
+  const [currentLeagueName, setCurrentLeagueName] = useState("");
+  const [currentLeagueDescription, setCurrentLeagueDescription] = useState("");
+  const [currentLeagueId, setCurrentLeagueId] = useState(0);
 
   const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
-  const [open, setOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const { currentUser } = useAuth();
 
@@ -33,12 +38,25 @@ const Leagues = () => {
     queryFn: getLeagueByGroupId,
   });
 
+  const handleEdit = (
+    leagueName: string,
+    leagueDescription: string,
+    leagueId: number,
+  ) => {
+    setCurrentLeagueName(leagueName);
+    setCurrentLeagueDescription(leagueDescription);
+    setCurrentLeagueId(leagueId);
+    setIsEditOpen(true);
+  };
+
+  const handleDelete = (leagueName: string, leagueId: number) => {
+    setCurrentLeagueName(leagueName);
+    setCurrentLeagueId(leagueId);
+    setIsDeleteOpen(true);
+  };
+
   return (
     <Page>
-      <div className={styles.breadcrumb}>
-        <Link to={`/home`}>Home</Link>
-      </div>
-
       <h1 className={styles.h1}>{t("title")}</h1>
 
       <div className={styles.filterSearch}>
@@ -79,14 +97,18 @@ const Leagues = () => {
           </div>
         </div>
 
-        <Modal open={open} onOpenChange={setOpen}>
+        <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton
               label="Add League"
-              onClick={() => setOpen(true)}></PrimaryButton>
+              onClick={() => setIsCreateOpen(true)}
+            />
           </Modal.Button>
           <Modal.Content title="Create League">
-            <LeagueForm afterSave={() => setOpen(false)} />
+            <LeagueForm
+              afterSave={() => setIsCreateOpen(false)}
+              requestType="POST"
+            />
           </Modal.Content>
         </Modal>
       </div>
@@ -94,7 +116,7 @@ const Leagues = () => {
       {data == null || data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a League to Display...</p>
       ) : (
-        <DashboardTable headers={["Name", "Options"]}>
+        <DashboardTable headers={["League Name", "Options"]}>
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -107,18 +129,54 @@ const Leagues = () => {
             data?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/league/${league.id}/${league.name}`}>
+                  <Link to={`/season/${league.id}/${league.name}`}>
                     {league.name}
                   </Link>
                 </td>
                 <td>
-                  <DropdownMenuButton />
+                  <DropdownMenuButton>
+                    <DropdownMenuButton.Item
+                      onClick={() =>
+                        handleEdit(league.name, league.description, league.id)
+                      }>
+                      Edit
+                    </DropdownMenuButton.Item>
+
+                    <DropdownMenuButton.Separator
+                      className={styles.separator}
+                    />
+
+                    <DropdownMenuButton.Item
+                      onClick={() => handleDelete(league.name, league.id)}>
+                      Delete
+                    </DropdownMenuButton.Item>
+                  </DropdownMenuButton>
                 </td>
               </tr>
             ))
           )}
         </DashboardTable>
       )}
+
+      <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <Modal.Content title={`Edit ${currentLeagueName}`}>
+          <LeagueForm
+            afterSave={() => setIsEditOpen(false)}
+            requestType="PATCH"
+            leagueId={currentLeagueId}
+          />
+        </Modal.Content>
+      </Modal>
+
+      <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <Modal.Content title={`Delete ${currentLeagueName}`}>
+          <LeagueForm
+            afterSave={() => setIsDeleteOpen(false)}
+            requestType="DELETE"
+            leagueId={currentLeagueId}
+          />
+        </Modal.Content>
+      </Modal>
     </Page>
   );
 };

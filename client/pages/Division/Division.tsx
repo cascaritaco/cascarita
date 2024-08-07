@@ -11,7 +11,7 @@ import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import { useQuery } from "@tanstack/react-query";
-import { getDivisionsBySeasonId } from "../../components/Forms/DivisionForm/service";
+import { getDivisionsBySeasonId } from "../../components/Forms/DivisionForm/services/service";
 import DivisionForm from "../../components/Forms/DivisionForm/DivisionForm";
 
 const Divisions = () => {
@@ -23,35 +23,34 @@ const Divisions = () => {
 
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
+  const [currentDivisionName, setCurrentDivisionName] = useState("");
+  const [currentDivisionId, setCurrentDivisionId] = useState(0);
 
   const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
-  const [open, setOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["divisions", seasonIdNumber],
     queryFn: getDivisionsBySeasonId,
   });
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  const handleEdit = (divisionName: string, divisionId: number) => {
+    setCurrentDivisionName(divisionName);
+    setCurrentDivisionId(divisionId);
+    setIsEditOpen(true);
+  };
+
+  const handleDelete = (divisionName: string, divisionId: number) => {
+    setCurrentDivisionName(divisionName);
+    setCurrentDivisionId(divisionId);
+    setIsDeleteOpen(true);
   };
 
   return (
     <Page>
-      <div className={styles.breadcrumb}>
-        <Link to={`/home`}>Home</Link>
-        <h3> / </h3>
-        <Link to={window.location.pathname}>Seasons</Link>
-        <h3> / </h3>
-        <Link to={window.location.pathname}>{seasonName}</Link>
-      </div>
-
       <h1 className={styles.h1}>{seasonName}</h1>
 
       <div className={styles.filterSearch}>
@@ -92,15 +91,16 @@ const Divisions = () => {
           </div>
         </div>
 
-        <Modal open={open} onOpenChange={setOpen}>
+        <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton
               label="Add Divison"
-              onClick={() => setOpen(true)}></PrimaryButton>
+              onClick={() => setIsCreateOpen(true)}></PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Division">
             <DivisionForm
-              afterSave={() => setOpen(false)}
+              afterSave={() => setIsCreateOpen(false)}
+              requestType="POST"
               seasonId={seasonIdNumber}
             />
           </Modal.Content>
@@ -110,7 +110,7 @@ const Divisions = () => {
       {data == null || data?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a Division to Display...</p>
       ) : (
-        <DashboardTable headers={["Name", "Options"]}>
+        <DashboardTable headers={["Division Name", "Options"]}>
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -123,18 +123,53 @@ const Divisions = () => {
             data?.map((division: DivisionType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/divisions/${seasonIdNumber}/${seasonName}`}>
+                  <Link
+                    to={`/teams/seasons/${seasonIdNumber}/division/${division.id}/${division.name}`}>
                     {division.name}
                   </Link>
                 </td>
                 <td>
-                  <DropdownMenuButton />
+                  <DropdownMenuButton>
+                    <DropdownMenuButton.Item
+                      onClick={() => handleEdit(division.name, division.id)}>
+                      Edit
+                    </DropdownMenuButton.Item>
+
+                    <DropdownMenuButton.Separator
+                      className={styles.separator}
+                    />
+
+                    <DropdownMenuButton.Item
+                      onClick={() => handleDelete(division.name, division.id)}>
+                      Delete
+                    </DropdownMenuButton.Item>
+                  </DropdownMenuButton>
                 </td>
               </tr>
             ))
           )}
         </DashboardTable>
       )}
+
+      <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <Modal.Content title={`Edit ${currentDivisionName}`}>
+          <DivisionForm
+            afterSave={() => setIsEditOpen(false)}
+            requestType="PATCH"
+            divisionId={currentDivisionId}
+          />
+        </Modal.Content>
+      </Modal>
+
+      <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <Modal.Content title={`Edit ${currentDivisionName}`}>
+          <DivisionForm
+            afterSave={() => setIsDeleteOpen(false)}
+            requestType="DELETE"
+            divisionId={currentDivisionId}
+          />
+        </Modal.Content>
+      </Modal>
     </Page>
   );
 };

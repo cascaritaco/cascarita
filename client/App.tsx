@@ -28,15 +28,15 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route
-                path="/league/:leagueId/:leagueName"
+                path="/season/:leagueId/:leagueName"
                 element={<Seasons />}
               />
               <Route
-                path="/seasons/:seasonId/:seasonName"
+                path="/division/:seasonId/:seasonName"
                 element={<Divisions />}
               />
               <Route
-                path="/divisions/:divisionId/:divisionName"
+                path="/teams/seasons/:seasonId/division/:divisionId/:divisionName"
                 element={<Teams />}
               />
               <Route path="/users" element={<Users />} />

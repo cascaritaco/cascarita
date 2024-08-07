@@ -1,6 +1,7 @@
 "use strict";
 const { Team, Group, Division, TeamsSession, Session } = require("./../models");
 const TeamsSessionController = require("../controllers/teamSession.controller");
+const { getSessionByDivisionAndSeasonId } = require("./session.controller");
 
 const TeamController = function () {
   var getTeamsByGroupId = async function (req, res, next) {
@@ -33,7 +34,7 @@ const TeamController = function () {
           {
             model: TeamsSession,
             required: true,
-            attributes: [],
+            attributes: ["session_id"],
             include: [
               {
                 model: Session,
@@ -71,8 +72,8 @@ const TeamController = function () {
   };
 
   var createTeam = async function (req, res, next) {
-    const { group_id, name, team_logo } = req.body;
-    const newTeam = { group_id, name, team_logo };
+    const { group_id, name, team_logo, division_id, season_id } = req.body;
+    const newTeam = { group_id, name, team_logo, division_id, season_id };
 
     try {
       const group = await Group.findOne({
@@ -97,6 +98,18 @@ const TeamController = function () {
 
       await Team.build(newTeam).validate();
       const result = await Team.create(newTeam);
+
+      if (division_id && season_id) {
+        const session_id = await getSessionByDivisionAndSeasonId(
+          division_id,
+          season_id,
+        );
+        console.log(session_id);
+        const team_id = result.id;
+        const newTeamSession = { team_id, session_id };
+        await TeamsSession.build(newTeamSession).validate();
+        await TeamsSession.create(newTeamSession);
+      }
 
       return res.status(201).json(result);
     } catch (error) {

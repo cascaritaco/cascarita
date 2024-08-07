@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services";
+import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services/services";
 import { SeasonType } from "./types";
 import styles from "../Leagues/Leagues.module.css";
 
@@ -25,10 +25,14 @@ const Seasons = () => {
 
   const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
+  const [currentSeasonName, setCurrentSeasonName] = useState("");
+  const [currentSeasonId, setCurrentSeasonId] = useState(0);
 
   const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
-  const [open, setOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["seasons", leagueIdNumber],
@@ -44,14 +48,20 @@ const Seasons = () => {
     });
   };
 
+  const handleEdit = (seasonName: string, seasonId: number) => {
+    setCurrentSeasonName(seasonName);
+    setCurrentSeasonId(seasonId);
+    setIsEditOpen(true);
+  };
+
+  const handleDelete = (seasonName: string, seasonId: number) => {
+    setCurrentSeasonName(seasonName);
+    setCurrentSeasonId(seasonId);
+    setIsDeleteOpen(true);
+  };
+
   return (
     <Page>
-      <div className={styles.breadcrumb}>
-        <Link to={`/home`}>Home</Link>
-        <h3> / </h3>
-        <Link to={window.location.pathname}>{leagueName}</Link>
-      </div>
-
       <h1 className={styles.h1}> {leagueName} </h1>
 
       <div className={styles.filterSearch}>
@@ -92,15 +102,16 @@ const Seasons = () => {
           </div>
         </div>
 
-        <Modal open={open} onOpenChange={setOpen}>
+        <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton
               label="Add Season"
-              onClick={() => setOpen(true)}></PrimaryButton>
+              onClick={() => setIsCreateOpen(true)}></PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Season">
             <SeasonForm
-              afterSave={() => setOpen(false)}
+              afterSave={() => setIsCreateOpen(false)}
+              requestType="POST"
               leagueId={leagueIdNumber}
             />
           </Modal.Content>
@@ -123,7 +134,7 @@ const Seasons = () => {
             data?.map((season: SeasonType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/seasons/${season.id}/${season.name}`}>
+                  <Link to={`/division/${season.id}/${season.name}`}>
                     {season.name}
                   </Link>
                 </td>
@@ -134,13 +145,47 @@ const Seasons = () => {
                   {formatDate(season.end_date)}
                 </td>
                 <td>
-                  <DropdownMenuButton />
+                  <DropdownMenuButton>
+                    <DropdownMenuButton.Item
+                      onClick={() => handleEdit(season.name, season.id)}>
+                      Edit
+                    </DropdownMenuButton.Item>
+
+                    <DropdownMenuButton.Separator
+                      className={styles.separator}
+                    />
+
+                    <DropdownMenuButton.Item
+                      onClick={() => handleDelete(season.name, season.id)}>
+                      Delete
+                    </DropdownMenuButton.Item>
+                  </DropdownMenuButton>
                 </td>
               </tr>
             ))
           )}
         </DashboardTable>
       )}
+
+      <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <Modal.Content title={`Edit ${currentSeasonName}`}>
+          <SeasonForm
+            afterSave={() => setIsEditOpen(false)}
+            requestType="PATCH"
+            seasonId={currentSeasonId}
+          />
+        </Modal.Content>
+      </Modal>
+
+      <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <Modal.Content title={`Delete ${currentSeasonName}`}>
+          <SeasonForm
+            afterSave={() => setIsDeleteOpen(false)}
+            requestType="DELETE"
+            seasonId={currentSeasonId}
+          />
+        </Modal.Content>
+      </Modal>
     </Page>
   );
 };

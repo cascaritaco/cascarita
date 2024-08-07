@@ -35,6 +35,12 @@
   width: 150px;
 }
 
+.noLeagueMessage {
+  text-align: center;
+  margin-top: 200px;
+  font-size: 2rem;
+}
+
 .tableRow {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
@@ -42,4 +48,10 @@
 
 .tableData {
   padding: 12px 0;
+}
+
+.separator {
+  border-bottom: 1px solid #c8cbd0;
+  margin-bottom: 3px;
+  margin-top: 3px;
 }
