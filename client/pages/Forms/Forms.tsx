@@ -139,7 +139,11 @@ const Forms = () => {
                 onEdit={() => onEdit(form._id)}
               />
               <button
-                onClick={() => handleShareClick(form.form_data._links.display)}>
+                onClick={() =>
+                  handleShareClick(
+                    `${window.location.origin}/forms/${form._id}`,
+                  )
+                }>
                 <ShareButton />
               </button>
             </div>

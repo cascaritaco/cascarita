@@ -13,7 +13,7 @@ import {
   useCreateLeague,
   useDeleteLeague,
   useUpdateLeague,
-} from "./services/mutations";
+} from "../../../api/leagues/mutations";
 
 const LeagueForm: React.FC<LeagueFormProps> = ({
   afterSave,
@@ -53,7 +53,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
         } as UpdateLeagueData);
         break;
       case "DELETE":
-        await deleteLeagueMutation.mutateAsync({
+        deleteLeagueMutation.mutate({
           id: leagueId ? leagueId : 0,
         } as DeleteLeagueData);
         break;
@@ -71,7 +71,7 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
           destructBtnLabel="Yes, I'm sure"
           onSubmit={handleSubmit}
           className={styles.form}>
-          <p>{`Are you sure you want to delete?`}</p>
+          <p>Are you sure you want to delete?</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>

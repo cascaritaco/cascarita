@@ -21,7 +21,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ className }) => {
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const onDropAccepted = useCallback((acceptedFiles: File[]) => {
-    console.log(acceptedFiles[0]);
     const file = new FileReader();
 
     file.onload = () => {

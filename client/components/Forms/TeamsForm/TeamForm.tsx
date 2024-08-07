@@ -13,7 +13,7 @@ import {
   useCreateTeam,
   useDeleteTeam,
   useUpdateTeam,
-} from "./services/mutations";
+} from "../../../api/teams/mutations";
 import DeleteForm from "../DeleteForm/DeleteForm";
 
 const TeamForm: React.FC<TeamFormProps> = ({
@@ -58,7 +58,7 @@ const TeamForm: React.FC<TeamFormProps> = ({
         } as UpdateTeamData);
         break;
       case "DELETE":
-        await deleteTeamMutation.mutateAsync({
+        deleteTeamMutation.mutate({
           id: teamId ? teamId : 0,
         } as DeleteTeamData);
         break;

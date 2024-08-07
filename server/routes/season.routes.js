@@ -12,7 +12,6 @@ router.get("/:id/leagues", SeasonController.getSeasonsByLeagueId);
 router.get("/:id/divisions", DivisionController.getBySeasonId);
 router.get("/:seasonId/seasonId", DivisionController.getAllDivsionsBySeason);
 router.post("/", SeasonController.createSeason);
-router.post("/dummy/:division_id/:season_id", SessionController.createSession);
 router.patch("/:id", SeasonController.updateSeason);
 router.delete("/:id", SeasonController.deleteSeason);
 

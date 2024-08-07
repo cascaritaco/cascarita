@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getLeagueByGroupId } from "../../components/Forms/LeagueForm/services/service";
+import { getLeagueByGroupId } from "../../api/leagues/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 import { Link } from "react-router-dom";
 

@@ -5,7 +5,7 @@ import Search from "../../components/Search/Search";
 import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
-import { getTeamsBySeasonDivisionId } from "../../components/Forms/TeamsForm/services/service";
+import { getTeamsBySeasonDivisionId } from "../../api/teams/service";
 import { useParams } from "react-router-dom";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useQuery } from "@tanstack/react-query";

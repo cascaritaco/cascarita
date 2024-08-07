@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNewTeam, updateTeam, deleteTeam } from "./service";
-import { CreateNewTeamData, UpdateTeamData, DeleteTeamData } from "../types";
+import {
+  CreateNewTeamData,
+  UpdateTeamData,
+  DeleteTeamData,
+} from "../../components/Forms/TeamsForm/types";
 
 export const useCreateTeam = () => {
   const queryClient = useQueryClient();
@@ -27,7 +31,7 @@ export const useUpdateTeam = () => {
     },
     onSettled: async (_, error, variables) => {
       if (error) {
-        console.log(`Error from Update: ${error}`);
+        console.error(`Error from Update Team: ${error}`);
       } else {
         await queryClient.invalidateQueries({ queryKey: ["update"] });
         await queryClient.invalidateQueries({
@@ -50,7 +54,7 @@ export const useDeleteTeam = () => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        console.log(`Error from Delete: ${error}`);
+        console.error(`Error from Delete Team: ${error}`);
       } else {
         await queryClient.invalidateQueries({ queryKey: ["teams"] });
       }

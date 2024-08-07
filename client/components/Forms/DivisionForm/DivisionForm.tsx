@@ -11,7 +11,7 @@ import {
   useCreateDivision,
   useUpdateDivision,
   useDeleteDivision,
-} from "./services/mutations";
+} from "../../../api/divisions/mutations";
 import { useAuth } from "../../AuthContext/AuthContext";
 import DeleteForm from "../DeleteForm/DeleteForm";
 
@@ -35,7 +35,6 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
     const { divisionName } = Object.fromEntries(
       new FormData(event.currentTarget),
     );
-    console.log("Enter handled submit");
 
     const data = {
       formData: {
@@ -56,7 +55,7 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
         } as UpdateDivisionData);
         break;
       case "DELETE":
-        await deleteDivisionMutation.mutateAsync({
+        deleteDivisionMutation.mutate({
           id: divisionId ? divisionId : 0,
         } as DeleteDivisionData);
         break;
@@ -74,7 +73,7 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
           className={styles.form}
           destructBtnLabel="Yes, I am sure"
           onSubmit={handleSubmit}>
-          Are you sure you want to delete this division?
+          <p>Are you sure you want to delete this division?</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>

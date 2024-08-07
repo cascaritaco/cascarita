@@ -4,7 +4,7 @@ import {
   CreateNewDivisionData,
   UpdateDivisionData,
   DeleteDivisionData,
-} from "../types";
+} from "../../components/Forms/DivisionForm/types";
 
 export const useCreateDivision = () => {
   const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ export const useUpdateDivision = () => {
     },
     onSettled: async (_, error, variables) => {
       if (error) {
-        console.log(`Error from Update: ${error}`);
+        console.error(`Error from Update Division: ${error}`);
       } else {
         await queryClient.invalidateQueries({ queryKey: ["divisions"] });
         await queryClient.invalidateQueries({
@@ -54,7 +54,7 @@ export const useDeleteDivision = () => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        console.log(`Error from Delete: ${error}`);
+        console.error(`Error from Delete Division: ${error}`);
       } else {
         await queryClient.invalidateQueries({ queryKey: ["divisions"] });
       }

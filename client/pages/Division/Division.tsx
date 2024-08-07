@@ -11,7 +11,7 @@ import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import { useQuery } from "@tanstack/react-query";
-import { getDivisionsBySeasonId } from "../../components/Forms/DivisionForm/services/service";
+import { getDivisionsBySeasonId } from "../../api/divisions/service";
 import DivisionForm from "../../components/Forms/DivisionForm/DivisionForm";
 
 const Divisions = () => {

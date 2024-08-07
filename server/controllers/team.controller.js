@@ -104,7 +104,6 @@ const TeamController = function () {
           division_id,
           season_id,
         );
-        console.log(session_id);
         const team_id = result.id;
         const newTeamSession = { team_id, session_id };
         await TeamsSession.build(newTeamSession).validate();

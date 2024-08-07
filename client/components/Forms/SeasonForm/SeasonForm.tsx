@@ -11,7 +11,7 @@ import {
   useCreateSeason,
   useDeleteSeason,
   useUpdateSeason,
-} from "./services/mutations";
+} from "../../../api/seasons/mutations";
 import DeleteForm from "../DeleteForm/DeleteForm";
 import { useTranslation } from "react-i18next";
 
@@ -60,7 +60,7 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
         } as UpdateSeasonData);
         break;
       case "DELETE":
-        await deleteSeasonMutation.mutateAsync({
+        deleteSeasonMutation.mutate({
           id: seasonId ? seasonId : 0,
         } as DeleteSeasonData);
         break;

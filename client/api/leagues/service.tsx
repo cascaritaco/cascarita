@@ -1,19 +1,19 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import {
-  CreateNewSeasonData,
-  DeleteSeasonData,
-  SeasonResponse,
-  UpdateSeasonData,
-} from "../types";
+  LeagueResponse,
+  CreateNewLeagueData,
+  UpdateLeagueData,
+  DeleteLeagueData,
+} from "../../components/Forms/LeagueForm/types";
 
 type UserQueryKey = [string, number];
 
-const getSeasonsByLeagueId = async ({
+const getLeagueByGroupId = async ({
   queryKey,
 }: QueryFunctionContext<UserQueryKey>) => {
-  const [, leagueId] = queryKey;
+  const [, groupId] = queryKey;
   try {
-    const response = await fetch(`/api/seasons/${leagueId}/leagues`, {
+    const response = await fetch(`/api/groups/${groupId}/leagues`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,34 +22,35 @@ const getSeasonsByLeagueId = async ({
     });
     return response.json();
   } catch (error) {
-    console.error("Error fetching seasons by league id: ", error);
+    console.error("Error fetching league: ", error);
     throw error;
   }
 };
 
-const createNewSeason = async (
-  data: CreateNewSeasonData,
-): Promise<SeasonResponse> => {
+const createNewLeague = async (
+  data: CreateNewLeagueData,
+): Promise<LeagueResponse> => {
   try {
-    const response = await fetch("/api/seasons", {
+    const response = await fetch("/api/leagues", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data.formData),
     });
+
     return response.json();
   } catch (error) {
-    console.error("Error creating season:", error);
+    console.error("Error creating league: ", error);
     throw error;
   }
 };
 
-const updateSeason = async (
-  data: UpdateSeasonData,
-): Promise<SeasonResponse> => {
+const updateLeague = async (
+  data: UpdateLeagueData,
+): Promise<LeagueResponse> => {
   try {
-    const response = await fetch(`/api/seasons/${data.id}`, {
+    const response = await fetch(`/api/leagues/${data.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -63,9 +64,9 @@ const updateSeason = async (
   }
 };
 
-const deleteSeason = async (data: DeleteSeasonData): Promise<void> => {
+const deleteLeague = async (data: DeleteLeagueData): Promise<void> => {
   try {
-    const response = await fetch(`/api/seasons/${data.id}`, {
+    const response = await fetch(`api/leagues/${data.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -78,12 +79,11 @@ const deleteSeason = async (data: DeleteSeasonData): Promise<void> => {
     ) {
       return;
     }
-
     return response.json();
   } catch (error) {
-    console.error("Error deleting season: ", error);
+    console.error("Error deleting league: ", error);
     throw error;
   }
 };
 
-export { createNewSeason, getSeasonsByLeagueId, updateSeason, deleteSeason };
+export { getLeagueByGroupId, createNewLeague, updateLeague, deleteLeague };

@@ -8,7 +8,6 @@ const Home = () => {
     <>
       {currentUser ? (
         <div>
-          {/* <h1> Welcome {currentUser.first_name} </h1> <Leagues /> */}
           <Leagues />
         </div>
       ) : (

@@ -4,7 +4,7 @@ import {
   DeleteDivisionData,
   DivisionResponse,
   UpdateDivisionData,
-} from "../types";
+} from "../../components/Forms/DivisionForm/types";
 
 type UserQueryKey = [string, number];
 

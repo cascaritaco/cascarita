@@ -1,39 +1,39 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNewSeason, updateSeason, deleteSeason } from "./services";
+import { createNewLeague, updateLeague, deleteLeague } from "./service";
 import {
-  CreateNewSeasonData,
-  UpdateSeasonData,
-  DeleteSeasonData,
-} from "../types";
+  CreateNewLeagueData,
+  DeleteLeagueData,
+  UpdateLeagueData,
+} from "../../components/Forms/LeagueForm/types";
 
-export const useCreateSeason = () => {
+export const useCreateLeague = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateNewSeasonData) => createNewSeason(data),
+    mutationFn: (data: CreateNewLeagueData) => createNewLeague(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["seasons"],
+        queryKey: ["leagues"],
       });
     },
   });
 };
 
-export const useUpdateSeason = () => {
+export const useUpdateLeague = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateSeasonData) => updateSeason(data),
+    mutationFn: (data: UpdateLeagueData) => updateLeague(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["seasons"],
+        queryKey: ["leagues"],
       });
     },
     onSettled: async (_, error, variables) => {
       if (error) {
         console.log(`Error from Update: ${error}`);
       } else {
-        await queryClient.invalidateQueries({ queryKey: ["seasons"] });
+        await queryClient.invalidateQueries({ queryKey: ["leagues"] });
         await queryClient.invalidateQueries({
           queryKey: ["seasons", { id: variables.id }],
         });
@@ -42,21 +42,21 @@ export const useUpdateSeason = () => {
   });
 };
 
-export const useDeleteSeason = () => {
+export const useDeleteLeague = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: DeleteSeasonData) => deleteSeason(data),
+    mutationFn: (data: DeleteLeagueData) => deleteLeague(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["seasons"],
+        queryKey: ["leagues"],
       });
     },
     onSettled: async (_, error) => {
       if (error) {
         console.log(`Error from Delete: ${error}`);
       } else {
-        await queryClient.invalidateQueries({ queryKey: ["seasons"] });
+        await queryClient.invalidateQueries({ queryKey: ["leagues"] });
       }
     },
   });

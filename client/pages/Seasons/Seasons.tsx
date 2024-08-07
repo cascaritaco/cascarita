@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getSeasonsByLeagueId } from "../../components/Forms/SeasonForm/services/services";
+import { getSeasonsByLeagueId } from "../../api/seasons/services";
 import { SeasonType } from "./types";
 import styles from "../Leagues/Leagues.module.css";
 

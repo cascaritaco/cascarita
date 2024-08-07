@@ -206,7 +206,6 @@ async function isNameUniqueWithinLeague(name, leagueId) {
       name: name,
     },
   });
-  console.log(league);
 
   return league === null;
 }
