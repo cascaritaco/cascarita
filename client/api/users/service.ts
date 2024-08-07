@@ -22,4 +22,33 @@ const updateUsersLanguages = async (
   }
 };
 
-export { updateUsersLanguages };
+const registerUser = async (
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+) => {
+  try {
+    const registerData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    };
+    const response = await fetch(`/api/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registerData),
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error registering user:', error);
+    throw error;
+  }
+};
+
+export { updateUsersLanguages, registerUser };
