@@ -2,33 +2,34 @@ version: "3.8"
 
 services:
   server:
+    platform: linux/arm64
+    restart: unless-stopped
+    image: cascarita-server
     build:
       context: .
       dockerfile: server/Dockerfile
+    volumes:
+      - ./server:/app/server
+      - ./dist:/app/dist
     # NOTE, if you change the .env SERVER_PORT, please update here to match
     # Please update in the corresponding Dockerfile as well
     ports:
       - "3001:3001"
       - "3306:3306"
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-      - /app/node_modules
-    working_dir: /app
     command: npm run server
 
   client:
+    platform: linux/arm64
+    restart: unless-stopped
+    image: cascarita-client
     build:
       context: .
       dockerfile: client/Dockerfile
-    env_file:
-      - .env
     # NOTE, if you change the .env CLIENT_PORT, please update here to match
     # Please update in the corresponding Dockerfile as well
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
-    working_dir: /app
+      - ./client:/app/client
+      - ./dist:/app/dist
     command: npm run client
