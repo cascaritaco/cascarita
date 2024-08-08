@@ -38,3 +38,22 @@
   gap: 5px;
   flex-direction: row;
 }
+
+@media (max-width: 600px) {
+  .question {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .input {
+    padding: 7px;
+    font-size: 16px;
+    line-height: 22px;
+    border-radius: 10px;
+  }
+
+  .errorMessage {
+    font-size: 12px;
+    padding-bottom: 7px;
+  }
+}
