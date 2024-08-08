@@ -17,7 +17,7 @@ const UserController = function () {
     return userFound == null;
   };
 
-  var generateOTP = async function () {
+  var generateOTP = function () {
     const length = 6;
     const otp = crypto.randomInt(
       Math.pow(10, length - 1),
@@ -109,7 +109,7 @@ const UserController = function () {
     }
   };
 
-  var updateUser = async function (req, res, next) {
+  var updateUserById = async function (req, res, next) {
     try {
       const { id } = req.params;
 
@@ -138,84 +138,121 @@ const UserController = function () {
     }
   };
 
-  var sendEmail = async function (req, res, next) {
+  var updateUserByEmail = async function (req, res, next) {
     try {
-      const apiKey = process.env.BREVO_API_KEY;
-      const url = "https://api.brevo.com/v3/smtp/email";
+      const user = await User.findOne({
+        where: {
+          email: req.body.email,
+        },
+      });
 
-      const emailType = req.body.emailType;
-      const typeformLink = req.body.formLink || "";
+      if (!user) {
+        res.status(404);
+        throw new Error(`no user was found with email ${user.email}`);
+      }
+
+      delete req.body.email;
+
+      req.params = { id: user.id };
+
+      const response = await updateUserById(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var sendEmail = async function (recipientEmail, subject, emailContent) {
+    const apiKey = process.env.BREVO_API_KEY;
+    const url = "https://api.brevo.com/v3/smtp/email";
+
+    const senderEmail = "jgomez.cascarita@gmail.com"; // (i.e. no-reply-cascarita@gmail.com) once
+    const senderName = "Cascarita";
+    const type = "classic";
+
+    const body = JSON.stringify({
+      sender: { name: senderName, email: senderEmail },
+      to: [{ email: recipientEmail }],
+      type: type,
+      subject,
+      htmlContent: emailContent,
+    });
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "api-key": apiKey,
+      },
+      body,
+    });
+
+    const responseData = await response.json();
+
+    return { status: response.ok, responseData };
+  };
+
+  var sendOtpEmail = async function (req, res, next) {
+    try {
       const recipientEmail = req.body.email;
 
-      const senderEmail = "jgomez.cascarita@gmail.com"; //Ask Armando if we could use a fake email instead of ours (i.e. no-reply-cascarita@gmail.com)
-      const senderName = "Cascarita";
-      const type = "classic";
+      const authCode = generateOTP();
+      const subject = "Cascarita - Reset Your Password";
+      const emailContent = `
+          <html>
+            <body>
+              <p>Hello,</p>
+              <p>Use this code to reset your password:</p>
+              <h1><strong>${authCode}</strong></h1>
+              <p>Thank you!</p>
+            </body>
+          </html>`;
 
-      const authCode =
-        emailType === "passwordCode" ? await generateOTP() : null;
+      const response = await sendEmail(recipientEmail, subject, emailContent);
 
-      const emailTypes = {
-        passwordCode: {
-          subject: "Cascarita - Reset Your Password",
-          type: "classic",
-          emailContent: `
-        <html>
-          <body>
-            <p>Hello,</p>
-            <p>Use this code to reset your password:</p>
-            <h1><strong>${authCode}</strong></h1>
-            <p>Thank you!</p>
-          </body>
-        </html>`,
-        },
-        formLink: {
-          subject: "Cascarita - Please fill out this form",
-          emailContent: `
+      if (response.status) {
+        const newAuthCode = {
+          email: recipientEmail,
+          code: await hashOtp(authCode),
+          attempts: 0,
+          start_date: new Date(),
+          expiration_date: new Date(new Date().getTime() + 15 * 60000),
+        };
+
+        await AuthCode.build(newAuthCode).validate();
+        await AuthCode.create(newAuthCode);
+      } else {
+        throw new Error(
+          `failed to send email: ${response.responseData.message}, ${response.responseData.code}`,
+        );
+      }
+
+      return res.status(200).json({ data: response });
+    } catch (error) {
+      console.error("failed to send otp email:", error);
+      next(error);
+    }
+  };
+
+  var sendFormLinkEmail = async function (req, res, next) {
+    try {
+      const recipientEmail = req.body.email;
+      const formLink = req.body.formLink;
+
+      const subject = "Cascarita - Please fill out this form";
+      const emailContent = `
         <html>
           <body>
             <p>Hello,</p>
             <p>Please fill out the following form:</p>
-            <a href="${typeformLink}">Fill out the form</a>
+            <a href="${formLink}">Fill out the form</a>
             <p>Thank you!</p>
           </body>
-        </html>`,
-        },
-      };
+        </html>`;
 
-      const { subject, emailContent } = emailTypes[emailType] || {};
+      const response = await sendEmail(recipientEmail, subject, emailContent);
 
-      const body = JSON.stringify({
-        sender: { name: senderName, email: senderEmail },
-        to: [{ email: recipientEmail }],
-        type: type,
-        subject,
-        htmlContent: emailContent,
-      });
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "api-key": apiKey,
-        },
-        body,
-      });
-
-      const responseData = await response.json();
-
-      const newAuthCode = {
-        email: req.body.email,
-        code: await hashOtp(authCode),
-        attempts: 0,
-        start_date: new Date(),
-        expiration_date: new Date(new Date().getTime() + 15 * 60000),
-      };
-
-      await AuthCode.build(newAuthCode).validate();
-      await AuthCode.create(newAuthCode);
-
-      return res.status(200).json({ data: responseData });
+      return res.status(200).json({ data: response });
     } catch (error) {
       console.error("failed to send email:", error);
       next(error);
@@ -224,6 +261,7 @@ const UserController = function () {
 
   var verifyOTP = async function (req, res, next) {
     try {
+      const MAX_OPT_ATTEMPTS = 5;
       const otp = req.body.otp;
 
       const response = await AuthCode.findAll({
@@ -239,6 +277,11 @@ const UserController = function () {
       if (!userOtp) {
         res.status(404);
         throw new Error(`no entry was found with email: ${req.body.email}`);
+      }
+
+      if (userOtp.attempts >= MAX_OPT_ATTEMPTS) {
+        res.status(401);
+        throw new Error("reached max number of attempts. generate a new code");
       }
 
       if (userOtp.expiration_date < new Date()) {
@@ -275,8 +318,10 @@ const UserController = function () {
     registerUser,
     logInUser,
     getUserByUserId,
-    updateUser,
-    sendEmail,
+    updateUserById,
+    updateUserByEmail,
+    sendOtpEmail,
+    sendFormLinkEmail,
     verifyOTP,
   };
 };
