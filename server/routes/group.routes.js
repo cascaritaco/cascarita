@@ -13,7 +13,6 @@ router.get("/:id/divisions", DivisionController.getByGroupId);
 router.get("/:id/fields", FieldController.getFieldByGroupId);
 router.get("/:id/leagues", LeagueController.getLeagueByGroupId);
 router.get("/:id/forms", FormController.getAllForms);
-router.post("/", GroupController.createGroup);
 router.patch("/:id", GroupController.updateGroup);
 
 module.exports = router;
