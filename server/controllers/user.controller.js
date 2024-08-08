@@ -2,6 +2,7 @@
 
 const { User } = require("../models");
 const passport = require("passport");
+const GroupController = require("./group.controller");
 
 const UserController = function () {
   var isEmailUniqueWithinGroup = async function (groupId, email) {
@@ -21,25 +22,50 @@ const UserController = function () {
       last_name,
       email,
       password,
-      group_id,
       role_id,
       language_id,
+      group_id,
+      name,
+      street_address,
+      city,
+      state,
+      zip_code,
+      logo_url,
     } = req.body;
+
+    let groupId = group_id;
+
+    if (!group_id) {
+      try {
+        const newGroup = {
+          name,
+          street_address,
+          city,
+          state,
+          zip_code,
+          logo_url,
+        };
+
+        groupId = await GroupController.createGroup(newGroup);
+      } catch (error) {
+        next(error);
+      }
+    }
 
     const newUser = {
       first_name,
       last_name,
       email,
       password,
-      group_id,
       role_id,
       language_id,
+      group_id: groupId,
     };
 
     try {
       const userFound = await isEmailUniqueWithinGroup(
         newUser.group_id,
-        newUser.email
+        newUser.email,
       );
 
       if (!userFound) {

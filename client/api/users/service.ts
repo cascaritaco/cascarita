@@ -27,18 +27,37 @@ const registerUser = async (
   lastName: string,
   email: string,
   password: string,
+  roleId: number,
+  languageId: number,
+  groupId: number | null, // they might be joining an existing group
+  name: string | null,
+  streetAddress: string | null,
+  city: string | null,
+  state: string | null,
+  zipCode: string | null,
+  logoUrl: string | null, // still need to set up s3 buckets for images so for now we wont collect this and just set it to null
 ) => {
   try {
     const registerData = {
-      firstName: firstName,
-      lastName: lastName,
+      first_name: firstName,
+      last_name: lastName,
       email: email,
       password: password,
+      role_id: roleId ? roleId : 1,
+      languageId: 1,
+      group_id: groupId,
+      name: name,
+      street_address: streetAddress,
+      city: city,
+      state: state,
+      zip_code: zipCode,
+      logo_url: logoUrl,
     };
+
     const response = await fetch(`/api/auth/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(registerData),
     });
@@ -46,7 +65,7 @@ const registerUser = async (
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error("Error registering user:", error);
     throw error;
   }
 };
