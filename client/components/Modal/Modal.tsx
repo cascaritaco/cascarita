@@ -1,20 +1,9 @@
 import React from "react";
 import styles from "./Modal.module.css";
+import { ModalProps, ModalContentProps } from "./types";
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
-
-interface ModalProps {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-}
-
-interface ModalContentProps {
-  title?: string;
-  children: React.ReactNode;
-}
 
 const Modal: React.FC<ModalProps> & {
   Button: React.FC<React.ComponentProps<typeof Dialog.Trigger>>;
@@ -25,8 +14,7 @@ const Modal: React.FC<ModalProps> & {
     <Dialog.Root
       open={open}
       onOpenChange={onOpenChange}
-      defaultOpen={defaultOpen}
-    >
+      defaultOpen={defaultOpen}>
       {children}
     </Dialog.Root>
   );

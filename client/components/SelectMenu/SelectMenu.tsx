@@ -8,7 +8,7 @@ import {
   ChevronUpIcon,
 } from "@radix-ui/react-icons";
 
-interface SelectMenu {
+interface SelectMenuProps {
   defaultValue?: string;
   defaultOpen?: boolean;
   open?: boolean;
@@ -22,7 +22,14 @@ interface SelectMenu {
   className?: string;
 }
 
-const SelectMenu: React.FC<SelectMenu> & {
+interface SelectItemProps {
+  value: string;
+  children: React.ReactNode;
+  disabled?: boolean;
+  className?: string;
+}
+
+const SelectMenu: React.FC<SelectMenuProps> & {
   Button: typeof Select.Trigger;
   Group: typeof Select.Group;
   GroupLabel: typeof Select.Label;
@@ -54,8 +61,7 @@ const SelectMenu: React.FC<SelectMenu> & {
       value={value}
       name={name}
       onValueChange={onValueChange}
-      required={required}
-    >
+      required={required}>
       <Select.Trigger className={triggerClassName}>
         <Select.Value
           placeholder={placeholder ? placeholder : "Select a value"}
@@ -85,13 +91,6 @@ const SelectMenu: React.FC<SelectMenu> & {
   );
 };
 
-interface SelectItemProps {
-  value: string;
-  children: React.ReactNode;
-  disabled?: boolean;
-  className?: string;
-}
-
 const SelectItem: React.FC<SelectItemProps> = ({
   value,
   children,
@@ -103,8 +102,7 @@ const SelectItem: React.FC<SelectItemProps> = ({
     <Select.Item
       className={selectItemClassName}
       value={value}
-      disabled={disabled}
-    >
+      disabled={disabled}>
       <Select.ItemText>{children}</Select.ItemText>
 
       <Select.ItemIndicator>
