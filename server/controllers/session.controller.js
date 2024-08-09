@@ -38,7 +38,9 @@ const SessionController = function () {
 
       return result.id;
     } catch (error) {
-      console.error("sesson with given id does not exist");
+      throw new Error(
+        `session not found for division_id: ${divisionId}, season_id: ${seasonId}`,
+      );
     }
   };
 
