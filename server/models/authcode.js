@@ -8,11 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      AuthCode.belongsTo(models.User, {
+        foreignKey: "user_id",
+        targetKey: "id",
+      });
     }
   }
   AuthCode.init(
     {
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -37,6 +37,21 @@ const UserController = function () {
     return await bcrypt.compare(otp, hashedOtp);
   }
 
+  async function isEmailRegistered(recipientEmail) {
+    const user = await User.findAll({
+      limit: 1,
+      where: {
+        email: recipientEmail,
+      },
+    });
+
+    if (!user[0]) {
+      throw new Error(`no user was found with email ${recipientEmail}`);
+    }
+
+    return user[0];
+  }
+
   var registerUser = async function (req, res, next) {
     const {
       first_name,
@@ -138,31 +153,8 @@ const UserController = function () {
     }
   };
 
-  var updateUserByEmail = async function (req, res, next) {
-    try {
-      const user = await User.findOne({
-        where: {
-          email: req.body.email,
-        },
-      });
-
-      if (!user) {
-        res.status(404);
-        throw new Error(`no user was found with email ${user.email}`);
-      }
-
-      delete req.body.email;
-
-      req.params = { id: user.id };
-
-      const response = await updateUserById(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
-
   var sendEmail = async function (recipientEmail, subject, emailContent) {
-    const apiKey = process.env.BREVO_API_KEY;
+    const brevoAPIKey = process.env.BREVO_API_KEY;
     const url = "https://api.brevo.com/v3/smtp/email";
 
     const senderEmail = "jgomez.cascarita@gmail.com"; // (i.e. no-reply-cascarita@gmail.com) once
@@ -182,19 +174,25 @@ const UserController = function () {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "api-key": apiKey,
+        "api-key": brevoAPIKey,
       },
       body,
     });
 
     const responseData = await response.json();
 
-    return { status: response.ok, responseData };
+    if (!response.ok) {
+      throw new Error(
+        `failed to send email: ${responseData.message}, ${responseData.code}`,
+      );
+    }
   };
 
   var sendOtpEmail = async function (req, res, next) {
     try {
       const recipientEmail = req.body.email;
+
+      const user = await isEmailRegistered(recipientEmail);
 
       const authCode = generateOTP();
       const subject = "Cascarita - Reset Your Password";
@@ -208,26 +206,21 @@ const UserController = function () {
             </body>
           </html>`;
 
-      const response = await sendEmail(recipientEmail, subject, emailContent);
+      await sendEmail(recipientEmail, subject, emailContent);
 
-      if (response.status) {
-        const newAuthCode = {
-          email: recipientEmail,
-          code: await hashOtp(authCode),
-          attempts: 0,
-          start_date: new Date(),
-          expiration_date: new Date(new Date().getTime() + 15 * 60000),
-        };
+      const newAuthCode = {
+        user_id: user.id,
+        email: recipientEmail,
+        code: await hashOtp(authCode),
+        attempts: 0,
+        start_date: new Date(),
+        expiration_date: new Date(new Date().getTime() + 15 * 60000),
+      };
 
-        await AuthCode.build(newAuthCode).validate();
-        await AuthCode.create(newAuthCode);
-      } else {
-        throw new Error(
-          `failed to send email: ${response.responseData.message}, ${response.responseData.code}`,
-        );
-      }
+      await AuthCode.build(newAuthCode).validate();
+      await AuthCode.create(newAuthCode);
 
-      return res.status(200).json({ data: response });
+      return res.status(200).json({ response: "email sent successfully" });
     } catch (error) {
       console.error("failed to send otp email:", error);
       next(error);
@@ -238,6 +231,8 @@ const UserController = function () {
     try {
       const recipientEmail = req.body.email;
       const formLink = req.body.formLink;
+
+      await isEmailRegistered(recipientEmail);
 
       const subject = "Cascarita - Please fill out this form";
       const emailContent = `
@@ -250,9 +245,9 @@ const UserController = function () {
           </body>
         </html>`;
 
-      const response = await sendEmail(recipientEmail, subject, emailContent);
+      await sendEmail(recipientEmail, subject, emailContent);
 
-      return res.status(200).json({ data: response });
+      return res.status(200).json({ response: "email sent successfully" });
     } catch (error) {
       console.error("failed to send email:", error);
       next(error);
@@ -319,7 +314,6 @@ const UserController = function () {
     logInUser,
     getUserByUserId,
     updateUserById,
-    updateUserByEmail,
     sendOtpEmail,
     sendFormLinkEmail,
     verifyOTP,

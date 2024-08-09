@@ -10,7 +10,6 @@ router.get("/loginReactPageHere", (req, res) => {
 });
 router.get("/:id", UserController.getUserByUserId);
 router.patch("/:id", UserController.updateUserById);
-router.patch("/", UserController.updateUserByEmail);
 router.post("/register", UserController.registerUser);
 router.post(
   "/login",
@@ -19,8 +18,8 @@ router.post(
   }),
   UserController.logInUser,
 );
-router.post("/otpEmail", UserController.sendOtpEmail);
-router.post("/formEmail", UserController.sendFormLinkEmail);
-router.post("/verifyOTP", UserController.verifyOTP);
+router.post("/otp/emails", UserController.sendOtpEmail);
+router.post("/forms/emails", UserController.sendFormLinkEmail);
+router.post("/otp/verification", UserController.verifyOTP);
 
 module.exports = router;

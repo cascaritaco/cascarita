@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
         sourceKey: "id",
       });
+      User.hasMany(models.AuthCode, {
+        foreignKey: "user_id",
+        sourceKey: "id",
+      });
     }
   }
   User.init(
