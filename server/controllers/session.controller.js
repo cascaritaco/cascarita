@@ -72,7 +72,7 @@ const SessionController = function () {
 
       return result;
     } catch (error) {
-      throw new Error(`creating session error: ${error}`);
+      throw error;
     }
   };
 

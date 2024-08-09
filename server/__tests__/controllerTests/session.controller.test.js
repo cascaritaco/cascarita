@@ -19,17 +19,17 @@ var setUpForSession = async function (
   groupName,
   LeagueName,
   SeasonName,
-  DivisionName
+  DivisionName,
 ) {
   const group = await TestDataGenerator.createDummyGroup(groupName);
   const league = await TestDataGenerator.createLeague(LeagueName, group.id);
   const sampleSeason = await TestDataGenerator.createSeason(
     league.id,
-    SeasonName
+    SeasonName,
   );
   const sampleDivision = await TestDataGenerator.createDivision(
     group.id,
-    DivisionName
+    DivisionName,
   );
 
   return {
@@ -75,28 +75,19 @@ describe("Session Controller", () => {
         "Dummy Group",
         "Best League",
         "Winter 23",
-        "U-18"
+        "U-18",
       );
 
-      const req = {
-        body: {
-          division_id: sampleData.divisionId,
-          season_id: sampleData.seasonId,
-        },
-      };
+      const session = await SessionController.createSession(
+        sampleData.divisionId,
+        sampleData.seasonId,
+      );
 
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await SessionController.createSession(req, res, next);
-
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.body).toEqual(
+      expect(session).toEqual(
         expect.objectContaining({
           division_id: sampleData.divisionId,
           season_id: sampleData.seasonId,
-        })
+        }),
       );
     });
 
@@ -105,34 +96,22 @@ describe("Session Controller", () => {
         "Big Group",
         "top League",
         "Summer 23",
-        "1st"
+        "1st",
       );
 
-      const req = {
-        body: {
-          division_id: "not a division lol",
-          season_id: sampleData.seasonId,
-        },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await SessionController.createSession(req, res, next);
-
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
-
-      expect(next).toHaveBeenCalled();
-      expect(caughtError).toEqual(
+      await expect(
+        SessionController.createSession(
+          "not a division lol",
+          sampleData.seasonId,
+        ),
+      ).rejects.toEqual(
         expect.objectContaining({
           name: "SequelizeDatabaseError",
           original: expect.objectContaining({
             sqlMessage:
               "Incorrect integer value: 'not a division lol' for column 'division_id' at row 1",
           }),
-        })
+        }),
       );
     });
 
@@ -141,52 +120,19 @@ describe("Session Controller", () => {
         "Big Group 2",
         "top League 2",
         "Summer 25",
-        "2nd"
+        "2nd",
       );
 
-      const req = {
-        body: { division_id: sampleData.divisionId, season_id: 111 },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await SessionController.createSession(req, res, next);
-
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
-
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
-      );
-    });
-
-    it("should handle error during session creation, when passing in an unexisting division id", async () => {
-      const sampleData = await setUpForSession(
-        "Big Group 2",
-        "top League 2",
-        "Summer 25",
-        "2nd"
-      );
-
-      const req = {
-        body: { division_id: 123, season_id: sampleData.seasonId },
-      };
-
-      const res = createMockResponse();
-
-      const next = jest.fn();
-
-      await SessionController.createSession(req, res, next);
-
-      const nextArgs = next.mock.calls[0];
-      const caughtError = nextArgs[0];
-
-      expect(next).toHaveBeenCalled();
-      expect(caughtError.toString()).toMatch(
-        /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
+      await expect(
+        SessionController.createSession(sampleData.divisionId, "not a season"),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          name: "SequelizeDatabaseError",
+          original: expect.objectContaining({
+            sqlMessage:
+              "Incorrect integer value: 'not a season' for column 'season_id' at row 1",
+          }),
+        }),
       );
     });
   });
@@ -196,7 +142,7 @@ describe("Session Controller", () => {
       const oldSession = await createSampleSession();
       const newDivision = await TestDataGenerator.createDivision(
         oldSession.groupId,
-        "New Division Boi"
+        "New Division Boi",
       );
 
       const req = {
@@ -215,7 +161,7 @@ describe("Session Controller", () => {
         expect.objectContaining({
           division_id: newDivision.id,
           season_id: oldSession.sessionData.season_id,
-        })
+        }),
       );
     });
 
@@ -240,7 +186,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/
+        /^SequelizeForeignKeyConstraintError: Cannot add or update a child row:/,
       );
     });
 
@@ -261,7 +207,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: session with given id was not found"
+        "Error: session with given id was not found",
       );
     });
   });
@@ -280,7 +226,7 @@ describe("Session Controller", () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           id: newSession.sessionData.id,
-        })
+        }),
       );
     });
 
@@ -298,7 +244,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: session with given id does not exist"
+        "Error: session with given id does not exist",
       );
     });
   });
@@ -317,7 +263,7 @@ describe("Session Controller", () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           id: newSession.sessionData.id,
-        })
+        }),
       );
     });
 
@@ -335,7 +281,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: session with given division id does not exist"
+        "Error: session with given division id does not exist",
       );
     });
   });
@@ -366,7 +312,7 @@ describe("Session Controller", () => {
 
       expect(next).toHaveBeenCalled();
       expect(caughtError.toString()).toMatch(
-        "Error: no session found with the given id"
+        "Error: no session found with the given id",
       );
     });
   });
