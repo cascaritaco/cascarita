@@ -9,14 +9,17 @@ router.get("/loginReactPageHere", (req, res) => {
   res.json({ message: "Invalid email or password, try again" });
 });
 router.get("/:id", UserController.getUserByUserId);
-router.post("/:id/languages", UserController.updateUser);
+router.patch("/:id", UserController.updateUserById);
 router.post("/register", UserController.registerUser);
 router.post(
   "/login",
   passport.authenticate("local", {
     failureRedirect: "/user/loginReactPageHere",
   }),
-  UserController.logInUser
+  UserController.logInUser,
 );
+router.post("/otp/emails", UserController.sendOtpEmail);
+router.post("/forms/emails", UserController.sendFormLinkEmail);
+router.post("/otp/verification", UserController.verifyOTP);
 
 module.exports = router;

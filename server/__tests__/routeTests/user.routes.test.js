@@ -42,7 +42,7 @@ describe("User Routes", () => {
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
-      expect.objectContaining({ first_name: "Leo" })
+      expect.objectContaining({ first_name: "Leo" }),
     );
   });
 
@@ -150,7 +150,7 @@ describe("User Routes", () => {
     });
 
     const response = await request(app)
-      .post(`/users/${userM.id}/languages`)
+      .patch(`/users/${userM.id}`)
       .send({ language_id: updatedLanguagePref.id });
 
     expect(response.status).toBe(200);
