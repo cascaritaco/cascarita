@@ -7,7 +7,6 @@
 
 .breadcrumb li:last-child {
   font-weight: bold;
-  pointer-events: none;
 }
 
 .breadcrumb li:not(:last-child),

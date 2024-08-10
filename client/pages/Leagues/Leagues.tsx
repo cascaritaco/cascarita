@@ -16,6 +16,11 @@ import { useAuth } from "../../components/AuthContext/AuthContext";
 import { Link } from "react-router-dom";
 
 const Leagues = () => {
+  const { currentUser } = useAuth();
+  if (!currentUser) {
+    return;
+  }
+
   const { t } = useTranslation("Leagues");
 
   const [filter, setFilter] = useState("");
@@ -28,8 +33,6 @@ const Leagues = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-
-  const { currentUser } = useAuth();
 
   const groupId = currentUser?.group_id;
   const { data, isLoading, isError } = useQuery({
@@ -123,7 +126,7 @@ const Leagues = () => {
             data?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/season/${league.id}/${league.name}`}>
+                  <Link to={`season/${league.id}/${league.name}`}>
                     {league.name}
                   </Link>
                 </td>
