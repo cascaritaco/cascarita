@@ -1,7 +1,9 @@
 "use strict";
 
 const { Session, Season, Division, Group } = require("../models");
+const { Op } = require("sequelize");
 const modelByPk = require("./utility");
+const sessionController = require("./session.controller");
 
 const isDivisionNameUnique = async (groupId, name) => {
   const division = await Division.findOne({
@@ -52,6 +54,7 @@ const DivisionController = {
   },
   create: async function (req, res, next) {
     const form = {
+      season_id: req.body.season_id,
       group_id: req.body.group_id,
       name: req.body.name,
     };
@@ -66,6 +69,9 @@ const DivisionController = {
       await Division.build(form).validate();
 
       const division = await Division.create(form);
+      if (form.season_id) {
+        await sessionController.createSession(division.id, form.season_id);
+      }
       res.status(201).json(division);
     } catch (error) {
       next(error);
@@ -102,6 +108,21 @@ const DivisionController = {
     } catch (error) {
       next(error);
     }
+  },
+  getAllDivsionsBySeason: async function (req, res, next) {
+    const { seasonId } = req.params;
+    const sessions = await Session.findAll({
+      where: {
+        season_id: seasonId,
+      },
+      include: {
+        model: Division,
+        as: "Division", // Alias for the included model
+        attributes: ["name"], // Include only the 'name' attribute
+      },
+    });
+
+    return res.json(sessions);
   },
 };
 

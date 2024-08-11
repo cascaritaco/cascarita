@@ -1,11 +1,20 @@
-// import Leagues from "../Leagues/Leagues";
-import Seasons from "../Seasons/Seasons";
+import Leagues from "../Leagues/Leagues";
 import { useAuth } from "../../components/AuthContext/AuthContext";
 
 const Home = () => {
   const { currentUser } = useAuth();
 
-  return <div>{currentUser ? <Seasons /> : <></>}</div>;
+  return (
+    <>
+      {currentUser ? (
+        <div>
+          <Leagues />
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 };
 
 export default Home;

@@ -1,0 +1,26 @@
+.breadcrumb {
+  display: flex;
+  font-size: 0.8rem;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.breadcrumb li:last-child {
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.breadcrumb li:not(:last-child),
+.breadcrumb h3:not(:last-child) {
+  color: #ccc;
+}
+
+.breadcrumb li:not(:last-child):hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.breadcrumb li:not(:last-child):after {
+  content: " /";
+  pointer-events: none;
+}

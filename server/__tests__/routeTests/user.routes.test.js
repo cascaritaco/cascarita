@@ -180,7 +180,7 @@ describe("User Routes", () => {
     });
 
     const response = await request(app)
-      .post(`/users/${userM.id}/languages`)
+      .patch(`/users/${userM.id}`)
       .send({ language_id: updatedLanguagePref.id });
 
     expect(response.status).toBe(200);
