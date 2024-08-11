@@ -7,6 +7,16 @@ const Register = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [roleId, setRoleId] = useState('');
+  const [languageId, setLanguageId] = useState('');
+  const [groupId, setGroupId] = useState('');
+  const [name, setName] = useState('');
+  const [stressAddress, setStreetAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
+
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -25,7 +35,21 @@ const Register = () => {
     }
 
     try {
-      const user = await registerUser(firstName, lastName, email, password);
+      const user = await registerUser(
+        firstName,
+        lastName,
+        email,
+        password,
+        roleId,
+        Number(languageId),
+        groupId,
+        name,
+        stressAddress,
+        city,
+        state,
+        zipCode,
+        logoUrl
+        );
       setSuccessMessage('User registered successfully');
       setErrorMessage('');
     } catch (error) {
