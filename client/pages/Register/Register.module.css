@@ -6,6 +6,11 @@
     background-color: #ffffff;
 }
 
+.inlineFields {
+    display: flex;
+    gap: 10px;
+}
+
 .formContainer {
     display: flex;
     flex-direction: column;
@@ -49,4 +54,105 @@
 .successMessage {
     color: green;
     margin-bottom: 10px;
+}
+
+
+.login {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+}
+
+.logo {
+    margin-top: 35%;
+    /* transform: scale(1.75); Scale the logo to 175% of its original size */
+    height: auto; /* Maintain the aspect ratio */
+    width: auto;
+    margin-bottom: 80%; /* Add margin-bottom if needed */
+    transform: scale(2.2);
+    transition: transform 0.05s ease; /* Add transition for smooth scaling */
+}
+
+/* Adjust scale for smaller viewport widths */
+@media screen and (max-width: 950px) {
+    .logo {
+        transform: scale(1.75); /* Adjust the scale value as needed */
+    }
+}
+
+.left {
+    background: linear-gradient(to top, #830aaf, #4238d5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full height of the viewport */
+    width: 50%; /* 50% width of the viewport */
+    display: flex;
+    flex-direction: column; /* Make it a column */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.left > h1 {
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-top: 5%;
+    color: white;
+    font-size: 40px;
+    font-weight: 500;
+    overflow-wrap: break-word;
+    display: inline-block; /* Allow the text to wrap */
+    text-align: center;
+}
+
+.right {
+    position: fixed;
+    top: 45%;
+    transform: translateY(-50%);
+    right: 0;
+    width: 50%;
+    text-align: center;
+    padding-left: 125px;
+    padding-right: 100px;
+    /* padding: 0 200px; */
+}
+
+.right > p {
+    text-align: left;
+    margin-bottom: 5px;
+    color: #495a6b;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.right > input {
+    min-width: 200px;
+    min-width: 200px;
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 5px;
+    color: #7e878f;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: #f5f7fb;
+}
+
+.right > button {
+    min-width: 200px;
+    max-width: 500px;
+    width: calc(100% - 100px);
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    background-color: #000;
+}
+
+.right > button:hover {
+    background-color: #808080;
 }
