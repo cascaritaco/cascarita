@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Users from "./pages/Users/Users";
-import Schedule from "./pages/Schedule/Schedule";
+// import Schedule from "./pages/Schedule/Schedule";
 import Forms from "./pages/Forms/Forms";
 import Settings from "./pages/Settings/Settings";
 import Login from "./pages/Login/Login";
@@ -40,7 +40,7 @@ const App = () => {
                 element={<Teams />}
               />
               <Route path="/users" element={<Users />} />
-              <Route path="/schedule" element={<Schedule />} />
+              {/* <Route path="/schedule" element={<Schedule />} /> */}
               <Route path="/forms" element={<Forms />} />
               <Route path="/forms/check" element={<NewForm />} />
               <Route path="/settings" element={<Settings />} />

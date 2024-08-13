@@ -1,11 +1,11 @@
 import { useState } from "react";
 import styles from "./Division.module.css";
 import { useParams, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { DivisionType } from "./types";
 import Page from "../../components/Page/Page";
 import Search from "../../components/Search/Search";
-import SelectMenu from "../../components/SelectMenu/SelectMenu";
+// import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
@@ -19,15 +19,16 @@ const Divisions = () => {
   const { seasonName } = useParams<{ seasonName: string }>();
   const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
 
-  const { t } = useTranslation("Leagues");
+  // const { t } = useTranslation("Leagues");
 
-  const [filter, setFilter] = useState("");
-  const [sorts, setSorts] = useState("");
+  // const [filter, setFilter] = useState("");
+  // const [sorts, setSorts] = useState("");
   const [currentDivisionName, setCurrentDivisionName] = useState("");
   const [currentDivisionId, setCurrentDivisionId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
-  const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
+  // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
+  // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -49,14 +50,19 @@ const Divisions = () => {
     setIsDeleteOpen(true);
   };
 
+  const filteredData = data?.filter((division: DivisionType) =>
+    division.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <Page>
       <h1 className={styles.h1}>{seasonName}</h1>
 
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
-          <Search />
-          <div className={styles.filterContainer}>
+          <Search onSearchChange={setSearchQuery} />
+          {/* NOTE: WILL UNCOMMENT ONCE ACTIVE STATUS ADDED TO VIEW
+            <div className={styles.filterContainer}>
             <p className={styles.filterSubTitle}>{t("filter")}</p>
             <SelectMenu
               placeholder={t("filterOptions.item1")}
@@ -88,7 +94,7 @@ const Divisions = () => {
                 ))}
               </SelectMenu.Group>
             </SelectMenu>
-          </div>
+          </div> */}
         </div>
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -107,8 +113,8 @@ const Divisions = () => {
         </Modal>
       </div>
 
-      {data == null || data?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a Division to Display...</p>
+      {filteredData == null || filteredData?.length === 0 ? (
+        <p className={styles.noLeagueMessage}>No divisions to display...</p>
       ) : (
         <DashboardTable headers={["Division Name", "Options"]}>
           {isLoading ? (

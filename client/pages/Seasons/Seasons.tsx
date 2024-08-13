@@ -23,12 +23,13 @@ const Seasons = () => {
 
   const { t } = useTranslation("Seasons");
 
-  const [filter, setFilter] = useState("");
+  // const [filter, setFilter] = useState("");
   const [sorts, setSorts] = useState("");
   const [currentSeasonName, setCurrentSeasonName] = useState("");
   const [currentSeasonId, setCurrentSeasonId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
+  // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -60,13 +61,29 @@ const Seasons = () => {
     setIsDeleteOpen(true);
   };
 
+  const filteredData = data
+    ?.filter((season: SeasonType) =>
+      season.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+    ?.sort((a: SeasonType, b: SeasonType) => {
+      if (sorts === t("sortOptions.item1")) {
+        return a.name.localeCompare(b.name);
+      } else if (sorts === t("sortOptions.item2")) {
+        return (
+          new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+        );
+      }
+      return 0;
+    });
+
   return (
     <Page>
       <h1 className={styles.h1}> {leagueName} </h1>
 
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
-          <Search />
+          <Search onSearchChange={setSearchQuery} />
+          {/* NOTE: WILL UNCOMMENT ONCE ACTIVE STATUS ADDED TO VIEW
           <div className={styles.filterContainer}>
             <p className={styles.filterSubTitle}>{t("filter")}</p>
             <SelectMenu
@@ -82,7 +99,7 @@ const Seasons = () => {
                 ))}
               </SelectMenu.Group>
             </SelectMenu>
-          </div>
+          </div> */}
 
           <div className={styles.filterContainer}>
             <p className={styles.filterSubTitle}>{t("sort")}</p>
@@ -118,8 +135,8 @@ const Seasons = () => {
         </Modal>
       </div>
 
-      {data == null || data?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a Season to Display...</p>
+      {filteredData == null || filteredData?.length === 0 ? (
+        <p className={styles.noLeagueMessage}>No seasons to display...</p>
       ) : (
         <DashboardTable headers={[t("col1"), t("col2"), t("col3"), t("col4")]}>
           {isLoading ? (
@@ -131,7 +148,7 @@ const Seasons = () => {
               <td>Error Fetching Data</td>
             </tr>
           ) : (
-            data?.map((season: SeasonType, idx: number) => (
+            filteredData?.map((season: SeasonType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
                   <Link to={`/division/${season.id}/${season.name}`}>

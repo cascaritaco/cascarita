@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./Teams.module.css";
 import Page from "../../components/Page/Page";
 import Search from "../../components/Search/Search";
-import SelectMenu from "../../components/SelectMenu/SelectMenu";
+// import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import { getTeamsBySeasonDivisionId } from "../../api/teams/service";
@@ -21,9 +21,10 @@ const Teams = () => {
   }>();
   const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
   const divisionIdNumber = divisionId ? parseInt(divisionId, 10) : 0;
-  const [sorts, setSorts] = useState("");
+  // const [sorts, setSorts] = useState("");
   const [currentTeamName, setCurrentTeamName] = useState("");
   const [currentTeamId, setCurrentTeamId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -46,14 +47,19 @@ const Teams = () => {
     setIsDeleteOpen(true);
   };
 
+  const filteredData = data?.filter((team: TeamType) =>
+    team.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <Page>
       <h1 className={styles.h1}>{divisionName}</h1>
 
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
-          <Search />
-          <div className={styles.filterContainer}>
+          <Search onSearchChange={setSearchQuery} />
+          {/* NOTE: WILL UNCOMMENT ONCE ACTIVE STATUS ADDED TO VIEW
+            <div className={styles.filterContainer}>
             <SelectMenu
               placeholder="Sort By"
               name="sort"
@@ -67,7 +73,7 @@ const Teams = () => {
                 Last Created
               </SelectMenu.Item>
             </SelectMenu>
-          </div>
+          </div> */}
         </div>
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -88,7 +94,7 @@ const Teams = () => {
         </Modal>
       </div>
 
-      {data == null || data?.length === 0 ? (
+      {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a Team to Display...</p>
       ) : (
         <DashboardTable headers={["Team Name", "Options"]}>
