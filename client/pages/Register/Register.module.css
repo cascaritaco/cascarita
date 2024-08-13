@@ -11,6 +11,27 @@
     gap: 10px;
 }
 
+.inlineFields input {
+    flex: 1; /* Distribute available space equally */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Specific styling for the State and Zip-code fields if needed */
+.inlineFields input:nth-child(1) {
+    flex: 1; /* Give the State input more space */
+}
+
+.inlineFields input:nth-child(2) {
+    flex: 1; /* Zip-code field is narrower */
+}
+
+.inlineFields input:nth-child(2) {
+    max-width: 100px; /* Adjust as needed */
+}
+
 .formContainer {
     display: flex;
     flex-direction: column;

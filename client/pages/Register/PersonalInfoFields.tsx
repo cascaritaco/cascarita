@@ -32,11 +32,21 @@ const PersonalInfoFields: React.FC<PersonalInfoFieldsProps> = ({
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
+    // Check if any fields are empty
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      setErrorMessage('All fields are required.');
+      setSuccessMessage('');
       return;
     }
 
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
+      setSuccessMessage('');
+      return;
+    }
+
+    // If all checks pass
     setSuccessMessage('Personal information validated');
     setErrorMessage('');
 
