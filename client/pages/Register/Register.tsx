@@ -6,8 +6,19 @@ import LogoWhite from "../../assets/logoWhite.svg";
 import { registerUser } from "../../api/users/service";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
-  const [step, setStep] = useState(1); // To track the current step
+interface RegisterProps {
+  languageId: number;
+  roleId: number;
+  groupId: number;
+}
+
+const Register: React.FC<RegisterProps> = (
+  {
+    languageId,
+    roleId,
+    groupId,
+}) => {
+  const [step, setStep] = useState(1);
 
   // State for PersonalInfoFields
   const [firstName, setFirstName] = useState('');
@@ -23,10 +34,6 @@ const Register = () => {
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
-
-  const [roleId, setRoleId] = useState('');
-  const [languageId, setLanguageId] = useState('');
-  const [groupId, setGroupId] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -65,7 +72,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const user = await registerUser(
+      await registerUser(
         firstName,
         lastName,
         email,

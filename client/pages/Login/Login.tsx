@@ -62,7 +62,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Sign in</button>
-        <button onClick={handleSignUp}>Don't have an account?</button>
+        <button onClick={handleSignUp}>Do not have an account?</button>
       </div>
     </div>
   );
