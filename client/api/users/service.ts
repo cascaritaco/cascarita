@@ -44,7 +44,7 @@ const registerUser = async (
       email: email,
       password: password,
       role_id: roleId ? roleId : 1,
-      languageId: 1,
+      language_id: 1,
       group_id: groupId,
       name: name,
       street_address: streetAddress,
@@ -54,7 +54,7 @@ const registerUser = async (
       logo_url: logoUrl,
     };
 
-    const response = await fetch(`/api/auth/register`, {
+    const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

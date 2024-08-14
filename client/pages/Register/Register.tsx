@@ -4,6 +4,7 @@ import OrganizationFields from "./OrganizationFields";
 import styles from './Register.module.css';
 import LogoWhite from "../../assets/logoWhite.svg";
 import { registerUser } from "../../api/users/service";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [step, setStep] = useState(1); // To track the current step
@@ -30,15 +31,36 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.body.style.backgroundColor = "#ffffff";
+    if (successMessage === "User registered successfully") {
+      // Set a timeout to navigate after a short delay, e.g., 2 seconds
+      const timer = setTimeout(() => {
+        navigate('/login'); // Replace with your desired path
+      }, 2000);
+      return () => {
+        document.body.style.backgroundColor = "";
+        clearTimeout(timer)
+      };
+    }
     return () => {
       document.body.style.backgroundColor = "";
     };
-  }, []);
+  }, [successMessage, navigate]);
 
   const handleNextStep = () => {
     setStep(step + 1);
+  };
+
+
+  // Simulate setting the successMessage, e.g., after a registration API call
+  const handleRegistration = () => {
+    // Simulate API call and on success set the successMessage
+    setTimeout(() => {
+      setSuccessMessage("User registered successfully");
+    }, 1000); // Simulate a 1 second delay for API call
   };
 
   const handleRegister = async () => {
@@ -58,11 +80,10 @@ const Register = () => {
         zipCode,
         logoUrl
       );
-      setSuccessMessage('User registered successfully');
-      setErrorMessage('');
+      handleRegistration()
+
     } catch (error) {
       setErrorMessage('Failed to register user');
-      setSuccessMessage('');
     }
   };
 
