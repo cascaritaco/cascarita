@@ -6,19 +6,8 @@ import LogoWhite from "../../assets/logoWhite.svg";
 import { registerUser } from "../../api/users/service";
 import { useNavigate } from "react-router-dom";
 
-interface RegisterProps {
-  languageId: number;
-  roleId: number;
-  groupId: number;
-}
-
-const Register: React.FC<RegisterProps> = (
-  {
-    languageId,
-    roleId,
-    groupId,
-}) => {
-  const [step, setStep] = useState(1);
+const Register = () => {
+  const [step, setStep] = useState(1); // To track the current step
 
   // State for PersonalInfoFields
   const [firstName, setFirstName] = useState('');
@@ -37,6 +26,14 @@ const Register: React.FC<RegisterProps> = (
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  // Adding the functionality to this in the NEXT PR
+  // eslint-disable-next-line
+  const [roleId, setRoleId] = useState('');
+  // eslint-disable-next-line
+  const [groupId, setGroupId] = useState('');
+  // eslint-disable-next-line
+  const [languageId, setLanguageId] = useState('');
 
   const navigate = useNavigate();
 
