@@ -23,22 +23,23 @@ const GroupController = function () {
     }
   };
 
-  var createGroup = async function (req, res, next) {
+  var createGroup = async function (groupInfo) {
     const newGroup = {
-      name: req.body.name,
-      street_address: req.body.street_address,
-      city: req.body.city,
-      state: req.body.state,
-      zip_code: req.body.zip_code,
-      logo_url: req.body.logo_url,
+      name: groupInfo.name,
+      street_address: groupInfo.street_address,
+      city: groupInfo.city,
+      state: groupInfo.state,
+      zip_code: groupInfo.zip_code,
+      logo_url: groupInfo.logo_url,
     };
 
     try {
       await Group.build(newGroup).validate();
-      const result = await Group.create(newGroup);
-      return res.status(201).json(result);
+      const createdGroup = await Group.create(newGroup);
+      return createdGroup.id;
     } catch (error) {
-      next(error);
+      console.error("error creating group: ", error);
+      throw new Error("failed to create group");
     }
   };
 
