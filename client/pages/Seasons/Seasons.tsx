@@ -6,7 +6,7 @@ import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import SeasonForm from "../../components/Forms/SeasonForm/SeasonForm";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -28,6 +28,7 @@ const Seasons = () => {
   const [currentSeasonName, setCurrentSeasonName] = useState("");
   const [currentSeasonId, setCurrentSeasonId] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -39,6 +40,16 @@ const Seasons = () => {
     queryKey: ["seasons", leagueIdNumber],
     queryFn: getSeasonsByLeagueId,
   });
+
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -63,7 +74,7 @@ const Seasons = () => {
 
   const filteredData = data
     ?.filter((season: SeasonType) =>
-      season.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      season.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
     )
     ?.sort((a: SeasonType, b: SeasonType) => {
       if (sorts === t("sortOptions.item1")) {

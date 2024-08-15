@@ -53,6 +53,17 @@ const Forms = () => {
   const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
 
   useEffect(() => {
     (async () => {
@@ -93,7 +104,7 @@ const Forms = () => {
 
   const filteredData = forms
     ?.filter((form: Form) =>
-      form.form_data.title.toLowerCase().includes(searchQuery.toLowerCase()),
+      form.form_data.title.toLowerCase().includes(debouncedQuery.toLowerCase()),
     )
     ?.sort((a: Form, b: Form) => {
       if (sorts === t("sortOptions.item1")) {

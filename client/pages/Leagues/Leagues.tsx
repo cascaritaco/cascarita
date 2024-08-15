@@ -9,7 +9,7 @@ import LeagueForm from "../../components/Forms/LeagueForm/LeagueForm";
 import { LeagueType } from "./types";
 import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../api/leagues/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
@@ -23,6 +23,7 @@ const Leagues = () => {
   const [currentLeagueName, setCurrentLeagueName] = useState("");
   const [currentLeagueId, setCurrentLeagueId] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -38,6 +39,16 @@ const Leagues = () => {
     queryFn: getLeagueByGroupId,
   });
 
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
+
   const handleEdit = (leagueName: string, leagueId: number) => {
     setCurrentLeagueName(leagueName);
     setCurrentLeagueId(leagueId);
@@ -51,7 +62,7 @@ const Leagues = () => {
   };
 
   const filteredData = data?.filter((league: LeagueType) =>
-    league.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    league.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Division.module.css";
 import { useParams, Link } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
@@ -26,12 +26,23 @@ const Divisions = () => {
   const [currentDivisionName, setCurrentDivisionName] = useState("");
   const [currentDivisionId, setCurrentDivisionId] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["divisions", seasonIdNumber],
@@ -51,7 +62,7 @@ const Divisions = () => {
   };
 
   const filteredData = data?.filter((division: DivisionType) =>
-    division.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    division.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
 
   return (

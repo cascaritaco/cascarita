@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Teams.module.css";
 import Page from "../../components/Page/Page";
 import Search from "../../components/Search/Search";
@@ -25,6 +25,7 @@ const Teams = () => {
   const [currentTeamName, setCurrentTeamName] = useState("");
   const [currentTeamId, setCurrentTeamId] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -34,6 +35,16 @@ const Teams = () => {
     queryKey: ["teams", seasonIdNumber, divisionIdNumber],
     queryFn: getTeamsBySeasonDivisionId,
   });
+
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
 
   const handleEdit = (teamName: string, teamId: number) => {
     setCurrentTeamName(teamName);
@@ -48,7 +59,7 @@ const Teams = () => {
   };
 
   const filteredData = data?.filter((team: TeamType) =>
-    team.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    team.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
 
   return (
