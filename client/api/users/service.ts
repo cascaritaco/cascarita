@@ -7,8 +7,8 @@ const updateUsersLanguages = async (
   const language_id = LanguageCodeToLanguageId[language as "en" | "esp"];
 
   try {
-    const response = await fetch(`/api/users/${user_id}/languages`, {
-      method: "POST",
+    const response = await fetch(`/api/users/${user_id}`, {
+      method: "PATCH",
       body: JSON.stringify({ language_id: language_id }),
       headers: {
         "Content-Type": "application/json",
