@@ -54,7 +54,7 @@ export const fetchTypeformFormData = async (
   }
 };
 
-export const updateTypeformForm = async (
+export const updateForm = async (
   data: Form,
   formId: string,
   title: string,
@@ -74,8 +74,8 @@ export const updateTypeformForm = async (
   };
 
   try {
-    const response = await fetch(`/api/survey/${formId}`, {
-      method: "PUT",
+    const response = await fetch(`/api/forms/${formId}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -93,9 +93,9 @@ export const updateTypeformForm = async (
   }
 };
 
-export const deleteTypeformForm = async (id: string) => {
+export const deleteForm = async (id: string) => {
   try {
-    const response = await fetch(`/api/survey/${id}`, {
+    const response = await fetch(`/api/forms/${id}`, {
       method: "DELETE",
     });
 
