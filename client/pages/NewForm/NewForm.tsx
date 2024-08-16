@@ -49,6 +49,7 @@ const NewForm = () => {
     "Multiple Choice",
     "Email",
     "Phone Number",
+    "Payment",
   ];
 
   const handleDrop = (label: DroppedItemType) => {

@@ -16,7 +16,7 @@ h4 {
   justify-content: left;
   background-color: #f4f7fb;
   border-radius: 10px;
-  z-index: 3;
+  overflow-y: auto;
 }
 
 .newFormContainer {

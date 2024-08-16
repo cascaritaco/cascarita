@@ -12,11 +12,18 @@
   display: flex;
   border-radius: 10px;
   padding: 10px;
-  background-color: #1d74c5ff;
   color: white;
   align-items: center;
   height: 51px;
   width: 185px;
+}
+
+.standardButton {
+  background-color: #1d74c5ff;
+}
+
+.paymentButton {
+  background-color: #7560f9;
 }
 
 .baseStyle {
