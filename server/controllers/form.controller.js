@@ -163,7 +163,7 @@ const FormController = {
         );
       }
 
-      res.json(formResponse);
+      res.status(200).json(formResponse);
     } catch (error) {
       next(error);
     }
