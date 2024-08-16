@@ -98,7 +98,13 @@ const NewForm = () => {
     if (formId == null || formId === undefined) {
       throw new Error("Form ID is undefined");
     }
-    const response = await updateForm(data, formId, title, description);
+    const response = await updateForm(
+      data,
+      formId,
+      title,
+      description,
+      currentUser,
+    );
     setFields(response.fields);
   };
 

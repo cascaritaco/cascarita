@@ -117,7 +117,7 @@ const FormController = {
         form_id: req.params.form_id,
       });
 
-      if (responses) {
+      if (Object.keys(responses).length !== 0) {
         res.status(401);
         throw new Error(
           `cannot edit form with form id (${form_id}) as it already has responses`,
@@ -145,9 +145,15 @@ const FormController = {
       });
 
       Object.keys(sqlUpdateData).forEach((key) => {
-        formResponse[key] = sqlUpdateData[key]
-          ? sqlUpdateData[key]
-          : formResponse[key];
+        if (key === "updated_by") {
+          formResponse[key] = sqlUpdateData[key].id
+            ? sqlUpdateData[key].id
+            : formResponse[key];
+        } else {
+          formResponse[key] = sqlUpdateData[key]
+            ? sqlUpdateData[key]
+            : formResponse[key];
+        }
       });
 
       await formResponse.validate();
