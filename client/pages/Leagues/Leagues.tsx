@@ -3,13 +3,13 @@ import Search from "../../components/Search/Search";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import Page from "../../components/Page/Page";
-import SelectMenu from "../../components/SelectMenu/SelectMenu";
+// import SelectMenu from "../../components/SelectMenu/SelectMenu";
 import Modal from "../../components/Modal/Modal";
 import LeagueForm from "../../components/Forms/LeagueForm/LeagueForm";
 import { LeagueType } from "./types";
 import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../api/leagues/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
@@ -18,13 +18,15 @@ import { Link } from "react-router-dom";
 const Leagues = () => {
   const { t } = useTranslation("Leagues");
 
-  const [filter, setFilter] = useState("");
-  const [sorts, setSorts] = useState("");
+  // const [filter, setFilter] = useState("");
+  // const [sorts, setSorts] = useState("");
   const [currentLeagueName, setCurrentLeagueName] = useState("");
   const [currentLeagueId, setCurrentLeagueId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
-  const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
+  // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
+  // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -36,6 +38,16 @@ const Leagues = () => {
     queryKey: ["leagues", groupId ? groupId : 0],
     queryFn: getLeagueByGroupId,
   });
+
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
 
   const handleEdit = (leagueName: string, leagueId: number) => {
     setCurrentLeagueName(leagueName);
@@ -49,30 +61,19 @@ const Leagues = () => {
     setIsDeleteOpen(true);
   };
 
+  const filteredData = data?.filter((league: LeagueType) =>
+    league.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
+  );
+
   return (
     <Page>
       <h1 className={styles.h1}>{t("title")}</h1>
 
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
-          <Search />
-          <div className={styles.filterContainer}>
-            <p className={styles.filterSubTitle}>{t("filter")}</p>
-            <SelectMenu
-              placeholder={t("filterOptions.item1")}
-              name="filter"
-              value={filter}
-              onValueChange={(value) => setFilter(value)}>
-              <SelectMenu.Group>
-                {filterStatuses.map((status, idx) => (
-                  <SelectMenu.Item key={idx} value={status}>
-                    {status}
-                  </SelectMenu.Item>
-                ))}
-              </SelectMenu.Group>
-            </SelectMenu>
-          </div>
+          <Search onSearchChange={setSearchQuery} />
 
+          {/* NOTE: WILL UNCOMMENT ONCE ACTIVE STATUS ADDED TO VIEW
           <div className={styles.filterContainer}>
             <p className={styles.filterSubTitle}>{t("sort")}</p>
             <SelectMenu
@@ -88,7 +89,7 @@ const Leagues = () => {
                 ))}
               </SelectMenu.Group>
             </SelectMenu>
-          </div>
+          </div> */}
         </div>
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -107,8 +108,8 @@ const Leagues = () => {
         </Modal>
       </div>
 
-      {data == null || data?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a League to Display...</p>
+      {filteredData == null || filteredData?.length === 0 ? (
+        <p className={styles.noLeagueMessage}>No leagues to display...</p>
       ) : (
         <DashboardTable headers={["League Name", "Options"]}>
           {isLoading ? (
@@ -120,7 +121,7 @@ const Leagues = () => {
               <td>Error Fetching Data</td>
             </tr>
           ) : (
-            data?.map((league: LeagueType, idx: number) => (
+            filteredData?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
                   <Link to={`/season/${league.id}/${league.name}`}>

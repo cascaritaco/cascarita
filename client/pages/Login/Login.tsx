@@ -32,6 +32,10 @@ const Login = () => {
     }
   };
 
+  const handleSignUp = async () => {
+    navigate("/register");
+  };
+
   return (
     <div className={styles.login} data-name="login">
       <div className={styles.left}>
@@ -58,6 +62,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Sign in</button>
+        <button onClick={handleSignUp}>Do not have an account?</button>
       </div>
     </div>
   );
