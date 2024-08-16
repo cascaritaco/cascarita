@@ -23,3 +23,8 @@ coverage
 
 # Build binaries not needed
 dist/*
+
+terraform/.terraform/*
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate
