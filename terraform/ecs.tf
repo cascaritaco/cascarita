@@ -1,15 +1,15 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "staging-ecs-cluster"
+  name = var.cluster_name
 
   tags = {
-    Name        = "staging-ecs-cluster"
-    Environment = "staging"
-    Project     = "cascarita"
+    Name        = var.cluster_name
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
 resource "aws_ecs_capacity_provider" "ecs_capacity_provider" {
-  name = "capacity"
+  name = var.capacity_provider_name
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.ecs_asg.arn
@@ -18,14 +18,14 @@ resource "aws_ecs_capacity_provider" "ecs_capacity_provider" {
       maximum_scaling_step_size = 1000
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
-      target_capacity           = 3
+      target_capacity           = var.target_capacity
     }
   }
 
   tags = {
     Name        = "ecs-capacity-provider"
-    Environment = "staging"
-    Project     = "cascarita"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
@@ -42,24 +42,24 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
 }
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
-  family             = "my-ecs-task"
-  network_mode       = "awsvpc"
-  cpu                = 256
+  family       = var.task_family_name
+  network_mode = "awsvpc"
+  cpu          = var.cpu_allocation
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "ARM64"
   }
   container_definitions = jsonencode([
     {
-      name      = "dockergs"
-      image     = "public.ecr.aws/z2w9v6e7/cascarita-server"
-      cpu       = 256
-      memory    = 512
+      name      = var.container_name
+      image     = var.container_image
+      cpu       = var.cpu_allocation
+      memory    = var.memory_allocation
       essential = true
       portMappings = [
         {
-          containerPort = 3000
-          hostPort      = 3000
+          containerPort = var.port
+          hostPort      = var.port
           protocol      = "tcp"
         }
       ]
@@ -68,16 +68,16 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 
   tags = {
     Name        = "ecs-task-definition"
-    Environment = "staging"
-    Project     = "cascarita"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
 resource "aws_ecs_service" "ecs_service" {
-  name            = "staging-ecs-service"
+  name            = "${var.environment}-ecs-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
-  desired_count   = 1
+  desired_count   = var.desired_count
 
   network_configuration {
     subnets         = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
@@ -100,15 +100,15 @@ resource "aws_ecs_service" "ecs_service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
-    container_name   = "dockergs"
-    container_port   = 3000
+    container_name   = var.container_name
+    container_port   = var.port
   }
 
   depends_on = [aws_autoscaling_group.ecs_asg]
 
   tags = {
     Name        = "ecs-service"
-    Environment = "staging"
-    Project     = "cascarita"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }

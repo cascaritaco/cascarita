@@ -1,17 +1,11 @@
-variable "vpc_cidr" {
-  description = "The CIDR block for the VPC"
-  type        = string
-  default     = "10.0.0.0/16"
-}
-
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   tags = {
-    Name        = "main-vpc"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
+    Name        = var.vpc_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
   }
 }
 
@@ -19,12 +13,12 @@ resource "aws_subnet" "subnet" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 1)
   map_public_ip_on_launch = true
-  availability_zone       = "us-west-1a"
+  availability_zone       = var.availability_zones[0]
   tags = {
-    Name        = "main-subnet-1"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
+    Name        = var.subnet_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
   }
 }
 
@@ -32,22 +26,22 @@ resource "aws_subnet" "subnet2" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 2)
   map_public_ip_on_launch = true
-  availability_zone       = "us-west-1b"
+  availability_zone       = var.availability_zones[1]
   tags = {
-    Name        = "main-subnet-2"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
+    Name        = var.subnet2_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
   }
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name        = "main-internet-gateway"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
+    Name        = var.internet_gateway_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
   }
 }
 
@@ -58,10 +52,10 @@ resource "aws_route_table" "route_table" {
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
   tags = {
-    Name        = "main-route-table"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
+    Name        = var.route_table_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
   }
 }
 
@@ -76,29 +70,29 @@ resource "aws_route_table_association" "subnet2_route" {
 }
 
 resource "aws_security_group" "security_group" {
-  name   = "ecs-security-group"
+  name   = var.security_group_name
   vpc_id = aws_vpc.main.id
 
   ingress {
     from_port   = 0
     to_port     = 0
-    protocol    = -1
+    protocol    = var.protocol
     self        = "false"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ingress_cidr_blocks
     description = "any"
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = var.protocol
+    cidr_blocks = var.egress_cidr_blocks
   }
 
   tags = {
-    Name        = "ecs-security-group"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
+    Name        = var.security_group_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
   }
 }

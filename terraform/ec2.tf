@@ -1,9 +1,9 @@
 resource "aws_launch_template" "ecs_lt" {
-  name_prefix   = "ecs-template"
-  image_id      = "ami-06e58c02ae8aabac6"
-  instance_type = "t4g.medium"
+  name_prefix   = var.name_prefix
+  image_id      = var.image_id
+  instance_type = var.instance_type
 
-  key_name               = "cascarita"
+  key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.security_group.id]
 
   iam_instance_profile {
@@ -22,21 +22,20 @@ resource "aws_launch_template" "ecs_lt" {
     resource_type = "instance"
     tags = {
       Name        = "ecs-staging-instance"
-      Environment = "staging"
-      Project     = "cascarita"
-      Owner       = "abanuelo"
-      Role        = "ECSWorkerNode"
-      Purpose     = "AutoScalingGroup"
+      Environment = var.environment
+      Project     = var.project_name
+      Owner       = var.owner
+      Role        = var.role_instance
+      Purpose     = var.purpose_instance
     }
   }
 
-
-    user_data = base64encode(file("ecs.sh"))
+  user_data = filebase64("${path.module}/ecs.sh")
 }
 
 resource "aws_autoscaling_group" "ecs_asg" {
   vpc_zone_identifier = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
-  desired_capacity    = 2
+  desired_capacity    = 1
   max_size            = 3
   min_size            = 1
 
@@ -61,17 +60,17 @@ resource "aws_lb" "ecs_alb" {
 
   tags = {
     Name        = "ecs-alb"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
-    Role        = "ECSLoadBalancer"
-    Purpose     = "TrafficDistribution"
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
+    Role        = var.role_lb
+    Purpose     = var.purpose_lb
   }
 }
 
 resource "aws_lb_listener" "ecs_alb_listener" {
   load_balancer_arn = aws_lb.ecs_alb.arn
-  port              = 3000
+  port              = var.port
   protocol          = "HTTP"
 
   default_action {
@@ -81,17 +80,17 @@ resource "aws_lb_listener" "ecs_alb_listener" {
 
   tags = {
     Name        = "ecs-alb-listener"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
-    Role        = "ECSLoadBalancerListener"
-    Purpose     = "RequestRouting"
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
+    Role        = var.role_listener
+    Purpose     = var.purpose_listener
   }
 }
 
 resource "aws_lb_target_group" "ecs_tg" {
   name        = "ecs-target-group"
-  port        = 80
+  port        = var.port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.main.id
@@ -102,10 +101,10 @@ resource "aws_lb_target_group" "ecs_tg" {
 
   tags = {
     Name        = "ecs-target-group"
-    Environment = "staging"
-    Project     = "cascarita"
-    Owner       = "abanuelo"
-    Role        = "ECSTargetGroup"
-    Purpose     = "LoadBalancing"
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
+    Role        = var.role_tg
+    Purpose     = var.purpose_tg
   }
 }
