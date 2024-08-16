@@ -99,6 +99,99 @@ const FormController = {
       next(error);
     }
   },
+
+  async updateForm(req, res, next) {
+    const { form_id } = req.params;
+    try {
+      const formResponse = await Form.findOne({
+        where: {
+          document_id: form_id,
+        },
+      });
+      if (!formResponse) {
+        res.status(404);
+        throw new Error(`no form with id ${form_id}`);
+      }
+
+      const responses = await Response.find({
+        form_id: req.params.form_id,
+      });
+
+      if (responses) {
+        res.status(401);
+        throw new Error(
+          `cannot edit form with form id (${form_id}) as it already has responses`,
+        );
+      }
+
+      const sqlFields = ["group_id", "created_by", "updated_by"];
+      const mongoFields = [
+        "form_data",
+        "form_blueprint",
+        "group_id",
+        "updated_by",
+      ];
+
+      const sqlUpdateData = {};
+      const mongoUpdateData = {};
+
+      Object.keys(req.body).forEach((key) => {
+        if (sqlFields.includes(key)) {
+          sqlUpdateData[key] = req.body[key];
+        }
+        if (mongoFields.includes(key)) {
+          mongoUpdateData[key] = req.body[key];
+        }
+      });
+
+      Object.keys(sqlUpdateData).forEach((key) => {
+        formResponse[key] = sqlUpdateData[key]
+          ? sqlUpdateData[key]
+          : formResponse[key];
+      });
+
+      await formResponse.validate();
+      await formResponse.save();
+
+      if (Object.keys(mongoUpdateData).length > 0) {
+        await FormMongo.updateOne(
+          { _id: form_id },
+          {
+            $set: mongoUpdateData,
+            $currentDate: { updatedAt: true },
+          },
+        );
+      }
+
+      res.json(formResponse);
+    } catch (error) {
+      next(error);
+    }
+  },
+  async deleteForm(req, res, next) {
+    const { form_id } = req.params;
+    try {
+      const formResponse = await Form.findOne({
+        where: {
+          document_id: form_id,
+        },
+      });
+      if (!formResponse) {
+        res.status(404);
+        throw new Error(`no form with form id: ${form_id}`);
+      }
+
+      await formResponse.destroy();
+
+      await Response.deleteMany({ form_id: form_id });
+
+      await FormMongo.deleteOne({ _id: form_id });
+
+      res.status(204).json();
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = FormController;
