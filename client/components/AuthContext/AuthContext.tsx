@@ -24,15 +24,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (window.location.pathname === "/login") {
+    if (window.location.pathname === "/register") {
       return;
     }
     const fetchCurrentUser = async () => {
       const user = await getUser(csrfToken);
       setCurrentUser(user);
-      if (!user) {
-        navigate("/login");
-      }
     };
 
     fetchCurrentUser();
