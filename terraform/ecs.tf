@@ -23,7 +23,7 @@ resource "aws_ecs_capacity_provider" "ecs_capacity_provider" {
   }
 
   tags = {
-    Name        = "ecs-capacity-provider"
+    Name        = "ecs-${var.environment}-capacity-provider"
     Environment = var.environment
     Project     = var.project_name
   }
@@ -67,14 +67,14 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   ])
 
   tags = {
-    Name        = "ecs-task-definition"
+    Name        = "ecs-${var.environment}-task-definition"
     Environment = var.environment
     Project     = var.project_name
   }
 }
 
 resource "aws_ecs_service" "ecs_service" {
-  name            = "${var.environment}-ecs-service"
+  name            = "ecs-${var.environment}-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
   desired_count   = var.desired_count
@@ -107,7 +107,7 @@ resource "aws_ecs_service" "ecs_service" {
   depends_on = [aws_autoscaling_group.ecs_asg]
 
   tags = {
-    Name        = "ecs-service"
+    Name        = "ecs-${var.environment}-service"
     Environment = var.environment
     Project     = var.project_name
   }

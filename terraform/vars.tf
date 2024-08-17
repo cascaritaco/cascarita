@@ -1,6 +1,12 @@
+# NOTE: Change this variable to target different infra either prod/staging
+variable "environment" {
+  description = "The environment for which these resources are created, e.g., staging or production."
+  default     = "staging"
+}
+
 variable "name_prefix" {
   description = "Prefix for the name of the AWS launch template."
-  default     = "ecs-template"
+  default     = "ecs-${var.environment}-template"
 }
 
 variable "image_id" {
@@ -16,11 +22,6 @@ variable "instance_type" {
 variable "key_name" {
   description = "The name of the key pair to use for the instance."
   default     = "cascarita"
-}
-
-variable "environment" {
-  description = "The environment for which these resources are created, e.g., staging or production."
-  default     = "staging"
 }
 
 variable "project_name" {
@@ -74,33 +75,28 @@ variable "purpose_tg" {
 }
 
 variable "port" {
-  description = "The port exposed load balancer and target group."
+  description = "The port exposed load balancer, target group, and container."
   default     = 80
-}
-
-variable "container_port" {
-  description = "The port exposed by our Docker container."
-  default     = 3001
 }
 
 variable "cluster_name" {
   description = "The name of the ECS cluster."
-  default     = "staging-ecs-cluster"
+  default     = "${var.environment}-ecs-cluster"
 }
 
 variable "capacity_provider_name" {
   description = "The name of the ECS capacity provider."
-  default     = "capacity"
+  default     = "${var.environment}-capacity"
 }
 
 variable "task_family_name" {
   description = "The family name for the ECS task."
-  default     = "my-ecs-task"
+  default     = "ecs-${var.environment}-task"
 }
 
 variable "container_name" {
   description = "The name of the container in the task definition."
-  default     = "nginx"
+  default     = "casc-server"
 }
 
 variable "container_image" {
@@ -130,32 +126,32 @@ variable "target_capacity" {
 
 variable "vpc_name" {
   description = "The name of the VPC."
-  default     = "main-vpc"
+  default     = "${var.environment}-vpc"
 }
 
 variable "subnet_name" {
   description = "The name of the first subnet."
-  default     = "main-subnet-1"
+  default     = "${var.environment}-subnet-1"
 }
 
 variable "subnet2_name" {
   description = "The name of the second subnet."
-  default     = "main-subnet-2"
+  default     = "${var.environment}-subnet-2"
 }
 
 variable "internet_gateway_name" {
   description = "The name of the internet gateway."
-  default     = "main-internet-gateway"
+  default     = "${var.environment}-internet-gateway"
 }
 
 variable "route_table_name" {
   description = "The name of the route table."
-  default     = "main-route-table"
+  default     = "${var.environment}-route-table"
 }
 
 variable "security_group_name" {
   description = "The name of the security group."
-  default     = "ecs-security-group"
+  default     = "ecs-${var.environment}-security-group"
 }
 
 variable "availability_zones" {
@@ -164,25 +160,18 @@ variable "availability_zones" {
   default     = ["us-west-1a", "us-west-1b"]
 }
 
-variable "ingress_cidr_blocks" {
-  description = "CIDR blocks for ingress rules."
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
+variable "staging_vpc_cidr" {
+  description = "CIDR block for the staging VPC."
+  default     = "10.0.0.0/16"
 }
 
-variable "egress_cidr_blocks" {
-  description = "CIDR blocks for egress rules."
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
-variable "protocol" {
-  description = "Protocol for ingress and egress rules."
-  default     = "-1" # -1 means all protocols
+variable "production_vpc_cidr" {
+  description = "CIDR block for the production VPC."
+  default     = "10.1.0.0/16"
 }
 
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = var.environment == "staging" ? var.staging_vpc_cidr : var.production_vpc_cidr
 }

@@ -54,7 +54,7 @@ resource "aws_launch_template" "ecs_lt" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "ecs-staging-instance"
+      Name        = "ecs-${var.environment}-instance"
       Environment = var.environment
       Project     = var.project_name
       Owner       = var.owner
@@ -67,9 +67,9 @@ resource "aws_launch_template" "ecs_lt" {
 }
 
 resource "aws_autoscaling_group" "ecs_asg" {
-  desired_capacity    = 2
-  max_size            = 3
-  min_size            = 1
+  desired_capacity    = var.desired_count
+  max_size            = var.target_capacity
+  min_size            = var.desired_count
 
   launch_template {
     id      = aws_launch_template.ecs_lt.id
@@ -86,14 +86,14 @@ resource "aws_autoscaling_group" "ecs_asg" {
 }
 
 resource "aws_lb" "ecs_alb" {
-  name               = "ecs-alb"
+  name               = "ecs-${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.security_group.id]
   subnets            = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
 
   tags = {
-    Name        = "ecs-alb"
+    Name        = "ecs-${var.environment}-alb"
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -113,7 +113,7 @@ resource "aws_lb_listener" "ecs_alb_listener" {
   }
 
   tags = {
-    Name        = "ecs-alb-listener"
+    Name        = "ecs-${var.environment}-alb-listener"
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -123,7 +123,7 @@ resource "aws_lb_listener" "ecs_alb_listener" {
 }
 
 resource "aws_lb_target_group" "ecs_tg" {
-  name        = "ecs-target-group"
+  name        = "ecs-${var.environment}-target-group"
   port        = var.port
   protocol    = "HTTP"
   target_type = "ip"
@@ -134,7 +134,7 @@ resource "aws_lb_target_group" "ecs_tg" {
   }
 
   tags = {
-    Name        = "ecs-target-group"
+    Name        = "ecs-${var.environment}-target-group"
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
