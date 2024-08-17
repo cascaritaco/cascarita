@@ -1,12 +1,18 @@
 # NOTE: Change this variable to target different infra either prod/staging
+# Remember to update the `ecs.sh` with the right environment as well
 variable "environment" {
   description = "The environment for which these resources are created, e.g., staging or production."
   default     = "staging"
 }
 
-variable "name_prefix" {
-  description = "Prefix for the name of the AWS launch template."
-  default     = "ecs-${var.environment}-template"
+variable "policy_arn" {
+  description = "The policy arn associated with adding EC2 instances to ECS cluster."
+  default     = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+variable "instance_policy_name" {
+  description = "The instance policy name associated with role for adding EC2 instances to ECS cluster."
+  default     = "ecsInstanceProfile"
 }
 
 variable "image_id" {
@@ -79,21 +85,6 @@ variable "port" {
   default     = 80
 }
 
-variable "cluster_name" {
-  description = "The name of the ECS cluster."
-  default     = "${var.environment}-ecs-cluster"
-}
-
-variable "capacity_provider_name" {
-  description = "The name of the ECS capacity provider."
-  default     = "${var.environment}-capacity"
-}
-
-variable "task_family_name" {
-  description = "The family name for the ECS task."
-  default     = "ecs-${var.environment}-task"
-}
-
 variable "container_name" {
   description = "The name of the container in the task definition."
   default     = "casc-server"
@@ -124,54 +115,64 @@ variable "target_capacity" {
   default     = 3
 }
 
-variable "vpc_name" {
-  description = "The name of the VPC."
-  default     = "${var.environment}-vpc"
-}
-
-variable "subnet_name" {
-  description = "The name of the first subnet."
-  default     = "${var.environment}-subnet-1"
-}
-
-variable "subnet2_name" {
-  description = "The name of the second subnet."
-  default     = "${var.environment}-subnet-2"
-}
-
-variable "internet_gateway_name" {
-  description = "The name of the internet gateway."
-  default     = "${var.environment}-internet-gateway"
-}
-
-variable "route_table_name" {
-  description = "The name of the route table."
-  default     = "${var.environment}-route-table"
-}
-
-variable "security_group_name" {
-  description = "The name of the security group."
-  default     = "ecs-${var.environment}-security-group"
-}
-
 variable "availability_zones" {
   description = "List of availability zones for the subnets."
   type        = list(string)
   default     = ["us-west-1a", "us-west-1b"]
 }
 
-variable "staging_vpc_cidr" {
-  description = "CIDR block for the staging VPC."
-  default     = "10.0.0.0/16"
-}
-
-variable "production_vpc_cidr" {
-  description = "CIDR block for the production VPC."
-  default     = "10.1.0.0/16"
-}
-
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC"
   type        = string
-  default     = var.environment == "staging" ? var.staging_vpc_cidr : var.production_vpc_cidr
+  default     = "10.1.0.0/16"
+}
+
+/*
+    LOCAL VARIABLES THAT REFERENCE DEPLOYED ENVIRONMENT
+*/
+locals {
+  cluster_name = "ecs-${var.environment}-cluster"
+}
+locals {
+  service_name = "ecs-${var.environment}-service"
+}
+locals {
+  instance_name = "ecs-${var.environment}-instance"
+}
+locals {
+  alb_lb_target_group_name = "ecs-${var.environment}-target-group"
+}
+locals {
+  alb_name = "ecs-${var.environment}-alb"
+}
+locals {
+  alb_listener_name = "ecs-${var.environment}-alb-listener"
+}
+locals {
+  name_prefix = "ecs-${var.environment}-template"
+}
+// NOTE: cannot be prefixed with "aws", "ecs", or "fargate"
+locals {
+  capacity_provider_name = "${var.environment}-capacity"
+}
+locals {
+  task_family_name = "ecs-${var.environment}-task"
+}
+locals {
+  security_group_name = "ecs-${var.environment}-security-group"
+}
+locals {
+  vpc_name = "${var.environment}-vpc"
+}
+locals {
+  subnet_name = "${var.environment}-subnet-1"
+}
+locals {
+  subnet2_name = "${var.environment}-subnet-2"
+}
+locals {
+  internet_gateway_name = "${var.environment}-internet-gateway"
+}
+locals {
+  route_table_name = "${var.environment}-route-table"
 }

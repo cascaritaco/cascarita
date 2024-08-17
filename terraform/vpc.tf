@@ -2,7 +2,7 @@ resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   tags = {
-    Name        = var.vpc_name
+    Name        = local.vpc_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -14,8 +14,9 @@ resource "aws_subnet" "subnet" {
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 1)
   map_public_ip_on_launch = true
   availability_zone       = var.availability_zones[0]
+  depends_on = [aws_vpc.main]
   tags = {
-    Name        = var.subnet_name
+    Name        = local.subnet_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -27,8 +28,9 @@ resource "aws_subnet" "subnet2" {
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 2)
   map_public_ip_on_launch = true
   availability_zone       = var.availability_zones[1]
+  depends_on = [aws_vpc.main]
   tags = {
-    Name        = var.subnet2_name
+    Name        = local.subnet2_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -37,8 +39,9 @@ resource "aws_subnet" "subnet2" {
 
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.main.id
+  depends_on = [aws_subnet.subnet, aws_subnet.subnet2]
   tags = {
-    Name        = var.internet_gateway_name
+    Name        = local.internet_gateway_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -51,8 +54,9 @@ resource "aws_route_table" "route_table" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
+  depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
-    Name        = var.route_table_name
+    Name        = local.route_table_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -62,16 +66,19 @@ resource "aws_route_table" "route_table" {
 resource "aws_route_table_association" "subnet_route" {
   subnet_id      = aws_subnet.subnet.id
   route_table_id = aws_route_table.route_table.id
+  depends_on = [aws_route_table.route_table]
 }
 
 resource "aws_route_table_association" "subnet2_route" {
   subnet_id      = aws_subnet.subnet2.id
   route_table_id = aws_route_table.route_table.id
+  depends_on = [aws_route_table.route_table]
 }
 
 resource "aws_security_group" "security_group" {
-  name   = var.security_group_name
+  name   = local.security_group_name
   vpc_id = aws_vpc.main.id
+  depends_on = [aws_vpc.main]
 
   ingress {
    from_port   = 0
@@ -90,7 +97,7 @@ resource "aws_security_group" "security_group" {
  }
 
   tags = {
-    Name        = var.security_group_name
+    Name        = local.security_group_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner

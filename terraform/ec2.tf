@@ -17,16 +17,16 @@ resource "aws_iam_role" "ecs_instance_role" {
 
 resource "aws_iam_role_policy_attachment" "ecs_instance_role_attachment" {
   role       = aws_iam_role.ecs_instance_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  policy_arn = var.policy_arn
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
-  name = "ecsInstanceProfile"
+  name = var.instance_policy_name
   role = aws_iam_role.ecs_instance_role.name
 }
 
 resource "aws_launch_template" "ecs_lt" {
-  name_prefix   = var.name_prefix
+  name_prefix   = local.name_prefix
   image_id      = var.image_id
   instance_type = var.instance_type
 
@@ -54,7 +54,7 @@ resource "aws_launch_template" "ecs_lt" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "ecs-${var.environment}-instance"
+      Name        = local.instance_name
       Environment = var.environment
       Project     = var.project_name
       Owner       = var.owner
@@ -78,6 +78,8 @@ resource "aws_autoscaling_group" "ecs_asg" {
 
   vpc_zone_identifier = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
 
+  depends_on = [aws_lb.ecs_alb]
+
   tag {
     key                 = "AmazonECSManaged"
     value               = true
@@ -86,14 +88,14 @@ resource "aws_autoscaling_group" "ecs_asg" {
 }
 
 resource "aws_lb" "ecs_alb" {
-  name               = "ecs-${var.environment}-alb"
+  name               = local.alb_name
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.security_group.id]
   subnets            = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
 
   tags = {
-    Name        = "ecs-${var.environment}-alb"
+    Name        = local.alb_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -113,7 +115,7 @@ resource "aws_lb_listener" "ecs_alb_listener" {
   }
 
   tags = {
-    Name        = "ecs-${var.environment}-alb-listener"
+    Name        = local.alb_listener_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner
@@ -123,7 +125,7 @@ resource "aws_lb_listener" "ecs_alb_listener" {
 }
 
 resource "aws_lb_target_group" "ecs_tg" {
-  name        = "ecs-${var.environment}-target-group"
+  name        = local.alb_lb_target_group_name
   port        = var.port
   protocol    = "HTTP"
   target_type = "ip"
@@ -134,7 +136,7 @@ resource "aws_lb_target_group" "ecs_tg" {
   }
 
   tags = {
-    Name        = "ecs-${var.environment}-target-group"
+    Name        = local.alb_lb_target_group_name
     Environment = var.environment
     Project     = var.project_name
     Owner       = var.owner

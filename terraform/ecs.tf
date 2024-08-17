@@ -1,15 +1,15 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = var.cluster_name
+  name = local.cluster_name
 
   tags = {
-    Name        = var.cluster_name
+    Name        = local.cluster_name
     Environment = var.environment
     Project     = var.project_name
   }
 }
 
 resource "aws_ecs_capacity_provider" "ecs_capacity_provider" {
-  name = var.capacity_provider_name
+  name = local.capacity_provider_name
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.ecs_asg.arn
@@ -23,7 +23,7 @@ resource "aws_ecs_capacity_provider" "ecs_capacity_provider" {
   }
 
   tags = {
-    Name        = "ecs-${var.environment}-capacity-provider"
+    Name        = local.capacity_provider_name
     Environment = var.environment
     Project     = var.project_name
   }
@@ -42,7 +42,7 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
 }
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
-  family       = var.task_family_name
+  family       = local.task_family_name
   network_mode = "awsvpc"
   cpu          = var.cpu_allocation
   runtime_platform {
@@ -67,14 +67,14 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   ])
 
   tags = {
-    Name        = "ecs-${var.environment}-task-definition"
+    Name        = local.task_family_name
     Environment = var.environment
     Project     = var.project_name
   }
 }
 
 resource "aws_ecs_service" "ecs_service" {
-  name            = "ecs-${var.environment}-service"
+  name            = local.service_name
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
   desired_count   = var.desired_count
@@ -107,7 +107,7 @@ resource "aws_ecs_service" "ecs_service" {
   depends_on = [aws_autoscaling_group.ecs_asg]
 
   tags = {
-    Name        = "ecs-${var.environment}-service"
+    Name        = local.service_name
     Environment = var.environment
     Project     = var.project_name
   }
