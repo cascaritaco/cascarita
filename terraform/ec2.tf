@@ -15,31 +15,9 @@ resource "aws_iam_role" "ecs_instance_role" {
   })
 }
 
-resource "aws_iam_policy" "ecs_instance_policy" {
-  name        = "ecsInstancePolicy"
-  description = "Policy to allow ECS registration and SSM actions"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ssm:*",
-          "ec2messages:*",
-          "ecs:*",
-          "ecr:*",
-          "logs:*"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_instance_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "ecs_instance_role_attachment" {
   role       = aws_iam_role.ecs_instance_role.name
-  policy_arn  = aws_iam_policy.ecs_instance_policy.arn
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
@@ -53,17 +31,23 @@ resource "aws_launch_template" "ecs_lt" {
   instance_type = var.instance_type
 
   key_name               = var.key_name
-  vpc_security_group_ids = [aws_security_group.security_group.id]
 
   iam_instance_profile {
     name = aws_iam_instance_profile.ecs_instance_profile.name
   }
 
+  network_interfaces {
+    associate_public_ip_address = true
+    subnet_id                   = aws_subnet.subnet.id
+    security_groups             = [aws_security_group.security_group.id]
+    delete_on_termination       = true
+  }
+
   block_device_mappings {
-    device_name = "/dev/xvda"
+    device_name = "/dev/sdf"
+
     ebs {
-      volume_size = 30
-      volume_type = "gp2"
+      volume_size = 20
     }
   }
 
@@ -83,8 +67,7 @@ resource "aws_launch_template" "ecs_lt" {
 }
 
 resource "aws_autoscaling_group" "ecs_asg" {
-  vpc_zone_identifier = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
-  desired_capacity    = 1
+  desired_capacity    = 2
   max_size            = 3
   min_size            = 1
 
@@ -92,6 +75,8 @@ resource "aws_autoscaling_group" "ecs_asg" {
     id      = aws_launch_template.ecs_lt.id
     version = "$Latest"
   }
+
+  vpc_zone_identifier = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
 
   tag {
     key                 = "AmazonECSManaged"

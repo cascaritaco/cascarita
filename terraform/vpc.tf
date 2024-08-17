@@ -74,20 +74,20 @@ resource "aws_security_group" "security_group" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = var.protocol
-    self        = "false"
-    cidr_blocks = var.ingress_cidr_blocks
-    description = "any"
-  }
+   from_port   = 0
+   to_port     = 0
+   protocol    = -1
+   self        = "false"
+   cidr_blocks = ["0.0.0.0/0"]
+   description = "any"
+ }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = var.protocol
-    cidr_blocks = var.egress_cidr_blocks
-  }
+ egress {
+   from_port   = 0
+   to_port     = 0
+   protocol    = "-1"
+   cidr_blocks = ["0.0.0.0/0"]
+ }
 
   tags = {
     Name        = var.security_group_name

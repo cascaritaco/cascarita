@@ -5,12 +5,12 @@ variable "name_prefix" {
 
 variable "image_id" {
   description = "The ID of the AMI to use for the instance."
-  default     = "ami-06e58c02ae8aabac6"
+  default     = "ami-0211752aa919a35bf"
 }
 
 variable "instance_type" {
-  description = "The type of instance to start, e.g., t4g.medium."
-  default     = "t4g.medium"
+  description = "The type of instance to start, e.g., t4g.small."
+  default     = "t4g.small"
 }
 
 variable "key_name" {
@@ -74,7 +74,12 @@ variable "purpose_tg" {
 }
 
 variable "port" {
-  description = "The port exposed load balancer, target group, and server container."
+  description = "The port exposed load balancer and target group."
+  default     = 80
+}
+
+variable "container_port" {
+  description = "The port exposed by our Docker container."
   default     = 3001
 }
 
@@ -95,12 +100,12 @@ variable "task_family_name" {
 
 variable "container_name" {
   description = "The name of the container in the task definition."
-  default     = "dockergs"
+  default     = "nginx"
 }
 
 variable "container_image" {
   description = "The container image to be used in the task definition."
-  default     = "public.ecr.aws/z2w9v6e7/cascarita-server"
+  default     = "public.ecr.aws/nginx/nginx:latest"
 }
 
 variable "cpu_allocation" {
