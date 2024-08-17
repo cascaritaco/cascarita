@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { useTranslation } from "react-i18next";
 import {
-  deleteTypeformForm,
+  deleteForm,
   getMongoFormById,
   getMongoForms,
 } from "../../api/forms/service";
@@ -83,7 +83,7 @@ const Forms = () => {
 
   // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
-    await deleteTypeformForm(id);
+    await deleteForm(id);
     setForms((forms) => forms.filter((form) => form.form_data.id !== id));
   };
 
