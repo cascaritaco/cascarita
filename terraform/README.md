@@ -39,6 +39,7 @@
 4. As part of initialization navigate to the `terraform` directory and run:
 
    ```
+    cd terraform
     terraform init
    ```
 
