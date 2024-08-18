@@ -8,5 +8,6 @@
   "questionPlaceholder": "Pregunta",
   "requiredText": "Requerido",
   "multipleSelection": "Selección Múltiple",
-  "maxCharacters": "Máximo de Caracteres"
+  "maxCharacters": "Máximo de Caracteres",
+  "payment": "Pago"
 }

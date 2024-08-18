@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableShortTextProps } from "./types";
-import styles from "./DraggableShortText.module.css";
+import { DraggablePaymentProps } from "./types";
+import styles from "./DraggablePayment.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
 
-const DraggableShortText: React.FC<DraggableShortTextProps> = ({
+const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   id,
   index,
   title,
@@ -53,7 +53,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }} ref={containerRef}>
-            <p className={styles.textElementTypeText}>{t("shortText")}</p>
+            <p className={styles.textElementTypeText}>{t("payment")}</p>
             <div
               style={{
                 padding: 16,
@@ -146,4 +146,4 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   );
 };
 
-export default DraggableShortText;
+export default DraggablePayment;

@@ -6,7 +6,8 @@ export type FieldType =
   | "long_text"
   | "dropdown"
   | "email"
-  | "phone_number";
+  | "phone_number"
+  | "payment";
 
 export interface Validation {
   max_length?: number;
@@ -22,6 +23,7 @@ export interface Properties {
   choices?: Label[];
   allow_multiple_selection?: boolean;
   default_country_code?: string;
+  currency?: string;
 }
 
 export interface Field {

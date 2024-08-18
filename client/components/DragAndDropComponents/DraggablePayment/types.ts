@@ -1,7 +1,7 @@
 import { Control } from "react-hook-form";
 import { Field, Validation } from "../DNDCanvas/types";
 
-export interface DraggableShortTextProps {
+export interface DraggablePaymentProps {
   id: string;
   index: number;
   title: string;
