@@ -9,5 +9,8 @@
   "requiredText": "Required",
   "multipleSelection": "Multiple Selection",
   "maxCharacters": "Max Characters",
-  "payment": "Payment"
+  "payment": "Payment",
+  "title": "Title",
+  "description": "Description",
+  "paymentAmount": "Payment Amount"
 }

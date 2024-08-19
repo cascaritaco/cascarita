@@ -72,7 +72,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                 render={({ field }) => (
                   <input
                     {...field}
-                    placeholder={"Title"}
+                    placeholder={t("title")}
                     className={styles.question}
                   />
                 )}
@@ -85,7 +85,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                   render={({ field }) => (
                     <input
                       {...field}
-                      placeholder={"Description"}
+                      placeholder={t("description")}
                       className={styles.question}
                     />
                   )}
@@ -95,7 +95,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
               {properties?.price != null && (
                 <>
                   <div className={styles.payment}>
-                    <p className={styles.paymentText}>Payment Amount: </p>
+                    <p className={styles.paymentText}>{t("paymentAmount")}: </p>
                     <div className={styles.paymentInputGroup}>
                       <p className={styles.currencySymbol}>$</p>
                       <Controller
