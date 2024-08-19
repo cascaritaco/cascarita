@@ -7,6 +7,7 @@ import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
+import { formatPayment } from "../../../util/formatPayment";
 
 const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   id,
@@ -14,6 +15,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   title,
   control,
   validations,
+  properties,
   onDelete,
   onCopy,
 }) => {
@@ -68,43 +70,66 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                 control={control}
                 defaultValue={title} // Ensure the default value is set
                 render={({ field }) => (
-                  <>
-                    <input
-                      {...field}
-                      placeholder={t("questionPlaceholder")}
-                      className={styles.question}
-                    />
-                    <hr />
-                  </>
+                  <input
+                    {...field}
+                    placeholder={"Title"}
+                    className={styles.question}
+                  />
                 )}
               />
+              {properties?.description != null && (
+                <Controller
+                  name={`fields.${index}.properties.description`}
+                  control={control}
+                  defaultValue={properties?.description}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder={"Description"}
+                      className={styles.question}
+                    />
+                  )}
+                />
+              )}
+              <hr />
+              {properties?.price != null && (
+                <>
+                  <div className={styles.payment}>
+                    <p className={styles.paymentText}>Payment Amount: </p>
+                    <div className={styles.paymentInputGroup}>
+                      <p className={styles.currencySymbol}>$</p>
+                      <Controller
+                        key={index}
+                        name={`fields.${index}.properties.price.value`}
+                        control={control}
+                        defaultValue={properties.price.value}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            value={formatPayment(field.value)}
+                            placeholder={"0.00"}
+                            className={styles.paymentInput}
+                          />
+                        )}
+                      />
+                    </div>
+                    <p className={styles.currency}>
+                      {properties.price?.currency}
+                    </p>
+                  </div>
+                </>
+              )}
+              {/* TODO: Add Stripe Accounts */}
+              <select className={styles.input}>
+                <option value="">Select an Account</option>
+                <option value="1">Account 1</option>
+                <option value="2">Account 2</option>
+                <option value="3">Account 3</option>
+              </select>
               <div
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""
                 }`}>
-                {validations?.max_length != null && (
-                  <>
-                    <p className={styles.requiredText}>{t("maxCharacters")}</p>
-                    <Controller
-                      name={`fields.${index}.validations.max_length`}
-                      control={control}
-                      defaultValue={validations.max_length}
-                      render={({ field }) => (
-                        <>
-                          <input
-                            {...field}
-                            type="number"
-                            min={0}
-                            max={10000}
-                            placeholder={"0 - 10,000"}
-                            className={styles.requiredText}
-                          />
-                          <hr />
-                        </>
-                      )}
-                    />
-                  </>
-                )}
                 {validations?.required != null && (
                   <>
                     <p className={styles.requiredText}>{t("requiredText")}</p>

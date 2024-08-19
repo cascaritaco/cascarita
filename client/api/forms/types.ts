@@ -19,7 +19,14 @@ export interface Label {
 
 export interface Properties {
   choices?: Label[];
+  allow_multiple_selection?: boolean;
   default_country_code?: string;
+  description?: string;
+  price?: {
+    type: string;
+    value: string;
+    currency: string;
+  };
 }
 
 export interface Field {

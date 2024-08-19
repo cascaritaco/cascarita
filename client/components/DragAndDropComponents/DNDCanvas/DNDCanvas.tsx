@@ -100,7 +100,10 @@ const DNDCanvas = forwardRef(
           title: "",
           id: item.id,
           ref: item.id,
-          properties: { currency: "USD" },
+          properties: {
+            price: { type: "fixed", value: "", currency: "USD" },
+            description: "",
+          },
           validations: { required: false },
           type: item.type,
         },
