@@ -40,7 +40,7 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
   }, []);
 
   const handleClick = () => {
-    setIsMenuOpen((prev) => !prev);
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -54,14 +54,7 @@ const DraggableLongText: React.FC<DraggableLongTextProps> = ({
           onClick={handleClick}>
           <div style={{ position: "relative" }} ref={containerRef}>
             <p className={styles.textElementTypeText}>{t("longText")}</p>
-            <div
-              style={{
-                padding: 16,
-                margin: "0 0 8px 0",
-                background: "#FFFFFF",
-                border: "1px solid #DFE5EE",
-                borderRadius: 10,
-              }}>
+            <div className={styles.draggableContainer}>
               <Controller
                 key={index}
                 name={`fields.${index}.title`}

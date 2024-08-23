@@ -42,7 +42,16 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   }, []);
 
   const handleClick = () => {
-    setIsMenuOpen((prev) => !prev);
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const getAccounts = () => {
+    const accounts = [];
+    accounts.push(<option value="">Select an Account</option>);
+    for (let i = 1; i < 5; ++i) {
+      accounts.push(<option value={i}>Account {i}</option>);
+    }
+    return accounts;
   };
 
   return (
@@ -56,14 +65,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
           onClick={handleClick}>
           <div style={{ position: "relative" }} ref={containerRef}>
             <p className={styles.textElementTypeText}>{t("payment")}</p>
-            <div
-              style={{
-                padding: 16,
-                margin: "0 0 8px 0",
-                background: "#FFFFFF",
-                border: "1px solid #DFE5EE",
-                borderRadius: 10,
-              }}>
+            <div className={styles.draggableContainer}>
               <Controller
                 key={index}
                 name={`fields.${index}.title`}
@@ -120,12 +122,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                 </>
               )}
               {/* TODO: Add Stripe Accounts */}
-              <select className={styles.input}>
-                <option value="">Select an Account</option>
-                <option value="1">Account 1</option>
-                <option value="2">Account 2</option>
-                <option value="3">Account 3</option>
-              </select>
+              <select className={styles.input}>{getAccounts()}</select>
               <div
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""
