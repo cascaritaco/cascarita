@@ -38,10 +38,9 @@ const ConnectAccountController = function () {
           }
           break;
         default:
-          statusCode = 400;
+          statusCode = 403;
           responseBody = { message: "Unhandled event type" };
       }
-
       return res.status(statusCode).json(responseBody);
     } catch (error) {
       return res.status(400).send(`Webhook Error: ${error.message}`);
