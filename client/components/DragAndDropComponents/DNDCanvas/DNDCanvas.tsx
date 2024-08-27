@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
 import DraggableEmail from "../DraggableEmail/DraggableEmail";
 import { StrictModeDroppable } from "../../StrictModeDroppable/StrictModeDroppable";
+import DraggablePayment from "../DraggablePayment/DraggablePayment";
 
 const DNDCanvas = forwardRef(
   (
@@ -45,6 +46,7 @@ const DNDCanvas = forwardRef(
       long_text: DraggableLongText,
       email: DraggableEmail,
       phone_number: DraggablePhoneNumber,
+      payment: DraggablePayment,
     };
 
     const appendField = (item: DroppedItem) => {
@@ -91,6 +93,17 @@ const DNDCanvas = forwardRef(
           id: item.id,
           ref: item.id,
           properties: { default_country_code: "US" },
+          validations: { required: false },
+          type: item.type,
+        },
+        payment: {
+          title: "",
+          id: item.id,
+          ref: item.id,
+          properties: {
+            price: { type: "fixed", value: "", currency: "USD" },
+            description: "",
+          },
           validations: { required: false },
           type: item.type,
         },
