@@ -7,5 +7,10 @@
   "shortText": "Texto Corto",
   "questionPlaceholder": "Pregunta",
   "requiredText": "Requerido",
-  "multipleSelection": "Selección Múltiple"
+  "multipleSelection": "Selección Múltiple",
+  "maxCharacters": "Máximo de Caracteres",
+  "payment": "Pago",
+  "title": "Título",
+  "description": "Descripción",
+  "paymentAmount": "Cantidad de Pago"
 }

@@ -21,6 +21,10 @@
   border-radius: 5px;
 }
 
+.options:hover {
+  cursor: pointer;
+}
+
 .seperator {
   border-bottom: 1px solid #c8cbd0;
   margin-bottom: 3px;

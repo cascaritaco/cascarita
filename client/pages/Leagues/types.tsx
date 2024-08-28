@@ -13,4 +13,10 @@ interface LeagueType {
   updated_at: Date;
 }
 
-export type { LeaguesProps, LeagueType };
+interface EditModalProps {
+  leagueName: string;
+  leagueDescription: string;
+  isEditOpen: () => void;
+}
+
+export type { LeaguesProps, LeagueType, EditModalProps };

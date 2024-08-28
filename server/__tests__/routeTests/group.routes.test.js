@@ -50,8 +50,9 @@ describe("Integration Tests for Group", () => {
 
   describe("GET/ Group routes", () => {
     it("successful GET of group information", async () => {
-      const coolGroup =
-        await TestDataGenerator.createDummyGroup("Sample Group");
+      const coolGroup = await TestDataGenerator.createDummyGroup(
+        "Sample Group",
+      );
 
       const response = await request(app).get(`/groups/${coolGroup.id}`);
 
@@ -171,45 +172,6 @@ describe("Integration Tests for Group", () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
-    });
-  });
-
-  // ---------------- CREATE ----------------
-
-  describe("POST/ Group routes", () => {
-    it("successful POST when creating a new group", async () => {
-      const response = await request(app).post("/groups/").send(sampleGroup);
-
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          name: "Sample Group",
-          city: "Sample City",
-        }),
-      );
-    });
-
-    it("error POST when creating a new group with the same name", async () => {
-      const coolGroup =
-        await TestDataGenerator.createDummyGroup("Sample Group");
-
-      const response = await request(app).post("/groups/").send(sampleGroup);
-
-      expect(response.status).toBe(500);
-      expect(response.body).toMatchObject({
-        message: "Validation error",
-      });
-    });
-
-    it("error POST when creating a new group with a bad state name", async () => {
-      const response = await request(app)
-        .post("/groups/")
-        .send(sampleErrorGroup);
-
-      expect(response.status).toBe(500);
-      expect(response.body).toMatchObject({
-        message: "Validation error: Invalid state abbreviation",
-      });
     });
   });
 

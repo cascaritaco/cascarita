@@ -14,7 +14,7 @@ import { useAuth } from "../../components/AuthContext/AuthContext";
 import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
-import { createMongoForm, updateTypeformForm } from "../../api/forms/service";
+import { createMongoForm, updateForm } from "../../api/forms/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -49,6 +49,7 @@ const NewForm = () => {
     "Multiple Choice",
     "Email",
     "Phone Number",
+    "Payment",
   ];
 
   const handleDrop = (label: DroppedItemType) => {
@@ -88,17 +89,23 @@ const NewForm = () => {
       currentUser?.group_id,
       currentUser?.id,
     );
-    setFormLink(response.form_data._links.display);
+    setFormLink(`${window.location.origin}/forms/${response._id}`);
     setFormId(response._id);
     setFields(response.form_data.fields);
   };
 
   // TODO: save by mongo form ID
   const onSave = async (data: Form) => {
-    if (formId == null || formId === undefined) {
+    if (formId == null) {
       throw new Error("Form ID is undefined");
     }
-    const response = await updateTypeformForm(data, formId, title, description);
+    const response = await updateForm(
+      data,
+      formId,
+      title,
+      description,
+      currentUser,
+    );
     setFields(response.fields);
   };
 

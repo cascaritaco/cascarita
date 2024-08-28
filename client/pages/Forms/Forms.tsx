@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
 import { useTranslation } from "react-i18next";
 import {
-  deleteTypeformForm,
+  deleteForm,
   getMongoFormById,
   getMongoForms,
 } from "../../api/forms/service";
@@ -48,9 +48,22 @@ const Forms = () => {
   const [sorts, setSorts] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [currentFormLink, setCurrentFormLink] = useState("");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+
+  useEffect(() => {
+    const handleDebounce = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handleDebounce);
+    };
+  }, [searchQuery]);
 
   useEffect(() => {
     (async () => {
@@ -63,9 +76,14 @@ const Forms = () => {
     navigate("/forms/check");
   };
 
+  const handleShareClick = (formLink: string) => {
+    setCurrentFormLink(formLink);
+    setIsOpen(true);
+  };
+
   // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
-    await deleteTypeformForm(id);
+    await deleteForm(id);
     setForms((forms) => forms.filter((form) => form.form_data.id !== id));
   };
 
@@ -78,18 +96,33 @@ const Forms = () => {
         title: form.form_data.title,
         description:
           form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form.form_data._links.display,
+        link: form.form_data.title,
         fields: form.form_data.fields,
       },
     });
   };
+
+  const filteredData = forms
+    ?.filter((form: Form) =>
+      form.form_data.title.toLowerCase().includes(debouncedQuery.toLowerCase()),
+    )
+    ?.sort((a: Form, b: Form) => {
+      if (sorts === t("sortOptions.item1")) {
+        return a.form_data.title.localeCompare(b.form_data.title);
+      } else if (sorts === t("sortOptions.item2")) {
+        return (
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
+      }
+      return 0;
+    });
 
   return (
     <Page>
       <h1 className={styles.h1}>{t("title")}</h1>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
-          <Search />
+          <Search onSearchChange={setSearchQuery} />
           <div className={styles.filterContainer}>
             <p className={styles.filterSubTitle}>{t("sort")}</p>
             <SelectMenu
@@ -110,37 +143,52 @@ const Forms = () => {
         <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
         <ConnectWithStripeButton />
       </div>
-      <div className={styles.cols}>
-        <h3>{t("col1")}</h3>
-        <h3>{t("col2")}</h3>
-        <h3>{t("col3")}</h3>
-        <h3>{t("col4")}</h3>
-        <h3>{t("col5")}</h3>
-      </div>
-      <div className={styles.table}>
-        <div>
-          {forms.map((form, index) => (
-            <div className={styles.cols} key={index}>
-              <p>
-                <a href={`/forms/${form._id}`} style={{ cursor: "pointer" }}>
-                  {form.form_data.title}
-                </a>
-              </p>
-              <p>{form.created_by?.first_name ?? ""}</p>
-              <p>{new Date(form.updatedAt).toLocaleString()}</p>
-              <DropdownMenuButton
-                onDelete={() => onDelete(form._id)}
-                onEdit={() => onEdit(form._id)}
-              />
-              <ShareModal
-                formLink={form.form_data._links.display}
-                isOpen={isOpen}
-                onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
-              />
-            </div>
-          ))}
+      {filteredData == null || filteredData?.length === 0 ? (
+        <p className={styles.noLeagueMessage}>No divisions to display...</p>
+      ) : (
+        <div className={styles.table}>
+          <div className={styles.cols}>
+            <h3>{t("col1")}</h3>
+            <h3>{t("col2")}</h3>
+            <h3>{t("col3")}</h3>
+            <h3>{t("col4")}</h3>
+            <h3>{t("col5")}</h3>
+          </div>
+          <div>
+            {filteredData.map((form, index) => (
+              <div className={styles.cols} key={index}>
+                <p>
+                  <a href={`/forms/${form._id}`} style={{ cursor: "pointer" }}>
+                    {form.form_data.title}
+                  </a>
+                </p>
+                <p>{form.created_by?.first_name ?? ""}</p>
+                <p>{new Date(form.updatedAt).toLocaleString()}</p>
+                <DropdownMenuButton
+                  onDelete={() => onDelete(form._id)}
+                  onEdit={() => onEdit(form._id)}
+                />
+                <button
+                  onClick={() =>
+                    handleShareClick(
+                      `${window.location.origin}/forms/${form._id}`,
+                    )
+                  }>
+                  <ShareButton />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {isOpen && (
+        <ShareModal
+          formLink={currentFormLink}
+          isOpen={isOpen}
+          onOpen={(isOpen: boolean) => setIsOpen(isOpen)}
+        />
+      )}
     </Page>
   );
 };
