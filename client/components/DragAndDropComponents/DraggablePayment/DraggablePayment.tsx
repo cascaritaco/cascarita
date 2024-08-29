@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableShortTextProps } from "./types";
-import styles from "./DraggableShortText.module.css";
+import { DraggablePaymentProps } from "./types";
+import styles from "./DraggablePayment.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
+import { formatPayment } from "../../../util/formatPayment";
 
-const DraggableShortText: React.FC<DraggableShortTextProps> = ({
+const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   id,
   index,
   title,
   control,
   validations,
+  properties,
   onDelete,
   onCopy,
 }) => {
@@ -43,6 +45,15 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const getAccounts = () => {
+    const accounts = [];
+    accounts.push(<option value="">Select an Account</option>);
+    for (let i = 1; i < 5; ++i) {
+      accounts.push(<option value={i}>Account {i}</option>);
+    }
+    return accounts;
+  };
+
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -53,7 +64,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
           style={provided.draggableProps.style}
           onClick={handleClick}>
           <div style={{ position: "relative" }} ref={containerRef}>
-            <p className={styles.textElementTypeText}>{t("shortText")}</p>
+            <p className={styles.textElementTypeText}>{t("payment")}</p>
             <div className={styles.draggableContainer}>
               <Controller
                 key={index}
@@ -61,43 +72,61 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
                 control={control}
                 defaultValue={title} // Ensure the default value is set
                 render={({ field }) => (
-                  <>
-                    <input
-                      {...field}
-                      placeholder={t("questionPlaceholder")}
-                      className={styles.question}
-                    />
-                    <hr />
-                  </>
+                  <input
+                    {...field}
+                    placeholder={t("title")}
+                    className={styles.question}
+                  />
                 )}
               />
+              {properties?.description != null && (
+                <Controller
+                  name={`fields.${index}.properties.description`}
+                  control={control}
+                  defaultValue={properties?.description}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder={t("description")}
+                      className={styles.question}
+                    />
+                  )}
+                />
+              )}
+              <hr />
+              {properties?.price != null && (
+                <>
+                  <div className={styles.payment}>
+                    <p className={styles.paymentText}>{t("paymentAmount")}: </p>
+                    <div className={styles.paymentInputGroup}>
+                      <p className={styles.currencySymbol}>$</p>
+                      <Controller
+                        key={index}
+                        name={`fields.${index}.properties.price.value`}
+                        control={control}
+                        defaultValue={properties.price.value}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            value={formatPayment(field.value)}
+                            placeholder={"0.00"}
+                            className={styles.paymentInput}
+                          />
+                        )}
+                      />
+                    </div>
+                    <p className={styles.currency}>
+                      {properties.price?.currency}
+                    </p>
+                  </div>
+                </>
+              )}
+              {/* TODO: Add Stripe Accounts */}
+              <select className={styles.input}>{getAccounts()}</select>
               <div
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""
                 }`}>
-                {validations?.max_length != null && (
-                  <>
-                    <p className={styles.requiredText}>{t("maxCharacters")}</p>
-                    <Controller
-                      name={`fields.${index}.validations.max_length`}
-                      control={control}
-                      defaultValue={validations.max_length}
-                      render={({ field }) => (
-                        <>
-                          <input
-                            {...field}
-                            type="number"
-                            min={0}
-                            max={10000}
-                            placeholder={"0 - 10,000"}
-                            className={styles.requiredText}
-                          />
-                          <hr />
-                        </>
-                      )}
-                    />
-                  </>
-                )}
                 {validations?.required != null && (
                   <>
                     <p className={styles.requiredText}>{t("requiredText")}</p>
@@ -139,4 +168,4 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   );
 };
 
-export default DraggableShortText;
+export default DraggablePayment;

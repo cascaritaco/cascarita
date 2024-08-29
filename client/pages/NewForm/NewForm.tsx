@@ -49,6 +49,7 @@ const NewForm = () => {
     "Multiple Choice",
     "Email",
     "Phone Number",
+    "Payment",
   ];
 
   const handleDrop = (label: DroppedItemType) => {
@@ -95,7 +96,7 @@ const NewForm = () => {
 
   // TODO: save by mongo form ID
   const onSave = async (data: Form) => {
-    if (formId == null || formId === undefined) {
+    if (formId == null) {
       throw new Error("Form ID is undefined");
     }
     const response = await updateForm(
