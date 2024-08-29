@@ -21,7 +21,14 @@ const Seasons = () => {
     leagueName: string;
   }>();
   const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
+
+  // Check if the current path is the division route
   const location = useLocation();
+  const isDivisionRoute = location.pathname.includes("division");
+
+  if (isDivisionRoute) {
+    return <Outlet />;
+  }
 
   const { t } = useTranslation("Seasons");
 
@@ -164,8 +171,7 @@ const Seasons = () => {
             filteredData?.map((season: SeasonType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link
-                    to={`${location.pathname}/division/${season.id}/${season.name}`}>
+                  <Link to={`division/${season.id}/${season.name}`}>
                     {season.name}
                   </Link>
                 </td>

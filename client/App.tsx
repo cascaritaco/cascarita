@@ -3,7 +3,6 @@ import { I18nextProvider } from "react-i18next";
 import i18next from "./i18n/config";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useRouter } from "./pages/Routes";
-import RootLayout from "./components/Layout/RootLayout";
 import { AuthProvider } from "./components/AuthContext/AuthContext";
 
 const queryClient = new QueryClient();

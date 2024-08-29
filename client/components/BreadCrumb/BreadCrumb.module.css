@@ -21,6 +21,7 @@
 }
 
 .breadcrumb li:not(:last-child):after {
-  content: " /";
+  content: " >";
+  text-decoration: none;
   pointer-events: none;
 }

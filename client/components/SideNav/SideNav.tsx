@@ -45,7 +45,7 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           icon={<RiHomeLine />}
           label={t("item1")}
           labelType="item1"
-          selected={selectedItem === "home"}
+          selected={selectedItem === ""}
           onItemClick={handleItemClick}
         />
         <NavItem

@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../api/leagues/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Leagues = () => {
   const { t } = useTranslation("Leagues");
@@ -125,12 +125,9 @@ const Leagues = () => {
             filteredData?.map((league: LeagueType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <button
-                    onClick={() =>
-                      navigate(`/season/${league.id}/${league.name}`)
-                    }>
+                  <Link to={`/season/${league.id}/${league.name}`}>
                     {league.name}
-                  </button>
+                  </Link>
                 </td>
                 <td>
                   <DropdownMenuButton>

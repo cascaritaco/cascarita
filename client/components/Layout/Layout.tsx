@@ -8,9 +8,9 @@ import { useAuth } from "../AuthContext/AuthContext";
 import { matchPath } from "../../util/matchPath";
 import { Outlet } from "react-router-dom";
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = () => {
   const { currentUser } = useAuth();
-  const [selectedItem, setSelectedItem] = useState("home");
+  const [selectedItem, setSelectedItem] = useState("");
 
   const isBlacklisted = blackListRoutes.some((pattern) =>
     matchPath(window.location.pathname, pattern, blackListExceptions),
