@@ -6,6 +6,7 @@ import { useState } from "react";
 import { blackListRoutes } from "./blacklist";
 import { useAuth } from "../AuthContext/AuthContext";
 import { matchPath } from "../../util/matchPath";
+import { Outlet } from "react-router-dom";
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { currentUser } = useAuth();
@@ -24,10 +25,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
           />
-          <div className={styles.main}>{children}</div>
+          <main className={styles.main}>
+            <Outlet />
+          </main>
         </div>
       ) : (
-        <div>{children}</div>
+        <main>
+          <Outlet />
+        </main>
       )}
     </div>
   );
