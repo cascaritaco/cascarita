@@ -29,11 +29,13 @@ function Breadcrumbs() {
     });
 
   return (
-    <ol className={styles.breadcrumb}>
-      {crumbs.map((crumb, index) => (
-        <li key={index}>{crumb}</li>
-      ))}
-    </ol>
+    <nav>
+      <ol className={styles.breadcrumb}>
+        {crumbs.map((crumb, index) => (
+          <li key={index}>{crumb}</li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
