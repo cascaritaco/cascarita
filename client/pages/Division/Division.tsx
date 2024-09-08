@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./Division.module.css";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation, Outlet } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 import { DivisionType } from "./types";
 import Page from "../../components/Page/Page";
@@ -18,6 +18,14 @@ const Divisions = () => {
   const { seasonId } = useParams<{ seasonId: string }>();
   const { seasonName } = useParams<{ seasonName: string }>();
   const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
+
+  // Check if the current path is the division route
+  const location = useLocation();
+  const isTeamRoute = location.pathname.includes("team");
+
+  if (isTeamRoute) {
+    return <Outlet />;
+  }
 
   // const { t } = useTranslation("Leagues");
 
@@ -141,7 +149,7 @@ const Divisions = () => {
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
                   <Link
-                    to={`/teams/seasons/${seasonIdNumber}/division/${division.id}/${division.name}`}>
+                    to={`teams/seasons/${seasonIdNumber}/division/${division.id}/${division.name}`}>
                     {division.name}
                   </Link>
                 </td>
