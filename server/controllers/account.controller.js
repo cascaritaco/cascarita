@@ -40,6 +40,10 @@ const AccountController = function () {
         await UserStripeAccounts.create({
           user_id: user.id,
           stripe_account_id: accountId,
+          details_submitted: false,
+          requires_verification: true,
+          charges_enabled: false,
+          payouts_enabled: false,
         });
       }
 
