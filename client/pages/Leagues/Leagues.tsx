@@ -66,9 +66,7 @@ const Leagues = () => {
   );
 
   return (
-    <Page>
-      <h1 className={styles.h1}>{t("title")}</h1>
-
+    <Page title={t("title")}>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search onSearchChange={setSearchQuery} />
