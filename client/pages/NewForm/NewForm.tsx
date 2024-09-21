@@ -10,11 +10,12 @@ import {
   Form,
 } from "../../components/DragAndDropComponents/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
 import { createMongoForm, updateForm } from "../../api/forms/service";
+import { User } from "../../components/AuthContext/types";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -40,7 +41,18 @@ const NewForm = () => {
   );
   const [formLink, setFormLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
+
+  const emptyUser = {
+    id: 1,
+    email: "t@abc.com",
+    first_name: "string",
+    last_name: "string",
+    group_id: 1,
+    role_id: 1,
+    language_id: 1,
+  } as User;
 
   const draggableButtons = [
     "Short Text",
@@ -104,7 +116,7 @@ const NewForm = () => {
       formId,
       title,
       description,
-      currentUser,
+      emptyUser,
     );
     setFields(response.fields);
   };

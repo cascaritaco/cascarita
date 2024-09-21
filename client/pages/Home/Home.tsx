@@ -1,27 +1,31 @@
 import Leagues from "../Leagues/Leagues";
-import { useAuth } from "../../components/AuthContext/AuthContext";
-import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+// import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 
 const Home = () => {
-  const { currentUser } = useAuth();
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth0();
+  // const history = useNavigate(); // For react-router v6, use useNavigate instead.
 
-  useEffect(() => {
-    if (!currentUser) {
-      navigate("/login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isLoading && !isAuthenticated) {
+  //     // If not authenticated, redirect the user to the login page
+  //     loginWithRedirect();
+  //   }
+  // }, [isLoading, isAuthenticated, loginWithRedirect]);
 
   return (
     <>
-      {currentUser ? (
+      {isAuthenticated ? (
         <div>
           <Leagues />
           <Outlet />
+          <></>
         </div>
       ) : (
-        <></>
+        <>
+          <p>NOT AUTHENTICATED</p>
+        </>
       )}
     </>
   );

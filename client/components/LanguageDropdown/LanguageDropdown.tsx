@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./LanguageDropdown.module.css";
 import { changeLanguage } from "../../i18n/config";
 import { LanguageDropdownProps } from "./types";
-import { useAuth } from "../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface LanguageOption {
   value: string;
@@ -17,7 +17,8 @@ const languages: LanguageOption[] = [
 const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   handleSelect,
 }) => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
 
   useEffect(() => {

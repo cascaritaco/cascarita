@@ -12,7 +12,8 @@ import {
   useUpdateDivision,
   useDeleteDivision,
 } from "../../../api/divisions/mutations";
-import { useAuth } from "../../AuthContext/AuthContext";
+// import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import DeleteForm from "../DeleteForm/DeleteForm";
 
 const DivisionForm: React.FC<DivisionFormProps> = ({
@@ -23,7 +24,8 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
 }) => {
   const [divisionName, setDivisionName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
 
   const createDivisionMutation = useCreateDivision();
   const updateDivisionMutation = useUpdateDivision();

@@ -7,7 +7,7 @@ import {
   UpdateLeagueData,
   DeleteLeagueData,
 } from "./types";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import DeleteForm from "../DeleteForm/DeleteForm";
 import {
   useCreateLeague,
@@ -23,7 +23,8 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
   const [leagueName, setLeagueName] = React.useState("");
   const [leagueDesc, setLeagueDesc] = React.useState("");
 
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
   const createLeagueMutation = useCreateLeague();
   const updateLeagueMutation = useUpdateLeague();
   const deleteLeagueMutation = useDeleteLeague();

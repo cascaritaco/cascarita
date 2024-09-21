@@ -2,11 +2,12 @@ import Logo from "../../assets/logo.svg";
 import styles from "./TopNav.module.css";
 import { Text } from "@radix-ui/themes";
 import { Avatar } from "@radix-ui/themes";
-import { useAuth } from "../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import LanguagePreferenceButton from "../LanguagePreferenceButton/LanguagePreferenceButton";
 
 const SideNav = () => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
 
   return (
     <div className={styles["top-nav"]}>

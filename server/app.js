@@ -15,24 +15,31 @@ const app = express();
 app.set("port", process.env.SERVER_PORT || 3001);
 app.use(express.static(path.join(__dirname, "../dist")));
 
-const secondsInAnHour = 60 * 60;
-const sessionMiddleware = session({
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: false,
-  resave: true,
-  cookie: {
-    httpOnly: true,
-    sameSite: "strict",
-    maxAge: secondsInAnHour * 1000,
-  },
+const authConfig = require("./../client/auth_config.json");
+if (
+  !authConfig.domain ||
+  !authConfig.audience ||
+  authConfig.audience === "YOUR_API_IDENTIFIER"
+) {
+  console.log(
+    "Exiting: Please make sure that auth_config.json is in place and populated with valid domain and audience values",
+  );
+
+  process.exit();
+}
+
+const checkJwt = auth({
+  audience: authConfig.audience,
+  issuerBaseURL: `https://${authConfig.domain}/`,
+  algorithms: ["RS256"],
 });
-app.use(sessionMiddleware);
 
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Enable CORS before using the router
+app.use(helmet());
 app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
@@ -66,19 +73,19 @@ const UserRoutes = require("./routes/user.routes");
 const FormRoutes = require("./routes/form.routes");
 const AccountRoutes = require("./routes/account.routes");
 
-app.use("/api/auth", AuthRoutes);
-app.use("/api/divisions", DivisionController);
-app.use("/api/fields", FieldRoutes);
-app.use("/api/groups", GroupRoutes);
-app.use("/api/leagues", LeagueRoutes);
-app.use("/api/players", PlayerRoutes);
-app.use("/api/roles", RoleRoutes);
-app.use("/api/seasons", SeasonRoutes);
-app.use("/api", SurveyController);
-app.use("/api/teams", TeamRoutes);
-app.use("/api/users", UserRoutes);
-app.use("/api/forms", FormRoutes);
-app.use("/api/accounts", AccountRoutes);
+// Protected routes (requires JWT authentication)
+app.use("/api/divisions", checkJwt, DivisionController);
+app.use("/api/fields", checkJwt, FieldRoutes);
+app.use("/api/groups", checkJwt, GroupRoutes);
+app.use("/api/leagues", checkJwt, LeagueRoutes);
+app.use("/api/players", checkJwt, PlayerRoutes);
+app.use("/api/roles", checkJwt, RoleRoutes);
+app.use("/api/seasons", checkJwt, SeasonRoutes);
+app.use("/api/surveys", checkJwt, SurveyController);
+app.use("/api/teams", checkJwt, TeamRoutes);
+app.use("/api/users", checkJwt, UserRoutes);
+app.use("/api/forms", checkJwt, FormRoutes);
+app.use("/api/accounts", checkJwt, AccountRoutes);
 
 app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
