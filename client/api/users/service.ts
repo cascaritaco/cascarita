@@ -70,4 +70,31 @@ const registerUser = async (
   }
 };
 
-export { updateUsersLanguages, registerUser };
+const fetchUser = async (email: string, token: string) => {
+  try {
+    // Encode the email to ensure it's safe for use in a URL
+    const response = await fetch(
+      `/api/users?email=${encodeURIComponent(email)}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
+
+export { updateUsersLanguages, registerUser, fetchUser };

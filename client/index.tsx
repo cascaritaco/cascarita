@@ -64,6 +64,7 @@ root.render(
     clientId="Bfvu7AdllYYt0ONhhRILk9xaUr4qeDVu"
     authorizationParams={{
       redirect_uri: window.location.origin,
+      audience: "https://dev-2vszya8j41e1n3fe.us.auth0.com/api/v2/",
     }}>
     <StrictMode>
       <App />

@@ -21,5 +21,6 @@ router.post(
 router.post("/otp/emails", UserController.sendOtpEmail);
 router.post("/forms/emails", UserController.sendFormLinkEmail);
 router.post("/otp/verification", UserController.verifyOTP);
+router.get("/", UserController.fetchUser);
 
 module.exports = router;

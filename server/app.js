@@ -3,13 +3,14 @@ const cors = require("cors");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const express = require("express");
-const session = require("express-session");
 const http = require("http");
+const { auth } = require("express-oauth2-jwt-bearer");
+const helmet = require("helmet");
 const path = require("path");
 const Middlewares = require("./middlewares");
-const passport = require("./passport");
 const { startMongoConnection } = require("./mongodb");
 const StripeWebhooks = require("./routes/webhooks/stripe.webhooks");
+const morgan = require("morgan");
 
 const app = express();
 app.set("port", process.env.SERVER_PORT || 3001);
@@ -28,17 +29,10 @@ if (
   process.exit();
 }
 
-const checkJwt = auth({
-  audience: authConfig.audience,
-  issuerBaseURL: `https://${authConfig.domain}/`,
-  algorithms: ["RS256"],
-});
-
 app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Enable CORS before using the router
+app.use(morgan("dev"));
 app.use(helmet());
 app.use(
   cors({
@@ -46,6 +40,12 @@ app.use(
     credentials: true,
   }),
 );
+
+const checkJwt = auth({
+  audience: "https://dev-2vszya8j41e1n3fe.us.auth0.com/api/v2/", // Ensure this matches the value in your Auth0 application
+  issuerBaseURL: "https://dev-2vszya8j41e1n3fe.us.auth0.com/",
+  algorithms: ["RS256"], // Ensure you're using RS256
+});
 
 app.use(
   "/api/webhook/stripe",

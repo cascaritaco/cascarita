@@ -2,23 +2,35 @@ import Leagues from "../Leagues/Leagues";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { fetchUser } from "../../api/users/service";
 
 const Home = () => {
-  const { user, isAuthenticated } = useAuth0();
-  // const history = useNavigate(); // For react-router v6, use useNavigate instead.
+  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0();
 
-  // At the time we are authenticated we want to store this users data info
   useEffect(() => {
-    if (isAuthenticated) {
-      console.log("user from AuthZero: ", user);
-    }
-  }, [isAuthenticated]);
-  // useEffect(() => {
-  //   if (!isLoading && !isAuthenticated) {
-  //     // If not authenticated, redirect the user to the login page
-  //     loginWithRedirect();
-  //   }
-  // }, [isLoading, isAuthenticated, loginWithRedirect]);
+    const fetchCurrentUser = async () => {
+      console.log(isAuthenticated, user);
+      const token = await getAccessTokenSilently();
+      console.log("Authorizaton token: ", token);
+      if (isAuthenticated && user) {
+        // Check if user is defined
+        console.log("Authenticated and user");
+        try {
+          const currentUser = await fetchUser(user.email || "", token);
+          // Handle the user data here
+          console.log(currentUser);
+        } catch (error) {
+          // Handle errors here
+          console.error("Error fetching user:", error);
+        }
+      } else {
+        loginWithRedirect();
+      }
+    };
+    console.log("Inside this useEffect");
+    fetchCurrentUser();
+  }, [isAuthenticated, user]);
 
   return (
     <>
@@ -30,7 +42,7 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <p>NOT AUTHENTICATED</p>
+          <p>Not authenticated...</p>
         </>
       )}
     </>

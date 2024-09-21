@@ -5,6 +5,7 @@ const passport = require("passport");
 const GroupController = require("./group.controller");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const { request } = require("http");
 
 const UserController = function () {
   var isEmailUniqueWithinGroup = async function (groupId, email) {
@@ -335,6 +336,30 @@ const UserController = function () {
     }
   };
 
+  var fetchUser = async function (req, res, next) {
+    try {
+      // Access the email from the query parameters
+      const email = req.query.email;
+
+      let user = await User.findOne({
+        where: {
+          email: email,
+        },
+      });
+
+      if (user) {
+        return res.status(200).json({ user: user });
+      } else {
+        return res.status(404).json({
+          message: `User with email: '${email}' not found.`,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch existing user:", error);
+      next(error);
+    }
+  };
+
   return {
     registerUser,
     logInUser,
@@ -343,6 +368,7 @@ const UserController = function () {
     sendOtpEmail,
     sendFormLinkEmail,
     verifyOTP,
+    fetchUser,
   };
 };
 
