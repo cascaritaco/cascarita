@@ -4,7 +4,6 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const http = require("http");
-const { auth } = require("express-oauth2-jwt-bearer");
 const helmet = require("helmet");
 const path = require("path");
 const Middlewares = require("./middlewares");
@@ -40,12 +39,7 @@ app.use(
     credentials: true,
   }),
 );
-
-const checkJwt = auth({
-  audience: "https://dev-2vszya8j41e1n3fe.us.auth0.com/api/v2/", // Ensure this matches the value in your Auth0 application
-  issuerBaseURL: "https://dev-2vszya8j41e1n3fe.us.auth0.com/",
-  algorithms: ["RS256"], // Ensure you're using RS256
-});
+const checkJwt = require("./checkJwt");
 
 app.use(
   "/api/webhook/stripe",
@@ -69,23 +63,23 @@ const RoleRoutes = require("./routes/role.routes");
 const SeasonRoutes = require("./routes/season.routes");
 const SurveyController = require("./routes/survey.routes");
 const TeamRoutes = require("./routes/team.routes");
-const UserRoutes = require("./routes/user.routes");
+const UserRoutes = require("./routes/user.routes")(checkJwt);
 const FormRoutes = require("./routes/form.routes");
 const AccountRoutes = require("./routes/account.routes");
 
 // Protected routes (requires JWT authentication)
-app.use("/api/divisions", checkJwt, DivisionController);
-app.use("/api/fields", checkJwt, FieldRoutes);
-app.use("/api/groups", checkJwt, GroupRoutes);
-app.use("/api/leagues", checkJwt, LeagueRoutes);
-app.use("/api/players", checkJwt, PlayerRoutes);
-app.use("/api/roles", checkJwt, RoleRoutes);
-app.use("/api/seasons", checkJwt, SeasonRoutes);
-app.use("/api/surveys", checkJwt, SurveyController);
-app.use("/api/teams", checkJwt, TeamRoutes);
-app.use("/api/users", checkJwt, UserRoutes);
-app.use("/api/forms", checkJwt, FormRoutes);
-app.use("/api/accounts", checkJwt, AccountRoutes);
+app.use("/api/divisions", DivisionController);
+app.use("/api/fields", FieldRoutes);
+app.use("/api/groups", GroupRoutes);
+app.use("/api/leagues", LeagueRoutes);
+app.use("/api/players", PlayerRoutes);
+app.use("/api/roles", RoleRoutes);
+app.use("/api/seasons", SeasonRoutes);
+app.use("/api/surveys", SurveyController);
+app.use("/api/teams", TeamRoutes);
+app.use("/api/users", UserRoutes);
+app.use("/api/forms", FormRoutes);
+app.use("/api/accounts", AccountRoutes);
 
 app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "../dist") });
