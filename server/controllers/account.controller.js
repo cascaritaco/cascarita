@@ -73,9 +73,9 @@ const AccountController = function () {
   var createPaymentIntent = async function (req, res, next) {
     try {
       const productObj = req.body;
-      const stripeAccountId = await getStripeAccountId(
-        req.params["account_id"],
-      );
+      // const stripeAccountId = await getStripeAccountId(
+      //   req.params["account_id"],
+      // );
 
       const paymentIntent = await Stripe.paymentIntents.create(
         {
@@ -87,14 +87,14 @@ const AccountController = function () {
           application_fee_amount: productObj.fee,
         },
         {
-          stripeAccount: stripeAccountId,
+          stripeAccount: productObj.stripeAccountId,
         },
       );
-
+      console.log(paymentIntent);
       await FormPaymentIntents.create({
         payment_intent_id: paymentIntent.id,
         form_id: productObj.form_id,
-        user_stripe_account_id: req.params["account_id"],
+        user_stripe_account_id: productObj.userId,
       });
 
       res.status(201).json(paymentIntent);

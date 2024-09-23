@@ -9,6 +9,7 @@ const queryClient = new QueryClient();
 const routes = useRouter();
 
 const App = () => {
+  console.log(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18next}>

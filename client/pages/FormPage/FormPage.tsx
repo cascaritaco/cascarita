@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
@@ -15,9 +15,55 @@ import { createMongoResponse } from "../../api/forms/service";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
+import { createPaymentIntent } from "../../api/stripe/service";
+import { Elements, PaymentElement } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+// import CheckoutForm from "./CheckoutForm";
+// Make sure to call `loadStripe` outside of a component's render to avoid
+// recreating the `Stripe` object on every render.
+
+// const stripePromise = loadStripe(
+//   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!,
+//   {
+//     stripeAccount: process.env.REACT_APP_STRIPE_PARENT_ACCOUNT_ID,
+//   },
+// );
 
 const FormPage = () => {
   const { formId } = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [options, setOptions] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchPaymentIntent = async () => {
+      try {
+        const stripeStuff = await createPaymentIntent();
+        if (stripeStuff != null) {
+          console.log("Client Secret:", stripeStuff.client_secret);
+          setOptions({
+            clientSecret: stripeStuff.client_secret,
+            appearance: {
+              theme: "stripe",
+              variables: {
+                colorPrimary: "#0570de",
+                colorBackground: "#ffffff",
+                colorText: "#30313d",
+                colorDanger: "#df1b41",
+              },
+            },
+          });
+        } else {
+          console.error("Failed to create PaymentIntent");
+        }
+      } catch (error) {
+        console.error("Error fetching PaymentIntent:", error);
+      }
+    };
+
+    fetchPaymentIntent();
+  }, []);
+
   const navigate = useNavigate();
 
   const {
@@ -71,32 +117,56 @@ const FormPage = () => {
 
   return (
     <>
-      <FormHeader />
-      <div className={styles.container}>
-        {form != null && (
-          <FormProvider {...methods}>
-            <form
-              className={styles.formContent}
-              onSubmit={methods.handleSubmit(onSubmit)}>
-              <h1 className={styles.title}>{form?.form_data.title}</h1>
-
-              {form.form_data.fields.map((field: Field, index: number) => {
-                const FieldComponent = FieldComponents[field.type];
-                if (!FieldComponent) return null;
-                return (
-                  <FieldComponent key={field.id} field={field} index={index} />
-                );
-              })}
-              <button type="submit" className={styles.submitButton}>
-                Submit
-              </button>
-            </form>
-          </FormProvider>
-        )}
-      </div>
-      <FormFooter />
+      <h1>this is our stripe form</h1>
+      {JSON.stringify(stripePromise)}
+      <Elements stripe={stripePromise} options={options}>
+        <form>
+          <PaymentElement />
+          <button>Submit</button>
+        </form>
+      </Elements>
     </>
   );
+
+  // return (
+  //   <>
+  //     <FormHeader />
+  //     <div className={styles.container}>
+  //       {form != null && (
+  //         <FormProvider {...methods}>
+  //           <form
+  //             className={styles.formContent}
+  //             onSubmit={methods.handleSubmit(onSubmit)}>
+  //             <h1 className={styles.title}>{form?.form_data.title}</h1>
+  //             <h1>Hello World</h1>
+  //             {options != null && (
+  //               <>
+  //                 <h1>this is our stripe form</h1>
+  //                 <Elements stripe={stripePromise} options={options}>
+  //                   <form>
+  //                     <PaymentElement />
+  //                     <button>Submit</button>
+  //                   </form>
+  //                 </Elements>
+  //               </>
+  //             )}
+  //             {form.form_data.fields.map((field: Field, index: number) => {
+  //               const FieldComponent = FieldComponents[field.type];
+  //               if (!FieldComponent) return null;
+  //               return (
+  //                 <FieldComponent key={field.id} field={field} index={index} />
+  //               );
+  //             })}
+  //             <button type="submit" className={styles.submitButton}>
+  //               Submit
+  //             </button>
+  //           </form>
+  //         </FormProvider>
+  //       )}
+  //     </div>
+  //     <FormFooter />
+  //   </>
+  // );
 };
 
 export default FormPage;

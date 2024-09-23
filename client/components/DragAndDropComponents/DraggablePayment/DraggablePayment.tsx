@@ -51,6 +51,9 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
     for (let i = 1; i < 5; ++i) {
       accounts.push(<option value={i}>Account {i}</option>);
     }
+    accounts.push(
+      <option value="acct_1Pwrm0R4osRmT1sy">acct_1Pwrm0R4osRmT1sy</option>,
+    );
     return accounts;
   };
 
