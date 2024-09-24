@@ -1,0 +1,13 @@
+.planWrapper h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 36px 0;
+}
+
+.table {
+  border-bottom: #dfe5ee solid 1px;
+}
+
+.table td {
+  padding: 12px 10px;
+}

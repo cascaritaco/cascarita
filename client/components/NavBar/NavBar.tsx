@@ -9,7 +9,7 @@ const Navbar: React.FC<NavbarProps> & {
   const navbarClassName = `${styles.navbar} ${className}`;
 
   return (
-    <nav>
+    <nav id="navbar">
       <ul className={navbarClassName}>{children}</ul>
     </nav>
   );

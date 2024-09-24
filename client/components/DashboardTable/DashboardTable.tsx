@@ -3,16 +3,25 @@ import styles from "./DashboardTable.module.css";
 
 interface TableProps {
   headers: string[];
-  children: (string | React.ReactNode)[][];
+  headerColor?: "light" | "strong";
+  children: React.ReactNode | React.ReactNode[];
   className?: string;
 }
 
 const DashboardTable: React.FC<TableProps> = ({
   headers,
+  headerColor,
   children,
   className,
 }) => {
   const tableClassName = `${styles.table} ${className}`;
+  const headColor =
+    headerColor === "light"
+      ? "#F4F7FB"
+      : headerColor === "strong"
+        ? "gray"
+        : "";
+
   return (
     <div className={styles.tableContainer}>
       <table className={tableClassName}>
@@ -20,7 +29,10 @@ const DashboardTable: React.FC<TableProps> = ({
           <tr>
             {headers.map((header, idx) => {
               return (
-                <th key={idx} className={styles.header}>
+                <th
+                  key={idx}
+                  className={styles.header}
+                  style={{ backgroundColor: headColor }}>
                   {header}
                 </th>
               );

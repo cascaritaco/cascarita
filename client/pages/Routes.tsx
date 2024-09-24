@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Link,
+  Navigate,
   useParams,
 } from "react-router-dom";
 
@@ -17,6 +18,9 @@ import Forms from "./Forms/Forms";
 import NewForm from "./NewForm/NewForm";
 import Settings from "./Settings/Settings";
 import FormPage from "./FormPage/FormPage";
+import Plan from "./Settings/Plan/Plan";
+import Payment from "./Settings/Payment/Payment";
+import Leagues from "./Leagues/Leagues";
 
 export const useRouter = () =>
   createBrowserRouter(
@@ -103,7 +107,12 @@ export const useRouter = () =>
         />
         <Route path="forms" element={<Forms />} />
         <Route path="forms/check" element={<NewForm />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<Settings />}>
+          <Route index element={<Plan />} />
+          <Route path="payment" element={<Payment />} />
+          {/* <Route path="billing" element={<Plan />} /> */}
+          {/* <Route path="help" element={<Plan />} /> */}
+        </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
       </Route>,

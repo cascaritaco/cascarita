@@ -126,7 +126,7 @@ const Leagues = () => {
                     {league.name}
                   </Link>
                 </td>
-                <td>
+                <td className={styles.tableData}>
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
                       onClick={() => handleEdit(league.name, league.id)}>
