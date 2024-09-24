@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
 import { createMongoForm, updateForm } from "../../api/forms/service";
-import { User } from "../../components/AuthContext/types";
+import { User } from "../../api/users/types";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");

@@ -12,7 +12,6 @@ import {
   useUpdateDivision,
   useDeleteDivision,
 } from "../../../api/divisions/mutations";
-// import { useAuth } from "../../AuthContext/AuthContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import DeleteForm from "../DeleteForm/DeleteForm";
 

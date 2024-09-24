@@ -1,6 +1,6 @@
 import { Answer, Form, GetFormsParams } from "./types";
 
-import { User } from "../../components/AuthContext/types";
+import { User } from "../../api/users/types";
 
 // TODO: Create a call to fetch all forms by groupId
 // TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)

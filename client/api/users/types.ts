@@ -11,6 +11,16 @@ export interface UserResponse {
   updated_at: Date;
 }
 
+export interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  group_id: number;
+  role_id: number;
+  language_id: number;
+}
+
 export const LanguageCodeToLanguageId = {
   en: 1 as number,
   esp: 2 as number,

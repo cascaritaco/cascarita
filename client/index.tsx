@@ -3,7 +3,7 @@ import App from "./App";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
-// import history from "./history";
+import history from "./history";
 import configJson from "./auth_config.json";
 import "./index.css";
 
@@ -30,42 +30,34 @@ export function getConfig() {
   };
 }
 
-// type AppState = {
-//   returnTo?: string;
-// };
+type AppState = {
+  returnTo?: string;
+};
 
-// const onRedirectCallback = (appState: AppState | undefined) => {
-//   history.push(
-//     appState && appState.returnTo
-//       ? appState.returnTo
-//       : window.location.pathname,
-//   );
-// };
+const onRedirectCallback = (appState: AppState | undefined) => {
+  history.push(
+    appState && appState.returnTo
+      ? appState.returnTo
+      : window.location.pathname,
+  );
+};
 
 // Please see https://auth0.github.io/auth0-react/interfaces/Auth0ProviderOptions.html
 // for a full list of the available properties on the provider
 const config = getConfig();
-console.log("config: ", config);
 
-// const providerConfig = {
-//   domain: config.domain,
-//   clientId: config.clientId,
-//   onRedirectCallback,
-//   authorizationParams: {
-//     redirect_uri: window.location.origin,
-//     ...(config.audience ? { audience: config.audience } : null),
-//   },
-// };
+const providerConfig = {
+  domain: config.domain,
+  clientId: config.clientId,
+  onRedirectCallback,
+  authorizationParams: {
+    redirect_uri: window.location.origin,
+    ...(config.audience ? { audience: config.audience } : null),
+  },
+};
 
 root.render(
-  // <Auth0Provider {...providerConfig}>
-  <Auth0Provider
-    domain="dev-2vszya8j41e1n3fe.us.auth0.com"
-    clientId="Bfvu7AdllYYt0ONhhRILk9xaUr4qeDVu"
-    authorizationParams={{
-      redirect_uri: window.location.origin,
-      audience: "https://dev-2vszya8j41e1n3fe.us.auth0.com/api/v2/",
-    }}>
+  <Auth0Provider {...providerConfig}>
     <StrictMode>
       <App />
     </StrictMode>
