@@ -53,19 +53,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Error handler should be the last middleware used
 app.use(Middlewares.errorHandler);
 
-const AuthRoutes = require("./routes/auth.routes");
-const DivisionController = require("./routes/division.routes");
-const FieldRoutes = require("./routes/field.routes");
-const GroupRoutes = require("./routes/group.routes");
-const LeagueRoutes = require("./routes/league.routes");
-const PlayerRoutes = require("./routes/player.routes");
-const RoleRoutes = require("./routes/role.routes");
-const SeasonRoutes = require("./routes/season.routes");
-const SurveyController = require("./routes/survey.routes");
-const TeamRoutes = require("./routes/team.routes");
+const DivisionController = require("./routes/division.routes")(checkJwt);
+const FieldRoutes = require("./routes/field.routes")(checkJwt);
+const GroupRoutes = require("./routes/group.routes")(checkJwt);
+const LeagueRoutes = require("./routes/league.routes")(checkJwt);
+const PlayerRoutes = require("./routes/player.routes")(checkJwt);
+const RoleRoutes = require("./routes/role.routes")(checkJwt);
+const SeasonRoutes = require("./routes/season.routes")(checkJwt);
+const SurveyController = require("./routes/survey.routes")(checkJwt);
+const TeamRoutes = require("./routes/team.routes")(checkJwt);
 const UserRoutes = require("./routes/user.routes")(checkJwt);
-const FormRoutes = require("./routes/form.routes");
-const AccountRoutes = require("./routes/account.routes");
+const FormRoutes = require("./routes/form.routes")(checkJwt);
+const AccountRoutes = require("./routes/account.routes")(checkJwt);
 
 // Protected routes (requires JWT authentication)
 app.use("/api/divisions", DivisionController);
