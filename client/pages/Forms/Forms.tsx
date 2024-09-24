@@ -14,7 +14,7 @@ import {
   getMongoFormById,
   getMongoForms,
 } from "../../api/forms/service";
-import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
@@ -50,7 +50,8 @@ const Forms = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentFormLink, setCurrentFormLink] = useState("");
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);

@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import StripeConnect from "../../assets/stripe/connectblurple.svg";
 import styles from "./Stripe.module.css";
 import { connectStripe } from "../../api/stripe/service";
-import { useAuth } from "../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ConnectWithStripeButton = () => {
   const [isConnecting, setIsConnecting] = useState(false);
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
   const handleClick = async () => {
     setIsConnecting(true);
     try {

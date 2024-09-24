@@ -12,7 +12,6 @@ import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../api/leagues/service";
-import { useAuth } from "../../components/AuthContext/AuthContext";
 import { Link } from "react-router-dom";
 
 const Leagues = () => {
@@ -31,9 +30,9 @@ const Leagues = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const { currentUser } = useAuth();
+  // const currentUser = {};
 
-  const groupId = currentUser?.group_id;
+  const groupId = 1;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["leagues", groupId ? groupId : 0],
     queryFn: getLeagueByGroupId,

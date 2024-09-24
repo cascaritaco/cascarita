@@ -1,27 +1,49 @@
 import Leagues from "../Leagues/Leagues";
-import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { fetchUser } from "../../api/users/service";
 
 const Home = () => {
-  const { currentUser } = useAuth();
-  const navigate = useNavigate();
+  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0();
 
   useEffect(() => {
-    if (!currentUser) {
-      navigate("/login");
-    }
-  }, []);
+    const fetchCurrentUser = async () => {
+      console.log(isAuthenticated, user);
+      const token = await getAccessTokenSilently();
+      console.log("Authorizaton token: ", token);
+      if (isAuthenticated && user) {
+        // Check if user is defined
+        console.log("Authenticated and user");
+        try {
+          const currentUser = await fetchUser(user.email || "", token);
+          // Handle the user data here
+          console.log(currentUser);
+        } catch (error) {
+          // Handle errors here
+          console.error("Error fetching user:", error);
+        }
+      } else {
+        loginWithRedirect();
+      }
+    };
+    console.log("Inside this useEffect");
+    fetchCurrentUser();
+  }, [isAuthenticated, user]);
 
   return (
     <>
-      {currentUser ? (
+      {isAuthenticated ? (
         <div>
           <Leagues />
           <Outlet />
+          <></>
         </div>
       ) : (
-        <></>
+        <>
+          <p>Not authenticated...</p>
+        </>
       )}
     </>
   );

@@ -8,7 +8,7 @@ import {
 } from "./types";
 import FileUpload from "../../FileUpload/FileUpload";
 import Modal from "../../Modal/Modal";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   useCreateTeam,
   useDeleteTeam,
@@ -24,7 +24,8 @@ const TeamForm: React.FC<TeamFormProps> = ({
   divisionId,
 }) => {
   const [teamName, setTeamName] = React.useState("");
-  const currentUser = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
 
   const createTeamMutation = useCreateTeam();
   const updateTeamMutation = useUpdateTeam();
@@ -41,7 +42,7 @@ const TeamForm: React.FC<TeamFormProps> = ({
       formData: {
         name: teamName,
         team_logo: teamLogo,
-        group_id: currentUser.currentUser?.group_id,
+        group_id: currentUser?.currentUser?.group_id,
         division_id: divisionId,
         season_id: seasonId,
       },
