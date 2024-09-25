@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { User, AuthContextType } from "./types";
 import {
   createToken,
@@ -21,22 +21,18 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [csrfToken, setCsrfToken] = useState<string>("");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (window.location.pathname === "/login") {
+    if (window.location.pathname === "/register") {
       return;
     }
     const fetchCurrentUser = async () => {
       const user = await getUser(csrfToken);
       setCurrentUser(user);
-      if (!user) {
-        navigate("/login");
-      }
     };
 
     fetchCurrentUser();
-  }, [navigate]);
+  }, []);
 
   const login = async (email: string, password: string): Promise<User> => {
     try {

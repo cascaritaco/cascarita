@@ -1,0 +1,29 @@
+{
+  "title": "Temporada",
+  "filter": "Filtro",
+  "filterOptions": {
+    "item1": "Activo",
+    "item2": "Inactivo"
+  },
+  "sort": "Ordenar Por",
+  "sortOptions": {
+    "item1": "Alfabético",
+    "item2": "Fecha"
+  },
+  "button": "Agregar Temporada",
+  "col1": "Nombre de Temporada",
+  "col2": "Fecha de Inicio",
+  "col3": "Fecha Final",
+  "col4": "Opciones",
+  "formContent": {
+    "title": "Crear Temporada",
+    "name": "Nombre",
+    "start": "Fecha de Inicio",
+    "end": "Fecha Final",
+    "submit": "Entregar",
+    "submitting": "Entregando...",
+    "cancel": "Cancelar"
+  },
+  "edit": "Editar",
+  "delete": "Borrar"
+}

@@ -8,5 +8,6 @@ router.post("/:group_id/:user_id", FormController.createForm);
 router.post("/responses", FormController.createResponse);
 router.get("/:form_id/responses", FormController.getResponsesByFormId);
 router.get("/:document_id", FormController.getFormByDocumentId);
-router.post("/email", FormController.emailForm);
+router.patch("/:form_id", FormController.updateForm);
+router.delete("/:form_id", FormController.deleteForm);
 module.exports = router;

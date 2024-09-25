@@ -44,6 +44,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "updated_by_id",
         sourceKey: "id",
       });
+      User.hasMany(models.UserStripeAccounts, {
+        foreignKey: "user_id",
+        sourceKey: "id",
+      });
+      User.hasMany(models.AuthCode, {
+        foreignKey: "user_id",
+        sourceKey: "id",
+      });
     }
   }
   User.init(
@@ -134,6 +142,13 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeCreate(async (user) => {
     const saltRounds = 10;
     user.password = await Bcrypt.hash(user.password, saltRounds);
+  });
+
+  User.beforeUpdate(async (user) => {
+    if (user.changed("password")) {
+      const saltRounds = 10;
+      user.password = await Bcrypt.hash(user.password, saltRounds);
+    }
   });
 
   User.prototype.validPassword = async function (password) {

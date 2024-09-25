@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
 import DraggableEmail from "../DraggableEmail/DraggableEmail";
 import { StrictModeDroppable } from "../../StrictModeDroppable/StrictModeDroppable";
+import DraggablePayment from "../DraggablePayment/DraggablePayment";
 
 const DNDCanvas = forwardRef(
   (
@@ -45,12 +46,14 @@ const DNDCanvas = forwardRef(
       long_text: DraggableLongText,
       email: DraggableEmail,
       phone_number: DraggablePhoneNumber,
+      payment: DraggablePayment,
     };
 
     const appendField = (item: DroppedItem) => {
       const fieldTemplate = {
         multiple_choice: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { choices: [], allow_multiple_selection: false },
           validations: { required: false },
@@ -58,12 +61,14 @@ const DNDCanvas = forwardRef(
         },
         short_text: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { max_length: 20, required: false },
           type: item.type,
         },
         dropdown: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { choices: [] },
           validations: { required: false },
@@ -71,20 +76,34 @@ const DNDCanvas = forwardRef(
         },
         long_text: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { max_length: 100, required: false },
           type: item.type,
         },
         email: {
           title: "",
+          id: item.id,
           ref: item.id,
           validations: { required: false },
           type: item.type,
         },
         phone_number: {
           title: "",
+          id: item.id,
           ref: item.id,
           properties: { default_country_code: "US" },
+          validations: { required: false },
+          type: item.type,
+        },
+        payment: {
+          title: "",
+          id: item.id,
+          ref: item.id,
+          properties: {
+            price: { type: "fixed", value: "", currency: "USD" },
+            description: "",
+          },
           validations: { required: false },
           type: item.type,
         },

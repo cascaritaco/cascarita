@@ -107,27 +107,27 @@
 .btn {
   border-radius: 21.5px;
   padding: 13px 45px;
-  background-color: transparent;
   outline: 1px solid #170cb4;
-  color: #170cb4;
+  background-color: #170cb4;
+  color: #ffffff;
 }
 
 .btn:hover,
 .btn:focus {
   transition: ease-in 200ms;
-  background-color: #170cb4;
-  color: #ffffff;
+  background-color: transparent;
+  color: #170cb4;
 }
 
 .cancelBtn {
   padding: 8px 32px;
   outline: 1px solid black;
+  background-color: transparent;
   color: black;
 }
 .cancelBtn:hover,
 .cancelBtn:focus {
   outline: 1px solid blue;
-  background-color: transparent;
   color: black;
 }
 

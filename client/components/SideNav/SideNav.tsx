@@ -2,7 +2,7 @@ import styles from "./SideNav.module.css";
 import { SideNavProps } from "./types";
 import { RiHomeLine } from "react-icons/ri";
 import { FiUser } from "react-icons/fi";
-import { MdOutlineCalendarToday } from "react-icons/md";
+// import { MdOutlineCalendarToday } from "react-icons/md";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
@@ -20,13 +20,10 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
 
     switch (labelType) {
       case "item1":
-        route = "home";
+        route = "";
         break;
       case "item2":
         route = "users";
-        break;
-      case "item3":
-        route = "schedule";
         break;
       case "item4":
         route = "forms";
@@ -48,7 +45,7 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           icon={<RiHomeLine />}
           label={t("item1")}
           labelType="item1"
-          selected={selectedItem === "home"}
+          selected={selectedItem === ""}
           onItemClick={handleItemClick}
         />
         <NavItem
@@ -58,13 +55,14 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           selected={selectedItem === "users"}
           onItemClick={handleItemClick}
         />
-        <NavItem
+        {/* NOTE: UNCOMMENT ONCE SCHEDULING ADDED
+          <NavItem
           icon={<MdOutlineCalendarToday />}
           label={t("item3")}
           labelType="item3"
           selected={selectedItem === "schedule"}
           onItemClick={handleItemClick}
-        />
+        /> */}
         <NavItem
           icon={<HiOutlinePencilAlt />}
           label={t("item4")}

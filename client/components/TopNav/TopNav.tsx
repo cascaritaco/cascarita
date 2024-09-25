@@ -2,8 +2,6 @@ import Logo from "../../assets/logo.svg";
 import styles from "./TopNav.module.css";
 import { Text } from "@radix-ui/themes";
 import { Avatar } from "@radix-ui/themes";
-import { MdOutlineNotifications } from "react-icons/md";
-import Search from "../Search/Search";
 import { useAuth } from "../AuthContext/AuthContext";
 import LanguagePreferenceButton from "../LanguagePreferenceButton/LanguagePreferenceButton";
 
@@ -21,11 +19,9 @@ const SideNav = () => {
         </span>
       </div>
       <div className={styles["search-alert-con"]}>
-        <Search />
         <div className={styles.language}>
           <LanguagePreferenceButton />
         </div>
-        <MdOutlineNotifications className={styles.notification} />
         <div className={styles.avatarCard}>
           <Avatar
             src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.67&fp-y=0.5&fp-z=1.4&fit=crop"

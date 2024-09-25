@@ -11,9 +11,7 @@ const FormController = {
     try {
       const mongoForms = await FormMongo.find({
         group_id: { $in: req.params.id },
-      }).select(
-        "form_data.id form_data.title form_data._links.display created_by updated_by createdAt updatedAt",
-      );
+      }).select("form_data.title created_by updated_by createdAt updatedAt");
 
       return res.status(201).json(mongoForms);
     } catch (error) {
@@ -49,22 +47,8 @@ const FormController = {
   },
   async createForm(req, res, next) {
     try {
-      const response = await fetch("https://api.typeform.com/forms", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.TYPEFORM_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req.body),
-      });
+      const form_data = { title: req.body.title, fields: req.body.fields };
 
-      if (!response.ok) {
-        throw new Error(
-          "typeform api call failed with status code of: " + response.status,
-        );
-      }
-
-      const responseBody = await response.json();
       const user = await User.findByPk(req.params.user_id, {
         attributes: { exclude: ["password"] },
       });
@@ -84,7 +68,7 @@ const FormController = {
         group_id: req.params.group_id,
         created_by: createdBy,
         updated_by: null,
-        form_data: responseBody,
+        form_data: form_data,
         form_blueprint: req.body,
       });
 
@@ -116,52 +100,101 @@ const FormController = {
     }
   },
 
-  async emailForm(req, res, next) {
+  async updateForm(req, res, next) {
+    const { form_id } = req.params;
     try {
-      const apiKey = process.env.BREVO_API_KEY;
-      const url = "https://api.brevo.com/v3/smtp/email";
-
-      const typeformLink = req.body.formLink;
-      const recipientEmail = req.body.email;
-
-      const senderEmail = "abanuelos.cascarita@gmail.com";
-      const senderName = "Cascarita";
-      const subject = "Cascarita - Please fill out this form";
-      const type = "classic";
-
-      const emailContent = `
-        <html>
-          <body>
-            <p>Hello,</p>
-            <p>Please fill out the following form:</p>
-            <a href="${typeformLink}">Fill out the form</a>
-            <p>Thank you!</p>
-          </body>
-        </html>
-      `;
-
-      const body = JSON.stringify({
-        sender: { name: senderName, email: senderEmail },
-        to: [{ email: recipientEmail }],
-        type: type,
-        subject,
-        htmlContent: emailContent,
-      });
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "api-key": apiKey,
+      const formResponse = await Form.findOne({
+        where: {
+          document_id: form_id,
         },
-        body,
+      });
+      if (!formResponse) {
+        res.status(404);
+        throw new Error(`no form with id ${form_id}`);
+      }
+
+      const responses = await Response.find({
+        form_id: req.params.form_id,
       });
 
-      const responseData = await response.json();
-      return res.status(200).json({ data: responseData });
+      if (Object.keys(responses).length !== 0) {
+        res.status(401);
+        throw new Error(
+          `cannot edit form with form id (${form_id}) as it already has responses`,
+        );
+      }
+
+      const sqlFields = ["group_id", "created_by", "updated_by"];
+      const mongoFields = [
+        "form_data",
+        "form_blueprint",
+        "group_id",
+        "updated_by",
+      ];
+
+      const sqlUpdateData = {};
+      const mongoUpdateData = {};
+
+      Object.keys(req.body).forEach((key) => {
+        if (sqlFields.includes(key)) {
+          sqlUpdateData[key] = req.body[key];
+        }
+        if (mongoFields.includes(key)) {
+          mongoUpdateData[key] = req.body[key];
+        }
+      });
+
+      Object.keys(sqlUpdateData).forEach((key) => {
+        if (key === "updated_by") {
+          formResponse[key] = sqlUpdateData[key].id
+            ? sqlUpdateData[key].id
+            : formResponse[key];
+        } else {
+          formResponse[key] = sqlUpdateData[key]
+            ? sqlUpdateData[key]
+            : formResponse[key];
+        }
+      });
+
+      await formResponse.validate();
+      await formResponse.save();
+
+      if (Object.keys(mongoUpdateData).length > 0) {
+        await FormMongo.updateOne(
+          { _id: form_id },
+          {
+            $set: mongoUpdateData,
+            $currentDate: { updatedAt: true },
+          },
+        );
+      }
+
+      res.status(200).json(formResponse);
     } catch (error) {
-      console.error("Failed to send email:", error);
+      next(error);
+    }
+  },
+  async deleteForm(req, res, next) {
+    const { form_id } = req.params;
+    try {
+      const formResponse = await Form.findOne({
+        where: {
+          document_id: form_id,
+        },
+      });
+      if (!formResponse) {
+        res.status(404);
+        throw new Error(`no form with form id: ${form_id}`);
+      }
+
+      await formResponse.destroy();
+
+      await Response.deleteMany({ form_id: form_id });
+
+      await FormMongo.deleteOne({ _id: form_id });
+
+      res.status(204).json();
+    } catch (error) {
       next(error);
     }
   },

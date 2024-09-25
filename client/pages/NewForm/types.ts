@@ -4,7 +4,8 @@ export type DroppedItemType =
   | "dropdown"
   | "multiple_choice"
   | "email"
-  | "phone_number";
+  | "phone_number"
+  | "payment";
 
 export interface DroppedItem {
   id: string;

@@ -13,6 +13,8 @@ import { DraggableButtonKeys, DraggableButtonProps } from "./types";
 import { GrTextAlignFull } from "react-icons/gr";
 import { TiPhoneOutline } from "react-icons/ti";
 import { useTranslation } from "react-i18next";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { FaDollarSign } from "react-icons/fa6";
 
 const iconMapping: { [key: string]: IconType } = {
   shorttext: MdOutlineShortText,
@@ -22,6 +24,7 @@ const iconMapping: { [key: string]: IconType } = {
   multiplechoice: FaListUl,
   email: MdOutlineMailOutline,
   phonenumber: TiPhoneOutline,
+  payment: FaDollarSign,
 };
 
 const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
@@ -55,15 +58,23 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({ label, onDrop }) => {
       : "styles.baseStyle";
 
   return (
-    <Draggable
-      position={dragPosition}
-      onStop={handleDragStop}
-      onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
-      <button className={`${styles.buttonContainer} ${additionalClass}`}>
-        {IconComponent && <IconComponent />}
-        {t(`draggableButtons.${label}` as DraggableButtonKeys)}
-      </button>
-    </Draggable>
+    <div className={styles.container}>
+      <Draggable
+        position={dragPosition}
+        onStop={handleDragStop}
+        onDrag={(e, data) => setDragPosition({ x: data.x, y: data.y })}>
+        <button
+          className={`${styles.buttonContainer} ${additionalClass} ${
+            label === "Payment" ? styles.paymentButton : styles.standardButton
+          }`}>
+          {IconComponent && <IconComponent />}
+          <span className={styles.buttonText}>
+            {t(`draggableButtons.${label}` as DraggableButtonKeys)}
+          </span>
+        </button>
+      </Draggable>
+      <PlusCircledIcon onClick={onDrop} className={styles.plusIcon} />
+    </div>
   );
 };
 

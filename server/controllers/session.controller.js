@@ -1,5 +1,6 @@
 "use strict";
 
+const { constrainedMemory } = require("process");
 const { Session } = require("../models");
 
 const SessionController = function () {
@@ -17,6 +18,29 @@ const SessionController = function () {
       return res.status(200).json(result);
     } catch (error) {
       next(error);
+    }
+  };
+
+  var getSessionByDivisionAndSeasonId = async function (
+    division_id,
+    season_id,
+  ) {
+    const divisionId = division_id;
+    const seasonId = season_id;
+
+    try {
+      const result = await Session.findOne({
+        where: {
+          division_id: divisionId,
+          season_id: seasonId,
+        },
+      });
+
+      return result.id;
+    } catch (error) {
+      throw new Error(
+        `session not found for division_id: ${divisionId}, season_id: ${seasonId}`,
+      );
     }
   };
 
@@ -41,17 +65,16 @@ const SessionController = function () {
     }
   };
 
-  var createSession = async function (req, res, next) {
-    const { division_id, season_id } = req.body;
+  var createSession = async function (division_id, season_id) {
     const newSession = { division_id, season_id };
 
     try {
       await Session.build(newSession).validate();
       const result = await Session.create(newSession);
 
-      return res.status(201).json(result);
+      return result;
     } catch (error) {
-      next(error);
+      throw error;
     }
   };
 
@@ -105,6 +128,7 @@ const SessionController = function () {
   return {
     getSessionBySessionId,
     getSessionByDivisionId,
+    getSessionByDivisionAndSeasonId,
     createSession,
     updateSession,
     deleteSession,

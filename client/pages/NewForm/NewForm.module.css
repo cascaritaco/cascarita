@@ -7,7 +7,7 @@ h4 {
 
 .formElementsContainer {
   font-family: "DM Sans";
-  width: 195px;
+  width: 210px;
   height: 100%;
   display: block;
   padding-left: 12px;
@@ -16,7 +16,6 @@ h4 {
   justify-content: left;
   background-color: #f4f7fb;
   border-radius: 10px;
-  z-index: 3;
 }
 
 .newFormContainer {

@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "updated_by",
         targetKey: "id",
       });
+      Form.hasMany(models.FormPaymentIntents, {
+        foreignKey: "form_id",
+        sourceKey: "id",
+      });
     }
   }
   Form.init(
