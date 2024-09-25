@@ -55,7 +55,7 @@ export const createPaymentIntent = async (): Promise<any> => {
         body: JSON.stringify({
           price: 1000,
           fee: 50,
-          stripeAccountId: "acct_1Pwrm0R4osRmT1sy",
+          stripeAccountId: "", // TODO: Fake RAUL account
           form_id: 27, // "66f0ce55c83f8d26249f863c"
           userId: "2",
         }),
