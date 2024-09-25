@@ -1,0 +1,34 @@
+.wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  height: 70vh;
+  padding-top: 16px;
+}
+
+.wrapper h2 {
+  height: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.table {
+  border-bottom: #dfe5ee solid 1px;
+}
+
+.table td {
+  padding: 12px 10px;
+}
+
+.sectionWrapper {
+  margin-bottom: 32px;
+}
+
+.sectionWrapper h3 {
+  margin-bottom: 12px;
+}
+
+.progressWrapper {
+  margin-bottom: 40px;
+}

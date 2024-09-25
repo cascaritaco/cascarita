@@ -23,7 +23,7 @@ const Plan = () => {
   };
 
   return (
-    <section className={styles.planWrapper}>
+    <section className={styles.wrapper}>
       <div className={styles.sectionWrapper}>
         <h2>Current Subscription</h2>
 
