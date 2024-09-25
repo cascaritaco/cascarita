@@ -1,36 +1,38 @@
+import * as Progress from "@radix-ui/react-progress";
 import styles from "./ProgressBar.module.css";
 
 interface ProgressBarProps {
-  label?: string;
   used: number;
   total: number;
+  asChild?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  getLabel?: (value: number, max: number) => string;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ label, used, total }) => {
-  const percentage = (used / total) * 100;
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  getLabel,
+  used,
+  total,
+  asChild = false,
+  children,
+  className,
+}) => {
+  const progressBarClassName = `${styles.progressBarContainer} ${className}`;
 
   return (
-    <div className={styles.progressBarWrapper}>
-      <div className={styles.label}>
-        <span>{label}</span>
-        <span>
-          {used} of {total} used
-        </span>
-      </div>
-
-      <div
-        className={styles.barBackground}
-        role="progressbar"
-        aria-valuenow={used}
-        aria-valuemin={0}
-        aria-valuemax={total}
-        aria-label={`${label} usage`}
-        tabIndex={0}>
-        <div
-          className={styles.barFill}
-          style={{ width: `${percentage}` }}></div>
-      </div>
-    </div>
+    <Progress.Root
+      value={used}
+      max={total}
+      asChild={asChild ? true : false}
+      getValueLabel={getLabel}
+      className={progressBarClassName}>
+      <Progress.ProgressIndicator
+        className={styles.progressIndicator}
+        style={{ transform: `translateX(-${100 - used}%)` }}>
+        {children}
+      </Progress.ProgressIndicator>
+    </Progress.Root>
   );
 };
 

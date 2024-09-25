@@ -1,4 +1,12 @@
+.planWrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  height: 70vh;
+}
+
 .planWrapper h2 {
+  height: 100%;
   font-size: 1rem;
   font-weight: 700;
   margin: 36px 0;
@@ -10,4 +18,12 @@
 
 .table td {
   padding: 12px 10px;
+}
+
+.sectionWrapper h3 {
+  margin-bottom: 12px;
+}
+
+.progressWrapper {
+  margin-bottom: 40px;
 }

@@ -8,7 +8,7 @@ const Plan = () => {
     {
       id: 123,
       type: "Basic Subscription",
-      status: false,
+      status: true,
       renewalDate: Date.now(),
     },
   ];
@@ -51,7 +51,38 @@ const Plan = () => {
 
       <div className={styles.sectionWrapper}>
         <h2>Plan Details</h2>
-        <ProgressBar used={8} total={10} />
+        <div className={styles.progressWrapper}>
+          <h3>Users</h3>
+          <ProgressBar
+            used={70}
+            total={100}
+            getLabel={(used: number, total: number) =>
+              `${used} of ${total} used`
+            }
+          />
+        </div>
+
+        <div className={styles.progressWrapper}>
+          <h3>Players</h3>
+          <ProgressBar
+            used={10}
+            total={100}
+            getLabel={(used: number, total: number) =>
+              `${used} of ${total} used`
+            }
+          />
+        </div>
+
+        <div className={styles.progressWrapper}>
+          <h3>Storage</h3>
+          <ProgressBar
+            used={90}
+            total={100}
+            getLabel={(used: number, total: number) =>
+              `${used} of ${total} used`
+            }
+          />
+        </div>
       </div>
     </section>
   );
