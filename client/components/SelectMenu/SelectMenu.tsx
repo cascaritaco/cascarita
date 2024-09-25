@@ -82,7 +82,7 @@ const SelectMenu: React.FC<SelectMenuProps> & {
             {children}
           </Select.Viewport>
 
-          <Select.ScrollDownButton>
+          <Select.ScrollDownButton className={styles.selectScrollButton}>
             <ChevronDownIcon />
           </Select.ScrollDownButton>
         </Select.Content>

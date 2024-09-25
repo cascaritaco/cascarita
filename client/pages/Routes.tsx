@@ -17,6 +17,7 @@ import Forms from "./Forms/Forms";
 import NewForm from "./NewForm/NewForm";
 import Settings from "./Settings/Settings";
 import FormPage from "./FormPage/FormPage";
+import Register from "./Register/Register";
 
 export const useRouter = () =>
   createBrowserRouter(
@@ -106,6 +107,7 @@ export const useRouter = () =>
         <Route path="settings" element={<Settings />} />
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>,
     ),
   );
