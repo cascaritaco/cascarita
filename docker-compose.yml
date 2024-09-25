@@ -15,7 +15,6 @@ services:
     # Please update in the corresponding Dockerfile as well
     ports:
       - "3001:3001"
-      - "3306:3306"
     command: npm run server
 
   client:

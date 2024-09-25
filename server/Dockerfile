@@ -15,6 +15,5 @@ RUN apk add --no-cache make gcc g++ python3 && \
     apk del make gcc g++ python3
 
 EXPOSE 3001
-EXPOSE 3306
 
 CMD ["npm", "run", "server"]
