@@ -2,7 +2,8 @@
 
 require("dotenv").config();
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
-const { UserStripeAccounts, FormPaymentIntents } = require("../models");
+const { UserStripeAccounts, FormPaymentIntents, User } = require("../models");
+const { where } = require("../mongoModels/response");
 
 const AccountController = function () {
   var createAccountConnection = async function (req, res, next) {
@@ -112,11 +113,39 @@ const AccountController = function () {
     }
   };
 
+  var getAllAccountsByGroupId = async function (req, res, next) {
+    try {
+      const groupId = req.params.id;
+
+      const accounts = await UserStripeAccounts.findAll({
+        include: [
+          {
+            model: User,
+            as: "User",
+            where: {
+              group_id: groupId,
+            },
+            attributes: {
+              exclude: ["password", "created_at", "updated_at", "language_id"],
+            },
+          },
+        ],
+      });
+
+      let data = accounts.length != 0 ? accounts : [];
+
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     createAccountConnection,
     createPaymentIntent,
     getStripeAccountId,
     getClientSecret,
+    getAllAccountsByGroupId,
   };
 };
 
