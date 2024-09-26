@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      StripeStatus.hasMany(models.UserStripeAccounts, {
+        foreignKey: "stripe_status_id",
+        sourceKey: "id",
+      });
     }
   }
   StripeStatus.init(
