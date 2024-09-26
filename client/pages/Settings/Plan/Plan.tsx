@@ -1,6 +1,7 @@
 import styles from "./Plan.module.css";
 import DashboardTable from "../../../components/DashboardTable/DashboardTable";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
+import { useFormatDate } from "../../../hooks/useFormatDate";
 
 const Plan = () => {
   const planHeaders = ["Membership", "Status", "Renewal Date", "Actions"];
@@ -13,14 +14,7 @@ const Plan = () => {
     },
   ];
 
-  const formatDate = (dateNumber: number): string => {
-    const date = new Date(dateNumber);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  const formatDate = useFormatDate;
 
   return (
     <section className={styles.wrapper}>

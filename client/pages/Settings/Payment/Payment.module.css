@@ -43,21 +43,6 @@
   border-radius: 30px;
 }
 
-.restricted {
-  background-color: #ffeeee;
-  color: #f96565;
-}
-
-.completed {
-  background-color: #45b143;
-  color: #e9ffe8;
-}
-
-.pending {
-  background-color: lightyellow;
-  color: yellow;
-}
-
 .sectionWrapper {
   margin-bottom: 32px;
 }
