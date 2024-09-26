@@ -87,7 +87,7 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
               </PrimaryButton>
 
               <p>
-                Don't have a Stripe Account?{" "}
+                {"Don't have a Stripe Account? "}
                 <a href="#" className={styles.link}>
                   Create an Account
                 </a>

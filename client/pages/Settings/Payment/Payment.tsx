@@ -96,8 +96,9 @@ const Payment = () => {
       </div>
 
       <p style={{ marginBottom: "16px" }}>
-        Below you'll find details about the Stripe accounts associated with your
-        account.{" "}
+        {
+          "Below you'll find details about the Stripe accounts associated with your account."
+        }
       </p>
 
       <DashboardTable

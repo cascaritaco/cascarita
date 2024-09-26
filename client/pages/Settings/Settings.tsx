@@ -1,5 +1,3 @@
-import React from "react";
-import styles from "./Settings.module.css";
 import Page from "../../components/Page/Page";
 import Navbar from "../../components/NavBar/NavBar";
 import { Outlet } from "react-router-dom";

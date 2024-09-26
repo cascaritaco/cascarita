@@ -2,7 +2,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Link,
-  Navigate,
   useParams,
 } from "react-router-dom";
 
@@ -20,7 +19,6 @@ import Settings from "./Settings/Settings";
 import FormPage from "./FormPage/FormPage";
 import Plan from "./Settings/Plan/Plan";
 import Payment from "./Settings/Payment/Payment";
-import Leagues from "./Leagues/Leagues";
 
 export const useRouter = () =>
   createBrowserRouter(
