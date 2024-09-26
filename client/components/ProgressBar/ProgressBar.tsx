@@ -29,9 +29,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       className={progressBarClassName}>
       <Progress.ProgressIndicator
         className={styles.progressIndicator}
-        style={{ transform: `translateX(-${100 - used}%)` }}>
+        style={{
+          transform: `translateX(-${100 - used}%)`,
+        }}>
         {children}
       </Progress.ProgressIndicator>
+      <p>{getLabel ? getLabel(used, total) : ""}</p>
     </Progress.Root>
   );
 };

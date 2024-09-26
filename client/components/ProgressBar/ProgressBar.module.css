@@ -1,3 +1,12 @@
+@keyframes fillProgressBar {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
 .progressBarContainer {
   position: relative;
   overflow: hidden;
@@ -12,5 +21,5 @@
   background-color: #4238d5;
   width: 100%;
   height: 100%;
-  transition: transform 660ms cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 1s ease-out;
 }

@@ -2,6 +2,7 @@
   width: 100%;
   overflow-y: auto;
   max-height: 490px;
+  scrollbar-width: thin;
 }
 
 .table {
@@ -10,12 +11,19 @@
 }
 
 .header {
-  border-bottom: 1px solid #ccc;
   padding: 10px;
   text-align: left;
   position: sticky;
   top: 0;
   background-color: #ffffff;
+}
+
+.header:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.header:last-child {
+  border-radius: 0 4px 4px 0;
 }
 
 .tableBody {

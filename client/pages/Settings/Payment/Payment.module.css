@@ -10,7 +10,21 @@
   height: 100%;
   font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 24px;
+}
+
+.wrapper p {
+  font-size: 0.925rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.btn {
+  padding: 8px 24px;
 }
 
 .table {
@@ -18,7 +32,30 @@
 }
 
 .table td {
-  padding: 12px 10px;
+  padding: 16px 10px;
+  border-bottom: #dfe5ee solid 1px;
+}
+
+.statusLabel {
+  width: fit-content;
+  font-size: 0.925rem;
+  padding: 1px 16px;
+  border-radius: 30px;
+}
+
+.restricted {
+  background-color: #ffeeee;
+  color: #f96565;
+}
+
+.completed {
+  background-color: #45b143;
+  color: #e9ffe8;
+}
+
+.pending {
+  background-color: lightyellow;
+  color: yellow;
 }
 
 .sectionWrapper {

@@ -56,9 +56,9 @@ const Plan = () => {
           <ProgressBar
             used={70}
             total={100}
-            getLabel={(used: number, total: number) =>
-              `${used} of ${total} used`
-            }
+            getLabel={(value, max) => {
+              return `${value} of ${max} used`;
+            }}
           />
         </div>
 

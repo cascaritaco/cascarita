@@ -89,9 +89,9 @@ const Teams = () => {
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
-            <PrimaryButton
-              label="Add Team"
-              onClick={() => setIsCreateOpen(true)}></PrimaryButton>
+            <PrimaryButton onClick={() => setIsCreateOpen(true)}>
+              Add Team
+            </PrimaryButton>
           </Modal.Button>
 
           <Modal.Content title="Create Team">
@@ -108,7 +108,7 @@ const Teams = () => {
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>Add a Team to Display...</p>
       ) : (
-        <DashboardTable headers={["Team Name", "Options"]}>
+        <DashboardTable headers={["Team Name", "Options"]} headerColor="light">
           {isLoading ? (
             <tr>
               <td>Loading...</td>

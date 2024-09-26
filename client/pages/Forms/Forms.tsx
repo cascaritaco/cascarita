@@ -139,7 +139,9 @@ const Forms = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
+        <PrimaryButton onClick={handleNewFormClick}>
+          {t("button")}
+        </PrimaryButton>
         <ConnectWithStripeButton />
       </div>
       {filteredData == null || filteredData?.length === 0 ? (
