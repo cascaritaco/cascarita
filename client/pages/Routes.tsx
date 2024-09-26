@@ -19,6 +19,7 @@ import Settings from "./Settings/Settings";
 import FormPage from "./FormPage/FormPage";
 import Plan from "./Settings/Plan/Plan";
 import Payment from "./Settings/Payment/Payment";
+import Register from "./Register/Register";
 
 export const useRouter = () =>
   createBrowserRouter(
@@ -113,6 +114,7 @@ export const useRouter = () =>
         </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>,
     ),
   );

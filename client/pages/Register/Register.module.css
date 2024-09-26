@@ -1,179 +1,193 @@
 .register {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
 }
 
 .inlineFields {
-    display: flex;
-    gap: 10px;
-}
-
-.inlineFields input {
-    flex: 1; /* Distribute available space equally */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-/* Specific styling for the State and Zip-code fields if needed */
-.inlineFields input:nth-child(1) {
-    flex: 1; /* Give the State input more space */
-}
-
-.inlineFields input:nth-child(2) {
-    flex: 1; /* Zip-code field is narrower */
-}
-
-.inlineFields input:nth-child(2) {
-    max-width: 100px; /* Adjust as needed */
+  display: flex;
 }
 
 .formContainer {
-    display: flex;
-    flex-direction: column;
-    width: 400px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 .formContainer h2 {
-    margin-bottom: 10px;
-}
-
-.formContainer p {
-    margin-bottom: 20px;
-    color: #666;
+  margin-bottom: 10px;
 }
 
 .formContainer input {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  margin-bottom: 15px;
+  padding: 8px 13px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #f4f7fb;
 }
 
-.formContainer button {
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #000;
-    color: #fff;
-    cursor: pointer;
+.formContainer > button {
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 90px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.heading {
+  text-align: left;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.subheading {
+  color: #666;
+  text-align: left;
+  font-size: 16px;
+  font-weight: light;
+  margin-bottom: 15px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+}
+
+.selectMenu {
+  margin-right: 24px;
+  width: 180px;
 }
 
 .errorMessage {
-    color: red;
-    margin-bottom: 10px;
+  color: red;
+  margin-bottom: 10px;
 }
 
 .successMessage {
-    color: green;
-    margin-bottom: 10px;
+  color: green;
+  margin-bottom: 10px;
 }
 
-
 .login {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
 }
 
 .logo {
-    margin-top: 35%;
-    /* transform: scale(1.75); Scale the logo to 175% of its original size */
-    height: auto; /* Maintain the aspect ratio */
-    width: auto;
-    margin-bottom: 80%; /* Add margin-bottom if needed */
-    transform: scale(2.2);
-    transition: transform 0.05s ease; /* Add transition for smooth scaling */
+  margin-top: 35%;
+  /* transform: scale(1.75); Scale the logo to 175% of its original size */
+  height: auto; /* Maintain the aspect ratio */
+  width: auto;
+  margin-bottom: 80%; /* Add margin-bottom if needed */
+  transform: scale(2.2);
+  transition: transform 0.05s ease; /* Add transition for smooth scaling */
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  background: linear-gradient(to top, #830aaf, #4238d5);
+  height: 100vh; /* Full height of the viewport */
+  width: 50%; /* 50% width of the viewport */
+  display: flex;
+  flex-direction: column; /* Make it a column */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.left > h1 {
+  padding-left: 10%;
+  padding-right: 10%;
+  margin-top: 5%;
+  color: white;
+  font-size: 40px;
+  font-weight: 500;
+  overflow-wrap: break-word;
+  display: inline-block; /* Allow the text to wrap */
+  text-align: center;
+}
+
+.left > p {
+  color: white;
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  text-align: center;
+  padding: 0 80px;
+}
+
+.right > p {
+  text-align: left;
+  margin-bottom: 5px;
+  color: #495a6b;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.right > input {
+  min-width: 200px;
+  min-width: 200px;
+  width: calc(100% - 20px);
+  margin-bottom: 10px;
+  padding: 5px;
+  color: #7e878f;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: #f5f7fb;
+}
+
+.right > button {
+  min-width: 200px;
+  max-width: 500px;
+  width: calc(100% - 100px);
+  margin-top: 30px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #000;
+}
+
+.right > button:hover {
+  background-color: #808080;
+}
+
+@media screen and (max-width: 1200px) {
+  .selectMenu {
+    margin-bottom: 8px;
+  }
+
+  .inlineFields {
+    flex-direction: column;
+  }
 }
 
 /* Adjust scale for smaller viewport widths */
 @media screen and (max-width: 950px) {
-    .logo {
-        transform: scale(1.75); /* Adjust the scale value as needed */
-    }
-}
-
-.left {
-    background: linear-gradient(to top, #830aaf, #4238d5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh; /* Full height of the viewport */
-    width: 50%; /* 50% width of the viewport */
-    display: flex;
-    flex-direction: column; /* Make it a column */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-}
-
-.left > h1 {
-    padding-left: 10%;
-    padding-right: 10%;
-    margin-top: 5%;
-    color: white;
-    font-size: 40px;
-    font-weight: 500;
-    overflow-wrap: break-word;
-    display: inline-block; /* Allow the text to wrap */
-    text-align: center;
-}
-
-.right {
-    position: fixed;
-    top: 45%;
-    transform: translateY(-50%);
-    right: 0;
-    width: 50%;
-    text-align: center;
-    padding-left: 125px;
-    padding-right: 100px;
-    /* padding: 0 200px; */
-}
-
-.right > p {
-    text-align: left;
-    margin-bottom: 5px;
-    color: #495a6b;
-    padding: 5px;
-    box-sizing: border-box;
-}
-
-.right > input {
-    min-width: 200px;
-    min-width: 200px;
-    width: calc(100% - 20px);
-    margin-bottom: 10px;
-    padding: 5px;
-    color: #7e878f;
-    box-sizing: border-box;
-    border-radius: 8px;
-    background-color: #f5f7fb;
-}
-
-.right > button {
-    min-width: 200px;
-    max-width: 500px;
-    width: calc(100% - 100px);
-    margin-top: 30px;
-    margin-bottom: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    border-radius: 30px;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    background-color: #000;
-}
-
-.right > button:hover {
-    background-color: #808080;
+  .logo {
+    transform: scale(1.75); /* Adjust the scale value as needed */
+  }
 }
