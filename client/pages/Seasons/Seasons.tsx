@@ -140,10 +140,10 @@ const Seasons = () => {
         </div>
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <Modal.Button asChild className={styles.btn}>
-            <PrimaryButton
-              label={t("button")}
-              onClick={() => setIsCreateOpen(true)}></PrimaryButton>
+          <Modal.Button asChild>
+            <PrimaryButton onClick={() => setIsCreateOpen(true)}>
+              {t("button")}
+            </PrimaryButton>
           </Modal.Button>
           <Modal.Content title={t("formContent.title")}>
             <SeasonForm
@@ -158,7 +158,9 @@ const Seasons = () => {
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>No seasons to display...</p>
       ) : (
-        <DashboardTable headers={[t("col1"), t("col2"), t("col3"), t("col4")]}>
+        <DashboardTable
+          headers={[t("col1"), t("col2"), t("col3"), t("col4")]}
+          headerColor="light">
           {isLoading ? (
             <tr>
               <td>Loading...</td>
