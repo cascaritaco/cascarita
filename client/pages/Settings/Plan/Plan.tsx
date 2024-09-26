@@ -40,8 +40,12 @@ const Plan = () => {
                 <td>{user.status ? <p>Active</p> : <p>Expired</p>}</td>
                 <td>{formatDate(user.renewalDate)}</td>
                 <td>
-                  <p>Upgrade</p>
-                  <p>Cancel</p>
+                  <a href="#" className={styles.link}>
+                    Upgrade
+                  </a>
+                  <a href="#" className={styles.link}>
+                    Cancel
+                  </a>
                 </td>
               </tr>
             ))
@@ -53,35 +57,50 @@ const Plan = () => {
         <h2>Plan Details</h2>
         <div className={styles.progressWrapper}>
           <h3>Users</h3>
-          <ProgressBar
-            used={70}
-            total={100}
-            getLabel={(value, max) => {
-              return `${value} of ${max} used`;
-            }}
-          />
+
+          <div>
+            <ProgressBar
+              used={70}
+              total={100}
+              getLabel={(value, max) => {
+                return `${value} of ${max} used`;
+              }}
+            />
+
+            <span>{`${70} of ${100} used`}</span>
+          </div>
         </div>
 
         <div className={styles.progressWrapper}>
           <h3>Players</h3>
-          <ProgressBar
-            used={10}
-            total={100}
-            getLabel={(used: number, total: number) =>
-              `${used} of ${total} used`
-            }
-          />
+
+          <div>
+            <ProgressBar
+              used={30}
+              total={100}
+              getLabel={(value, max) => {
+                return `${value} of ${max} used`;
+              }}
+            />
+
+            <span>{`${30} of ${100} used`}</span>
+          </div>
         </div>
 
         <div className={styles.progressWrapper}>
           <h3>Storage</h3>
-          <ProgressBar
-            used={90}
-            total={100}
-            getLabel={(used: number, total: number) =>
-              `${used} of ${total} used`
-            }
-          />
+
+          <div>
+            <ProgressBar
+              used={50}
+              total={100}
+              getLabel={(value, max) => {
+                return `${value} of ${max} used`;
+              }}
+            />
+
+            <span>{`${50} of ${100} used`}</span>
+          </div>
         </div>
       </div>
     </section>

@@ -21,6 +21,16 @@
   padding: 12px 10px;
 }
 
+.link {
+  color: #2922bf;
+  text-decoration: none;
+  display: block;
+}
+
+.link:first-child {
+  margin-bottom: 2px;
+}
+
 .sectionWrapper {
   margin-bottom: 32px;
 }
@@ -30,5 +40,16 @@
 }
 
 .progressWrapper {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+}
+
+.progressWrapper > div {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  align-items: end;
+}
+
+.progressWrapper > div > span {
+  font-size: 0.8rem;
 }

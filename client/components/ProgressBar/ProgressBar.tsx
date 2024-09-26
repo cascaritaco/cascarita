@@ -34,7 +34,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         }}>
         {children}
       </Progress.ProgressIndicator>
-      <p>{getLabel ? getLabel(used, total) : ""}</p>
     </Progress.Root>
   );
 };
