@@ -124,6 +124,7 @@ const AccountController = function () {
         },
       });
 
+      //TODO: We are still figuring out whether creating a new account is needed, needs to be added/removed in the next PR
       // if (allExistingStripeAccounts) {
       //   accountId = allExistingStripeAccounts.stripe_account_id;
       // } else {

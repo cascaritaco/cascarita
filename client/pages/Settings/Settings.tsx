@@ -8,8 +8,6 @@ const Settings = () => {
       <Navbar>
         <Navbar.Item href="">Plan</Navbar.Item>
         <Navbar.Item href="payment">Payment Methods</Navbar.Item>
-        <Navbar.Item href="billing">Billing</Navbar.Item>
-        <Navbar.Item href="help">Help</Navbar.Item>
       </Navbar>
 
       <Outlet />

@@ -109,8 +109,6 @@ export const useRouter = () =>
         <Route path="settings" element={<Settings />}>
           <Route index element={<Plan />} />
           <Route path="payment" element={<Payment />} />
-          {/* <Route path="billing" element={<Billing />} /> */}
-          {/* <Route path="help" element={<Help />} /> */}
         </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
