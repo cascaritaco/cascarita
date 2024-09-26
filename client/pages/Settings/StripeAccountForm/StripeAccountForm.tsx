@@ -15,18 +15,6 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { name, description } = Object.fromEntries(
-      new FormData(event.currentTarget),
-    );
-
-    const data = {
-      formData: {
-        name: name,
-        description: description,
-      },
-    };
-
-    console.log(data.formData);
 
     afterSave();
   };
@@ -75,6 +63,7 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
             <div className={styles.stripeContainer}>
               <PrimaryButton
                 className={styles.stripeBtn}
+                //TODO: We need to hook up with endpoint, temporary console log for now
                 onClick={() => console.log("Stripe Button Pressed")}>
                 Connect with
                 <StripeLogo
