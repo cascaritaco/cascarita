@@ -6,7 +6,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     env:
@@ -32,11 +32,31 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
 
-      - name: Eslint Checks
-        run: npm run eslint
+        env:
+          cache-name: node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+
+      - name: Compile assets
+        run: |
+          npm install
+          npm run eslint
+          npm run build
 
       - name: Start MySQL
         run: |
@@ -46,9 +66,6 @@ jobs:
       - name: Jest Tests
         run: npm run test
 
-      - name: Webpack Build
-        run: npm run build
-
       - name: Start the app
         run: npm run start > app_output.log 2>&1 &
         env:
@@ -56,7 +73,7 @@ jobs:
 
       - name: Wait for the app to start
         run: sleep 10
-
+        timeout-minutes: 0.5
       - name: Display logs
         run: |
           echo "Application logs: $(cat app_output.log)"
