@@ -112,55 +112,6 @@ const AccountController = function () {
     }
   };
 
-  var getAllAccounts = async function (req, res, next) {
-    try {
-      const user = req.body;
-      let account;
-      let accountId;
-
-      const allExistingStripeAccounts = await UserStripeAccounts.findAll({
-        where: {
-          group_id: user.group_id,
-        },
-      });
-
-      //TODO: We are still figuring out whether creating a new account is needed, needs to be added/removed in the next PR
-      // if (allExistingStripeAccounts) {
-      //   accountId = allExistingStripeAccounts.stripe_account_id;
-      // } else {
-      //   account = await Stripe.accounts.create({
-      //     country: "US",
-      //     email: user.email,
-      //     type: "standard",
-      //   });
-      //
-      //   accountId = account.id;
-      // }
-
-      // const accountLink = await Stripe.accountLinks.create({
-      //   account: accountId,
-      //   refresh_url: "http://localhost:3000/forms",
-      //   return_url: "http://localhost:3000/home",
-      //   type: "account_onboarding",
-      // });
-
-      if (!allExistingStripeAccounts) {
-        await UserStripeAccounts.create({
-          user_id: user.id,
-          stripe_account_id: accountId,
-          details_submitted: false,
-          requires_verification: true,
-          charges_enabled: false,
-          payouts_enabled: false,
-        });
-      }
-
-      res.status(201).json({ url: accountLink.url });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   return {
     createAccountConnection,
     createPaymentIntent,
