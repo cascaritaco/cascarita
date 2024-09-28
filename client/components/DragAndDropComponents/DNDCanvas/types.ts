@@ -29,10 +29,10 @@ export interface Properties {
     value: string;
     currency: string;
   };
+  stripe_acount_id?: string;
 }
 
 export interface Field {
-  // NOTE: See comment in DNDCanvas.tsx
   id?: string;
   title: string;
   ref: string;

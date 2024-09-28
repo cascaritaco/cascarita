@@ -46,13 +46,10 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   };
 
   const getAccounts = () => {
+    // TODO: Get All Stripe Accounts
     const accounts = [];
-    accounts.push(<option value="">Select an Account</option>);
-    for (let i = 1; i < 5; ++i) {
-      accounts.push(<option value={i}>Account {i}</option>);
-    }
     accounts.push(
-      <option value="acct_1Pwrm0R4osRmT1sy">acct_1Pwrm0R4osRmT1sy</option>,
+      <option value="acct_1Pwrm0R4osRmT1sy">Raul&apos;s Account</option>,
     );
     return accounts;
   };

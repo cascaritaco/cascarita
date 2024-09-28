@@ -65,7 +65,8 @@ export type AnswerType =
   | "email"
   | "phone_number"
   | "boolean"
-  | "file_url";
+  | "file_url"
+  | "payment";
 
 export interface Answer {
   field: {
@@ -83,4 +84,5 @@ export interface Answer {
   choice?: { label: string };
   choices?: { labels: string[] };
   file_url?: string;
+  payment?: string;
 }

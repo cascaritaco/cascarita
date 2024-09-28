@@ -87,7 +87,7 @@ const AccountController = function () {
           application_fee_amount: productObj.fee,
         },
         {
-          stripeAccount: productObj.stripeAccountId,
+          stripeAccount: req.params["account_id"],
         },
       );
       console.log(paymentIntent);

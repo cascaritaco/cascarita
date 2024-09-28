@@ -1,3 +1,5 @@
+import { PaymentIntent } from "@stripe/stripe-js";
+
 const connectStripe = async (formData: object) => {
   try {
     const response = await fetch("/api/accounts/connect", {
@@ -21,55 +23,43 @@ const connectStripe = async (formData: object) => {
   }
 };
 
-export const getClientSecret = async (
-  accountId: number,
-  paymentIntent: string,
-): Promise<string> => {
+// stripeAccountId -> Customer Account ID (NOT Governing ID)
+// form_id -> form id from sql not mongo db
+// userId -> user id from sql (specifically the userstripeusers table)
+// price -> price of the form
+// fee -> fee of the form
+export const createPaymentIntent = async (
+  stripeAccountId: string,
+  form_id: number,
+  userId: number,
+  price: number,
+  fee: number,
+): Promise<PaymentIntent | null> => {
   try {
     const response = await fetch(
-      `/:${accountId}/paymentIntent/:${paymentIntent}`,
-    );
-
-    if (!response.ok) {
-      throw new Error(`Error fetching client secret: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return JSON.stringify(data.cleintSecret);
-  } catch (error) {
-    console.error("Error fetching client secret:", error);
-    return "";
-  }
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createPaymentIntent = async (): Promise<any> => {
-  try {
-    const response = await fetch(
-      `/api/accounts/acct_1Pwrm0R4osRmT1sy/paymentIntent`,
+      `/api/accounts/${stripeAccountId}/paymentIntent`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          price: 1000,
-          fee: 50,
-          stripeAccountId: "", // TODO: Fake RAUL account
-          form_id: 27, // "66f0ce55c83f8d26249f863c"
-          userId: "2",
+          price,
+          fee,
+          form_id,
+          userId,
         }),
       },
     );
 
     if (!response.ok) {
-      throw new Error(`1 Error creating payment intent: ${response.status}`);
+      throw new Error(`Error creating payment intent: ${response.status}`);
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("2 Error creating payment intent:", error);
+    console.error("Error creating payment intent:", error);
     return null;
   }
 };

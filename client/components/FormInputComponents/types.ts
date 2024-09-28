@@ -4,7 +4,8 @@ export type FieldType =
   | "long_text"
   | "dropdown"
   | "email"
-  | "phone_number";
+  | "phone_number"
+  | "payment";
 
 export interface Validation {
   max_length?: number;
@@ -54,6 +55,7 @@ export interface Answer {
   choice?: { label: string };
   choices?: { labels: string[] };
   file_url?: string;
+  payment?: string;
 }
 
 export interface FieldProps {

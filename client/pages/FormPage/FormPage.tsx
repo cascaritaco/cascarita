@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
-import { FormProvider, set, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import {
   Answer,
   AnswerMap,
@@ -15,64 +15,9 @@ import { createMongoResponse } from "../../api/forms/service";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
-import { createPaymentIntent } from "../../api/stripe/service";
-import { Elements, PaymentElement } from "@stripe/react-stripe-js";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
-import CheckoutForm from "../../components/StripeForm/CheckoutForm";
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
 
 const FormPage = () => {
   const { formId } = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [options, setOptions] = useState<any>(null);
-  const [stripePromise, setStripePromise] = useState<Stripe | null>(null);
-  const [clientSecret, setClientSecret] = useState("");
-
-  useEffect(() => {
-    const fetchStripePromise = async () => {
-      setStripePromise(
-        await loadStripe(
-          "", // TODO: We need Public key fetched from the server
-          {
-            stripeAccount: "", // TODO: We Need customer Account ID
-          },
-        ),
-      );
-    };
-    fetchStripePromise();
-  }, []);
-
-  useEffect(() => {
-    const fetchPaymentIntent = async () => {
-      try {
-        const stripeStuff = await createPaymentIntent();
-        if (stripeStuff != null) {
-          setClientSecret(stripeStuff.client_secret);
-          setOptions({
-            clientSecret: stripeStuff.client_secret,
-            appearance: {
-              theme: "stripe",
-              variables: {
-                colorPrimary: "#0570de",
-                colorBackground: "#ffffff",
-                colorText: "#30313d",
-                colorDanger: "#df1b41",
-              },
-            },
-          });
-        } else {
-          console.error("Failed to create PaymentIntent");
-        }
-      } catch (error) {
-        console.error("Error fetching PaymentIntent:", error);
-      }
-    };
-
-    fetchPaymentIntent();
-  }, []);
-
   const navigate = useNavigate();
 
   const {
@@ -134,15 +79,6 @@ const FormPage = () => {
               className={styles.formContent}
               onSubmit={methods.handleSubmit(onSubmit)}>
               <h1 className={styles.title}>{form?.form_data.title}</h1>
-              <h1>Hello World</h1>
-              <>
-                <h1>this is our stripe form</h1>
-                {stripePromise && clientSecret && (
-                  <Elements stripe={stripePromise} options={options}>
-                    <CheckoutForm />
-                  </Elements>
-                )}
-              </>
               {form.form_data.fields.map((field: Field, index: number) => {
                 const FieldComponent = FieldComponents[field.type];
                 if (!FieldComponent) return null;
