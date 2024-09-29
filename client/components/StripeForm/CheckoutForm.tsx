@@ -1,6 +1,7 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState, forwardRef, useImperativeHandle } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
+import styles from "./CheckoutForm.module.css";
 
 const CheckoutForm = forwardRef((_props, ref) => {
   const stripe = useStripe();
@@ -38,8 +39,8 @@ const CheckoutForm = forwardRef((_props, ref) => {
 
   return (
     <>
-      <PaymentElement id="payment-element" />
-      {message && <div id="payment-message">{message}</div>}
+      <PaymentElement />
+      {message && <div id={styles.paymentMessage}>{message}</div>}
     </>
   );
 });

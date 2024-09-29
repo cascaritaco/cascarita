@@ -9,5 +9,21 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.formatOnSave": true,
-  "files.autoSave": "onFocusChange"
+  "files.autoSave": "onFocusChange",
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "Cascarita",
+      "database": "test_db",
+      "username": "root",
+      "askForPassword": true
+    }
+  ]
 }
