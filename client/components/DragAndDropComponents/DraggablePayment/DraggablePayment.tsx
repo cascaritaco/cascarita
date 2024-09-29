@@ -45,8 +45,8 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const getAccounts = () => {
-    // TODO: Get All Stripe Accounts
+  // TODO: Get All Stripe Accounts from our API
+  const getStripeAccounts = () => {
     const accounts = [];
     accounts.push(
       <option value="acct_1Pwrm0R4osRmT1sy">Raul&apos;s Account</option>,
@@ -95,7 +95,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
               )}
               <hr />
               {properties?.price != null && (
-                <>
+                <div className={styles.paymentGroup}>
                   <div className={styles.payment}>
                     <p className={styles.paymentText}>{t("paymentAmount")}: </p>
                     <div className={styles.paymentInputGroup}>
@@ -119,10 +119,47 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                       {properties.price?.currency}
                     </p>
                   </div>
-                </>
+                  <div className={styles.payment}>
+                    <p className={styles.paymentText}>{t("feeAmount")}: </p>
+                    <div className={styles.paymentInputGroup}>
+                      <p className={styles.currencySymbol}>$</p>
+                      <Controller
+                        name={`fields.${index}.properties.price.feeValue`}
+                        control={control}
+                        defaultValue={properties.price.feeValue}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            value={formatPayment(field.value)}
+                            placeholder={"0.00"}
+                            className={styles.paymentInput}
+                          />
+                        )}
+                      />
+                    </div>
+                    <p className={styles.currency}>
+                      {properties.price?.currency}
+                    </p>
+                  </div>
+                </div>
               )}
-              {/* TODO: Add Stripe Accounts */}
-              <select className={styles.input}>{getAccounts()}</select>
+              {properties?.stripe_acount_id != null && (
+                <div className={styles.stripeGroup}>
+                  <p className={styles.flexCenter}>
+                    <b>{t("stripeAccount")}: </b>
+                  </p>
+                  <Controller
+                    name={`fields.${index}.properties.stripe_acount_id`}
+                    control={control}
+                    defaultValue={properties.stripe_acount_id}
+                    render={({ field }) => (
+                      <select {...field} className={styles.accountList}>
+                        {getStripeAccounts()}
+                      </select>
+                    )}
+                  />
+                </div>
+              )}
               <div
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""

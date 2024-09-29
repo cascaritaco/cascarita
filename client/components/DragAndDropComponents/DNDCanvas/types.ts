@@ -27,6 +27,7 @@ export interface Properties {
   price?: {
     type: string;
     value: string;
+    feeValue: string;
     currency: string;
   };
   stripe_acount_id?: string;

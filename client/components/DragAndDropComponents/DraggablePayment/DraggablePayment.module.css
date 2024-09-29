@@ -108,3 +108,39 @@
   border: 1px solid #dfe5ee;
   border-radius: 10px;
 }
+
+.paymentGroup,
+.stripeGroup {
+  display: flex;
+  gap: 10px;
+  overflow: wrap;
+}
+
+.stripeGroup {
+  margin-top: 10px;
+}
+
+.input {
+  background-color: #f6f9fd;
+  padding: 9px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+  border-radius: 15px;
+}
+
+.accountList {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

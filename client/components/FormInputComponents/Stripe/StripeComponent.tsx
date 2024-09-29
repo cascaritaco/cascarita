@@ -53,7 +53,7 @@ const StripeComponent = ({ field, index }: FieldProps) => {
           27,
           2,
           normalizePriceToCents(field.properties?.price?.value),
-          50,
+          normalizePriceToCents(50),
         );
         if (stripeStuff != null && stripeStuff.client_secret != null) {
           setClientSecret(stripeStuff.client_secret);

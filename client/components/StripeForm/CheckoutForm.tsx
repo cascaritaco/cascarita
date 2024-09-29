@@ -1,6 +1,7 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
+import styles from "./CheckoutForm.module.css";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -9,8 +10,9 @@ export default function CheckoutForm() {
   const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
@@ -22,13 +24,13 @@ export default function CheckoutForm() {
 
     const { error } = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: `${window.location.origin}/completion`,
-      },
+      redirect: "if_required",
     });
 
-    if (error.type === "card_error" || error.type === "validation_error") {
+    if (
+      error &&
+      (error.type === "card_error" || error.type === "validation_error")
+    ) {
       setMessage(error.message ?? "An error occurred");
     } else {
       setMessage("An unexpected error occured.");
@@ -37,10 +39,14 @@ export default function CheckoutForm() {
     setIsProcessing(false);
   };
 
+  // TODO: This is a form nested in a form which is bad practices and needs a change.
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
+    <form id={styles.paymentForm} onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
-      <button disabled={isProcessing || !stripe || !elements} id="submit">
+      <button
+        disabled={isProcessing || !stripe || !elements}
+        id="submit"
+        className={styles.stripeSubmitButton}>
         <span id="button-text">
           {isProcessing ? "Processing ... " : "Pay now"}
         </span>

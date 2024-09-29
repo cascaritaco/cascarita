@@ -12,5 +12,7 @@
   "payment": "Payment",
   "title": "Title",
   "description": "Description",
-  "paymentAmount": "Payment Amount"
+  "paymentAmount": "Payment Amount",
+  "feeAmount": "Fee Amount",
+  "stripeAccount": "Account"
 }
