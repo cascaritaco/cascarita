@@ -133,7 +133,8 @@
   display: flex;
   height: 40px;
   align-items: center;
-  padding: 10px;
+  padding: 0 15px;
+  justify-content: center;
   border: 1px solid #dfe5ee;
   border-radius: 10px;
   background-color: #f4f4f4;
