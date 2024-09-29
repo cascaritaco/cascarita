@@ -2,7 +2,12 @@
 
 require("dotenv").config();
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
-const { UserStripeAccounts, FormPaymentIntents, User } = require("../models");
+const {
+  UserStripeAccounts,
+  FormPaymentIntents,
+  User,
+  StripeStatus,
+} = require("../models");
 const { where } = require("../mongoModels/response");
 
 const AccountController = function () {
@@ -38,6 +43,11 @@ const AccountController = function () {
       });
 
       if (!existingStripeAccount) {
+        const defaultStatus = await StripeStatus.findOne({
+          where: {
+            status: "Restricted",
+          },
+        });
         await UserStripeAccounts.create({
           user_id: user.id,
           stripe_account_id: accountId,
@@ -45,6 +55,10 @@ const AccountController = function () {
           requires_verification: true,
           charges_enabled: false,
           payouts_enabled: false,
+          platform_account_name: user.platform_account_name,
+          platform_account_description: user.platform_account_description,
+          account_email: user.account_email,
+          stripe_status_id: defaultStatus.id,
         });
       }
 
