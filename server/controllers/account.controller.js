@@ -129,6 +129,13 @@ const AccountController = function () {
               exclude: ["password", "created_at", "updated_at", "language_id"],
             },
           },
+          {
+            model: StripeStatus,
+            as: "StripeStatus",
+            attributes: {
+              exclude: ["created_at", "updated_at"],
+            },
+          },
         ],
       });
 
