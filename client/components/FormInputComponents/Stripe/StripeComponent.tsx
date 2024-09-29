@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { FieldProps } from "../types";
 import styles from "./StripeComponent.module.css";
 import { createPaymentIntent } from "../../../api/stripe/service";
@@ -7,7 +7,7 @@ import { loadStripe, Stripe, StripeElementsOptions } from "@stripe/stripe-js";
 import CheckoutForm from "../../StripeForm/CheckoutForm";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StripeComponent = ({ field, index }: FieldProps) => {
+const StripeComponent = forwardRef(({ field, index }: FieldProps, ref) => {
   const [options, setOptions] = useState<StripeElementsOptions | undefined>(
     undefined,
   );
@@ -99,6 +99,8 @@ const StripeComponent = ({ field, index }: FieldProps) => {
       )}
     </section>
   );
-};
+});
+
+StripeComponent.displayName = "StripeComponent";
 
 export default StripeComponent;

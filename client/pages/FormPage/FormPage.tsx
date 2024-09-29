@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
@@ -19,7 +19,9 @@ import styles from "./FormPage.module.css";
 const FormPage = () => {
   const { formId } = useParams();
   const navigate = useNavigate();
-
+  const stripeComponentRef = useRef<{
+    handlePayment: () => Promise<boolean>;
+  } | null>(null);
   const {
     data: form,
     isLoading,
@@ -57,10 +59,17 @@ const FormPage = () => {
       }) ?? [];
 
     try {
+      if (stripeComponentRef.current) {
+        const success = await stripeComponentRef.current.handlePayment();
+        if (!success) {
+          return;
+        }
+      }
       const responsesData = await createMongoResponse(
         formId ?? "",
         normalizedAnswers,
       );
+      // TODO: Redirect to a success page / thank you page?
       navigate("/forms");
       return responsesData;
     } catch (error) {
@@ -82,6 +91,16 @@ const FormPage = () => {
               {form.form_data.fields.map((field: Field, index: number) => {
                 const FieldComponent = FieldComponents[field.type];
                 if (!FieldComponent) return null;
+                if (FieldComponent === FieldComponents.payment) {
+                  return (
+                    <FieldComponent
+                      key={field.id}
+                      ref={stripeComponentRef}
+                      field={field}
+                      index={index}
+                    />
+                  );
+                }
                 return (
                   <FieldComponent key={field.id} field={field} index={index} />
                 );
