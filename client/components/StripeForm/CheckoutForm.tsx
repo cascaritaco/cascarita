@@ -2,7 +2,7 @@ import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState, forwardRef, useImperativeHandle } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 
-const CheckoutForm = forwardRef((props, ref) => {
+const CheckoutForm = forwardRef((_props, ref) => {
   const stripe = useStripe();
   const elements = useElements();
 

@@ -1,4 +1,10 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { FieldProps } from "../types";
 import styles from "./StripeComponent.module.css";
 import { createPaymentIntent } from "../../../api/stripe/service";
@@ -6,14 +12,18 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, Stripe, StripeElementsOptions } from "@stripe/stripe-js";
 import CheckoutForm from "../../StripeForm/CheckoutForm";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StripeComponent = forwardRef(({ field, index }: FieldProps, ref) => {
+interface CheckoutFormRef {
+  handlePayment: () => void;
+}
+
+const StripeComponent = forwardRef(({ field }: FieldProps, ref) => {
   const [options, setOptions] = useState<StripeElementsOptions | undefined>(
     undefined,
   );
   const [stripePromise, setStripePromise] = useState<Stripe | null>(null);
   const [clientSecret, setClientSecret] = useState("");
 
+  const checkoutFormRef = useRef<CheckoutFormRef>(null);
   const normalizePriceToCents = (
     price: string | number | undefined,
   ): number => {
@@ -80,6 +90,10 @@ const StripeComponent = forwardRef(({ field, index }: FieldProps, ref) => {
     fetchPaymentIntent();
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    handlePayment: checkoutFormRef.current?.handlePayment,
+  }));
+
   return (
     <section className={styles.container}>
       <div className={styles.questionContainer}>
@@ -94,7 +108,7 @@ const StripeComponent = forwardRef(({ field, index }: FieldProps, ref) => {
       </p>
       {stripePromise && clientSecret && (
         <Elements stripe={stripePromise} options={options}>
-          <CheckoutForm />
+          <CheckoutForm ref={checkoutFormRef} />
         </Elements>
       )}
     </section>
