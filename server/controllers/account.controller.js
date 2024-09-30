@@ -1,15 +1,16 @@
 "use strict";
 
 require("dotenv").config();
-if (process.env.NODE_ENV !== "testing") {
-  Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
-}
+
+const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
 const {
   UserStripeAccounts,
   FormPaymentIntents,
   User,
   StripeStatus,
+  Group,
 } = require("../models");
+const modelByPk = require("./utility");
 
 const AccountController = function () {
   var createAccountConnection = async function (req, res, next) {
@@ -130,7 +131,8 @@ const AccountController = function () {
 
   var getAllAccountsByGroupId = async function (req, res, next) {
     try {
-      const groupId = req.params.id;
+      const groupId = req.params.group_id;
+      await modelByPk(res, Group, groupId);
 
       const accounts = await UserStripeAccounts.findAll({
         include: [
@@ -163,7 +165,7 @@ const AccountController = function () {
   };
 
   var calculateStripeStatus = async function (account) {
-    let rejectedReasons = [
+    const rejectedReasons = [
       "rejected.fraud",
       "rejected.incomplete_verification",
       "rejected.listed",
