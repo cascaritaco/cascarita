@@ -15,4 +15,6 @@ router.get(
   AccountController.getClientSecret,
 );
 
+router.get("/:group_id", AccountController.getAllAccountsByGroupId);
+
 module.exports = router;
