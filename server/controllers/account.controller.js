@@ -8,7 +8,6 @@ const {
   User,
   StripeStatus,
 } = require("../models");
-const { where } = require("../mongoModels/response");
 
 const AccountController = function () {
   var createAccountConnection = async function (req, res, next) {
@@ -161,12 +160,51 @@ const AccountController = function () {
     }
   };
 
+  var calculateStripeStatus = async function (account) {
+    let rejectedReasons = [
+      "rejected.fraud",
+      "rejected.incomplete_verification",
+      "rejected.listed",
+      "rejected.other",
+      "rejected.terms_of_service",
+      "platform_paused",
+      "under_review",
+    ];
+
+    let status = "Restricted";
+    if (rejectedReasons.includes(account.requirements.disabled_reason)) {
+      status = "Rejected";
+    } else if (!account.payouts_enabled || !account.charges_enabled) {
+      status = "Restricted";
+    } else if (
+      account.future_requirements.pending_verification?.length != 0 ||
+      account.requirements.pending_verification?.length != 0
+    ) {
+      status = "Pending";
+    } else if (account.current_deadline) {
+      status = "Restricted Soon";
+    } else if (account.requirements.eventually_due?.length >= 1) {
+      status = "Enabled";
+    } else {
+      status = "Complete";
+    }
+
+    const stripeStatusId = await StripeStatus.findOne({
+      where: {
+        status: status,
+      },
+    });
+
+    return stripeStatusId.id;
+  };
+
   return {
     createAccountConnection,
     createPaymentIntent,
     getStripeAccountId,
     getClientSecret,
     getAllAccountsByGroupId,
+    calculateStripeStatus,
   };
 };
 
