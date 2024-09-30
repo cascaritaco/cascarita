@@ -1,7 +1,9 @@
 "use strict";
 
 require("dotenv").config();
-const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
+if (process.env.NODE_ENV !== "testing") {
+  Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
+}
 const {
   UserStripeAccounts,
   FormPaymentIntents,
