@@ -28,6 +28,10 @@ export interface Properties {
     value: string;
     currency: string;
   };
+  stripe_account?: {
+    id: string;
+    stripe_account_id: string;
+  };
 }
 
 export interface Field {

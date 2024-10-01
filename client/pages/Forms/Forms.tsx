@@ -84,7 +84,7 @@ const Forms = () => {
   // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
     await deleteForm(id);
-    setForms((forms) => forms.filter((form) => form.form_data.id !== id));
+    setForms((forms) => forms.filter((form) => form._id !== id));
   };
 
   const onEdit = async (id: string) => {

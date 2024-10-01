@@ -101,8 +101,13 @@ const DNDCanvas = forwardRef(
           id: item.id,
           ref: item.id,
           properties: {
-            price: { type: "fixed", value: "", feeValue: "", currency: "USD" },
-            stripe_acount_id: "",
+            price: {
+              type: "fixed",
+              value: "",
+              feeValue: "",
+              currency: "USD",
+            },
+            stripe_account: { id: "", stripe_account_id: "" },
             description: "",
           },
           validations: { required: false },

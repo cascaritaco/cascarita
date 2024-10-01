@@ -30,7 +30,10 @@ export interface Properties {
     feeValue: string;
     currency: string;
   };
-  stripe_acount_id?: string;
+  stripe_account?: {
+    id: string;
+    stripe_account_id: string;
+  };
 }
 
 export interface Field {

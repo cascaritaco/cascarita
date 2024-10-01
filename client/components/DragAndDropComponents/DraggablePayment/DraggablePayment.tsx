@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
 import { DraggablePaymentProps } from "./types";
 import styles from "./DraggablePayment.module.css";
@@ -8,6 +8,7 @@ import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
 import { formatPayment } from "../../../util/formatPayment";
+import { calculateStripeFee } from "../../../util/calculateStripeFee";
 
 const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   id,
@@ -23,7 +24,10 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   const { t } = useTranslation("DraggableFields");
   const containerRef = useRef<HTMLDivElement>(null);
   const [isContainerWidthMaxed, setIsContainerWidthMaxed] = useState(false);
-
+  const [paymentFee, setPaymentFee] = useState(
+    properties?.price?.feeValue ?? "",
+  );
+  const { setValue } = useFormContext();
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
@@ -47,11 +51,23 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
 
   // TODO: Get All Stripe Accounts from our API
   const getStripeAccounts = () => {
-    const accounts = [];
-    accounts.push(
-      <option value="acct_1Pwrm0R4osRmT1sy">Raul&apos;s Account</option>,
-    );
-    return accounts;
+    const accounts = [
+      {
+        id: "1",
+        stripe_account_id: "acct_1Pwrm0R4osRmT1sy",
+        name: "Raul",
+      },
+    ];
+    return accounts.map((account) => (
+      <option
+        key={account.id}
+        value={JSON.stringify({
+          id: account.id,
+          stripe_account_id: account.stripe_account_id,
+        })}>
+        {account.name}&apos;s Account
+      </option>
+    ));
   };
 
   return (
@@ -109,6 +125,17 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                           <input
                             {...field}
                             value={formatPayment(field.value)}
+                            onChange={(e) => {
+                              const newFee = formatPayment(
+                                calculateStripeFee(+e.target.value).toString(),
+                              );
+                              setPaymentFee(newFee);
+                              setValue(
+                                `fields.${index}.properties.price.feeValue`,
+                                newFee,
+                              );
+                              field.onChange(e.target.value);
+                            }}
                             placeholder={"0.00"}
                             className={styles.paymentInput}
                           />
@@ -123,19 +150,22 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                     <p className={styles.paymentText}>{t("feeAmount")}: </p>
                     <div className={styles.paymentInputGroup}>
                       <p className={styles.currencySymbol}>$</p>
-                      <Controller
-                        name={`fields.${index}.properties.price.feeValue`}
-                        control={control}
-                        defaultValue={properties.price.feeValue}
-                        render={({ field }) => (
-                          <input
-                            {...field}
-                            value={formatPayment(field.value)}
-                            placeholder={"0.00"}
-                            className={styles.paymentInput}
-                          />
-                        )}
-                      />
+                      <div className={styles.paymentDisplay}>
+                        <Controller
+                          name={`fields.${index}.properties.price.feeValue`}
+                          control={control}
+                          defaultValue={properties.price.feeValue}
+                          render={({ field }) => (
+                            <input
+                              {...field}
+                              value={paymentFee}
+                              placeholder={"0.00"}
+                              className={styles.paymentInput}
+                              readOnly
+                            />
+                          )}
+                        />
+                      </div>
                     </div>
                     <p className={styles.currency}>
                       {properties.price?.currency}
@@ -143,17 +173,23 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                   </div>
                 </div>
               )}
-              {properties?.stripe_acount_id != null && (
+              {properties?.stripe_account != null && (
                 <div className={styles.stripeGroup}>
                   <p className={styles.flexCenter}>
                     <b>{t("stripeAccount")}: </b>
                   </p>
                   <Controller
-                    name={`fields.${index}.properties.stripe_acount_id`}
+                    name={`fields.${index}.properties.stripe_account`}
                     control={control}
-                    defaultValue={properties.stripe_acount_id}
+                    defaultValue={properties.stripe_account} // need to default the first option
                     render={({ field }) => (
-                      <select {...field} className={styles.accountList}>
+                      <select
+                        {...field}
+                        className={styles.accountList}
+                        onChange={(e) =>
+                          field.onChange(JSON.parse(e.target.value))
+                        }
+                        value={JSON.stringify(field.value)}>
                         {getStripeAccounts()}
                       </select>
                     )}
