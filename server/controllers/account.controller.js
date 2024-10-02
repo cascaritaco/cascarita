@@ -225,7 +225,7 @@ const AccountController = function () {
   };
 
   const getPulishableKey = function (req, res, next) {
-    res.status(200).json({ key: process.env.SRIPE_PUBLISHABLE_KEY });
+    res.status(200).json({ key: process.env.STRIPE_PUBLISHABLE_KEY });
   };
 
   return {
