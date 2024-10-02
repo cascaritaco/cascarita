@@ -206,25 +206,6 @@ const FormController = {
       next(error);
     }
   },
-
-  async getFormSqlId(req, res, next) {
-    const { document_id } = req.params;
-    try {
-      const form = await Form.findOne({
-        where: {
-          document_id: document_id,
-        },
-      });
-      if (!formResponse) {
-        res.status(404);
-        throw new Error(`no form with id ${form_id}`);
-      }
-
-      res.status(204).json({ sql_form_id: form.id });
-    } catch (error) {
-      next(error);
-    }
-  },
 };
 
 module.exports = FormController;
