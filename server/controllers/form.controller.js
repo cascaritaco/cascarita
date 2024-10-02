@@ -92,9 +92,17 @@ const FormController = {
 
   async getFormByDocumentId(req, res, next) {
     try {
-      const results = await FormMongo.findById(req.params.document_id);
+      const form_document_id = req.params.document_id;
+      let results = await FormMongo.findById(form_document_id);
+      let resultsObject = results.toObject();
+      const sqlFormData = await Form.findOne({
+        where: {
+          document_id: form_document_id,
+        },
+      });
 
-      return res.status(201).json(results);
+      resultsObject.sql_form_id = sqlFormData.id;
+      return res.status(201).json(resultsObject);
     } catch (error) {
       next(error);
     }
@@ -194,6 +202,25 @@ const FormController = {
       await FormMongo.deleteOne({ _id: form_id });
 
       res.status(204).json();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getFormSqlId(req, res, next) {
+    const { document_id } = req.params;
+    try {
+      const form = await Form.findOne({
+        where: {
+          document_id: document_id,
+        },
+      });
+      if (!formResponse) {
+        res.status(404);
+        throw new Error(`no form with id ${form_id}`);
+      }
+
+      res.status(204).json({ sql_form_id: form.id });
     } catch (error) {
       next(error);
     }
