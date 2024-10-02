@@ -16,5 +16,6 @@ router.get(
 );
 
 router.get("/:group_id", AccountController.getAllAccountsByGroupId);
+router.get("/key/publishable", AccountController.getPulishableKey);
 
 module.exports = router;
