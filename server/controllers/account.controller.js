@@ -135,6 +135,16 @@ const AccountController = function () {
       await modelByPk(res, Group, groupId);
 
       const accounts = await UserStripeAccounts.findAll({
+        attributes: [
+          "id",
+          "user_id",
+          "stripe_account_id",
+          "stripe_account_name",
+          "platform_account_name",
+          "platform_account_description",
+          "account_email",
+          "support_email",
+        ],
         include: [
           {
             model: User,
@@ -142,21 +152,33 @@ const AccountController = function () {
             where: {
               group_id: groupId,
             },
-            attributes: {
-              exclude: ["password", "created_at", "updated_at", "language_id"],
-            },
+            attributes: ["first_name", "last_name", "email"],
           },
           {
             model: StripeStatus,
             as: "StripeStatus",
-            attributes: {
-              exclude: ["created_at", "updated_at"],
-            },
+            attributes: ["id", "status"],
           },
         ],
       });
 
-      let data = accounts.length != 0 ? accounts : [];
+      const flattenedAccounts = accounts.map((account) => ({
+        id: account.id,
+        stripe_account_id: account.stripe_account_id,
+        stripe_account_name: account.stripe_account_name,
+        platform_account_name: account.platform_account_name,
+        platform_account_description: account.platform_account_description,
+        account_email: account.account_email,
+        support_email: account.support_email,
+        stripe_status_id: account.StripeStatus.id,
+        stripe_status: account.StripeStatus.status,
+        user_id: account.user_id,
+        first_name: account.User.first_name,
+        last_name: account.User.last_name,
+        user_email: account.User.email,
+      }));
+
+      let data = flattenedAccounts.length != 0 ? flattenedAccounts : [];
 
       res.status(200).json(data);
     } catch (error) {
