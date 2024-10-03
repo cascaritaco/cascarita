@@ -1,8 +1,16 @@
 "use strict";
 
 require("dotenv").config();
+
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
-const { UserStripeAccounts, FormPaymentIntents } = require("../models");
+const {
+  UserStripeAccounts,
+  FormPaymentIntents,
+  User,
+  StripeStatus,
+  Group,
+} = require("../models");
+const modelByPk = require("./utility");
 
 const AccountController = function () {
   var createAccountConnection = async function (req, res, next) {
@@ -37,6 +45,11 @@ const AccountController = function () {
       });
 
       if (!existingStripeAccount) {
+        const defaultStatus = await StripeStatus.findOne({
+          where: {
+            status: "Restricted",
+          },
+        });
         await UserStripeAccounts.create({
           user_id: user.id,
           stripe_account_id: accountId,
@@ -44,6 +57,10 @@ const AccountController = function () {
           requires_verification: true,
           charges_enabled: false,
           payouts_enabled: false,
+          platform_account_name: user.platform_account_name,
+          platform_account_description: user.platform_account_description,
+          account_email: user.account_email,
+          stripe_status_id: defaultStatus.id,
         });
       }
 
@@ -112,11 +129,113 @@ const AccountController = function () {
     }
   };
 
+  var getAllAccountsByGroupId = async function (req, res, next) {
+    try {
+      const groupId = req.params.group_id;
+      await modelByPk(res, Group, groupId);
+
+      const accounts = await UserStripeAccounts.findAll({
+        attributes: [
+          "id",
+          "user_id",
+          "stripe_account_id",
+          "stripe_account_name",
+          "platform_account_name",
+          "platform_account_description",
+          "account_email",
+          "support_email",
+        ],
+        include: [
+          {
+            model: User,
+            as: "User",
+            where: {
+              group_id: groupId,
+            },
+            attributes: ["first_name", "last_name", "email"],
+          },
+          {
+            model: StripeStatus,
+            as: "StripeStatus",
+            attributes: ["id", "status"],
+          },
+        ],
+      });
+
+      const flattenedAccounts = accounts.map((account) => ({
+        id: account.id,
+        stripe_account_id: account.stripe_account_id,
+        stripe_account_name: account.stripe_account_name,
+        platform_account_name: account.platform_account_name,
+        platform_account_description: account.platform_account_description,
+        account_email: account.account_email,
+        support_email: account.support_email,
+        stripe_status_id: account.StripeStatus.id,
+        stripe_status: account.StripeStatus.status,
+        user_id: account.user_id,
+        first_name: account.User.first_name,
+        last_name: account.User.last_name,
+        user_email: account.User.email,
+      }));
+
+      let data = flattenedAccounts.length != 0 ? flattenedAccounts : [];
+
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var calculateStripeStatus = async function (account) {
+    const rejectedReasons = [
+      "rejected.fraud",
+      "rejected.incomplete_verification",
+      "rejected.listed",
+      "rejected.other",
+      "rejected.terms_of_service",
+      "platform_paused",
+      "under_review",
+    ];
+
+    let status = "Restricted";
+    if (rejectedReasons.includes(account.requirements.disabled_reason)) {
+      status = "Rejected";
+    } else if (!account.payouts_enabled || !account.charges_enabled) {
+      status = "Restricted";
+    } else if (
+      account.future_requirements.pending_verification?.length != 0 ||
+      account.requirements.pending_verification?.length != 0
+    ) {
+      status = "Pending";
+    } else if (account.current_deadline) {
+      status = "Restricted Soon";
+    } else if (account.requirements.eventually_due?.length >= 1) {
+      status = "Enabled";
+    } else {
+      status = "Complete";
+    }
+
+    const stripeStatusId = await StripeStatus.findOne({
+      where: {
+        status: status,
+      },
+    });
+
+    return stripeStatusId.id;
+  };
+
+  const getPulishableKey = function (req, res, next) {
+    res.status(200).json({ key: process.env.STRIPE_PUBLISHABLE_KEY });
+  };
+
   return {
     createAccountConnection,
     createPaymentIntent,
     getStripeAccountId,
     getClientSecret,
+    getAllAccountsByGroupId,
+    calculateStripeStatus,
+    getPulishableKey,
   };
 };
 

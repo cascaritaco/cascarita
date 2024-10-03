@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
         targetKey: "id",
       });
+      UserStripeAccounts.belongsTo(models.StripeStatus, {
+        foreignKey: "stripe_status_id",
+        targetKey: "id",
+      });
     }
   }
   UserStripeAccounts.init(
@@ -58,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       payouts_enabled: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      stripe_status_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

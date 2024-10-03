@@ -1,6 +1,7 @@
 "use strict";
 const Stripe = require("stripe")(process.env.STRIPE_TEST_API_KEY);
 const { UserStripeAccounts } = require("../../models");
+const AccountController = require("../account.controller");
 
 const ConnectAccountController = function () {
   const endpointSecret = process.env.STRIPE_CONNECTED_ACCOUNTS_WEBHOOK_SECRET;
@@ -57,6 +58,10 @@ const ConnectAccountController = function () {
         },
       });
 
+      const stripeStatusId = await AccountController.calculateStripeStatus(
+        account,
+      );
+
       const updates = {
         stripe_account_name: account.business_profile.name,
         platform_account_name: account.metadata.cascarita_account_name || null,
@@ -68,6 +73,7 @@ const ConnectAccountController = function () {
         requires_verification: account.requirements.currently_due.length > 0,
         charges_enabled: account.charges_enabled,
         payouts_enabled: account.payouts_enabled,
+        stripe_status_id: stripeStatusId,
       };
 
       await currentAccount.update(updates, { validate: true });
