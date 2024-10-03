@@ -118,8 +118,7 @@ const Forms = () => {
     });
 
   return (
-    <Page>
-      <h1 className={styles.h1}>{t("title")}</h1>
+    <Page title={t("title")}>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search onSearchChange={setSearchQuery} />
@@ -140,7 +139,9 @@ const Forms = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
+        <PrimaryButton onClick={handleNewFormClick}>
+          {t("button")}
+        </PrimaryButton>
         <ConnectWithStripeButton />
       </div>
       {filteredData == null || filteredData?.length === 0 ? (

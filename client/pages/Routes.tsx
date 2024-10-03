@@ -17,6 +17,8 @@ import Forms from "./Forms/Forms";
 import NewForm from "./NewForm/NewForm";
 import Settings from "./Settings/Settings";
 import FormPage from "./FormPage/FormPage";
+import Plan from "./Settings/Plan/Plan";
+import Payment from "./Settings/Payment/Payment";
 import Register from "./Register/Register";
 
 export const useRouter = () =>
@@ -104,7 +106,10 @@ export const useRouter = () =>
         />
         <Route path="forms" element={<Forms />} />
         <Route path="forms/check" element={<NewForm />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<Settings />}>
+          <Route index element={<Plan />} />
+          <Route path="payment" element={<Payment />} />
+        </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
