@@ -1,3 +1,7 @@
+variable "aws_region" {
+  description = "value for aws_region"
+  default     = "us-west-1"
+}
 # NOTE: Change this variable to target different infra either prod/staging
 # Remember to update the `ecs.sh` with the right environment as well
 variable "environment" {
