@@ -10,6 +10,11 @@ variable "policy_arn" {
   default     = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
+variable "task_policy_arn" {
+  description = "The policy arn associated with AmazonECSTaskExecutionRolePolicy"
+  default     = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
 variable "instance_policy_name" {
   description = "The instance policy name associated with role for adding EC2 instances to ECS cluster."
   default     = "ecsInstanceProfile"

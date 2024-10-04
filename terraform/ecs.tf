@@ -71,6 +71,8 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
     Environment = var.environment
     Project     = var.project_name
   }
+
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
 }
 
 resource "aws_ecs_service" "ecs_service" {
