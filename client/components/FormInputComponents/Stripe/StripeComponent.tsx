@@ -58,36 +58,54 @@ const StripeComponent = forwardRef(({ field, sqlFormId }: FieldProps, ref) => {
   useEffect(() => {
     const fetchPaymentIntent = async () => {
       try {
-        const stripeStuff = await createPaymentIntent(
-          nullthrows(
-            field.properties?.stripe_account?.stripe_account_id,
-            "No Stripe Account ID",
-          ),
-          nullthrows(sqlFormId, "Form has no SQL id"),
-          nullthrows(
-            field.properties?.stripe_account?.id,
-            "No Stripe Account ID",
-          ),
-          normalizePriceToCents(field.properties?.price?.value),
-          normalizePriceToCents(field.properties?.price?.feeValue),
+        const stripeAccountId = nullthrows(
+          field.properties?.stripe_account?.stripe_account_id,
+          "No Stripe Account ID",
         );
-        if (stripeStuff != null && stripeStuff.client_secret != null) {
-          setClientSecret(stripeStuff.client_secret);
-          setOptions({
-            clientSecret: stripeStuff.client_secret,
-            appearance: {
-              theme: "stripe",
-              variables: {
-                colorPrimary: "#0570de",
-                colorBackground: "#ffffff",
-                colorText: "#30313d",
-                colorDanger: "#df1b41",
-              },
+
+        const formSqlId = nullthrows(sqlFormId, "Form has no SQL id");
+
+        const stripeAccountInternalId = nullthrows(
+          field.properties?.stripe_account?.id,
+          "No Stripe Account ID",
+        );
+
+        const priceValue = normalizePriceToCents(
+          field.properties?.price?.value,
+        );
+        const feeValue = normalizePriceToCents(
+          field.properties?.price?.feeValue,
+        );
+
+        const paymentIntent = nullthrows(
+          await createPaymentIntent(
+            stripeAccountId,
+            formSqlId,
+            stripeAccountInternalId,
+            priceValue,
+            feeValue,
+          ),
+          "Failed to create payment intent",
+        );
+
+        const fetchedClientSecret = nullthrows(
+          paymentIntent.client_secret,
+          "Payment intent has no client secret",
+        );
+
+        setClientSecret(fetchedClientSecret);
+        setOptions({
+          clientSecret: fetchedClientSecret,
+          appearance: {
+            theme: "stripe",
+            variables: {
+              colorPrimary: "#0570de",
+              colorBackground: "#ffffff",
+              colorText: "#30313d",
+              colorDanger: "#df1b41",
             },
-          });
-        } else {
-          console.error("Failed to create PaymentIntent");
-        }
+          },
+        });
       } catch (error) {
         console.error("Error fetching PaymentIntent:", error);
       }

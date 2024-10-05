@@ -12,7 +12,6 @@ import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
 import { formatPayment } from "../../../util/formatPayment";
-import { calculateStripeFee } from "../../../util/calculateStripeFee";
 import { useAuth } from "../../AuthContext/AuthContext";
 import { getStripeAccounts } from "../../../api/stripe/service";
 import nullthrows from "nullthrows";
@@ -37,6 +36,13 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   );
   const { setValue } = useFormContext();
   const [stripeAccounts, setStripeAccounts] = useState<StripeAccount[]>([]);
+
+  const calculateStripeFee = (price: number): number => {
+    const feePercentage = 0.029;
+    const fixedFee = 0.3;
+    const fee = price * feePercentage + fixedFee;
+    return Math.ceil(fee * 100) / 100;
+  };
 
   useEffect(() => {
     const fetchStripeAccounts = async () => {
