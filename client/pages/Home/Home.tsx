@@ -1,55 +1,67 @@
 import Leagues from "../Leagues/Leagues";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import RegisterModal from "../../components/RegistrationModal/RegistrationModal";
 import { fetchUser } from "../../api/users/service";
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
-    useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  const [registered, setRegistered] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      console.log(isAuthenticated, user);
-      const token = await getAccessTokenSilently();
-      const navigate = useNavigate();
-      console.log("Authorizaton token: ", token);
+    const checkRegistrationStatus = async () => {
       if (isAuthenticated && user) {
-        // Check if user is defined
-        console.log("Authenticated and user");
         try {
-          const currentUser = await fetchUser(user.email || "", token);
-          // Handle the user data here
-          console.log("Saul was here");
-          // if (currentUser.isSigningUp) {
-          navigate("/forms");
-          // }
-          console.log(currentUser);
+          const token = await getAccessTokenSilently();
+          const response = await fetchUser(user.email || "", token); // Ensure `fetchUser` is typed appropriately
+          console.log("response: ", response);
+          if (response.isSigningUp) {
+            setRegistered(false);
+          } else {
+            setRegistered(true);
+          }
         } catch (error) {
-          // Handle errors here
-          console.error("Error fetching user:", error);
+          console.error("Error checking registration status:", error);
         }
-      } else {
-        loginWithRedirect();
       }
     };
-    console.log("Inside this useEffect");
-    fetchCurrentUser();
-  }, [isAuthenticated, user]);
+
+    checkRegistrationStatus();
+  }, [isAuthenticated, user, getAccessTokenSilently]);
+
+  // Move the modal opening logic to a useEffect hook to avoid triggering re-renders
+  useEffect(() => {
+    if (!registered && isAuthenticated) {
+      console.log("Open up the registration Modal");
+      setIsRegisterModalOpen(true);
+    }
+  }, [registered, isAuthenticated, isRegisterModalOpen]);
+
+  // Function to handle registration completion
+  const handleRegistrationComplete = () => {
+    setRegistered(true);
+    setIsRegisterModalOpen(false);
+  };
 
   return (
     <>
       {isAuthenticated ? (
         <div>
+          {!registered && (
+            <RegisterModal
+              open={isRegisterModalOpen}
+              onOpenChange={setIsRegisterModalOpen}
+              onRegistrationComplete={handleRegistrationComplete}>
+              <></>
+            </RegisterModal>
+          )}
           <Leagues />
           <Outlet />
-          <></>
         </div>
       ) : (
-        <>
-          <p>Not authenticated...</p>
-        </>
+        <p>Not authenticated...</p>
       )}
     </>
   );
