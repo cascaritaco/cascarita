@@ -3,6 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { fetchUser } from "../../api/users/service";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
@@ -12,6 +13,7 @@ const Home = () => {
     const fetchCurrentUser = async () => {
       console.log(isAuthenticated, user);
       const token = await getAccessTokenSilently();
+      const navigate = useNavigate();
       console.log("Authorizaton token: ", token);
       if (isAuthenticated && user) {
         // Check if user is defined
@@ -19,6 +21,10 @@ const Home = () => {
         try {
           const currentUser = await fetchUser(user.email || "", token);
           // Handle the user data here
+          console.log("Saul was here");
+          // if (currentUser.isSigningUp) {
+          navigate("/forms");
+          // }
           console.log(currentUser);
         } catch (error) {
           // Handle errors here

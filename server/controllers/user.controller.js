@@ -347,12 +347,15 @@ const UserController = function () {
         },
       });
 
+      console.log(req.headers.authorization);
+
       if (user) {
         return res.status(200).json({ user: user });
       } else {
         console.log("NOT FOUND HERE!");
-        return res.status(404).json({
+        return res.status(201).json({
           message: `User with email: '${email}' not found.`,
+          isSigningUp: true,
         });
       }
     } catch (error) {
