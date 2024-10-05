@@ -224,7 +224,7 @@ const AccountController = function () {
     return stripeStatusId.id;
   };
 
-  const getPulishableKey = function (req, res, next) {
+  const getPublishableKey = function (req, res, next) {
     res.status(200).json({ key: process.env.STRIPE_PUBLISHABLE_KEY });
   };
 
@@ -235,7 +235,7 @@ const AccountController = function () {
     getClientSecret,
     getAllAccountsByGroupId,
     calculateStripeStatus,
-    getPulishableKey,
+    getPublishableKey,
   };
 };
 

@@ -23,11 +23,6 @@ export const connectStripe = async (formData: object) => {
   }
 };
 
-// stripeAccountId -> Customer Account ID (NOT Governing ID)
-// form_id -> form id from sql not mongo db
-// userId -> user id from sql (specifically the userstripeusers table)
-// price -> price of the form
-// fee -> fee of the form
 export const createPaymentIntent = async (
   stripeAccountId: string,
   form_id: string,
@@ -66,14 +61,14 @@ export const createPaymentIntent = async (
 
 export const getPublishableKey = async (): Promise<string> => {
   try {
-    const response = await fetch("/api/accounts/publishable");
+    const response = await fetch("/api/accounts/key/publishable");
 
     if (!response.ok) {
       throw new Error(`Error fetching publishable key: ${response.status}`);
     }
 
     const data = await response.json();
-    return data.publishableKey;
+    return data.key;
   } catch (error) {
     console.error("Error fetching publishable key:", error);
     return "";

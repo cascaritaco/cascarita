@@ -14,6 +14,7 @@ import {
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, Stripe, StripeElementsOptions } from "@stripe/stripe-js";
 import CheckoutForm from "../../StripeForm/CheckoutForm";
+import nullthrows from "nullthrows";
 
 interface CheckoutFormRef {
   handlePayment: () => void;
@@ -58,9 +59,15 @@ const StripeComponent = forwardRef(({ field, sqlFormId }: FieldProps, ref) => {
     const fetchPaymentIntent = async () => {
       try {
         const stripeStuff = await createPaymentIntent(
-          field.properties?.stripe_account?.stripe_account_id ?? "",
-          sqlFormId ?? "",
-          field.properties?.stripe_account?.id ?? "",
+          nullthrows(
+            field.properties?.stripe_account?.stripe_account_id,
+            "No Stripe Account ID",
+          ),
+          nullthrows(sqlFormId, "Form has no SQL id"),
+          nullthrows(
+            field.properties?.stripe_account?.id,
+            "No Stripe Account ID",
+          ),
           normalizePriceToCents(field.properties?.price?.value),
           normalizePriceToCents(field.properties?.price?.feeValue),
         );
