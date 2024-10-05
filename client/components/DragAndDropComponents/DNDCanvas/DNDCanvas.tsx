@@ -147,7 +147,6 @@ const DNDCanvas = forwardRef(
 
     const onCopy = (field: Field, index: number) => {
       const newRef = uuidv4();
-      // delete field.id;
       insert(index + 1, { ...field, ref: newRef });
       handleCopy(index, {
         id: newRef,
@@ -201,12 +200,8 @@ const DNDCanvas = forwardRef(
                       return (
                         <Component
                           key={field.ref}
-                          id={field.ref}
                           index={index}
-                          title={field.title}
-                          validations={field.validations}
-                          properties={field.properties}
-                          control={control}
+                          formField={field}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
                         />

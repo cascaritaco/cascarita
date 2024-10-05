@@ -11,28 +11,27 @@ import { formatPayment } from "../../../util/formatPayment";
 import { useAuth } from "../../AuthContext/AuthContext";
 import { getStripeAccounts } from "../../../api/stripe/service";
 import nullthrows from "nullthrows";
-import { DraggablePropsWithProperties } from "../types";
+import { DraggableProps } from "../types";
 
-const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
-  id,
+const DraggablePayment: React.FC<DraggableProps> = ({
   index,
-  title,
-  control,
-  validations,
-  properties,
+  formField,
   onDelete,
   onCopy,
 }) => {
   const { currentUser } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
-  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContainerWidthMaxed, setIsContainerWidthMaxed] = useState(false);
   const [paymentFee, setPaymentFee] = useState(
-    properties?.price?.feeValue ?? "",
+    formField.properties?.price?.feeValue ?? "",
   );
-  const { setValue } = useFormContext();
   const [stripeAccounts, setStripeAccounts] = useState<StripeAccount[]>([]);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { setValue, control } = useFormContext();
 
   const calculateStripeFee = (price: number): number => {
     const feePercentage = 0.029;
@@ -51,8 +50,8 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
         StripeAccountSchema.parse(account),
       );
       if (
-        properties?.stripe_account &&
-        properties?.stripe_account.id === "" &&
+        formField.properties?.stripe_account &&
+        formField.properties?.stripe_account.id === "" &&
         parsedAccounts.length > 0
       ) {
         setValue(`fields.${index}.properties.stripe_account`, {
@@ -101,7 +100,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={formField.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -116,7 +115,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                 key={index}
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title} // Ensure the default value is set
+                defaultValue={formField.title} // Ensure the default value is set
                 render={({ field }) => (
                   <input
                     {...field}
@@ -125,11 +124,11 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                   />
                 )}
               />
-              {properties?.description != null && (
+              {formField.properties?.description != null && (
                 <Controller
                   name={`fields.${index}.properties.description`}
                   control={control}
-                  defaultValue={properties?.description}
+                  defaultValue={formField.properties?.description}
                   render={({ field }) => (
                     <input
                       {...field}
@@ -140,7 +139,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                 />
               )}
               <hr />
-              {properties?.price != null && (
+              {formField.properties?.price != null && (
                 <div className={styles.paymentGroup}>
                   <div className={styles.payment}>
                     <p className={styles.paymentText}>{t("paymentAmount")}: </p>
@@ -150,7 +149,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                         key={index}
                         name={`fields.${index}.properties.price.value`}
                         control={control}
-                        defaultValue={properties.price.value}
+                        defaultValue={formField.properties.price.value}
                         render={({ field }) => (
                           <input
                             {...field}
@@ -173,7 +172,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                       />
                     </div>
                     <p className={styles.currency}>
-                      {properties.price?.currency}
+                      {formField.properties.price?.currency}
                     </p>
                   </div>
                   <div className={styles.payment}>
@@ -184,7 +183,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                         <Controller
                           name={`fields.${index}.properties.price.feeValue`}
                           control={control}
-                          defaultValue={properties.price.feeValue}
+                          defaultValue={formField.properties.price.feeValue}
                           render={({ field }) => (
                             <input
                               {...field}
@@ -198,12 +197,12 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                       </div>
                     </div>
                     <p className={styles.currency}>
-                      {properties.price?.currency}
+                      {formField.properties.price?.currency}
                     </p>
                   </div>
                 </div>
               )}
-              {properties?.stripe_account != null && (
+              {formField.properties?.stripe_account != null && (
                 <div className={styles.stripeGroup}>
                   <p className={styles.flexCenter}>
                     <b>{t("stripeAccount")}: </b>
@@ -211,7 +210,7 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                   <Controller
                     name={`fields.${index}.properties.stripe_account`}
                     control={control}
-                    defaultValue={properties.stripe_account}
+                    defaultValue={formField.properties.stripe_account}
                     render={({ field }) => (
                       <select
                         {...field}
@@ -230,13 +229,13 @@ const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""
                 }`}>
-                {validations?.required != null && (
+                {formField.validations?.required != null && (
                   <>
                     <p className={styles.requiredText}>{t("requiredText")}</p>
                     <Controller
                       name={`fields.${index}.validations.required`}
                       control={control}
-                      defaultValue={validations.required}
+                      defaultValue={formField.validations.required}
                       render={({ field }) => (
                         <Switch
                           checked={field.value}

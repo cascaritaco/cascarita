@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
 import styles from "./DraggablePhoneNumber.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
@@ -8,23 +8,23 @@ import { useTranslation } from "react-i18next";
 import { DraggableProps } from "../types";
 
 const DraggablePhoneNumber: React.FC<DraggableProps> = ({
-  id,
   index,
-  title,
-  validations,
-  control,
+  formField,
   onDelete,
   onCopy,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { control } = useFormContext();
 
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={formField.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -35,13 +35,13 @@ const DraggablePhoneNumber: React.FC<DraggableProps> = ({
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>{t("phoneNumber")}</p>
             <div className={styles.draggableContainer}>
-              {validations?.required != null && (
+              {formField.validations?.required != null && (
                 <div className={styles.requiredSwitch}>
                   <p className={styles.requiredText}>{t("requiredText")}</p>
                   <Controller
                     name={`fields.${index}.validations.required`}
                     control={control}
-                    defaultValue={validations.required}
+                    defaultValue={formField.validations.required}
                     render={({ field }) => (
                       <Switch
                         checked={field.value}
@@ -64,7 +64,7 @@ const DraggablePhoneNumber: React.FC<DraggableProps> = ({
                 key={index}
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title} // Ensure the default value is set
+                defaultValue={formField.title} // Ensure the default value is set
                 render={({ field }) => (
                   <>
                     <input
