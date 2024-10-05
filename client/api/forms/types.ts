@@ -13,6 +13,7 @@ export interface Validation {
 }
 
 export interface Label {
+  id: string;
   label: string;
   ref: string;
 }
@@ -25,6 +26,7 @@ export interface Properties {
   price?: {
     type: string;
     value: string;
+    feeValue: string;
     currency: string;
   };
   stripe_account?: {
@@ -34,8 +36,7 @@ export interface Properties {
 }
 
 export interface Field {
-  // NOTE: See comment in DNDCanvas.tsx
-  id?: string;
+  id: string;
   title: string;
   ref: string;
   validations?: Validation;

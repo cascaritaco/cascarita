@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import {
-  DraggablePaymentProps,
-  StripeAccount,
-  StripeAccountSchema,
-} from "./types";
+import { StripeAccount, StripeAccountSchema } from "./types";
 import styles from "./DraggablePayment.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
@@ -15,8 +11,9 @@ import { formatPayment } from "../../../util/formatPayment";
 import { useAuth } from "../../AuthContext/AuthContext";
 import { getStripeAccounts } from "../../../api/stripe/service";
 import nullthrows from "nullthrows";
+import { DraggablePropsWithProperties } from "../types";
 
-const DraggablePayment: React.FC<DraggablePaymentProps> = ({
+const DraggablePayment: React.FC<DraggablePropsWithProperties> = ({
   id,
   index,
   title,

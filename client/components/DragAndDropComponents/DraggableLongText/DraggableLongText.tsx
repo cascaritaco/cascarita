@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableLongTextProps } from "./types";
 import styles from "./DraggableLongText.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
+import { DraggableProps } from "../types";
 
-const DraggableLongText: React.FC<DraggableLongTextProps> = ({
+const DraggableLongText: React.FC<DraggableProps> = ({
   id,
   index,
   title,

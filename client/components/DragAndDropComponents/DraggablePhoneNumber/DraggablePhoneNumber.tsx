@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggablePhoneNumberProps } from "./types";
 import styles from "./DraggablePhoneNumber.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
+import { DraggableProps } from "../types";
 
-const DraggablePhoneNumber: React.FC<DraggablePhoneNumberProps> = ({
+const DraggablePhoneNumber: React.FC<DraggableProps> = ({
   id,
   index,
   title,

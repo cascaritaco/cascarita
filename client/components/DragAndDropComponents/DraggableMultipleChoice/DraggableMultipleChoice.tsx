@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Controller, useFieldArray } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableMultipleChoiceProps } from "./types";
 import styles from "./DraggableMultipleChoice.module.css";
 import PlusCircleIcon from "../../../assets/PlusCircleIcon";
 import MinusCircleIcon from "../../../assets/MinusCircleIcon";
@@ -9,8 +8,9 @@ import EllipseIcon from "../../../assets/EllipseIcon";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
+import { DraggablePropsWithProperties } from "../types";
 
-const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
+const DraggableMultipleChoice: React.FC<DraggablePropsWithProperties> = ({
   id,
   index,
   title,
@@ -33,7 +33,11 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   });
 
   const addOption = () => {
-    append({ ref: `option-${fields.length + 1}`, label: "" });
+    append({
+      id: `option-${fields.length + 1}`,
+      ref: `option-${fields.length + 1}`,
+      label: "",
+    });
   };
 
   const removeOption = (optionIndex: number) => {

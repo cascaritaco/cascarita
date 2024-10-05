@@ -3,18 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
 import { FormProvider, useForm } from "react-hook-form";
-import {
-  Answer,
-  AnswerMap,
-  AnswerType,
-  Field,
-  FieldComponents,
-  Form,
-} from "./types";
+import { AnswerMap, FieldComponents, FetchedForm } from "./types";
 import { createMongoResponse } from "../../api/forms/service";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
+import { Answer, AnswerType, Field } from "../../api/forms/types";
 
 const FormPage = () => {
   const { formId } = useParams();
@@ -26,7 +20,7 @@ const FormPage = () => {
     data: form,
     isLoading,
     error,
-  } = useQuery<Form, Error>({
+  } = useQuery<FetchedForm, Error>({
     queryKey: ["form", formId],
     queryFn: () =>
       formId
