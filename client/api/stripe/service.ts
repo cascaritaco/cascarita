@@ -1,6 +1,6 @@
 import { PaymentIntent } from "@stripe/stripe-js";
 
-const connectStripe = async (formData: object) => {
+export const connectStripe = async (formData: object) => {
   try {
     const response = await fetch("/api/accounts/connect", {
       method: "POST",
@@ -30,8 +30,8 @@ const connectStripe = async (formData: object) => {
 // fee -> fee of the form
 export const createPaymentIntent = async (
   stripeAccountId: string,
-  form_id: number,
-  userId: number,
+  form_id: string,
+  userId: string,
   price: number,
   fee: number,
 ): Promise<PaymentIntent | null> => {
@@ -64,4 +64,34 @@ export const createPaymentIntent = async (
   }
 };
 
-export { connectStripe };
+export const getPublishableKey = async (): Promise<string> => {
+  try {
+    const response = await fetch("/api/accounts/publishable");
+
+    if (!response.ok) {
+      throw new Error(`Error fetching publishable key: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.publishableKey;
+  } catch (error) {
+    console.error("Error fetching publishable key:", error);
+    return "";
+  }
+};
+
+export const getStripeAccounts = async (groupId: number) => {
+  try {
+    const response = await fetch(`/api/accounts/${groupId}`);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching Stripe accounts: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching Stripe accounts:", error);
+    return [];
+  }
+};

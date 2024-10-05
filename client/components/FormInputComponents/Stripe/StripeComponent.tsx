@@ -7,7 +7,10 @@ import React, {
 } from "react";
 import { FieldProps } from "../types";
 import styles from "./StripeComponent.module.css";
-import { createPaymentIntent } from "../../../api/stripe/service";
+import {
+  createPaymentIntent,
+  getPublishableKey,
+} from "../../../api/stripe/service";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, Stripe, StripeElementsOptions } from "@stripe/stripe-js";
 import CheckoutForm from "../../StripeForm/CheckoutForm";
@@ -16,7 +19,7 @@ interface CheckoutFormRef {
   handlePayment: () => void;
 }
 
-const StripeComponent = forwardRef(({ field }: FieldProps, ref) => {
+const StripeComponent = forwardRef(({ field, sqlFormId }: FieldProps, ref) => {
   const [options, setOptions] = useState<StripeElementsOptions | undefined>(
     undefined,
   );
@@ -43,13 +46,9 @@ const StripeComponent = forwardRef(({ field }: FieldProps, ref) => {
   useEffect(() => {
     const fetchStripePromise = async () => {
       setStripePromise(
-        await loadStripe(
-          // TODO: Public Key Needs to be fetched from the Server
-          "",
-          {
-            stripeAccount: "acct_1Pwrm0R4osRmT1sy", // TODO: We Need customer Account ID
-          },
-        ),
+        await loadStripe(await getPublishableKey(), {
+          stripeAccount: field.properties?.stripe_account?.stripe_account_id,
+        }),
       );
     };
     fetchStripePromise();
@@ -59,11 +58,11 @@ const StripeComponent = forwardRef(({ field }: FieldProps, ref) => {
     const fetchPaymentIntent = async () => {
       try {
         const stripeStuff = await createPaymentIntent(
-          "acct_1Pwrm0R4osRmT1sy", // Customer ID
-          27,
-          2,
+          field.properties?.stripe_account?.stripe_account_id ?? "",
+          sqlFormId ?? "",
+          field.properties?.stripe_account?.id ?? "",
           normalizePriceToCents(field.properties?.price?.value),
-          normalizePriceToCents(50),
+          normalizePriceToCents(field.properties?.price?.feeValue),
         );
         if (stripeStuff != null && stripeStuff.client_secret != null) {
           setClientSecret(stripeStuff.client_secret);

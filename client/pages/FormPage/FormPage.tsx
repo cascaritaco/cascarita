@@ -97,6 +97,7 @@ const FormPage = () => {
                       key={field.id}
                       ref={stripeComponentRef}
                       field={field}
+                      sqlFormId={form.sql_form_id}
                       index={index}
                     />
                   );

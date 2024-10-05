@@ -254,3 +254,18 @@ export const sendEmail = async (formLink: string, email: string) => {
     throw err;
   }
 };
+
+export const getTableFormId = async (mongoFormId: string) => {
+  try {
+    const response = await fetch(`/api/forms/${mongoFormId}/table`);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching form: ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (err) {
+    console.error("Error fetching form:", err);
+    throw err;
+  }
+};

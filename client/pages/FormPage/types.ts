@@ -34,6 +34,7 @@ export interface Properties {
   price?: {
     type: string;
     value: string;
+    feeValue: string;
     currency: string;
   };
   stripe_account?: {
@@ -86,6 +87,7 @@ export interface Form {
     fields: Field[];
   };
   welcome_screen: WelcomeScreen;
+  sql_form_id: string;
 }
 
 export type AnswerType =

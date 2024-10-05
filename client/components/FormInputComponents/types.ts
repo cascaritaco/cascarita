@@ -26,6 +26,7 @@ export interface Properties {
   price?: {
     type: string;
     value: string;
+    feeValue: string;
     currency: string;
   };
   stripe_account?: {
@@ -65,4 +66,5 @@ export interface Answer {
 export interface FieldProps {
   field: Field;
   index: number;
+  sqlFormId?: string;
 }

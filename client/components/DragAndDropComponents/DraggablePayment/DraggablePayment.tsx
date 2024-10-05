@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggablePaymentProps } from "./types";
+import {
+  DraggablePaymentProps,
+  StripeAccount,
+  StripeAccountSchema,
+} from "./types";
 import styles from "./DraggablePayment.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
@@ -9,6 +13,9 @@ import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
 import { formatPayment } from "../../../util/formatPayment";
 import { calculateStripeFee } from "../../../util/calculateStripeFee";
+import { useAuth } from "../../AuthContext/AuthContext";
+import { getStripeAccounts } from "../../../api/stripe/service";
+import nullthrows from "nullthrows";
 
 const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   id,
@@ -20,6 +27,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
   onDelete,
   onCopy,
 }) => {
+  const { currentUser } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,6 +36,33 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
     properties?.price?.feeValue ?? "",
   );
   const { setValue } = useFormContext();
+  const [stripeAccounts, setStripeAccounts] = useState<StripeAccount[]>([]);
+
+  useEffect(() => {
+    const fetchStripeAccounts = async () => {
+      const accounts = await getStripeAccounts(
+        nullthrows(currentUser?.group_id, "User does not have a group ID"),
+      );
+
+      const parsedAccounts = accounts.map((account: unknown) =>
+        StripeAccountSchema.parse(account),
+      );
+      if (
+        properties?.stripe_account &&
+        properties?.stripe_account.id === "" &&
+        parsedAccounts.length > 0
+      ) {
+        setValue(`fields.${index}.properties.stripe_account`, {
+          id: parsedAccounts[0].id,
+          stripe_account_id: parsedAccounts[0].stripe_account_id,
+        });
+      }
+      setStripeAccounts(parsedAccounts);
+    };
+
+    fetchStripeAccounts();
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
@@ -49,23 +84,15 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // TODO: Get All Stripe Accounts from our API
-  const getStripeAccounts = () => {
-    const accounts = [
-      {
-        id: "1",
-        stripe_account_id: "acct_1Pwrm0R4osRmT1sy",
-        name: "Raul",
-      },
-    ];
-    return accounts.map((account) => (
+  const displayStripeAccountOptions = () => {
+    return stripeAccounts.map((account) => (
       <option
         key={account.id}
         value={JSON.stringify({
           id: account.id,
           stripe_account_id: account.stripe_account_id,
         })}>
-        {account.name}&apos;s Account
+        {account.first_name}&apos;s Account
       </option>
     ));
   };
@@ -181,7 +208,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                   <Controller
                     name={`fields.${index}.properties.stripe_account`}
                     control={control}
-                    defaultValue={properties.stripe_account} // need to default the first option
+                    defaultValue={properties.stripe_account}
                     render={({ field }) => (
                       <select
                         {...field}
@@ -190,7 +217,7 @@ const DraggablePayment: React.FC<DraggablePaymentProps> = ({
                           field.onChange(JSON.parse(e.target.value))
                         }
                         value={JSON.stringify(field.value)}>
-                        {getStripeAccounts()}
+                        {displayStripeAccountOptions()}
                       </select>
                     )}
                   />
