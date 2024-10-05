@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import StripeConnect from "../../assets/stripe/connectblurple.svg";
-import styles from "./Stripe.module.css";
 import { connectStripe } from "../../api/stripe/service";
 import { useAuth } from "../AuthContext/AuthContext";
+import { StripeConnectProps } from "./types";
 
-const ConnectWithStripeButton = () => {
+const ConnectWithStripeButton = ({
+  width = 200,
+  height = 43,
+}: StripeConnectProps) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const { currentUser } = useAuth();
   const handleClick = async () => {
@@ -23,7 +26,7 @@ const ConnectWithStripeButton = () => {
   };
   return (
     <button disabled={isConnecting} onClick={handleClick}>
-      <StripeConnect className={styles.connectLogo} />
+      <StripeConnect width={width} height={height} />
     </button>
   );
 };

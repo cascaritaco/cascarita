@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { StripeAccount, StripeAccountSchema } from "./types";
+import { StripeAccount } from "./types";
 import styles from "./DraggablePayment.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
@@ -12,6 +12,8 @@ import { useAuth } from "../../AuthContext/AuthContext";
 import { getStripeAccounts } from "../../../api/stripe/service";
 import nullthrows from "nullthrows";
 import { DraggableProps } from "../types";
+import ConnectWithStripeButton from "../../Stripe/StripeConnectButton";
+import { useQuery } from "@tanstack/react-query";
 
 const DraggablePayment: React.FC<DraggableProps> = ({
   index,
@@ -27,7 +29,6 @@ const DraggablePayment: React.FC<DraggableProps> = ({
   const [paymentFee, setPaymentFee] = useState(
     formField.properties?.price?.feeValue ?? "",
   );
-  const [stripeAccounts, setStripeAccounts] = useState<StripeAccount[]>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -40,30 +41,28 @@ const DraggablePayment: React.FC<DraggableProps> = ({
     return Math.ceil(fee * 100) / 100;
   };
 
+  const groupId = nullthrows(
+    currentUser?.group_id,
+    "User does not have a group ID",
+  );
+
+  const { data: stripeAccounts = [], isLoading } = useQuery({
+    queryKey: ["stripeAccounts", groupId],
+    queryFn: () => getStripeAccounts(groupId),
+  });
+
   useEffect(() => {
-    const fetchStripeAccounts = async () => {
-      const accounts = await getStripeAccounts(
-        nullthrows(currentUser?.group_id, "User does not have a group ID"),
-      );
-
-      const parsedAccounts = accounts.map((account: unknown) =>
-        StripeAccountSchema.parse(account),
-      );
-      if (
-        formField.properties?.stripe_account &&
-        formField.properties?.stripe_account.id === "" &&
-        parsedAccounts.length > 0
-      ) {
-        setValue(`fields.${index}.properties.stripe_account`, {
-          id: parsedAccounts[0].id,
-          stripe_account_id: parsedAccounts[0].stripe_account_id,
-        });
-      }
-      setStripeAccounts(parsedAccounts);
-    };
-
-    fetchStripeAccounts();
-  }, []);
+    if (
+      stripeAccounts.length > 0 &&
+      formField.properties?.stripe_account &&
+      formField.properties.stripe_account.id === ""
+    ) {
+      setValue(`fields.${index}.properties.stripe_account`, {
+        id: stripeAccounts[0].id,
+        stripe_account_id: stripeAccounts[0].stripe_account_id,
+      });
+    }
+  }, [stripeAccounts, formField.properties?.stripe_account, setValue, index]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -87,7 +86,7 @@ const DraggablePayment: React.FC<DraggableProps> = ({
   };
 
   const displayStripeAccountOptions = () => {
-    return stripeAccounts.map((account) => (
+    return stripeAccounts.map((account: StripeAccount) => (
       <option
         key={account.id}
         value={JSON.stringify({
@@ -207,22 +206,28 @@ const DraggablePayment: React.FC<DraggableProps> = ({
                   <p className={styles.flexCenter}>
                     <b>{t("stripeAccount")}: </b>
                   </p>
-                  <Controller
-                    name={`fields.${index}.properties.stripe_account`}
-                    control={control}
-                    defaultValue={formField.properties.stripe_account}
-                    render={({ field }) => (
-                      <select
-                        {...field}
-                        className={styles.accountList}
-                        onChange={(e) =>
-                          field.onChange(JSON.parse(e.target.value))
-                        }
-                        value={JSON.stringify(field.value)}>
-                        {displayStripeAccountOptions()}
-                      </select>
-                    )}
-                  />
+                  {isLoading && <p>Loading...</p>}
+                  {!isLoading &&
+                    (stripeAccounts.length < 1 ? (
+                      <ConnectWithStripeButton />
+                    ) : (
+                      <Controller
+                        name={`fields.${index}.properties.stripe_account`}
+                        control={control}
+                        defaultValue={formField.properties.stripe_account}
+                        render={({ field }) => (
+                          <select
+                            {...field}
+                            className={styles.accountList}
+                            onChange={(e) =>
+                              field.onChange(JSON.parse(e.target.value))
+                            }
+                            value={JSON.stringify(field.value)}>
+                            {displayStripeAccountOptions()}
+                          </select>
+                        )}
+                      />
+                    ))}
                 </div>
               )}
               <div

@@ -1,4 +1,5 @@
 import { PaymentIntent } from "@stripe/stripe-js";
+import { StripeAccountSchema } from "../../components/DragAndDropComponents/DraggablePayment/types";
 
 export const connectStripe = async (formData: object) => {
   try {
@@ -84,7 +85,7 @@ export const getStripeAccounts = async (groupId: number) => {
     }
 
     const data = await response.json();
-    return data;
+    return data.map((account: unknown) => StripeAccountSchema.parse(account));
   } catch (error) {
     console.error("Error fetching Stripe accounts:", error);
     return [];
