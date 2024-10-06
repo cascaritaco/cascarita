@@ -228,6 +228,41 @@ const AccountController = function () {
     res.status(200).json({ key: process.env.STRIPE_PUBLISHABLE_KEY });
   };
 
+  const handlePaymentStatusUpdate = async function (req, res, next) {
+    try {
+      let formInfo = req.body;
+      const formSqlId = formInfo.sql_form_id;
+      const paymentIntentId = formInfo.payment_intent_id;
+      let status = formInfo.status;
+
+      // now depending on status, we need to get funds or cancel funds
+      switch (status) {
+        case "approved":
+          const intentCapture = await Stripe.paymentIntents.capture(
+            paymentIntentId,
+          );
+
+          if (intentCapture.status == "succeeded") {
+            // store to a transaction into our database
+            // store form id
+            // transaction id
+            // amount
+            // person who paid
+            // person who approved the transaction
+            // deleted at for softdeletes
+          }
+        default:
+          statusCode = 403;
+          responseBody = { message: "Unhandled status type" };
+      }
+
+      return res.status(statusCode).json(responseBody);
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  };
+
   return {
     createAccountConnection,
     createPaymentIntent,
@@ -236,6 +271,7 @@ const AccountController = function () {
     getAllAccountsByGroupId,
     calculateStripeStatus,
     getPulishableKey,
+    handlePaymentStatusUpdate,
   };
 };
 
