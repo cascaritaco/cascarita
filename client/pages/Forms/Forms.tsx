@@ -96,7 +96,7 @@ const Forms = () => {
         title: form.form_data.title,
         description:
           form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form.form_data.title,
+        link: id,
         fields: form.form_data.fields,
       },
     });
