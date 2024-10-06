@@ -14,5 +14,8 @@
   "description": "Description",
   "paymentAmount": "Payment Amount",
   "feeAmount": "Fee Amount",
-  "stripeAccount": "Account"
+  "stripeAccount": "Account",
+  "feeResponsible": "Fee Responsibility",
+  "organization": "Organization",
+  "customer": "Customer"
 }

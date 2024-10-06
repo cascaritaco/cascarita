@@ -28,6 +28,7 @@ export interface Properties {
     value: string;
     feeValue: string;
     currency: string;
+    isCustomerPayingFee: boolean;
   };
   stripe_account?: {
     id: string;

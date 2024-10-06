@@ -107,6 +107,7 @@ const DNDCanvas = forwardRef(
               value: "",
               feeValue: "",
               currency: "USD",
+              isCustomerPayingFee: false,
             },
             stripe_account: { id: "", stripe_account_id: "" },
             description: "",

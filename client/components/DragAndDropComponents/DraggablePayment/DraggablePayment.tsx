@@ -201,6 +201,37 @@ const DraggablePayment: React.FC<DraggableProps> = ({
                   </div>
                 </div>
               )}
+              {formField.properties?.price != null && (
+                <div className={styles.feeResponsibilityContainer}>
+                  <p className={styles.paymentText}>{t("feeResponsible")}: </p>
+                  <div className={styles.feeSwitchGroup}>
+                    <p className={styles.requiredText}>{t("organization")}</p>
+                    <Controller
+                      name={`fields.${index}.properties.price.isCustomerPayingFee`}
+                      control={control}
+                      defaultValue={
+                        formField.properties.price.isCustomerPayingFee
+                      }
+                      render={({ field }) => (
+                        <Switch
+                          checked={field.value}
+                          onChange={(checked) => field.onChange(checked)}
+                          offColor="#DFE5EE"
+                          onColor="#DFE5EE"
+                          offHandleColor="#AAAAAA"
+                          onHandleColor="#B01254"
+                          handleDiameter={24}
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          height={16}
+                          width={44}
+                        />
+                      )}
+                    />
+                    <p className={styles.requiredText}>{t("customer")}</p>
+                  </div>
+                </div>
+              )}
               {formField.properties?.stripe_account != null && (
                 <div className={styles.stripeGroup}>
                   <p className={styles.flexCenter}>

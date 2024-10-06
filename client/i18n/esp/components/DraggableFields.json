@@ -14,5 +14,8 @@
   "description": "Descripción",
   "paymentAmount": "Cantidad de Pago",
   "feeAmount": "Cantidad de Tarifa",
-  "stripeAccount": "Cuenta"
+  "stripeAccount": "Cuenta",
+  "feeResponsible": "Responsabilidad de Tarifa",
+  "organization": "Organización",
+  "customer": "Cliente"
 }

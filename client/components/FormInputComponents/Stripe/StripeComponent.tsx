@@ -128,8 +128,15 @@ const StripeComponent = forwardRef(({ field, sqlFormId }: FieldProps, ref) => {
       </div>
       <p>{field.properties?.description}</p>
       <p>
-        {field.properties?.price?.value} {field.properties?.price?.currency}
+        <b>Price:</b> {field.properties?.price?.value}{" "}
+        {field.properties?.price?.currency}
       </p>
+      {field.properties?.price?.isCustomerPayingFee && (
+        <p>
+          <b>Fee:</b> {field.properties?.price?.feeValue}{" "}
+          {field.properties?.price?.currency}
+        </p>
+      )}
       {stripePromise && clientSecret && (
         <Elements stripe={stripePromise} options={options}>
           <CheckoutForm ref={checkoutFormRef} />
