@@ -46,7 +46,6 @@ const StripeComponent = forwardRef(({ field, sqlFormId }: FieldProps, ref) => {
   useEffect(() => {
     const handleCreatePaymentIntent = async () => {
       try {
-        console.log("did this run twice");
         const paymentIntent: PaymentIntent = await createPaymentIntent();
         const fetchedClientSecret = paymentIntent.client_secret;
         if (fetchedClientSecret) {
