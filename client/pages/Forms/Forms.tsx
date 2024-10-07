@@ -15,7 +15,6 @@ import {
   getMongoForms,
 } from "../../api/forms/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
-import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
 import ShareForm from "../../components/Forms/ShareForm/ShareForm";
@@ -142,7 +141,6 @@ const Forms = () => {
         <PrimaryButton onClick={handleNewFormClick}>
           {t("button")}
         </PrimaryButton>
-        <ConnectWithStripeButton />
       </div>
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>No divisions to display...</p>

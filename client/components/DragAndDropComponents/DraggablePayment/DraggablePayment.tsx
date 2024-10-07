@@ -12,7 +12,6 @@ import { useAuth } from "../../AuthContext/AuthContext";
 import { getStripeAccounts } from "../../../api/stripe/service";
 import nullthrows from "nullthrows";
 import { DraggableProps } from "../types";
-import ConnectWithStripeButton from "../../Stripe/StripeConnectButton";
 import { useQuery } from "@tanstack/react-query";
 
 const DraggablePayment: React.FC<DraggableProps> = ({
@@ -240,7 +239,13 @@ const DraggablePayment: React.FC<DraggableProps> = ({
                   {isLoading && <p>Loading...</p>}
                   {!isLoading &&
                     (stripeAccounts.length < 1 ? (
-                      <ConnectWithStripeButton />
+                      <button
+                        className={styles.addStripeAccountButton}
+                        onClick={() =>
+                          (window.location.href = "/settings/payment")
+                        }>
+                        Add Stripe Account
+                      </button>
                     ) : (
                       <Controller
                         name={`fields.${index}.properties.stripe_account`}
