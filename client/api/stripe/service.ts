@@ -1,5 +1,7 @@
-import { PaymentIntent } from "@stripe/stripe-js";
+import { loadStripe, PaymentIntent } from "@stripe/stripe-js";
 import { StripeAccountSchema } from "../../components/DragAndDropComponents/DraggablePayment/types";
+import { useQuery } from "@tanstack/react-query";
+import nullthrows from "nullthrows";
 
 export const connectStripe = async (formData: object) => {
   try {
@@ -90,4 +92,19 @@ export const getStripeAccounts = async (groupId: number) => {
     console.error("Error fetching Stripe accounts:", error);
     return [];
   }
+};
+
+export const useStripePromise = (stripeAccount: string) => {
+  return useQuery({
+    queryKey: ["stripePromise"],
+    queryFn: async () => {
+      const publishableKey = await getPublishableKey();
+      return loadStripe(
+        nullthrows(publishableKey, "Publishable key is missing"),
+        {
+          stripeAccount,
+        },
+      );
+    },
+  });
 };
