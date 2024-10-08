@@ -56,6 +56,8 @@ const FormPage = () => {
       if (stripeComponentRef.current) {
         const success = await stripeComponentRef.current.handlePayment();
         if (!success) {
+          // The error message is already set within handlePayment
+          // You can add any additional handling here if needed
           return;
         }
       }

@@ -1,3 +1,6 @@
+export enum Currency {
+  USD = "USD",
+}
 export type FieldType =
   | "multiple_choice"
   | "short_text"
@@ -27,7 +30,7 @@ export interface Properties {
     type: string;
     value: string;
     feeValue: string;
-    currency: string;
+    currency: Currency;
     isCustomerPayingFee: boolean;
   };
   stripe_account?: {

@@ -2,7 +2,7 @@
 .textElementTypeText {
   font-family: "DM Sans";
   font-weight: 400;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .textElementTypeText {
@@ -18,7 +18,7 @@
   padding-right: 5px;
   font-style: normal;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 25px;
   width: 65%;
   margin-bottom: 8px;
@@ -47,7 +47,7 @@
   display: flex;
   font-style: normal;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 25px;
 }
 
@@ -76,9 +76,8 @@
 
 .currencySymbol {
   padding: 0 10px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
-  font-size: 16px;
   line-height: 21px;
   color: #8d8d8d;
 }
@@ -124,7 +123,7 @@
 .input {
   background-color: #f6f9fd;
   padding: 9px;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 400;
   line-height: 24px;
   border-radius: 15px;
@@ -165,7 +164,7 @@
   font-family: "DM Sans";
   width: 200px;
   height: 43px;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 21px;
   border-radius: 21.5px;
   color: #ffffff;

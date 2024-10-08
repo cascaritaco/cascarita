@@ -1,5 +1,8 @@
 import { loadStripe, PaymentIntent } from "@stripe/stripe-js";
-import { StripeAccountSchema } from "../../components/DragAndDropComponents/DraggablePayment/types";
+import {
+  StripeAccount,
+  StripeAccountSchema,
+} from "../../components/DragAndDropComponents/DraggablePayment/types";
 import { useQuery } from "@tanstack/react-query";
 import nullthrows from "nullthrows";
 
@@ -67,7 +70,9 @@ export const getPublishableKey = async (): Promise<string> => {
     const response = await fetch("/api/accounts/key/publishable");
 
     if (!response.ok) {
-      throw new Error(`Error fetching publishable key: ${response.status}`);
+      throw new Error(
+        `fetching publishable key non-ok-response: ${response.status} - ${response.statusText}`,
+      );
     }
 
     const data = await response.json();
@@ -78,7 +83,9 @@ export const getPublishableKey = async (): Promise<string> => {
   }
 };
 
-export const getStripeAccounts = async (groupId: number) => {
+export const getStripeAccounts = async (
+  groupId: number,
+): Promise<StripeAccount[]> => {
   try {
     const response = await fetch(`/api/accounts/${groupId}`);
 
@@ -87,7 +94,7 @@ export const getStripeAccounts = async (groupId: number) => {
     }
 
     const data = await response.json();
-    return data.map((account: unknown) => StripeAccountSchema.parse(account));
+    return StripeAccountSchema.array().parse(data);
   } catch (error) {
     console.error("Error fetching Stripe accounts:", error);
     return [];

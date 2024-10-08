@@ -17,7 +17,7 @@ import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
 import DraggableEmail from "../DraggableEmail/DraggableEmail";
 import { StrictModeDroppable } from "../../StrictModeDroppable/StrictModeDroppable";
 import DraggablePayment from "../DraggablePayment/DraggablePayment";
-import { Field, Form } from "../../../api/forms/types";
+import { Currency, Field, Form } from "../../../api/forms/types";
 
 const DNDCanvas = forwardRef(
   (
@@ -106,7 +106,7 @@ const DNDCanvas = forwardRef(
               type: "fixed",
               value: "",
               feeValue: "",
-              currency: "USD",
+              currency: Currency.USD,
               isCustomerPayingFee: false,
             },
             stripe_account: { id: "", stripe_account_id: "" },

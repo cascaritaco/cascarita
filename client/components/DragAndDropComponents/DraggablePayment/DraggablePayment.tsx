@@ -255,9 +255,21 @@ const DraggablePayment: React.FC<DraggableProps> = ({
                           <select
                             {...field}
                             className={styles.accountList}
-                            onChange={(e) =>
-                              field.onChange(JSON.parse(e.target.value))
-                            }
+                            onChange={(e) => {
+                              try {
+                                const parsedValue = JSON.parse(e.target.value);
+                                field.onChange(parsedValue);
+                              } catch (error) {
+                                console.error(
+                                  "Invalid JSON value:",
+                                  e.target.value,
+                                );
+                                // reset the value to the default account
+                                field.onChange(
+                                  formField?.properties?.stripe_account,
+                                );
+                              }
+                            }}
                             value={JSON.stringify(field.value)}>
                             {displayStripeAccountOptions()}
                           </select>
