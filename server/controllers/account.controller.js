@@ -40,7 +40,7 @@ const AccountController = function () {
       const accountLink = await Stripe.accountLinks.create({
         account: accountId,
         refresh_url: "http://localhost:3000/forms",
-        return_url: "http://localhost:3000/home",
+        return_url: "http://localhost:3000/settings/payment",
         type: "account_onboarding",
       });
 
