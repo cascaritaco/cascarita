@@ -73,9 +73,6 @@ const AccountController = function () {
   var createPaymentIntent = async function (req, res, next) {
     try {
       const productObj = req.body;
-      const stripeAccountId = await getStripeAccountId(
-        req.params["account_id"],
-      );
 
       const paymentIntent = await Stripe.paymentIntents.create(
         {
@@ -87,14 +84,14 @@ const AccountController = function () {
           application_fee_amount: productObj.fee,
         },
         {
-          stripeAccount: stripeAccountId,
+          stripeAccount: req.params["account_id"],
         },
       );
 
       await FormPaymentIntents.create({
         payment_intent_id: paymentIntent.id,
         form_id: productObj.form_id,
-        user_stripe_account_id: req.params["account_id"],
+        user_stripe_account_id: productObj.userId,
       });
 
       res.status(201).json(paymentIntent);
@@ -224,7 +221,7 @@ const AccountController = function () {
     return stripeStatusId.id;
   };
 
-  const getPulishableKey = function (req, res, next) {
+  const getPublishableKey = function (req, res, next) {
     res.status(200).json({ key: process.env.STRIPE_PUBLISHABLE_KEY });
   };
 
@@ -235,7 +232,7 @@ const AccountController = function () {
     getClientSecret,
     getAllAccountsByGroupId,
     calculateStripeStatus,
-    getPulishableKey,
+    getPublishableKey,
   };
 };
 
