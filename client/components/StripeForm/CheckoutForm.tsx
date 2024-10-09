@@ -16,14 +16,17 @@ const CheckoutForm = forwardRef((_props, ref) => {
       return false;
     }
 
-    const { error } = await stripe.confirmPayment({
+    const stripeConfirmedPayment = await stripe.confirmPayment({
       elements,
       redirect: "if_required",
     });
 
-    if (error) {
-      if (error.type === "card_error" || error.type === "validation_error") {
-        setMessage(error.message ?? "An error occurred");
+    if (stripeConfirmedPayment.error) {
+      if (
+        stripeConfirmedPayment.error.type === "card_error" ||
+        stripeConfirmedPayment.error.type === "validation_error"
+      ) {
+        setMessage(stripeConfirmedPayment.error.message ?? "An error occurred");
       } else {
         setMessage("An unexpected error occurred.");
       }
