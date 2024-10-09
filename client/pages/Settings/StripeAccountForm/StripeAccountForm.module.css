@@ -113,18 +113,23 @@
 }
 
 .stripeBtn {
-  padding: 2px 12px;
+  padding: 8px 32px;
   background-color: #7a73ff;
   border-radius: 4px;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 6px;
 }
 
-.stripeContainer {
+.stripeBtnLoading {
+  padding: 8px 32px;
+}
+
+.stripeBtnContainer {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 }
 
 .link {

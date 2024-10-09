@@ -5,70 +5,38 @@ import DashboardTable from "../../../components/DashboardTable/DashboardTable";
 import Modal from "../../../components/Modal/Modal";
 import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
 import StripeAccountForm from "../StripeAccountForm/StripeAccountForm";
+import { useAuth } from "../../../components/AuthContext/AuthContext";
+import { useGetStripeAccountByGroupId } from "../hooks";
+import { stripeUserType } from "./types";
 
 const Payment = () => {
   const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
   const planHeaders = [
     "Account Name",
     "Email Address",
-    "Date Submitted",
+    "Account Holder",
     "Status",
   ];
 
-  const mockPaymentData = [
-    {
-      id: 123,
-      name: "Juan Ramos",
-      email: "juanramos@gmail.com",
-      date_submitted: Date.now(),
-      status: "complete",
-    },
-    {
-      id: 124,
-      name: "Jose Patino",
-      email: "josepatino@gmail.com",
-      date_submitted: Date.now(),
-      status: "restricted",
-    },
-    {
-      id: 125,
-      name: "Saul Reyes",
-      email: "saulreyes@gmail.com",
-      date_submitted: Date.now(),
-      status: "pending",
-    },
-    {
-      id: 126,
-      name: "Chuy Gomez",
-      email: "chuy@gmail.com",
-      date_submitted: Date.now(),
-      status: "complete",
-    },
-  ];
+  const { currentUser } = useAuth();
 
-  const formatDate = (dateNumber: number): string => {
-    const date = new Date(dateNumber);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  const groupId = currentUser?.group_id;
+  const { data } = useGetStripeAccountByGroupId(groupId);
 
   const statusLabelStyling = (status: string) => {
     return {
       backgroundColor:
-        status === "complete"
-          ? "#e9ffe8"
-          : status === "restricted"
-            ? "#ffeeee"
-            : "#dbe7f98f",
+        status === "Complete"
+          ? "#d7f7c2"
+          : status === "Restricted"
+          ? "#ffe7f2"
+          : "#dbe7f98f",
       color:
-        status === "complete"
-          ? "#045502"
-          : status === "restricted"
-            ? "#970303"
-            : "#084986",
+        status === "Complete"
+          ? "#006908"
+          : status === "Restricted"
+          ? "#b3093c"
+          : "#084986",
     };
   };
 
@@ -87,10 +55,7 @@ const Payment = () => {
           </Modal.Button>
 
           <Modal.Content title="Add Stripe Account">
-            <StripeAccountForm
-              afterSave={() => setIsStripeModalOpen(false)}
-              requestType="POST"
-            />
+            <StripeAccountForm requestType="POST" />
           </Modal.Content>
         </Modal>
       </div>
@@ -101,29 +66,31 @@ const Payment = () => {
         }
       </p>
 
-      <DashboardTable
-        headers={planHeaders}
-        headerColor="light"
-        className={styles.table}>
-        {mockPaymentData == null || mockPaymentData?.length === 0 ? (
-          <p>There is no information to display</p>
-        ) : (
-          mockPaymentData?.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{formatDate(user.date_submitted)}</td>
+      {data == null || data?.length === 0 ? (
+        <p className={styles.noLeagueMessage}>No leagues to display...</p>
+      ) : (
+        <DashboardTable
+          headers={planHeaders}
+          headerColor="light"
+          className={styles.table}>
+          {data?.map((user: stripeUserType) => (
+            <tr key={user.user_id}>
+              <td>{user.platform_account_name}</td>
+              <td>{user.user_email}</td>
+              <td>
+                {user.first_name} {user.last_name}
+              </td>
               <td>
                 <p
-                  style={statusLabelStyling(user.status)}
+                  style={statusLabelStyling(user.stripe_status)}
                   className={`${styles.statusLabel}`}>
-                  {user.status}
+                  {user.stripe_status}
                 </p>
               </td>
             </tr>
-          ))
-        )}
-      </DashboardTable>
+          ))}
+        </DashboardTable>
+      )}
     </section>
   );
 };

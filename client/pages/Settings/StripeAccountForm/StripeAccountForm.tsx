@@ -1,22 +1,44 @@
 import React, { useState } from "react";
 import styles from "./StripeAccountForm.module.css";
+
 import Modal from "../../../components/Modal/Modal";
+import BeatLoader from "react-spinners/BeatLoader";
 import StripeLogo from "../../../assets/stripe/stripe_logo_solid.svg";
-import { StripeAccountFormProps } from "./types";
+import { CreateNewStripeAccountData, StripeAccountFormData } from "./types";
 import DeleteForm from "../../../components/Forms/DeleteForm/DeleteForm";
 import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
+import { useAuth } from "../../../components/AuthContext/AuthContext";
+import { useCreateStripeAccountByUserId } from "../hooks";
 
-const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
-  afterSave,
+const StripeAccountForm: React.FC<StripeAccountFormData> = ({
   requestType,
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const { currentUser } = useAuth();
+
+  const createStripeAccountMutation = useCreateStripeAccountByUserId();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    afterSave();
+    const { accountName, accountDescription } = Object.fromEntries(
+      new FormData(event.currentTarget),
+    );
+
+    const data = {
+      formData: {
+        platform_account_name: accountName,
+        platform_account_description: accountDescription,
+        id: currentUser?.id,
+      },
+    };
+
+    createStripeAccountMutation.mutate(data as CreateNewStripeAccountData, {
+      onSuccess: (response) => {
+        window.open(response.url, "_self", "noopener, noreferrer");
+      },
+    });
   };
 
   return (
@@ -59,43 +81,29 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
             />
           </div>
 
-          <div className={styles.inputContainer}>
-            <div className={styles.stripeContainer}>
-              <PrimaryButton
-                className={styles.stripeBtn}
-                //TODO: We need to hook up with endpoint, temporary console log for now
-                onClick={() => console.log("Stripe Button Pressed")}>
-                Connect with
-                <StripeLogo
-                  className={styles.stripeLogo}
-                  style={{
-                    fill: "#FFFFFF",
-                    width: "50px",
-                  }}
-                />
-              </PrimaryButton>
-
-              <p>
-                {"Don't have a Stripe Account? "}
-                <a href="#" className={styles.link}>
-                  Create an Account
-                </a>
-              </p>
-            </div>
-          </div>
-
           <div className={styles.formBtnContainer}>
             <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
               Cancel
             </Modal.Close>
 
-            <div>
-              <button
-                type="submit"
-                className={`${styles.btn} ${styles.submitBtn}`}>
-                Submit
-              </button>
-            </div>
+            <PrimaryButton
+              className={styles.stripeBtn}
+              onClick={() => handleSubmit}>
+              {createStripeAccountMutation.isPending ? (
+                <BeatLoader loading={true} color="#ffffff" />
+              ) : (
+                <p className={styles.stripeBtnContainer}>
+                  Connect with
+                  <StripeLogo
+                    className={styles.stripeLogo}
+                    style={{
+                      fill: "#FFFFFF",
+                      width: "30px",
+                    }}
+                  />
+                </p>
+              )}
+            </PrimaryButton>
           </div>
         </form>
       )}

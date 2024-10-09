@@ -1,8 +1,17 @@
-interface StripeAccountFormProps {
-  //Use to set open state from true to false after form submission
-  afterSave: () => void | null;
-  requestType?: "POST" | "PATCH" | "DELETE";
-  leagueId?: number;
+interface StripeAccountFormData {
+  requestType?: string;
 }
 
-export type { StripeAccountFormProps };
+interface CreateNewStripeAccountData {
+  formData: StripeAccountFormData;
+}
+
+interface StripeAccountResponse {
+  url: string;
+}
+
+export type {
+  StripeAccountFormData,
+  CreateNewStripeAccountData,
+  StripeAccountResponse,
+};
