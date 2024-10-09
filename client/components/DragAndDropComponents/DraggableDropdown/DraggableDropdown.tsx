@@ -1,7 +1,6 @@
 import React from "react";
-import { Controller, useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableDropdownProps } from "./types";
 import { useEffect, useState } from "react";
 import styles from "./DraggableDropdown.module.css";
 import MinusCircleIcon from "../../../assets/MinusCircleIcon";
@@ -9,18 +8,20 @@ import PlusCircleIcon from "../../../assets/PlusCircleIcon";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
+import { DraggableProps } from "../types";
+import { Option } from "./types";
 
-const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
-  id,
+const DraggableDropdown: React.FC<DraggableProps> = ({
   index,
-  title,
-  validations,
-  control,
+  formField,
   onDelete,
   onCopy,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { control } = useFormContext();
 
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -31,14 +32,18 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
     name: `fields.${index}.properties.choices`,
   });
 
-  const [options, setOptions] = useState(fields);
+  const [options, setOptions] = useState<Option[]>(fields as Option[]);
 
   useEffect(() => {
-    setOptions(fields);
+    setOptions(fields as Option[]);
   }, [fields]);
 
   const addOption = () => {
-    append({ ref: `option-${fields.length + 1}`, label: "" });
+    append({
+      id: `option-${fields.length + 1}`,
+      ref: `option-${fields.length + 1}`,
+      label: "",
+    });
   };
 
   const removeOption = (optionIndex: number) => {
@@ -55,7 +60,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={formField.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -66,13 +71,13 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>{t("dropDown")}</p>
             <div className={styles.draggableContainer}>
-              {validations?.required != null && (
+              {formField.validations?.required != null && (
                 <div className={styles.requiredSwitch}>
                   <p className={styles.requiredText}>{t("requiredText")}</p>
                   <Controller
                     name={`fields.${index}.validations.required`}
                     control={control}
-                    defaultValue={validations.required}
+                    defaultValue={formField.validations.required}
                     render={({ field }) => (
                       <Switch
                         checked={field.value}
@@ -95,7 +100,7 @@ const DraggableDropdown: React.FC<DraggableDropdownProps> = ({
                 key={index}
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title}
+                defaultValue={formField.title}
                 render={({ field }) => (
                   <>
                     <input

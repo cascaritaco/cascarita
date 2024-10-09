@@ -4,7 +4,8 @@ export type DraggableButtonKeys =
   | "draggableButtons.Dropdown"
   | "draggableButtons.Multiple Choice"
   | "draggableButtons.Email"
-  | "draggableButtons.Phone Number";
+  | "draggableButtons.Phone Number"
+  | "draggableButtons.Payment";
 
 export interface DraggableButtonProps {
   label: string;
