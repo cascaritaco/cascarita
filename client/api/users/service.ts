@@ -70,4 +70,21 @@ const registerUser = async (
   }
 };
 
-export { updateUsersLanguages, registerUser };
+const getUsersByGroupId = async (groupId: number) => {
+  try {
+    const response = await fetch(`/api/users/group/${groupId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+}
+
+export { updateUsersLanguages, registerUser, getUsersByGroupId };

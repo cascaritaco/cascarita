@@ -335,6 +335,35 @@ const UserController = function () {
     }
   };
 
+  var getUsersByGroupId = async function (req, res, next) {
+    try {
+      const { group_id } = req.params;
+
+      console.log(group_id)
+      console.log(typeof(group_id))
+
+      if (isNaN(group_id)) {
+        res.status(400);
+        throw new Error("group id must be an integer");
+      }
+
+      const users = await User.findAll({
+        where: {
+          group_id: group_id,
+        },
+        attributes: { exclude: ["password", "created_at", "updated_at", "id", "group_id", "language_id"] },
+      });
+
+      if (!users) {
+        res.status(404);
+        throw new Error(`no users were found with group id ${group_id}`);
+      }
+      return res.json(users);
+    } catch (error) {
+      next(error)
+    }
+  };
+
   return {
     registerUser,
     logInUser,
@@ -343,6 +372,7 @@ const UserController = function () {
     sendOtpEmail,
     sendFormLinkEmail,
     verifyOTP,
+    getUsersByGroupId
   };
 };
 
