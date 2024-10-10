@@ -15,7 +15,6 @@ import {
   getMongoForms,
 } from "../../api/forms/service";
 import { useAuth } from "../../components/AuthContext/AuthContext";
-import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
 import ShareForm from "../../components/Forms/ShareForm/ShareForm";
@@ -84,7 +83,7 @@ const Forms = () => {
   // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
     await deleteForm(id);
-    setForms((forms) => forms.filter((form) => form.form_data.id !== id));
+    setForms((forms) => forms.filter((form) => form._id !== id));
   };
 
   const onEdit = async (id: string) => {
@@ -96,7 +95,7 @@ const Forms = () => {
         title: form.form_data.title,
         description:
           form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form.form_data.title,
+        link: id,
         fields: form.form_data.fields,
       },
     });
@@ -142,7 +141,6 @@ const Forms = () => {
         <PrimaryButton onClick={handleNewFormClick}>
           {t("button")}
         </PrimaryButton>
-        <ConnectWithStripeButton />
       </div>
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>No divisions to display...</p>

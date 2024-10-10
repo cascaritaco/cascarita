@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Controller, useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableMultipleChoiceProps } from "./types";
 import styles from "./DraggableMultipleChoice.module.css";
 import PlusCircleIcon from "../../../assets/PlusCircleIcon";
 import MinusCircleIcon from "../../../assets/MinusCircleIcon";
@@ -9,19 +8,19 @@ import EllipseIcon from "../../../assets/EllipseIcon";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
+import { DraggableProps } from "../types";
 
-const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
-  id,
+const DraggableMultipleChoice: React.FC<DraggableProps> = ({
   index,
-  title,
-  validations,
-  properties,
-  control,
+  formField,
   onDelete,
   onCopy,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { control } = useFormContext();
 
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -33,7 +32,11 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   });
 
   const addOption = () => {
-    append({ ref: `option-${fields.length + 1}`, label: "" });
+    append({
+      id: `option-${fields.length + 1}`,
+      ref: `option-${fields.length + 1}`,
+      label: "",
+    });
   };
 
   const removeOption = (optionIndex: number) => {
@@ -41,7 +44,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={formField.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -53,13 +56,13 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
             <p className={styles.textElementTypeText}>{t("multipleChoice")}</p>
             <div className={styles.draggableContainer}>
               <div className={styles.switches}>
-                {validations?.required != null && (
+                {formField.validations?.required != null && (
                   <>
                     <p className={styles.requiredText}>{t("requiredText")}</p>
                     <Controller
                       name={`fields.${index}.validations.required`}
                       control={control}
-                      defaultValue={validations.required}
+                      defaultValue={formField.validations.required}
                       render={({ field }) => (
                         <Switch
                           checked={field.value}
@@ -78,7 +81,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                     />
                   </>
                 )}
-                {properties?.allow_multiple_selection != null && (
+                {formField.properties?.allow_multiple_selection != null && (
                   <>
                     <p className={styles.requiredText}>
                       {t("multipleSelection")}
@@ -86,7 +89,9 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
                     <Controller
                       name={`fields.${index}.properties.allow_multiple_selection`}
                       control={control}
-                      defaultValue={properties.allow_multiple_selection}
+                      defaultValue={
+                        formField.properties.allow_multiple_selection
+                      }
                       render={({ field }) => (
                         <Switch
                           checked={field.value == null ? false : field.value}
@@ -109,7 +114,7 @@ const DraggableMultipleChoice: React.FC<DraggableMultipleChoiceProps> = ({
               <Controller
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title} // Ensure the default value is set
+                defaultValue={formField.title} // Ensure the default value is set
                 render={({ field }) => (
                   <>
                     <input

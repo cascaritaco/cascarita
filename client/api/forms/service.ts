@@ -2,9 +2,8 @@ import { Answer, Form, GetFormsParams } from "./types";
 
 import { User } from "../../components/AuthContext/types";
 
-// TODO: Create a call to fetch all forms by groupId
-// TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
-
+// TODO: Implement a paginated API to call this for our forms
+// This will include filters, query, and sorting
 export const getTypeformForms = async ({
   page = 1,
   page_size = 10,
@@ -33,25 +32,6 @@ export const getTypeformForms = async ({
     return response.json();
   } catch (err) {
     console.error("Error fetching forms:", err);
-    throw err;
-  }
-};
-
-// fetches form data by endpoint (e.g. fetch form and/or form responses)
-export const fetchTypeformFormData = async (
-  formId: string,
-  endpoint: string,
-) => {
-  try {
-    const response = await fetch(`/api/survey/${formId}${endpoint}`);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (err) {
-    console.error("Error fetching form data:", err);
     throw err;
   }
 };
