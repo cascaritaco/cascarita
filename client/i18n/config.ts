@@ -22,6 +22,8 @@ import DraggableButtonsEn from "./en/components/DraggableButtons.json";
 import DraggableButtonsEsp from "./esp/components/DraggableButtons.json";
 import DraggableFieldsEn from "./en/components/DraggableFields.json";
 import DraggableFieldsEsp from "./esp/components/DraggableFields.json";
+import UsersEn from "./en/pages/Users.json";
+import UsersEsp from "./esp/pages/Users.json";
 import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
@@ -43,6 +45,7 @@ i18next.use(initReactI18next).init({
       DraggableButtons: DraggableButtonsEn,
       FormResponses: FormResponsesEn,
       DraggableFields: DraggableFieldsEn,
+      Users: UsersEn,
     },
     esp: {
       DropdownMenuButton: DropdownMenuButtonEsp,
@@ -56,6 +59,7 @@ i18next.use(initReactI18next).init({
       DraggableButtons: DraggableButtonsEsp,
       FormResponses: FormResponsesEsp,
       DraggableFields: DraggableFieldsEsp,
+      Users: UsersEsp,
     },
   },
   ns: [
@@ -70,6 +74,7 @@ i18next.use(initReactI18next).init({
     "DraggableButtons",
     "FormResponses",
     "DraggableFields",
+    "Users",
   ],
 });
 

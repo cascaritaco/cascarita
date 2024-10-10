@@ -102,7 +102,9 @@ export const useRouter = () =>
         <Route
           path="users"
           element={<Users />}
-          handle={{ crumb: () => <Link to={"/users"}>Users</Link> }}
+
+        // disable breadcrumbs for now
+        // handle={{ crumb: () => <Link to={"/users"}>Users</Link> }}
         />
         <Route path="forms" element={<Forms />} />
         <Route path="forms/check" element={<NewForm />} />

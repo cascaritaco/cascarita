@@ -9,6 +9,7 @@ import EmptyDNDCanvas from "../i18n/en/components/EmptyDNDCanvas.json";
 import DraggableButtons from "../i18n/en/components/DraggableButtons.json";
 import DraggableFields from "../i18n/en/components/DraggableFields.json";
 import FormResponses from "../i18n/en/components/FormResponses.json";
+import Users from "../i18n/en/pages/Users.json";
 
 const resources = {
   DropdownMenuButton,
@@ -22,6 +23,7 @@ const resources = {
   DraggableButtons,
   FormResponses,
   DraggableFields,
+  Users
 } as const;
 
 export default resources;
