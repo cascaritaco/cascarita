@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Modal from "../Modal/Modal"; // Adjust the import path as needed
 import { ModalProps } from "../Modal/types";
 //TODO: Arturo uses Form modules css to adjust register data, make copy as needed
-import styles from "../Forms/Form.module.css";
+import styles from "./RegistrationModal.module.css";
+import SelectMenu from "../SelectMenu/SelectMenu";
+import states from "./states.json";
+import RadioSelect from "../RadioSelect/RadioSelect";
 
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
@@ -15,20 +18,29 @@ const organizations = [
   // Add more organizations as needed
 ];
 
-// Sample states data
-const states = [{ value: "CA", label: "California" }];
-
 const RegisterModal: React.FC<RegisterModalProps> = ({
   open,
   onOpenChange,
   onRegistrationComplete,
 }) => {
+  const [page, setPage] = useState<number>(1);
+  const [isExistingOrg, setisExistingOrg] = useState<string>("No");
+  const [org, setOrg] = useState<string>("");
+
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
   const [selectedOrg, setSelectedOrg] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const incrementPageNumber = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  const decrementPageNumber = () => {
+    setPage((prev) => prev - 1);
+  };
 
   const handleRegistrationComplete = async () => {
     try {
@@ -68,87 +80,152 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
-      <Modal.Content title="Register">
-        <div>
-          <div className={styles.inputContainer}>
-            <label htmlFor="organization">Select Organization:</label>
-            <select
-              id="organization"
-              value={selectedOrg}
-              onChange={(e) => setSelectedOrg(e.target.value)}
-              required>
-              <option value="" disabled>
-                Select an organization
-              </option>
-              {organizations.map((org) => (
-                <option key={org.value} value={org.value}>
-                  {org.label}
-                </option>
-              ))}
-            </select>
-          </div>
+      <Modal.Content
+        title={
+          page === 1
+            ? "Connect Existing Organization"
+            : "Register Your Organization"
+        }
+        subtitle={
+          page === 1
+            ? "If you would like to connect to existing organization, please select 'Yes' and select from list"
+            : "We just need a few details before we begin"
+        }>
+        {page === 1 && (
+          <div className={styles.formContainer}>
+            <div className={styles.inputContainer}>
+              <p>Are you connecting to an existing organization?</p>
 
-          <div className={styles.inputContainer}>
-            <label htmlFor="address">Address:</label>
-            <input
-              type="text"
-              id="address"
-              placeholder="Enter your address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
-          </div>
+              <RadioSelect
+                className={styles.radioContainer}
+                groupName="rd-existingOrg"
+                value={isExistingOrg}
+                onValueChange={(value) => setisExistingOrg(value)}
+                required>
+                <div>
+                  <label htmlFor="rd-Yes">Yes</label>
+                  <RadioSelect.Item value="Yes" id="rd-Yes" />
+                </div>
 
-          <div className={styles.inputContainer}>
-            <label htmlFor="city">City:</label>
-            <input
-              type="text"
-              id="city"
-              placeholder="Enter your city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-            />
-          </div>
+                <div>
+                  <label htmlFor="rd-No">No</label>
+                  <RadioSelect.Item value="No" id="rd-No" />
+                </div>
+              </RadioSelect>
 
-          <div className={styles.inputContainer}>
-            <label htmlFor="state">State:</label>
-            <select
-              id="state"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required>
-              <option value="" disabled>
-                Select a state
-              </option>
-              {states.map((st) => (
-                <option key={st.value} value={st.value}>
-                  {st.label}
-                </option>
-              ))}
-            </select>
-          </div>
+              {isExistingOrg === "Yes" && (
+                <SelectMenu
+                  placeholder="Select an Organization"
+                  value={org}
+                  onValueChange={(value) => setOrg(value)}
+                  name="organization"
+                  className={styles.selectMenu1}>
+                  {organizations.map((org, idx) => (
+                    <SelectMenu.Item key={idx} value={org.value}>
+                      {org.label}
+                    </SelectMenu.Item>
+                  ))}
+                </SelectMenu>
+              )}
+            </div>
 
-          <div className={styles.inputContainer}>
-            <label htmlFor="zipCode">Zip Code:</label>
-            <input
-              type="text"
-              id="zipCode"
-              placeholder="Enter your zip code"
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
-              required
-            />
+            {isExistingOrg === "Yes" ? (
+              <button
+                style={{ marginTop: "26px" }}
+                onClick={incrementPageNumber}>
+                Finish
+              </button>
+            ) : (
+              <button
+                style={{ marginTop: "26px" }}
+                onClick={incrementPageNumber}>
+                Next
+              </button>
+            )}
           </div>
+        )}
 
-          {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-          <div className={styles.formBtnContainer}>
-            <button type="button" onClick={handleRegistrationComplete}>
-              Submit
-            </button>
+        {page === 2 && (
+          <div className={styles.formContainer}>
+            <div className={styles.inputContainer}>
+              <label htmlFor="orgName">Organization Name</label>
+
+              <input
+                id="orgName"
+                placeholder="Organization Name"
+                type="text"
+                value={selectedOrg}
+                onChange={(e) => setSelectedOrg(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.inputContainer}>
+              <label htmlFor="address">Address</label>
+
+              <input
+                id="address"
+                placeholder="Address"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.inputContainer}>
+              <label htmlFor="city">City</label>
+
+              <input
+                id="city"
+                placeholder="City"
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.inlineFields}>
+              <div className={styles.inputContainer}>
+                <label htmlFor="state">State</label>
+
+                <SelectMenu
+                  placeholder="State"
+                  value={state}
+                  onValueChange={(value) => setState(value)}
+                  name="state"
+                  className={styles.selectMenu2}>
+                  {states.map((state, idx) => (
+                    <SelectMenu.Item key={idx} value={state.abbreviation}>
+                      {state.abbreviation}
+                    </SelectMenu.Item>
+                  ))}
+                </SelectMenu>
+              </div>
+
+              <div className={styles.inputContainer}>
+                <label htmlFor="zip-code">Zip Code</label>
+
+                <input
+                  id="zip-code"
+                  placeholder="Zip-code"
+                  type="text"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className={styles.btnContainer}>
+              <button className={styles.backBtn} onClick={decrementPageNumber}>
+                Go Back
+              </button>
+              <button
+                className={styles.registerBtn}
+                onClick={handleRegistrationComplete}>
+                Register
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </Modal.Content>
     </Modal>
   );
