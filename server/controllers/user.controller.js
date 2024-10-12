@@ -28,6 +28,26 @@ const UserController = function () {
     return otp.toString();
   };
 
+  async function getUserInfoFromAuth0(token) {
+    try {
+      const response = await fetch(
+        "https://dev-2vszya8j41e1n3fe.us.auth0.com/userinfo",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        },
+      );
+
+      return response.json();
+    } catch (error) {
+      console.error("failed to retrieve user info from auth0:", error);
+      throw new Error(`failed to retrieve user info from auth0: ${error}`);
+    }
+  }
+
   async function hashOtp(otp) {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
@@ -55,29 +75,17 @@ const UserController = function () {
   }
 
   var registerUser = async function (req, res, next) {
-    const {
-      first_name,
-      last_name,
-      email,
-      password,
-      role_id,
-      language_id,
-      group_id,
-      name,
-      street_address,
-      city,
-      state,
-      zip_code,
-      logo_url,
-    } = req.body;
+    const { group_id, city, state, zip_code, logo_url } = req.body;
+
+    const userBasicInfo = await getUserInfoFromAuth0(req.body.authorization);
 
     let groupId = group_id;
 
     if (!group_id) {
       try {
         const newGroup = {
-          name,
-          street_address,
+          name: req.body.organization,
+          street_address: req.body.address,
           city,
           state,
           zip_code,
@@ -91,12 +99,12 @@ const UserController = function () {
     }
 
     const newUser = {
-      first_name,
-      last_name,
-      email,
-      password,
-      role_id,
-      language_id,
+      first_name: userBasicInfo.given_name,
+      last_name: userBasicInfo.family_name,
+      email: userBasicInfo.email,
+      password: "test",
+      role_id: 1,
+      language_id: 1,
       group_id: groupId,
     };
 
@@ -347,14 +355,14 @@ const UserController = function () {
         },
       });
 
-      console.log(req.headers.authorization);
-
       if (user) {
         return res.status(200).json({ user: user });
       } else {
         console.log("NOT FOUND HERE!");
-        return res.status(201).json({
+        // TODO Not the best practice below. Was previously .status(404)
+        return res.json({
           message: `User with email: '${email}' not found.`,
+          authorization: req.headers.authorization,
           isSigningUp: true,
         });
       }

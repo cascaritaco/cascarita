@@ -7,6 +7,7 @@ import styles from "../Forms/Form.module.css";
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
   onRegistrationComplete: () => void; // Callback for when registration is complete
+  authorization: string;
 }
 
 // Sample organizations data
@@ -22,11 +23,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
   open,
   onOpenChange,
   onRegistrationComplete,
+  authorization,
 }) => {
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
-  const [zipCode, setZipCode] = useState<string>("");
+  const [zip_code, setZipCode] = useState<string>("");
   const [selectedOrg, setSelectedOrg] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -39,7 +41,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
         - role_id
       */
 
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +50,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
           address,
           city,
           state,
-          zipCode,
+          zip_code,
+          authorization,
           organization: selectedOrg,
         }), // Send registration details
       });
@@ -131,12 +134,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
           </div>
 
           <div className={styles.inputContainer}>
-            <label htmlFor="zipCode">Zip Code:</label>
+            <label htmlFor="zip_code">Zip Code:</label>
             <input
               type="text"
-              id="zipCode"
+              id="zip_code"
               placeholder="Enter your zip code"
-              value={zipCode}
+              value={zip_code}
               onChange={(e) => setZipCode(e.target.value)}
               required
             />
