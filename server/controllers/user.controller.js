@@ -339,9 +339,6 @@ const UserController = function () {
     try {
       const { group_id } = req.params;
 
-      console.log(group_id)
-      console.log(typeof(group_id))
-
       if (isNaN(group_id)) {
         res.status(400);
         throw new Error("group id must be an integer");
