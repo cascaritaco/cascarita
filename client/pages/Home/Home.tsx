@@ -9,6 +9,7 @@ const Home = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const [registered, setRegistered] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [authorization, setAuthorization] = useState<string>("");
 
   useEffect(() => {
     const checkRegistrationStatus = async () => {
@@ -16,7 +17,8 @@ const Home = () => {
         try {
           const token = await getAccessTokenSilently();
           const response = await fetchUser(user.email || "", token); // Ensure `fetchUser` is typed appropriately
-          console.log("response: ", response);
+          setAuthorization(response.authorization);
+
           if (response.isSigningUp) {
             setRegistered(false);
           } else {
@@ -49,11 +51,13 @@ const Home = () => {
     <>
       {isAuthenticated ? (
         <div>
+          {!authorization ? <p>whatever</p> : <p>okay I guess</p>}
           {!registered && (
             <RegisterModal
               open={isRegisterModalOpen}
               onOpenChange={setIsRegisterModalOpen}
-              onRegistrationComplete={handleRegistrationComplete}>
+              onRegistrationComplete={handleRegistrationComplete}
+              authorization={authorization}>
               <></>
             </RegisterModal>
           )}

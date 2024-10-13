@@ -10,6 +10,7 @@ import RadioSelect from "../RadioSelect/RadioSelect";
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
   onRegistrationComplete: () => void; // Callback for when registration is complete
+  authorization: string;
 }
 
 //TODO: GroupID comes the name of organization
@@ -24,6 +25,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
   open,
   onOpenChange,
   onRegistrationComplete,
+  authorization,
 }) => {
   const [page, setPage] = useState<number>(1);
   const [isExistingOrg, setisExistingOrg] = useState<string>("No");
@@ -54,7 +56,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
         - role_id
       */
 
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +66,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
           city,
           state,
           zipCode,
+          authorization,
           organization: selectedOrg,
         }), // Send registration details
       });
