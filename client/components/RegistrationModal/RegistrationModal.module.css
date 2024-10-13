@@ -41,7 +41,6 @@
   background-color: #000;
   color: #fff;
   cursor: pointer;
-  font-weight: 900;
 }
 
 .btnContainer {
@@ -55,12 +54,11 @@
 .backBtn {
   background-color: #000;
   color: #fff;
-  padding: 9px 18px;
+  padding: 8px 32px;
   border-radius: 26px;
 }
 
 .backBtn {
-  padding: 8px 32px;
   outline: 1px solid #000;
   background-color: transparent;
   color: #000;

@@ -61,8 +61,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
-  max-width: 550px;
+  max-width: 600px;
   max-height: 85vh;
   padding: 25px;
 }

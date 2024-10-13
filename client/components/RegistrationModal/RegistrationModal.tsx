@@ -12,6 +12,8 @@ interface RegisterModalProps extends ModalProps {
   onRegistrationComplete: () => void; // Callback for when registration is complete
 }
 
+//TODO: GroupID comes the name of organization
+//We need an API call that gets every group
 // Sample organizations data
 const organizations = [
   { value: "Salinas Soccer Femenil", label: "Salinas Soccer Femenil" },
@@ -42,6 +44,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
     setPage((prev) => prev - 1);
   };
 
+  //TODO: Create two funcitons that sends different form data
   const handleRegistrationComplete = async () => {
     try {
       // Simulated API call for registration
@@ -92,7 +95,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
             : "We just need a few details before we begin"
         }>
         {page === 1 && (
-          <div className={styles.formContainer}>
+          <form className={styles.formContainer}>
             <div className={styles.inputContainer}>
               <p>Are you connecting to an existing organization?</p>
 
@@ -142,11 +145,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
                 Next
               </button>
             )}
-          </div>
+          </form>
         )}
 
         {page === 2 && (
-          <div className={styles.formContainer}>
+          <form className={styles.formContainer}>
             <div className={styles.inputContainer}>
               <label htmlFor="orgName">Organization Name</label>
 
@@ -224,7 +227,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
                 Register
               </button>
             </div>
-          </div>
+          </form>
         )}
       </Modal.Content>
     </Modal>
