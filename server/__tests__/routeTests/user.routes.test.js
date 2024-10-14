@@ -34,7 +34,8 @@ describe("User Routes", () => {
       first_name: "Leo",
       last_name: "Messi",
       email: "leoMessi10@gmail.com",
-      password: "testPassword",
+      picture:
+        "https://static.wikia.nocookie.net/nicos-nextbots-fanmade/images/9/97/Uncannyfar.png/revision/latest?cb=20230629212454",
       group_id: groupM.id,
       role_id: roleM.id,
       language_id: languageM.id,
@@ -59,7 +60,8 @@ describe("User Routes", () => {
       first_name: "Leo",
       last_name: "Messi",
       email: "leoMessi10@gmail.com",
-      password: "testPassword",
+      picture:
+        "https://static.wikia.nocookie.net/nicos-nextbots-fanmade/images/9/97/Uncannyfar.png/revision/latest?cb=20230629212454",
       group_id: null,
       role_id: roleM.id,
       language_id: languageM.id,
@@ -89,7 +91,8 @@ describe("User Routes", () => {
       first_name: "Leo",
       last_name: "Messi",
       email: "leoMessi10@gmail.com",
-      password: "testPassword",
+      picture:
+        "https://static.wikia.nocookie.net/nicos-nextbots-fanmade/images/9/97/Uncannyfar.png/revision/latest?cb=20230629212454",
       group_id: groupM.id,
       role_id: roleM.id,
       language_id: languageM.id,
@@ -99,7 +102,8 @@ describe("User Routes", () => {
       first_name: "Saul",
       last_name: "Reyes",
       email: "leoMessi10@gmail.com",
-      password: "password1",
+      picture:
+        "https://static.wikia.nocookie.net/nicos-nextbots-fanmade/images/9/97/Uncannyfar.png/revision/latest?cb=20230629212454",
       group_id: groupM.id,
       role_id: roleM.id,
       language_id: languageM.id,
@@ -124,30 +128,8 @@ describe("User Routes", () => {
       first_name: "",
       last_name: "Messi",
       email: "leoMessi10@gmail.com",
-      password: "testPassword",
-      group_id: groupM.id,
-      role_id: roleM.id,
-      language_id: languageM.id,
-    });
-
-    expect(response.status).toBe(500);
-    expect(response.body.message).toContain("Validation error");
-  });
-
-  it("should handle POST /register with an empty password", async () => {
-    const groupM = await TestDataGenerator.createDummyGroup("Salinas");
-    const roleM = await testDb.Role.create({
-      role_type: "Staff",
-    });
-    const languageM = await testDb.Language.create({
-      language: "English",
-    });
-
-    const response = await request(app).post("/users/register/").send({
-      first_name: "Leo",
-      last_name: "Messi",
-      email: "leoMessi10@gmail.com",
-      password: "",
+      picture:
+        "https://static.wikia.nocookie.net/nicos-nextbots-fanmade/images/9/97/Uncannyfar.png/revision/latest?cb=20230629212454",
       group_id: groupM.id,
       role_id: roleM.id,
       language_id: languageM.id,
@@ -173,7 +155,8 @@ describe("User Routes", () => {
       first_name: "Leo",
       last_name: "Messi",
       email: "leoMessi10@gmail.com",
-      password: "testPassword",
+      picture:
+        "https://static.wikia.nocookie.net/nicos-nextbots-fanmade/images/9/97/Uncannyfar.png/revision/latest?cb=20230629212454",
       group_id: groupM.id,
       role_id: roleM.id,
       language_id: languageM.id,
