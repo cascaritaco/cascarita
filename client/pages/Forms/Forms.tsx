@@ -15,7 +15,6 @@ import {
   getMongoForms,
 } from "../../api/forms/service";
 import { useAuth0 } from "@auth0/auth0-react";
-import ConnectWithStripeButton from "../../components/Stripe/StripeConnectButton";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
 import ShareForm from "../../components/Forms/ShareForm/ShareForm";
