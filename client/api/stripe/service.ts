@@ -1,3 +1,8 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
+import {
+  CreateNewStripeAccountData,
+  StripeAccountResponse,
+} from "../../pages/Settings/StripeAccountForm/types";
 import { loadStripe, PaymentIntent } from "@stripe/stripe-js";
 import {
   StripeAccount,
@@ -6,7 +11,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import nullthrows from "nullthrows";
 
-export const connectStripe = async (formData: object) => {
+type UserQueryKey = [string, number];
+
+const connectStripe = async (formData: object) => {
   try {
     const response = await fetch("/api/accounts/connect", {
       method: "POST",
@@ -26,6 +33,44 @@ export const connectStripe = async (formData: object) => {
     window.open(stripeUrl, "_blank", "noopener,noreferrer");
   } catch (error) {
     console.error("Error connecting to Stripe:", error);
+  }
+};
+
+const getStripeAccountsByGroupID = async ({
+  queryKey,
+}: QueryFunctionContext<UserQueryKey>) => {
+  const [, groupId] = queryKey;
+  try {
+    const response = await fetch(`/api/accounts/${groupId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    });
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching stripe accounts: ", error);
+    throw error;
+  }
+};
+
+const createStripeAccount = async (
+  data: CreateNewStripeAccountData,
+): Promise<StripeAccountResponse> => {
+  try {
+    const response = await fetch("/api/accounts/connect", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data.formData),
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Error creating league: ", error);
+    throw error;
   }
 };
 
@@ -115,3 +160,5 @@ export const useStripePromise = (stripeAccount: string) => {
     },
   });
 };
+
+export { connectStripe, getStripeAccountsByGroupID, createStripeAccount };
