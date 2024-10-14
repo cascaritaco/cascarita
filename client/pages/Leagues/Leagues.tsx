@@ -65,9 +65,7 @@ const Leagues = () => {
   );
 
   return (
-    <Page>
-      <h1 className={styles.h1}>{t("title")}</h1>
-
+    <Page title={t("title")}>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search onSearchChange={setSearchQuery} />
@@ -93,10 +91,9 @@ const Leagues = () => {
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
-            <PrimaryButton
-              label={t("button")}
-              onClick={() => setIsCreateOpen(true)}
-            />
+            <PrimaryButton onClick={() => setIsCreateOpen(true)}>
+              {t("button")}
+            </PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create League">
             <LeagueForm
@@ -110,7 +107,9 @@ const Leagues = () => {
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>No leagues to display...</p>
       ) : (
-        <DashboardTable headers={["League Name", "Options"]}>
+        <DashboardTable
+          headers={["League Name", "Options"]}
+          headerColor="light">
           {isLoading ? (
             <tr>
               <td>Loading...</td>
@@ -127,7 +126,7 @@ const Leagues = () => {
                     {league.name}
                   </Link>
                 </td>
-                <td>
+                <td className={styles.tableData}>
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
                       onClick={() => handleEdit(league.name, league.id)}>

@@ -1,0 +1,24 @@
+.navbar {
+  font-size: 1rem;
+  line-height: 25px;
+  display: flex;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+  border-bottom: 1px solid #dfe5ee;
+}
+
+.navbarItem {
+  margin-right: 25px;
+}
+
+.navbarLink:hover,
+.navbarLink:focus {
+  color: #170cb4;
+  border-bottom: 1px solid #170cb4;
+}
+
+.navbarLinkActive {
+  color: #170cb4;
+  border-bottom: 1px solid #170cb4;
+}

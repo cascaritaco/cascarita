@@ -85,7 +85,7 @@ const Forms = () => {
   // TODO: delete by mongo form ID
   const onDelete = async (id: string) => {
     await deleteForm(id);
-    setForms((forms) => forms.filter((form) => form.form_data.id !== id));
+    setForms((forms) => forms.filter((form) => form._id !== id));
   };
 
   const onEdit = async (id: string) => {
@@ -97,7 +97,7 @@ const Forms = () => {
         title: form.form_data.title,
         description:
           form.form_data.welcome_screens?.[0]?.properties?.description ?? "",
-        link: form.form_data.title,
+        link: id,
         fields: form.form_data.fields,
       },
     });
@@ -119,8 +119,7 @@ const Forms = () => {
     });
 
   return (
-    <Page>
-      <h1 className={styles.h1}>{t("title")}</h1>
+    <Page title={t("title")}>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search onSearchChange={setSearchQuery} />
@@ -141,8 +140,9 @@ const Forms = () => {
             </SelectMenu>
           </div>
         </div>
-        <PrimaryButton label={t("button")} onClick={handleNewFormClick} />
-        <ConnectWithStripeButton />
+        <PrimaryButton onClick={handleNewFormClick}>
+          {t("button")}
+        </PrimaryButton>
       </div>
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>No divisions to display...</p>

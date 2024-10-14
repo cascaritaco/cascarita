@@ -3,12 +3,8 @@ import Page from "../../components/Page/Page";
 import { useRef, useState } from "react";
 import DNDCanvas from "../../components/DragAndDropComponents/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
-import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
+import { DNDCanvasRef, DroppedItem } from "./types";
 import { v4 as uuidv4 } from "uuid";
-import {
-  Field,
-  Form,
-} from "../../components/DragAndDropComponents/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
@@ -16,6 +12,7 @@ import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
 import { createMongoForm, updateForm } from "../../api/forms/service";
 import { User } from "../../api/users/types";
+import { Field, FieldType, Form } from "../../api/forms/types";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -29,7 +26,7 @@ const NewForm = () => {
   const defaultItems = fields
     ? fields.map((field) => ({
         id: field.ref,
-        type: toSnakeCase(field.type) as DroppedItemType,
+        type: toSnakeCase(field.type) as FieldType,
       }))
     : [];
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>(defaultItems);
@@ -64,11 +61,11 @@ const NewForm = () => {
     "Payment",
   ];
 
-  const handleDrop = (label: DroppedItemType) => {
+  const handleDrop = (label: FieldType) => {
     const uniqueId = uuidv4();
     const newItem: DroppedItem = {
       id: uniqueId,
-      type: toSnakeCase(label) as DroppedItemType,
+      type: toSnakeCase(label) as FieldType,
     };
     setDroppedItems([...droppedItems, newItem]);
   };
@@ -184,7 +181,7 @@ const NewForm = () => {
                 <DraggableButton
                   key={index}
                   label={label}
-                  onDrop={() => handleDrop(label as DroppedItemType)}
+                  onDrop={() => handleDrop(label as FieldType)}
                 />
               ))}
             </div>

@@ -1,26 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggableShortTextProps } from "./types";
 import styles from "./DraggableShortText.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
+import { DraggableProps } from "../types";
 
-const DraggableShortText: React.FC<DraggableShortTextProps> = ({
-  id,
+const DraggableShortText: React.FC<DraggableProps> = ({
   index,
-  title,
-  control,
-  validations,
+  formField,
   onDelete,
   onCopy,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
-  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContainerWidthMaxed, setIsContainerWidthMaxed] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { control } = useFormContext();
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,7 +45,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={formField.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -59,7 +60,7 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
                 key={index}
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title} // Ensure the default value is set
+                defaultValue={formField.title} // Ensure the default value is set
                 render={({ field }) => (
                   <>
                     <input
@@ -75,13 +76,13 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""
                 }`}>
-                {validations?.max_length != null && (
+                {formField.validations?.max_length != null && (
                   <>
                     <p className={styles.requiredText}>{t("maxCharacters")}</p>
                     <Controller
                       name={`fields.${index}.validations.max_length`}
                       control={control}
-                      defaultValue={validations.max_length}
+                      defaultValue={formField.validations.max_length}
                       render={({ field }) => (
                         <>
                           <input
@@ -98,13 +99,13 @@ const DraggableShortText: React.FC<DraggableShortTextProps> = ({
                     />
                   </>
                 )}
-                {validations?.required != null && (
+                {formField.validations?.required != null && (
                   <>
                     <p className={styles.requiredText}>{t("requiredText")}</p>
                     <Controller
                       name={`fields.${index}.validations.required`}
                       control={control}
-                      defaultValue={validations.required}
+                      defaultValue={formField.validations.required}
                       render={({ field }) => (
                         <Switch
                           checked={field.value}

@@ -1,0 +1,56 @@
+.wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  height: 70vh;
+  padding-top: 16px;
+}
+
+.wrapper h2 {
+  height: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.wrapper p {
+  font-size: 0.925rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.btn {
+  padding: 8px 24px;
+}
+
+.table {
+  border-bottom: #dfe5ee solid 1px;
+}
+
+.table td {
+  padding: 16px 10px;
+  border-bottom: #dfe5ee solid 1px;
+}
+
+.statusLabel {
+  width: fit-content;
+  font-size: 0.925rem;
+  padding: 1px 16px;
+  border-radius: 30px;
+}
+
+.sectionWrapper {
+  margin-bottom: 32px;
+}
+
+.sectionWrapper h3 {
+  margin-bottom: 12px;
+}
+
+.progressWrapper {
+  margin-bottom: 40px;
+}
