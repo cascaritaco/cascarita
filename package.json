@@ -74,6 +74,8 @@
     "stripe": "^16.0.0",
     "style-loader": "^3.3.3",
     "supertest": "^6.3.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
     "url-loader": "^4.1.1",
