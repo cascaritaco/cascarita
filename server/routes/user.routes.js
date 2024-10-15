@@ -11,6 +11,7 @@ module.exports = (checkJwt) => {
   router.get("/:id", UserController.getUserByUserId);
   router.patch("/:id", UserController.updateUserById);
   router.post("/register", UserController.registerUser);
+
   // router.post("/otp/emails", UserController.sendOtpEmail);
   // router.post("/forms/emails", UserController.sendFormLinkEmail);
   // router.post("/otp/verification", UserController.verifyOTP);
