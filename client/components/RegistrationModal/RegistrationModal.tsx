@@ -31,7 +31,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
   const [state, setState] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
   const [selectedOrg, setSelectedOrg] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const registerUserMutation = useRegisterUser();
 
