@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import Modal from "../Modal/Modal"; // Adjust the import path as needed
 import { ModalProps } from "../Modal/types";
-//TODO: Arturo uses Form modules css to adjust register data, make copy as needed
 import styles from "./RegistrationModal.module.css";
 import SelectMenu from "../SelectMenu/SelectMenu";
 import states from "./states.json";
 import RadioSelect from "../RadioSelect/RadioSelect";
+import { useGetAllGroups } from "../../api/groups/query";
+import { useRegisterUser } from "../../api/users/mutation";
+import { GroupType } from "../../api/groups/types";
+import { RegisterUser } from "../../api/users/types";
 
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
   onRegistrationComplete: () => void; // Callback for when registration is complete
   authorization: string;
 }
-
-//TODO: GroupID comes the name of organization
-//We need an API call that gets every group
-// Sample organizations data
-const organizations = [
-  { value: "Salinas Soccer Femenil", label: "Salinas Soccer Femenil" },
-  // Add more organizations as needed
-];
 
 const RegisterModal: React.FC<RegisterModalProps> = ({
   open,
@@ -38,6 +33,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
   const [selectedOrg, setSelectedOrg] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const registerUserMutation = useRegisterUser();
+
   const incrementPageNumber = () => {
     setPage((prev) => prev + 1);
   };
@@ -46,42 +43,33 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
     setPage((prev) => prev - 1);
   };
 
-  //TODO: Create two funcitons that sends different form data
-  const handleRegistrationComplete = async () => {
-    try {
-      // Simulated API call for registration
-      //TODO: use registerUser
-      /* NOTE: backend call to register User needs to remove
-        - password
-        - role_id
-      */
+  const { data } = useGetAllGroups();
 
-      const response = await fetch("/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          address,
-          city,
-          state,
-          zipCode,
-          authorization,
-          organization: selectedOrg,
-        }), // Send registration details
-      });
+  const handleRegistrationComplete = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    const formEntries = Object.fromEntries(
+      new FormData(event.currentTarget),
+    ) as Record<string, string>;
+    const { groupId, orgName, address, state, city, zipCode } = formEntries;
 
-      if (!response.ok) {
-        throw new Error("Registration failed"); // Handle error response
-      }
+    const data = {
+      group_id: groupId,
+      name: orgName,
+      streetAddress: address,
+      city: city,
+      state: state,
+      zipCode: zipCode,
+      logoUrl: null,
+      token: authorization,
+    };
 
-      // Call the completion handler on success
-      onRegistrationComplete();
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unknown error occurred.",
-      );
-    }
+    console.log(data);
+
+    registerUserMutation.mutate(data as RegisterUser);
+
+    onRegistrationComplete();
   };
 
   return (
@@ -98,7 +86,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
             : "We just need a few details before we begin"
         }>
         {page === 1 && (
-          <form className={styles.formContainer}>
+          <form
+            onSubmit={handleRegistrationComplete}
+            className={styles.formContainer}>
             <div className={styles.inputContainer}>
               <p>Are you connecting to an existing organization?</p>
 
@@ -124,11 +114,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
                   placeholder="Select an Organization"
                   value={org}
                   onValueChange={(value) => setOrg(value)}
-                  name="organization"
+                  name="groupId"
                   className={styles.selectMenu1}>
-                  {organizations.map((org, idx) => (
-                    <SelectMenu.Item key={idx} value={org.value}>
-                      {org.label}
+                  {data?.map((group: GroupType) => (
+                    <SelectMenu.Item key={group.id} value={group.id.toString()}>
+                      {group.name}
                     </SelectMenu.Item>
                   ))}
                 </SelectMenu>
@@ -136,15 +126,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
             </div>
 
             {isExistingOrg === "Yes" ? (
-              <button
-                style={{ marginTop: "26px" }}
-                onClick={incrementPageNumber}>
-                Finish
-              </button>
+              <button style={{ marginTop: "26px" }}>Finish</button>
             ) : (
               <button
-                style={{ marginTop: "26px" }}
-                onClick={incrementPageNumber}>
+                onClick={incrementPageNumber}
+                style={{ marginTop: "26px" }}>
                 Next
               </button>
             )}
@@ -152,12 +138,16 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
         )}
 
         {page === 2 && (
-          <form className={styles.formContainer}>
+          <form
+            onSubmit={handleRegistrationComplete}
+            className={styles.formContainer}>
             <div className={styles.inputContainer}>
               <label htmlFor="orgName">Organization Name</label>
 
               <input
                 id="orgName"
+                required
+                name="orgName"
                 placeholder="Organization Name"
                 type="text"
                 value={selectedOrg}
@@ -170,6 +160,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
               <input
                 id="address"
+                required
+                name="address"
                 placeholder="Address"
                 type="text"
                 value={address}
@@ -182,6 +174,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
               <input
                 id="city"
+                required
+                name="city"
                 placeholder="City"
                 type="text"
                 value={city}
@@ -195,6 +189,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
                 <SelectMenu
                   placeholder="State"
+                  required
                   value={state}
                   onValueChange={(value) => setState(value)}
                   name="state"
@@ -212,6 +207,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
                 <input
                   id="zip-code"
+                  required
+                  name="zipCode"
                   placeholder="Zip-code"
                   type="text"
                   value={zipCode}
@@ -224,11 +221,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
               <button className={styles.backBtn} onClick={decrementPageNumber}>
                 Go Back
               </button>
-              <button
-                className={styles.registerBtn}
-                onClick={handleRegistrationComplete}>
-                Register
-              </button>
+              <button className={styles.registerBtn}>Register</button>
             </div>
           </form>
         )}

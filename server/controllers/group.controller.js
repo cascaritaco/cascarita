@@ -23,6 +23,15 @@ const GroupController = function () {
     }
   };
 
+  var getAllGroups = async function (req, res, next) {
+    try {
+      let allGroups = await Group.findAll();
+      return res.status(200).json(allGroups);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   var createGroup = async function (groupInfo) {
     const newGroup = {
       name: groupInfo.name,
@@ -62,6 +71,7 @@ const GroupController = function () {
 
   return {
     getGroupById,
+    getAllGroups,
     createGroup,
     updateGroup,
   };

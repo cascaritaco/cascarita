@@ -16,6 +16,7 @@ const Home = () => {
       if (isAuthenticated && user) {
         try {
           const token = await getAccessTokenSilently();
+          console.log(`Token: ${token}`);
           const response = await fetchUser(user.email || "", token); // Ensure `fetchUser` is typed appropriately
           setAuthorization(response.authorization);
 
@@ -51,7 +52,6 @@ const Home = () => {
     <>
       {isAuthenticated ? (
         <div>
-          {!authorization ? <p>whatever</p> : <p>okay I guess</p>}
           {!registered && (
             <RegisterModal
               open={isRegisterModalOpen}

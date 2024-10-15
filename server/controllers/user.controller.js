@@ -29,6 +29,7 @@ const UserController = function () {
   };
 
   async function getUserInfoFromAuth0(token) {
+    console.log(`From controller: ${token}`);
     try {
       const response = await fetch(
         "https://dev-2vszya8j41e1n3fe.us.auth0.com/userinfo",
@@ -75,21 +76,22 @@ const UserController = function () {
   }
 
   var registerUser = async function (req, res, next) {
-    const { group_id, city, state, zip_code, logo_url } = req.body;
+    const { group_id, name, streetAddress, city, state, zipCode, logoUrl } =
+      req.body;
 
-    const userBasicInfo = await getUserInfoFromAuth0(req.body.authorization);
+    const userBasicInfo = await getUserInfoFromAuth0(req.headers.authorization);
 
     let groupId = group_id;
 
     if (!group_id) {
       try {
         const newGroup = {
-          name: req.body.organization,
-          street_address: req.body.address,
+          name: name,
+          street_address: streetAddress,
           city,
           state,
-          zip_code,
-          logo_url,
+          zip_code: zipCode,
+          logo_url: logoUrl,
         };
 
         groupId = await GroupController.createGroup(newGroup);
@@ -100,7 +102,7 @@ const UserController = function () {
 
     const newUser = {
       first_name: userBasicInfo.given_name,
-      last_name: userBasicInfo.family_name,
+      last_name: userBasicInfo.family_name || "null",
       email: userBasicInfo.email,
       password: "test",
       role_id: 1,
@@ -124,6 +126,7 @@ const UserController = function () {
 
       return res.status(201).json(result);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };
