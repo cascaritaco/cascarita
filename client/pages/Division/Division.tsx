@@ -118,9 +118,9 @@ const Divisions = () => {
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
-            <PrimaryButton
-              label="Add Divison"
-              onClick={() => setIsCreateOpen(true)}></PrimaryButton>
+            <PrimaryButton onClick={() => setIsCreateOpen(true)}>
+              Add Division
+            </PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Division">
             <DivisionForm
@@ -135,7 +135,9 @@ const Divisions = () => {
       {filteredData == null || filteredData?.length === 0 ? (
         <p className={styles.noLeagueMessage}>No divisions to display...</p>
       ) : (
-        <DashboardTable headers={["Division Name", "Options"]}>
+        <DashboardTable
+          headers={["Division Name", "Options"]}
+          headerColor="light">
           {isLoading ? (
             <tr>
               <td>Loading...</td>

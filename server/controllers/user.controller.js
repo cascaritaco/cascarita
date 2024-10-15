@@ -104,7 +104,7 @@ const UserController = function () {
       first_name: userBasicInfo.given_name,
       last_name: userBasicInfo.family_name || "null",
       email: userBasicInfo.email,
-      password: "test",
+      picture: userBasicInfo.picture,
       role_id: 1,
       language_id: 1,
       group_id: groupId,
@@ -148,9 +148,7 @@ const UserController = function () {
         throw new Error("user id must be an integer");
       }
 
-      const user = await User.findByPk(id, {
-        attributes: { exclude: ["password"] },
-      });
+      const user = await User.findByPk(id);
       if (!user) {
         res.status(404);
         throw new Error(`no user was found with id ${id}`);

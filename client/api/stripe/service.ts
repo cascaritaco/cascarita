@@ -1,4 +1,12 @@
-const connectStripe = async (formData: object) => {
+import { loadStripe, PaymentIntent } from "@stripe/stripe-js";
+import {
+  StripeAccount,
+  StripeAccountSchema,
+} from "../../components/DragAndDropComponents/DraggablePayment/types";
+import { useQuery } from "@tanstack/react-query";
+import nullthrows from "nullthrows";
+
+export const connectStripe = async (formData: object) => {
   try {
     const response = await fetch("/api/accounts/connect", {
       method: "POST",
@@ -21,4 +29,89 @@ const connectStripe = async (formData: object) => {
   }
 };
 
-export { connectStripe };
+export const createPaymentIntent = async (
+  stripeAccountId: string,
+  form_id: string,
+  userId: string,
+  price: number,
+  fee: number,
+): Promise<PaymentIntent | null> => {
+  try {
+    const response = await fetch(
+      `/api/accounts/${stripeAccountId}/paymentIntent`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price,
+          fee,
+          form_id,
+          userId,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error creating payment intent: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    return null;
+  }
+};
+
+export const getPublishableKey = async (): Promise<string> => {
+  try {
+    const response = await fetch("/api/accounts/key/publishable");
+
+    if (!response.ok) {
+      throw new Error(
+        `fetching publishable key non-ok-response: ${response.status} - ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return data.key;
+  } catch (error) {
+    console.error("Error fetching publishable key:", error);
+    return "";
+  }
+};
+
+export const getStripeAccounts = async (
+  groupId: number,
+): Promise<StripeAccount[]> => {
+  try {
+    const response = await fetch(`/api/accounts/${groupId}`);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching Stripe accounts: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return StripeAccountSchema.array().parse(data);
+  } catch (error) {
+    console.error("Error fetching Stripe accounts:", error);
+    return [];
+  }
+};
+
+export const useStripePromise = (stripeAccount: string) => {
+  return useQuery({
+    queryKey: ["stripePromise"],
+    queryFn: async () => {
+      const publishableKey = await getPublishableKey();
+      return loadStripe(
+        nullthrows(publishableKey, "Publishable key is missing"),
+        {
+          stripeAccount,
+        },
+      );
+    },
+  });
+};

@@ -49,9 +49,7 @@ const FormController = {
     try {
       const form_data = { title: req.body.title, fields: req.body.fields };
 
-      const user = await User.findByPk(req.params.user_id, {
-        attributes: { exclude: ["password"] },
-      });
+      const user = await User.findByPk(req.params.user_id);
       if (!user) {
         res.status(404);
         throw new Error(`no user was found with id ${req.params.user_id}`);
@@ -92,10 +90,27 @@ const FormController = {
 
   async getFormByDocumentId(req, res, next) {
     try {
-      const results = await FormMongo.findById(req.params.document_id);
+      const form_document_id = req.params.document_id;
+      let data;
 
-      return res.status(201).json(results);
+      let form = await FormMongo.findById(form_document_id);
+      if (!form) {
+        data = [];
+      } else {
+        data = form.toObject();
+        const sqlFormData = await Form.findOne({
+          where: {
+            document_id: form_document_id,
+          },
+        });
+        data.sql_form_id = sqlFormData
+          ? sqlFormData.id
+          : `no sql form found for ${form_document_id}`;
+      }
+
+      return res.status(200).json(data);
     } catch (error) {
+      console.error(error);
       next(error);
     }
   },

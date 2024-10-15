@@ -23,7 +23,6 @@ const updateUsersLanguages = async (
 };
 
 const registerUser = async (formData: RegisterUser) => {
-  console.log(formData);
   try {
     const response = await fetch(`/api/users/register`, {
       method: "POST",

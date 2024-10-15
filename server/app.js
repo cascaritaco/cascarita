@@ -28,6 +28,8 @@ if (
   process.exit();
 }
 
+app.get("/api/health", (req, res) => res.sendStatus(200));
+
 app.use(cookieParser());
 
 // Enable CORS before using the router
