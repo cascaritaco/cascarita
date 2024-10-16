@@ -355,7 +355,7 @@ const UserController = function () {
         res.status(404);
         throw new Error(`no users were found with group id ${group_id}`);
       }
-      return res.json(users);
+      return res.status(200).json(users);
     } catch (error) {
       next(error)
     }

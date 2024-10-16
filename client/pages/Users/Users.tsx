@@ -2,6 +2,7 @@
 import { useTranslation } from "react-i18next";
 import * as Avatar from "@radix-ui/react-avatar";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 // Data Retrieval
 import { getUsersByGroupId } from "../../api/users/service";
@@ -29,17 +30,17 @@ const Users = () => {
     }
   }
 
-  // Fetch users by group id of current user
+  const groupId = currentUser?.group_id;
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["users", groupId ? groupId : 0],
+    queryFn: getUsersByGroupId,
+  });
+
   useEffect(() => {
-    (async () => {
-      const data =
-        await getUsersByGroupId(currentUser?.group_id ?? 0)
-          .then((res) => {
-            return res.filter((user: User) => user.email !== currentUser?.email);
-          });
-      setUsers(data);
-    })();
-  }, []);
+    const filteredData = data?.filter((user: User) => user.email !== currentUser?.email);
+    setUsers(filteredData);
+  }, [data]);
 
   return (
     <Page title={t("title")}>

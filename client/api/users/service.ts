@@ -1,3 +1,4 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import { UserResponse, LanguageCodeToLanguageId } from "./types";
 
 const updateUsersLanguages = async (
@@ -70,7 +71,11 @@ const registerUser = async (
   }
 };
 
-const getUsersByGroupId = async (groupId: number) => {
+type UserQueryKey = [string, number];
+
+const getUsersByGroupId = async ({ queryKey }: QueryFunctionContext<UserQueryKey>) => {
+
+  const [, groupId] = queryKey;
   try {
     const response = await fetch(`/api/users/group/${groupId}`, {
       method: "GET",
