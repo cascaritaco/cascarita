@@ -106,18 +106,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      password: {
-        type: DataTypes.STRING(64),
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: "password field is required",
-          },
-          notEmpty: {
-            msg: "password field cannot be empty",
-          },
-        },
-      },
       group_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -130,6 +118,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      picture: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,
@@ -138,22 +130,6 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "updated_at",
     },
   );
-
-  User.beforeCreate(async (user) => {
-    const saltRounds = 10;
-    user.password = await Bcrypt.hash(user.password, saltRounds);
-  });
-
-  User.beforeUpdate(async (user) => {
-    if (user.changed("password")) {
-      const saltRounds = 10;
-      user.password = await Bcrypt.hash(user.password, saltRounds);
-    }
-  });
-
-  User.prototype.validPassword = async function (password) {
-    return await Bcrypt.compare(password, this.password);
-  };
 
   return User;
 };

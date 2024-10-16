@@ -1,23 +1,19 @@
 import { Button } from "@radix-ui/themes";
 import { LogoutButtonProps } from "./types";
 import styles from "./LogoutButton.module.css";
-import { useAuth } from "../../components/AuthContext/AuthContext";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useAuth0 } from "@auth0/auth0-react";
+import Cookies from "js-cookie";
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ icon, label }) => {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
-  };
+  const { logout } = useAuth0();
   return (
-    <Button onClick={handleLogout} variant="soft" className={styles.button}>
+    <Button
+      onClick={() => {
+        logout();
+        Cookies.remove("email");
+      }}
+      variant="soft"
+      className={styles.button}>
       <span className={styles.icon}>{icon}</span>
       <span className={styles.label}>{label}</span>
     </Button>

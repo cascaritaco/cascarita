@@ -6,7 +6,8 @@ const RoleRoutes = require("../../routes/role.routes");
 const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/roles", RoleRoutes);
+const dummyCheckJwt = (req, res, next) => next();
+app.use("/roles", RoleRoutes(dummyCheckJwt));
 app.use(Middlewares.errorHandler);
 
 const TestDb = require("../../models");
@@ -29,7 +30,7 @@ describe("POST /roles/", () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         role_type: "admin",
-      })
+      }),
     );
   });
 });

@@ -8,9 +8,9 @@ import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
 import { SMALL_DRAGGABLE_CONTAINER_WIDTH } from "../constants";
 import { formatPayment } from "../../../util/formatPayment";
-import { useAuth } from "../../AuthContext/AuthContext";
 import { getStripeAccounts } from "../../../api/stripe/service";
 import nullthrows from "nullthrows";
+import { useAuth0 } from "@auth0/auth0-react";
 import { DraggableProps } from "../types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -20,7 +20,7 @@ const DraggablePayment: React.FC<DraggableProps> = ({
   onDelete,
   onCopy,
 }) => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
   const { t } = useTranslation("DraggableFields");
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,10 +40,8 @@ const DraggablePayment: React.FC<DraggableProps> = ({
     return Math.ceil(fee * 100) / 100;
   };
 
-  const groupId = nullthrows(
-    currentUser?.group_id,
-    "User does not have a group ID",
-  );
+  // TODO: Make a DB call to get our user related with Auth0 user id
+  const groupId = nullthrows(user?.group_id, "User does not have a group ID");
 
   const { data: stripeAccounts = [], isLoading } = useQuery({
     queryKey: ["stripeAccounts", groupId],

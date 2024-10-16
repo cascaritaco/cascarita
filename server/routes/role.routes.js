@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const RoleController = require("../controllers/role.controller");
 
-router.post("/", RoleController.createRole);
-
-module.exports = router;
+module.exports = (checkJwt) => {
+  router.post("/", RoleController.createRole);
+  return router;
+};
