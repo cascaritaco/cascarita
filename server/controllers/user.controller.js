@@ -154,7 +154,7 @@ const UserController = function () {
       });
 
       if (user) {
-        return res.status(200).json({ user: user });
+        return res.status(200).json(user);
       } else {
         console.log("NOT FOUND HERE!");
         // TODO Not the best practice below. Was previously .status(404)
