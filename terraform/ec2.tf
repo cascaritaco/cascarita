@@ -54,7 +54,7 @@ resource "aws_launch_template" "ecs_lt" {
   key_name               = var.key_name
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.ecs_instance_profile.arn
+    name = aws_iam_instance_profile.ecs_instance_profile.name
   }
 
   network_interfaces {
