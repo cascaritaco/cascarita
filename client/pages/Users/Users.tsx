@@ -15,8 +15,16 @@ import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import { User } from "./types";
 import Search from "../../components/Search/Search";
-import { TbSettingsSearch } from "react-icons/tb";
+import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
+import Modal from "../../components/Modal/Modal";
+import { set } from "react-hook-form";
 
+const mapRoles = (role_id: number) => {
+  switch (role_id) {
+    case 1:
+      return "Staff";
+  }
+}
 
 const Users = () => {
   // Confligure translation
@@ -27,13 +35,10 @@ const Users = () => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-
-  const mapRoles = (role_id: number) => {
-    switch (role_id) {
-      case 1:
-        return "Staff";
-    }
-  }
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState("");
 
   const groupId = currentUser?.group_id;
 
@@ -41,11 +46,6 @@ const Users = () => {
     queryKey: ["users", groupId ? groupId : 0],
     queryFn: getUsersByGroupId,
   });
-
-  // useEffect(() => {
-  //   const filteredData = data?.filter((user: User) => user.email !== currentUser?.email);
-  //   setUsers(filteredData);
-  // }, [data]);
 
   useEffect(() => {
     const handleDebounce = setTimeout(() => {
@@ -71,12 +71,29 @@ const Users = () => {
     }
   }, [debouncedQuery, users]);
 
+  const handleAddUser = () => {
+    setIsAddUserOpen(true);
+  }
+
+  const handleEditUser = (name: string) => {
+    setSelectedUser(name);
+    setIsEditOpen(true);
+  }
+
+  const handleDeleteUser = (name: string) => {
+    setSelectedUser(name);
+    setIsDeleteOpen(true);
+  }
+
   return (
     <Page title={t("title")}>
       <div className={styles.filterSearch}>
         <div className={styles.dropdown}>
           <Search onSearchChange={setSearchQuery} />
         </div>
+        <PrimaryButton onClick={handleAddUser}>
+          {t("addUser")}
+        </PrimaryButton>
       </div>
       <DashboardTable
         headers={["Name", "Email", "Role", "Options"]}
@@ -105,7 +122,7 @@ const Users = () => {
             <td className={styles.tableData}>
               <DropdownMenuButton>
                 <DropdownMenuButton.Item
-                  onClick={() => NaN}>
+                  onClick={() => handleEditUser(`${user.first_name} ${user.last_name}`)}>
                   Edit
                 </DropdownMenuButton.Item>
 
@@ -114,15 +131,30 @@ const Users = () => {
                 />
 
                 <DropdownMenuButton.Item
-                  onClick={() => NaN}>
+                  onClick={() => handleDeleteUser(`${user.first_name} ${user.last_name}`)}>
                   Delete
                 </DropdownMenuButton.Item>
               </DropdownMenuButton>
             </td>
           </tr>))
         }
-
       </DashboardTable>
+
+      <Modal open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
+        <Modal.Content title="Add User">
+          <div></div>
+        </Modal.Content>
+      </Modal>
+      <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <Modal.Content title={`Edit ${selectedUser}`}>
+          <div></div>
+        </Modal.Content>
+      </Modal>
+      <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <Modal.Content title={`Delete ${selectedUser}`}>
+          <div></div>
+        </Modal.Content>
+      </Modal>
     </Page >
   );
 };
