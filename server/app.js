@@ -9,13 +9,11 @@ const path = require("path");
 const Middlewares = require("./middlewares");
 const passport = require("./passport");
 const { startMongoConnection } = require("./mongodb");
+const StripeWebhooks = require("./routes/webhooks/stripe.webhooks");
 
 const app = express();
 app.set("port", process.env.SERVER_PORT || 3001);
 app.use(express.static(path.join(__dirname, "../dist")));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 const secondsInAnHour = 60 * 60;
 const sessionMiddleware = session({
@@ -28,6 +26,9 @@ const sessionMiddleware = session({
     maxAge: secondsInAnHour * 1000,
   },
 });
+
+app.get("/api/health", (req, res) => res.sendStatus(200));
+
 app.use(sessionMiddleware);
 
 app.use(cookieParser());
@@ -41,6 +42,15 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(
+  "/api/webhook/stripe",
+  express.raw({ type: "application/json" }),
+  StripeWebhooks,
+);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Error handler should be the last middleware used
 app.use(Middlewares.errorHandler);

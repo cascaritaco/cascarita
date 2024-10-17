@@ -1,30 +1,30 @@
 import React, { useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Draggable } from "react-beautiful-dnd";
-import { DraggablePhoneNumberProps } from "./types";
 import styles from "./DraggablePhoneNumber.module.css";
 import DraggableSubMenu from "../DraggableSubMenu/DraggableSubMenu";
 import Switch from "react-switch";
 import { useTranslation } from "react-i18next";
+import { DraggableProps } from "../types";
 
-const DraggablePhoneNumber: React.FC<DraggablePhoneNumberProps> = ({
-  id,
+const DraggablePhoneNumber: React.FC<DraggableProps> = ({
   index,
-  title,
-  validations,
-  control,
+  formField,
   onDelete,
   onCopy,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("DraggableFields");
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { control } = useFormContext();
+
   const handleClick = () => {
-    setIsMenuOpen((prev) => !prev);
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={formField.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -34,21 +34,14 @@ const DraggablePhoneNumber: React.FC<DraggablePhoneNumberProps> = ({
           onClick={handleClick}>
           <div style={{ position: "relative" }}>
             <p className={styles.textElementTypeText}>{t("phoneNumber")}</p>
-            <div
-              style={{
-                padding: 16,
-                margin: "0 0 8px 0",
-                background: "#FFFFFF",
-                border: "1px solid #DFE5EE",
-                borderRadius: 10,
-              }}>
-              {validations?.required != null && (
+            <div className={styles.draggableContainer}>
+              {formField.validations?.required != null && (
                 <div className={styles.requiredSwitch}>
                   <p className={styles.requiredText}>{t("requiredText")}</p>
                   <Controller
                     name={`fields.${index}.validations.required`}
                     control={control}
-                    defaultValue={validations.required}
+                    defaultValue={formField.validations.required}
                     render={({ field }) => (
                       <Switch
                         checked={field.value}
@@ -71,7 +64,7 @@ const DraggablePhoneNumber: React.FC<DraggablePhoneNumberProps> = ({
                 key={index}
                 name={`fields.${index}.title`}
                 control={control}
-                defaultValue={title} // Ensure the default value is set
+                defaultValue={formField.title} // Ensure the default value is set
                 render={({ field }) => (
                   <>
                     <input

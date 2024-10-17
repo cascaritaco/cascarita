@@ -1,10 +1,14 @@
+export enum Currency {
+  USD = "USD",
+}
 export type FieldType =
   | "multiple_choice"
   | "short_text"
   | "long_text"
   | "dropdown"
   | "email"
-  | "phone_number";
+  | "phone_number"
+  | "payment";
 
 export interface Validation {
   max_length?: number;
@@ -12,18 +16,31 @@ export interface Validation {
 }
 
 export interface Label {
-  label: string;
+  id: string;
   ref: string;
+  label: string;
 }
 
 export interface Properties {
   choices?: Label[];
+  allow_multiple_selection?: boolean;
   default_country_code?: string;
+  description?: string;
+  price?: {
+    type: string;
+    value: string;
+    feeValue: string;
+    currency: Currency;
+    isCustomerPayingFee: boolean;
+  };
+  stripe_account?: {
+    id: string;
+    stripe_account_id: string;
+  };
 }
 
 export interface Field {
-  // NOTE: See comment in DNDCanvas.tsx
-  id?: string;
+  id: string;
   title: string;
   ref: string;
   validations?: Validation;
@@ -57,7 +74,8 @@ export type AnswerType =
   | "email"
   | "phone_number"
   | "boolean"
-  | "file_url";
+  | "file_url"
+  | "payment";
 
 export interface Answer {
   field: {
@@ -75,4 +93,5 @@ export interface Answer {
   choice?: { label: string };
   choices?: { labels: string[] };
   file_url?: string;
+  payment?: string;
 }

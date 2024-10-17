@@ -1,4 +1,5 @@
 export interface PrimaryButtonProps {
-  label: string;
   onClick: () => void;
+  className?: string;
+  children?: React.ReactNode;
 }

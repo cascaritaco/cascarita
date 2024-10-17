@@ -1,43 +1,11 @@
+import { Field } from "../../api/forms/types";
 import Dropdown from "../../components/FormInputComponents/Dropdown/Dropdown";
 import Email from "../../components/FormInputComponents/Email/Email";
 import LongText from "../../components/FormInputComponents/LongText/LongText";
 import MultipleChoice from "../../components/FormInputComponents/MultipleChoice/MultipleChoice";
 import PhoneNumber from "../../components/FormInputComponents/PhoneNumber/PhoneNumber";
 import ShortText from "../../components/FormInputComponents/ShortText/ShortText";
-
-export type FieldType =
-  | "multiple_choice"
-  | "short_text"
-  | "long_text"
-  | "dropdown"
-  | "email"
-  | "phone_number";
-
-export interface Validation {
-  max_length?: number;
-  required: boolean;
-}
-
-export interface Label {
-  id: string;
-  label: string;
-  ref: string;
-}
-
-export interface Properties {
-  choices?: Label[];
-  allow_multiple_selection?: boolean;
-  default_country_code?: string;
-}
-
-export interface Field {
-  id: string;
-  title: string;
-  ref: string;
-  validations?: Validation;
-  properties?: Properties;
-  type: FieldType;
-}
+import StripeComponent from "../../components/FormInputComponents/Stripe/StripeComponent";
 
 export interface WelcomeScreen {
   id: string;
@@ -50,7 +18,7 @@ export interface WelcomeScreen {
   };
 }
 
-export interface Form {
+export interface FetchedForm {
   _id: string;
   created_by: {
     id: string;
@@ -74,18 +42,8 @@ export interface Form {
     fields: Field[];
   };
   welcome_screen: WelcomeScreen;
+  sql_form_id: string;
 }
-
-export type AnswerType =
-  | "text"
-  | "number"
-  | "date"
-  | "choice"
-  | "choices"
-  | "email"
-  | "phone_number"
-  | "boolean"
-  | "file_url";
 
 export const FieldComponents = {
   multiple_choice: MultipleChoice,
@@ -94,6 +52,7 @@ export const FieldComponents = {
   long_text: LongText,
   email: Email,
   phone_number: PhoneNumber,
+  payment: StripeComponent,
 };
 
 export const AnswerMap = {
@@ -103,22 +62,5 @@ export const AnswerMap = {
   long_text: "text",
   email: "email",
   phone_number: "phone_number",
+  payment: "payment",
 };
-
-export interface Answer {
-  field: {
-    id: string;
-    type: string;
-    ref: string;
-  };
-  type: AnswerType;
-  number?: number;
-  text?: string;
-  phone_number?: string;
-  email?: string;
-  date?: Date;
-  boolean?: boolean;
-  choice?: { label: string };
-  choices?: { labels: string[] };
-  file_url?: string;
-}

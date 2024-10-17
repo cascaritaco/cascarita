@@ -1,0 +1,178 @@
+.requiredText,
+.textElementTypeText {
+  font-family: "DM Sans";
+  font-weight: 400;
+  font-size: 0.75rem;
+}
+
+.textElementTypeText {
+  font-style: normal;
+  line-height: 24px;
+  color: #aaaaaa;
+}
+
+.question {
+  margin-left: -5px;
+  margin-right: -5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 25px;
+  width: 65%;
+  margin-bottom: 8px;
+}
+
+.extraOptions {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 25px;
+  padding: 10px;
+  right: 0;
+}
+
+.requiredText {
+  line-height: 2;
+}
+
+.containerSmall.extraOptions {
+  flex-direction: column;
+  position: static;
+  padding: 0;
+}
+
+.payment {
+  display: flex;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 25px;
+}
+
+.paymentText {
+  margin-top: 10px;
+  height: 40px;
+  padding: 10px 10px 10px 0;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+}
+
+.paymentInputGroup {
+  margin-top: 10px;
+  display: flex;
+  width: 130px;
+  height: 40px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+}
+
+.currencySymbol {
+  padding: 0 10px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 21px;
+  color: #8d8d8d;
+}
+
+.paymentInput {
+  flex: 1;
+  border: none !important;
+  outline: none !important;
+  padding: 0;
+  color: #000000;
+  background-color: transparent;
+}
+
+.currency {
+  margin-top: 10px;
+  height: 40px;
+  padding: 10px;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.draggableContainer {
+  padding: 16px;
+  margin: 0 0 8px 0;
+  background-color: #ffffff;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+}
+
+.paymentGroup,
+.stripeGroup {
+  display: flex;
+  gap: 10px;
+  overflow: wrap;
+}
+
+.stripeGroup {
+  margin-top: 10px;
+}
+
+.input {
+  background-color: #f6f9fd;
+  padding: 9px;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 24px;
+  border-radius: 15px;
+}
+
+.accountList {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  padding: 0 15px;
+  justify-content: center;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feeResponsibilityContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.feeSwitchGroup {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.addStripeAccountButton {
+  font-family: "DM Sans";
+  width: 200px;
+  height: 43px;
+  font-size: 1rem;
+  line-height: 21px;
+  border-radius: 21.5px;
+  color: #ffffff;
+  background: #170cb4;
+}
+
+.addStripeAccountButton:hover,
+.addStripeAccountButton:focus {
+  outline: 1px solid blue;
+  background-color: #2f26b7;
+}

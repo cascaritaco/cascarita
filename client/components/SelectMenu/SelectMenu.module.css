@@ -10,18 +10,18 @@
   font-size: 0.8rem;
 }
 
-.selectTrigger:hover,
-.selectTrigger:focus {
+.selectTrigger:hover {
   background-color: #d3d3d3cd;
+}
+.selectTrigger:focus {
+  box-shadow: 0 0 0 2px black;
 }
 
 .selectContent {
   overflow: hidden;
   background-color: white;
-  max-width: 100%;
   border-radius: 6px;
-  box-shadow:
-    0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 }
 
@@ -60,6 +60,6 @@
 }
 .selectItem[data-highlighted] {
   outline: none;
-  background-color: lightblue;
-  color: black;
+  background-color: #4238d5;
+  color: #fdfdfd;
 }

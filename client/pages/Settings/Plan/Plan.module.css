@@ -1,0 +1,55 @@
+.wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  height: 70vh;
+  padding-top: 16px;
+}
+
+.wrapper h2 {
+  height: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.table {
+  border-bottom: #dfe5ee solid 1px;
+}
+
+.table td {
+  padding: 12px 10px;
+}
+
+.link {
+  color: #2922bf;
+  text-decoration: none;
+  display: block;
+}
+
+.link:first-child {
+  margin-bottom: 2px;
+}
+
+.sectionWrapper {
+  margin-bottom: 32px;
+}
+
+.sectionWrapper h3 {
+  margin-bottom: 12px;
+}
+
+.progressWrapper {
+  margin-bottom: 20px;
+}
+
+.progressWrapper > div {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  align-items: end;
+}
+
+.progressWrapper > div > span {
+  font-size: 0.8rem;
+}

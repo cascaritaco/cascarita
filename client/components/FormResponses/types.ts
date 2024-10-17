@@ -1,23 +1,7 @@
+import { Answer, Field } from "../../api/forms/types";
+
 export interface FormResponsesProps {
   formId: string;
-}
-
-export interface Answer {
-  field: {
-    id: string;
-    type: string;
-    ref: string;
-  };
-  type: string;
-  number?: number;
-  text?: string;
-  phone_number?: string;
-  email?: string;
-  date?: Date;
-  boolean?: boolean;
-  choice?: { label: string };
-  choices?: { labels: string[] };
-  file_url?: string;
 }
 
 // Response type representing the structure of a Typeform response
@@ -63,13 +47,6 @@ export interface TypeformFormData {
 // Props for the FormResponses component
 export interface FormResponsesProps {
   formId: string;
-}
-
-// Field type representing a single form field
-export interface Field {
-  id: string;
-  title: string;
-  type: string;
 }
 
 export type AnswerRecordMap = Map<string, Map<string, Answer>>;

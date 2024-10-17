@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./FormResponses.module.css";
-import {
-  Answer,
-  AnswerRecordMap,
-  Field,
-  FormResponse,
-  FormResponsesProps,
-} from "./types";
+import { AnswerRecordMap, FormResponse, FormResponsesProps } from "./types";
 import {
   getMongoFormById,
   getMongoFormResponses,
 } from "../../api/forms/service";
 import { truncateText } from "../../util/truncateText";
 import { useTranslation } from "react-i18next";
+import { Answer, Field } from "../../api/forms/types";
 
 const FormResponses = ({ formId }: FormResponsesProps) => {
   const [formFields, setFormFields] = useState<Field[]>([]);

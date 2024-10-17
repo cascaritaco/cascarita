@@ -1,30 +1,26 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMongoFormById } from "../../api/forms/service";
 import { FormProvider, useForm } from "react-hook-form";
-import {
-  Answer,
-  AnswerMap,
-  AnswerType,
-  Field,
-  FieldComponents,
-  Form,
-} from "./types";
+import { AnswerMap, FieldComponents, FetchedForm } from "./types";
 import { createMongoResponse } from "../../api/forms/service";
 import FormHeader from "../../components/FormHeader/FormHeader";
 import FormFooter from "../../components/FormFooter/FormFooter";
 import styles from "./FormPage.module.css";
+import { Answer, AnswerType, Field } from "../../api/forms/types";
 
 const FormPage = () => {
   const { formId } = useParams();
   const navigate = useNavigate();
-
+  const stripeComponentRef = useRef<{
+    handlePayment: () => Promise<boolean>;
+  } | null>(null);
   const {
     data: form,
     isLoading,
     error,
-  } = useQuery<Form, Error>({
+  } = useQuery<FetchedForm, Error>({
     queryKey: ["form", formId],
     queryFn: () =>
       formId
@@ -57,10 +53,19 @@ const FormPage = () => {
       }) ?? [];
 
     try {
+      if (stripeComponentRef.current) {
+        const success = await stripeComponentRef.current.handlePayment();
+        if (!success) {
+          // The error message is already set within handlePayment
+          // You can add any additional handling here if needed
+          return;
+        }
+      }
       const responsesData = await createMongoResponse(
         formId ?? "",
         normalizedAnswers,
       );
+      // TODO: Redirect to a success page / thank you page?
       navigate("/forms");
       return responsesData;
     } catch (error) {
@@ -79,10 +84,20 @@ const FormPage = () => {
               className={styles.formContent}
               onSubmit={methods.handleSubmit(onSubmit)}>
               <h1 className={styles.title}>{form?.form_data.title}</h1>
-
               {form.form_data.fields.map((field: Field, index: number) => {
                 const FieldComponent = FieldComponents[field.type];
                 if (!FieldComponent) return null;
+                if (FieldComponent === FieldComponents.payment) {
+                  return (
+                    <FieldComponent
+                      key={field.id}
+                      ref={stripeComponentRef}
+                      field={field}
+                      sqlFormId={form.sql_form_id}
+                      index={index}
+                    />
+                  );
+                }
                 return (
                   <FieldComponent key={field.id} field={field} index={index} />
                 );

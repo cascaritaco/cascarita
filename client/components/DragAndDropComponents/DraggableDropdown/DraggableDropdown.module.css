@@ -35,3 +35,11 @@
 .requiredText {
   line-height: 2;
 }
+
+.draggableContainer {
+  padding: 16px;
+  margin: 0 0 8px 0;
+  background-color: #ffffff;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+}

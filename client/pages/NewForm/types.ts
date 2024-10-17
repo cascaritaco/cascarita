@@ -1,14 +1,8 @@
-export type DroppedItemType =
-  | "short_text"
-  | "long_text"
-  | "dropdown"
-  | "multiple_choice"
-  | "email"
-  | "phone_number";
+import { FieldType } from "../../api/forms/types";
 
 export interface DroppedItem {
   id: string;
-  type: DroppedItemType;
+  type: FieldType;
 }
 
 export interface DNDCanvasRef {

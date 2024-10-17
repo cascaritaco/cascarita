@@ -6,10 +6,11 @@ import { useState } from "react";
 import { blackListRoutes } from "./blacklist";
 import { useAuth } from "../AuthContext/AuthContext";
 import { matchPath } from "../../util/matchPath";
+import { Outlet } from "react-router-dom";
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = () => {
   const { currentUser } = useAuth();
-  const [selectedItem, setSelectedItem] = useState("home");
+  const [selectedItem, setSelectedItem] = useState("");
 
   const isBlacklisted = blackListRoutes.some((pattern) =>
     matchPath(window.location.pathname, pattern, blackListExceptions),
@@ -24,10 +25,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
           />
-          <div className={styles.main}>{children}</div>
+          <main className={styles.main}>
+            <Outlet />
+          </main>
         </div>
       ) : (
-        <div>{children}</div>
+        <main>
+          <Outlet />
+        </main>
       )}
     </div>
   );

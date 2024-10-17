@@ -35,7 +35,7 @@ const registerUser = async (
   city: string | null,
   state: string | null,
   zipCode: string | null,
-  logoUrl: string | null, // still need to set up s3 buckets for images so for now we wont collect this and just set it to null
+  // logoUrl: string | null, // still need to set up s3 buckets for images so for now we wont collect this and just set it to null
 ) => {
   try {
     const registerData = {
@@ -51,7 +51,7 @@ const registerUser = async (
       city: city,
       state: state,
       zip_code: zipCode,
-      logo_url: logoUrl,
+      // logo_url: logoUrl,
     };
 
     const response = await fetch(`/api/users/register`, {
