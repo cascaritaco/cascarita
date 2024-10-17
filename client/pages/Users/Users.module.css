@@ -32,3 +32,21 @@
     margin-bottom: 3px;
     margin-top: 3px;
 }
+
+.filterSearch {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filterSearch > button {
+  margin-right: 50px;
+}
+
+.dropdown {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+}
