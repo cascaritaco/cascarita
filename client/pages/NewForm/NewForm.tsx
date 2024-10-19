@@ -97,8 +97,6 @@ const NewForm = () => {
     const email = Cookies.get("email") || "";
     currentUser = await fetchUser(email, token);
 
-    console.log("glizzy");
-    console.log(currentUser);
     const response = await createMongoForm(
       data,
       title,

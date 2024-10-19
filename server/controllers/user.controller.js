@@ -28,8 +28,8 @@ const UserController = function () {
     const userBasicInfo = await getUserInfoFromAuth0(req.headers.authorization);
 
     let groupId = group_id;
-    const groups = await GroupController.getGroupByName(name);
-    groupId = groups[0].id;
+    // const groups = await GroupController.getGroupByName(name);
+    // groupId = groups[0].id;
 
     if (!groupId) {
       try {
@@ -83,7 +83,7 @@ const UserController = function () {
 
       return res.status(201).json(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       next(error);
     }
   };
