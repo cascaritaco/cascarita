@@ -9,6 +9,7 @@ const LeagueController = require("../controllers/league.controller");
 const FormController = require("../controllers/form.controller");
 
 module.exports = (checkJwt) => {
+  router.get("/", GroupController.getAllGroups);
   router.get("/:id", GroupController.getGroupById);
   router.get("/:id/divisions", DivisionController.getByGroupId);
   router.get("/:id/fields", FieldController.getFieldByGroupId);

@@ -22,25 +22,24 @@ const UserController = function () {
   };
 
   var registerUser = async function (req, res, next) {
-    const { address, city, state, zip_code, organization } = req.body;
+    const { group_id, name, streetAddress, city, state, zipCode, logoUrl } =
+      req.body;
 
-    const authorization = req.headers.authorization;
+    const userBasicInfo = await getUserInfoFromAuth0(req.headers.authorization);
 
-    const userBasicInfo = await getUserInfoFromAuth0(authorization);
-
-    let groupId;
-    const groups = await GroupController.getGroupByName(organization);
-    groupId = groups[0].id;
+    let groupId = group_id;
+    // const groups = await GroupController.getGroupByName(name);
+    // groupId = groups[0].id;
 
     if (!groupId) {
       try {
         const newGroup = {
-          name: organization,
-          street_address: address,
+          name: name,
+          street_address: streetAddress,
           city,
           state,
-          zip_code,
-          logo_url: null,
+          zip_code: zipCode,
+          logo_url: logoUrl,
         };
 
         groupId = await GroupController.createGroup(newGroup);
@@ -84,6 +83,7 @@ const UserController = function () {
 
       return res.status(201).json(result);
     } catch (error) {
+      console.error(error);
       next(error);
     }
   };
@@ -150,7 +150,6 @@ const UserController = function () {
     try {
       // Access the email from the query parameters
       const email = req.query.email;
-      console.log("email: ", email);
 
       let user = await User.findOne({
         where: {
@@ -158,12 +157,9 @@ const UserController = function () {
         },
       });
 
-      console.log("user: ", user);
-
       if (user) {
         return res.status(200).json(user);
       } else {
-        console.log("NOT FOUND HERE!");
         // TODO Not the best practice below. Was previously .status(404)
         return res.json({
           message: `User with email: '${email}' not found.`,

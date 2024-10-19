@@ -18,12 +18,14 @@ const Login = () => {
         {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
         <button
           onClick={() => {
-            console.log("Login with Redirect happening");
             loginWithRedirect();
           }}>
           Sign in
         </button>
-        <button onClick={() => console.log("TODO IMPLEMENT SIGN UP")}>
+        <button
+          onClick={() => {
+            loginWithRedirect();
+          }}>
           Do not have an account?
         </button>
       </div>

@@ -1,4 +1,4 @@
-import { UserResponse, LanguageCodeToLanguageId } from "./types";
+import { UserResponse, LanguageCodeToLanguageId, RegisterUser } from "./types";
 
 const updateUsersLanguages = async (
   user_id: number,
@@ -22,30 +22,25 @@ const updateUsersLanguages = async (
   }
 };
 
-const registerUser = async (
-  address: string | null,
-  city: string | null,
-  state: string | null,
-  zipCode: string | null,
-  organization: string | null,
-  token: string,
-) => {
+const registerUser = async (data: RegisterUser) => {
   try {
-    const registerData = {
-      address: address,
-      city: city,
-      state: state,
-      zip_code: zipCode,
-      organization: organization,
+    const formData = {
+      group_id: data.group_id,
+      name: data.name,
+      streetAddress: data.streetAddress,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      logoUrl: data.logoUrl,
     };
 
     const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${data.token}`,
       },
-      body: JSON.stringify(registerData),
+      body: JSON.stringify(formData),
     });
 
     const result = await response.json();
@@ -59,7 +54,6 @@ const registerUser = async (
 const fetchUser = async (email: string, token: string) => {
   try {
     // Encode the email to ensure it's safe for use in a URL
-    console.log("final token for authorization: ", token);
     const response = await fetch(
       `/api/users?email=${encodeURIComponent(email)}`,
       {

@@ -36,7 +36,6 @@ const Home = () => {
   // Move the modal opening logic to a useEffect hook to avoid triggering re-renders
   useEffect(() => {
     if (!registered && isAuthenticated) {
-      console.log("Open up the registration Modal");
       setIsRegisterModalOpen(true);
     }
   }, [registered, isAuthenticated, isRegisterModalOpen]);

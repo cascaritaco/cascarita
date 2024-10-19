@@ -27,7 +27,6 @@ export const useRouter = () =>
       <Route path="/" element={<Layout />}>
         <Route path="login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
-          {/* <Route path="register" element={<Register />} /> */}
           <Route
             path="/"
             element={<Home />}

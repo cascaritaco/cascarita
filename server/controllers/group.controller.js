@@ -14,17 +14,6 @@ const GroupController = function () {
     } else return currentGroup;
   };
 
-  var _getGroupByName = async function (name) {
-    let groups = await Group.findAll({
-      where: {
-        name: name,
-      },
-    });
-    if (!groups) {
-      throw new Error("No groups found with the given name");
-    } else return groups;
-  };
-
   var getGroupById = async function (req, res, next) {
     try {
       const group = await _getGroup(req.params["id"]);
@@ -34,17 +23,12 @@ const GroupController = function () {
     }
   };
 
-  var getGroupByName = async function (name) {
+  var getAllGroups = async function (req, res, next) {
     try {
-      const groupName = name;
-      if (!groupName) {
-        return null;
-      }
-      const groups = await _getGroupByName(groupName);
-
-      return groups;
+      let allGroups = await Group.findAll();
+      return res.status(200).json(allGroups);
     } catch (error) {
-      console.error("error getting group by name: ", error);
+      next(error);
     }
   };
 
@@ -87,7 +71,7 @@ const GroupController = function () {
 
   return {
     getGroupById,
-    getGroupByName,
+    getAllGroups,
     createGroup,
     updateGroup,
   };
