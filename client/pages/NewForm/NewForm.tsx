@@ -13,6 +13,8 @@ import { toSnakeCase } from "../../util/toSnakeCase";
 import { createMongoForm, updateForm } from "../../api/forms/service";
 import { User } from "../../api/users/types";
 import { Field, FieldType, Form } from "../../api/forms/types";
+import Cookies from "js-cookie";
+import { fetchUser } from "../../api/users/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -38,8 +40,8 @@ const NewForm = () => {
   );
   const [formLink, setFormLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
-  const { user } = useAuth0();
-  const currentUser = user;
+  const { getAccessTokenSilently } = useAuth0();
+  let currentUser: User;
 
   const emptyUser = {
     id: 1,
@@ -91,6 +93,12 @@ const NewForm = () => {
   };
 
   const onCreate = async (data: Form) => {
+    const token = await getAccessTokenSilently();
+    const email = Cookies.get("email") || "";
+    currentUser = await fetchUser(email, token);
+
+    console.log("glizzy");
+    console.log(currentUser);
     const response = await createMongoForm(
       data,
       title,

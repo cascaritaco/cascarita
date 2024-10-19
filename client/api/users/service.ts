@@ -22,13 +22,23 @@ const updateUsersLanguages = async (
   }
 };
 
-const registerUser = async (formData: RegisterUser) => {
+const registerUser = async (data: RegisterUser) => {
   try {
+    const formData = {
+      group_id: data.group_id,
+      name: data.name,
+      streetAddress: data.streetAddress,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      logoUrl: data.logoUrl,
+    };
+
     const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${formData.token}`,
+        Authorization: `Bearer ${data.token}`,
       },
       body: JSON.stringify(formData),
     });

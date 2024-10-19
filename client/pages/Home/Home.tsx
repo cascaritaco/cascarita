@@ -4,20 +4,20 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import RegisterModal from "../../components/RegistrationModal/RegistrationModal";
 import { fetchUser } from "../../api/users/service";
+import Cookies from "js-cookie";
 
 const Home = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const [registered, setRegistered] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [authorization, setAuthorization] = useState<string>("");
 
   useEffect(() => {
     const checkRegistrationStatus = async () => {
       if (isAuthenticated && user) {
         try {
+          Cookies.set("email", user.email || "");
           const token = await getAccessTokenSilently();
-          const response = await fetchUser(user.email || "", token); // Ensure `fetchUser` is typed appropriately
-          setAuthorization(response.authorization);
+          const response = await fetchUser(user.email || "", token);
 
           if (response.isSigningUp) {
             setRegistered(false);
@@ -54,8 +54,7 @@ const Home = () => {
             <RegisterModal
               open={isRegisterModalOpen}
               onOpenChange={setIsRegisterModalOpen}
-              onRegistrationComplete={handleRegistrationComplete}
-              authorization={authorization}>
+              onRegistrationComplete={handleRegistrationComplete}>
               <></>
             </RegisterModal>
           )}

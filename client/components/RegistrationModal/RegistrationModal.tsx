@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "../Modal/Modal"; // Adjust the import path as needed
 import { ModalProps } from "../Modal/types";
+
 import styles from "./RegistrationModal.module.css";
 import SelectMenu from "../SelectMenu/SelectMenu";
 import states from "./states.json";
@@ -10,27 +11,29 @@ import { useRegisterUser } from "../../api/users/mutation";
 import { GroupType } from "../../api/groups/types";
 import { RegisterUser } from "../../api/users/types";
 
+//TODO: Arturo uses Form modules css to adjust register data, make copy as needed
+import { useAuth0 } from "@auth0/auth0-react";
+import { registerUser } from "../../api/users/service";
+
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
   onRegistrationComplete: () => void; // Callback for when registration is complete
-  authorization: string;
 }
 
 const RegisterModal: React.FC<RegisterModalProps> = ({
   open,
   onOpenChange,
   onRegistrationComplete,
-  authorization,
 }) => {
   const [page, setPage] = useState<number>(1);
   const [isExistingOrg, setisExistingOrg] = useState<string>("No");
   const [org, setOrg] = useState<string>("");
-
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
   const [selectedOrg, setSelectedOrg] = useState<string>("");
+  const { getAccessTokenSilently } = useAuth0();
 
   const registerUserMutation = useRegisterUser();
 
@@ -52,8 +55,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
       new FormData(event.currentTarget),
     ) as Record<string, string>;
     const { groupId, orgName, address, state, city, zipCode } = formEntries;
+    const token = await getAccessTokenSilently();
 
-    const data = {
+    const payload = {
       group_id: groupId,
       name: orgName,
       streetAddress: address,
@@ -61,10 +65,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
       state: state,
       zipCode: zipCode,
       logoUrl: null,
-      token: authorization,
+      token: token,
     };
-    server / controllers / user.controller.js;
-    registerUserMutation.mutate(data as RegisterUser);
+    registerUserMutation.mutate(payload as RegisterUser);
 
     onRegistrationComplete();
   };
