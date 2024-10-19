@@ -40,7 +40,6 @@ const NewForm = () => {
   );
   const [formLink, setFormLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
-  //TODO ARMANDO TO DO CLEANER PLS
   const { getAccessTokenSilently } = useAuth0();
   let currentUser: User;
 
@@ -94,7 +93,6 @@ const NewForm = () => {
   };
 
   const onCreate = async (data: Form) => {
-    //TODO ARMANDO CLEAN PLS, so we reduce the 3 lines below
     const token = await getAccessTokenSilently();
     const email = Cookies.get("email") || "";
     currentUser = await fetchUser(email, token);
