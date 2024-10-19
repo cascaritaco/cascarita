@@ -63,9 +63,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
       logoUrl: null,
       token: authorization,
     };
-
-    console.log(data);
-
+    server / controllers / user.controller.js;
     registerUserMutation.mutate(data as RegisterUser);
 
     onRegistrationComplete();

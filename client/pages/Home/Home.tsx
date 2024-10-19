@@ -16,7 +16,6 @@ const Home = () => {
       if (isAuthenticated && user) {
         try {
           const token = await getAccessTokenSilently();
-          console.log(`Token: ${token}`);
           const response = await fetchUser(user.email || "", token); // Ensure `fetchUser` is typed appropriately
           setAuthorization(response.authorization);
 
@@ -37,7 +36,6 @@ const Home = () => {
   // Move the modal opening logic to a useEffect hook to avoid triggering re-renders
   useEffect(() => {
     if (!registered && isAuthenticated) {
-      console.log("Open up the registration Modal");
       setIsRegisterModalOpen(true);
     }
   }, [registered, isAuthenticated, isRegisterModalOpen]);

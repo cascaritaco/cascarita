@@ -44,7 +44,6 @@ const registerUser = async (formData: RegisterUser) => {
 const fetchUser = async (email: string, token: string) => {
   try {
     // Encode the email to ensure it's safe for use in a URL
-    console.log("final token for authorization: ", token);
     const response = await fetch(
       `/api/users?email=${encodeURIComponent(email)}`,
       {

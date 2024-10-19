@@ -29,7 +29,6 @@ const UserController = function () {
   };
 
   async function getUserInfoFromAuth0(token) {
-    console.log(`From controller: ${token}`);
     try {
       const response = await fetch(
         "https://dev-2vszya8j41e1n3fe.us.auth0.com/userinfo",
@@ -359,7 +358,6 @@ const UserController = function () {
       if (user) {
         return res.status(200).json({ user: user });
       } else {
-        console.log("NOT FOUND HERE!");
         // TODO Not the best practice below. Was previously .status(404)
         return res.json({
           message: `User with email: '${email}' not found.`,
