@@ -18,6 +18,7 @@ import Search from "../../components/Search/Search";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import Modal from "../../components/Modal/Modal";
 import { set } from "react-hook-form";
+import UserForm from "../../components/Forms/UserForm/UserForm";
 
 const mapRoles = (role_id: number) => {
   switch (role_id) {
@@ -38,7 +39,7 @@ const Users = () => {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUser, setSelectedUser] = useState<User>();
 
   const groupId = currentUser?.group_id;
 
@@ -46,6 +47,10 @@ const Users = () => {
     queryKey: ["users", groupId ? groupId : 0],
     queryFn: getUsersByGroupId,
   });
+
+  const formatName = (user: User) => {
+    return `${user.first_name} ${user.last_name}`;
+  }
 
   useEffect(() => {
     const handleDebounce = setTimeout(() => {
@@ -75,13 +80,13 @@ const Users = () => {
     setIsAddUserOpen(true);
   }
 
-  const handleEditUser = (name: string) => {
-    setSelectedUser(name);
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
     setIsEditOpen(true);
   }
 
-  const handleDeleteUser = (name: string) => {
-    setSelectedUser(name);
+  const handleDeleteUser = (user: User) => {
+    setSelectedUser(user);
     setIsDeleteOpen(true);
   }
 
@@ -122,7 +127,7 @@ const Users = () => {
             <td className={styles.tableData}>
               <DropdownMenuButton>
                 <DropdownMenuButton.Item
-                  onClick={() => handleEditUser(`${user.first_name} ${user.last_name}`)}>
+                  onClick={() => handleEditUser(user)}>
                   Edit
                 </DropdownMenuButton.Item>
 
@@ -131,7 +136,7 @@ const Users = () => {
                 />
 
                 <DropdownMenuButton.Item
-                  onClick={() => handleDeleteUser(`${user.first_name} ${user.last_name}`)}>
+                  onClick={() => handleDeleteUser(user)}>
                   Delete
                 </DropdownMenuButton.Item>
               </DropdownMenuButton>
@@ -146,12 +151,16 @@ const Users = () => {
         </Modal.Content>
       </Modal>
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <Modal.Content title={`Edit ${selectedUser}`}>
-          <div></div>
+        <Modal.Content title={`Edit ${selectedUser ? formatName(selectedUser) : ""}`}>
+          <UserForm
+            afterSave={() => setIsEditOpen(false)}
+            requestType="PATCH"
+            selectedUserId={selectedUser?.id}
+          />
         </Modal.Content>
       </Modal>
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <Modal.Content title={`Delete ${selectedUser}`}>
+        <Modal.Content title={`Delete ${selectedUser ? formatName(selectedUser) : ""}`}>
           <div></div>
         </Modal.Content>
       </Modal>
