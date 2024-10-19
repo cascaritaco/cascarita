@@ -3,11 +3,12 @@ import Modal from "../Modal/Modal"; // Adjust the import path as needed
 import { ModalProps } from "../Modal/types";
 //TODO: Arturo uses Form modules css to adjust register data, make copy as needed
 import styles from "../Forms/Form.module.css";
+import { useAuth0 } from "@auth0/auth0-react";
+import { registerUser } from "../../api/users/service";
 
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
   onRegistrationComplete: () => void; // Callback for when registration is complete
-  authorization: string;
 }
 
 // Sample organizations data
@@ -23,8 +24,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
   open,
   onOpenChange,
   onRegistrationComplete,
-  authorization,
 }) => {
+  const { getAccessTokenSilently } = useAuth0();
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
@@ -34,33 +35,18 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
   const handleRegistrationComplete = async () => {
     try {
-      // Simulated API call for registration
-      //TODO: use registerUser
-      /* NOTE: backend call to register User needs to remove
-        - password
-        - role_id
-      */
-
-      const response = await fetch("/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          address,
-          city,
-          state,
-          zip_code,
-          authorization,
-          organization: selectedOrg,
-        }), // Send registration details
-      });
-
-      if (!response.ok) {
+      const token = await getAccessTokenSilently();
+      const response = await registerUser(
+        address,
+        city,
+        state,
+        zip_code,
+        selectedOrg,
+        token,
+      );
+      if (!response) {
         throw new Error("Registration failed"); // Handle error response
       }
-
-      // Call the completion handler on success
       onRegistrationComplete();
     } catch (error) {
       setErrorMessage(

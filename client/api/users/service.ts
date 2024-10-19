@@ -23,41 +23,27 @@ const updateUsersLanguages = async (
 };
 
 const registerUser = async (
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  roleId: number,
-  languageId: number,
-  groupId: number | null, // they might be joining an existing group
-  name: string | null,
-  streetAddress: string | null,
+  address: string | null,
   city: string | null,
   state: string | null,
   zipCode: string | null,
-  // logoUrl: string | null, // still need to set up s3 buckets for images so for now we wont collect this and just set it to null
+  organization: string | null,
+  token: string,
 ) => {
   try {
     const registerData = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-      role_id: roleId ? roleId : 1,
-      language_id: 1,
-      group_id: groupId,
-      name: name,
-      street_address: streetAddress,
+      address: address,
       city: city,
       state: state,
       zip_code: zipCode,
-      // logo_url: logoUrl,
+      organization: organization,
     };
 
     const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(registerData),
     });

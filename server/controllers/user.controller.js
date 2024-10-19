@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { request } = require("http");
 const { group } = require("console");
-const { getUserInfoFromAuth0 } = require("../utilityFunctions/auth0");
+const getUserInfoFromAuth0 = require("../utilityFunctions/auth0");
 
 const UserController = function () {
   var isEmailUniqueWithinGroup = async function (groupId, email) {
@@ -22,28 +22,25 @@ const UserController = function () {
   };
 
   var registerUser = async function (req, res, next) {
-    const { group_id, city, state, zip_code, logo_url } = req.body;
+    const { address, city, state, zip_code, organization } = req.body;
 
-    // console.log(group_id, city, state, zip_code, logo_url);
     const authorization = req.headers.authorization;
-    // console.log("authorization: ", authorization);
-    // console.log("getUserInfoFromAuth0: ", getUserInfoFromAuth0(authorization));
 
     const userBasicInfo = await getUserInfoFromAuth0(authorization);
 
-    // console.log("userBasicInfo: ", userBasicInfo);
+    let groupId;
+    const groups = await GroupController.getGroupByName(organization);
+    groupId = groups[0].id;
 
-    let groupId = group_id;
-
-    if (!group_id) {
+    if (!groupId) {
       try {
         const newGroup = {
-          name: req.body.organization,
-          street_address: req.body.address,
+          name: organization,
+          street_address: address,
           city,
           state,
           zip_code,
-          logo_url,
+          logo_url: null,
         };
 
         groupId = await GroupController.createGroup(newGroup);
@@ -51,18 +48,25 @@ const UserController = function () {
         next(error);
       }
     }
+    const first_name =
+      userBasicInfo.given_name ||
+      (userBasicInfo.name ? userBasicInfo.name.split(" ")[0] : "");
+
+    const last_name =
+      userBasicInfo.family_name ||
+      (userBasicInfo.name
+        ? userBasicInfo.name.split(" ").slice(1).join(" ")
+        : "");
 
     const newUser = {
-      first_name: userBasicInfo.given_name,
-      last_name: userBasicInfo.family_name,
+      first_name: first_name,
+      last_name: last_name,
       email: userBasicInfo.email,
       picture: userBasicInfo.picture,
       role_id: 1,
       language_id: 1,
       group_id: groupId,
     };
-
-    // console.log("newUser: ", newUser);
 
     try {
       const userFound = await isEmailUniqueWithinGroup(
@@ -146,12 +150,15 @@ const UserController = function () {
     try {
       // Access the email from the query parameters
       const email = req.query.email;
+      console.log("email: ", email);
 
       let user = await User.findOne({
         where: {
           email: email,
         },
       });
+
+      console.log("user: ", user);
 
       if (user) {
         return res.status(200).json(user);
