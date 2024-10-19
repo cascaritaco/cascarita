@@ -13,7 +13,6 @@ import { RegisterUser } from "../../api/users/types";
 
 //TODO: Arturo uses Form modules css to adjust register data, make copy as needed
 import { useAuth0 } from "@auth0/auth0-react";
-import { registerUser } from "../../api/users/service";
 
 // Extend ModalProps to include the onRegistrationComplete callback
 interface RegisterModalProps extends ModalProps {
