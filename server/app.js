@@ -4,6 +4,8 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const session = require("express-session");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJSDoc = require("swagger-jsdoc");
 const http = require("http");
 const path = require("path");
 const Middlewares = require("./middlewares");
@@ -30,6 +32,30 @@ const sessionMiddleware = session({
 app.get("/api/health", (req, res) => res.sendStatus(200));
 
 app.use(sessionMiddleware);
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "Cascarita Server",
+      version: "1.0.0",
+      description: "The server-side of Cascarita is built using Node.js with Express.js as the web application framework. It provides a robust backend for managing sports-related data and operations.",
+      contact: {
+        name: "Cascarita",
+        email: "info.cascarita@gmail.com",
+      },
+      servers: [
+        {
+          url: `http://localhost:${app.get("port")}`,
+        },
+      ],
+    },
+  },
+  apis: ["./server/models/*.js", "./server/routes/*.js"],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -68,6 +94,7 @@ const TeamRoutes = require("./routes/team.routes");
 const UserRoutes = require("./routes/user.routes");
 const FormRoutes = require("./routes/form.routes");
 const AccountRoutes = require("./routes/account.routes");
+const { server } = require("typescript");
 
 app.use("/api/auth", AuthRoutes);
 app.use("/api/divisions", DivisionController);

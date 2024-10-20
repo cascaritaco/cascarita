@@ -1,3 +1,38 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Division:
+ *       type: object
+ *       required:
+ *         - group_id
+ *         - name
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the division.
+ *         group_id:
+ *           type: integer
+ *           description: The id of the group this division belongs to.
+ *         name:
+ *           type: string
+ *           description: The name of the division. Must be unique within a group and between 2 and 50 characters long.
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the division was created.
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the division was last updated.
+ *       example:
+ *         id: 1
+ *         group_id: 1
+ *         name: "Junior Division"
+ *         created_at: "2023-05-01T00:00:00.000Z"
+ *         updated_at: "2023-05-01T00:00:00.000Z"
+ */
+
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
