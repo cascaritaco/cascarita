@@ -1,3 +1,34 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     StripeStatus:
+ *       type: object
+ *       required:
+ *         - status
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the Stripe status.
+ *         status:
+ *           type: string
+ *           description: The status of the Stripe account.
+ *           unique: true
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the Stripe status was created.
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the Stripe status was last updated.
+ *       example:
+ *         id: 1
+ *         status: "Verified"
+ *         created_at: "2023-05-01T00:00:00.000Z"
+ *         updated_at: "2023-05-01T00:00:00.000Z"
+ */
+
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {

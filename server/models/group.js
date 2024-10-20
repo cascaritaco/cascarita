@@ -1,3 +1,57 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Group:
+ *       type: object
+ *       required:
+ *         - name
+ *         - street_address
+ *         - city
+ *         - state
+ *         - zip_code
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the group.
+ *         name:
+ *           type: string
+ *           description: The name of the group.
+ *         street_address:
+ *           type: string
+ *           description: The street address of the group. Must be between 5 and 100 characters.
+ *         city:
+ *           type: string
+ *           description: The city of the group. Must be between 2 and 50 characters.
+ *         state:
+ *           type: string
+ *           description: The state of the group. Must be a valid two-letter abbreviation.
+ *         zip_code:
+ *           type: string
+ *           description: The zip code of the group. Must be a valid 5-digit or 5-digit plus 4-digit format.
+ *         logo_url:
+ *           type: string
+ *           nullable: true
+ *           description: The logo url of the group.
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the group was created.
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the group was last updated.
+ *       example:
+ *         id: 1
+ *         name: "Cascarita"
+ *         street_address: "210 Salinas St"
+ *         city: "Salinas"
+ *         state: "CA"
+ *         zip_code: "93905"
+ *         logo_url: "https://example.com/logo.png"
+ *         created_at: "2023-04-01T00:00:00.000Z"
+ *         updated_at: "2023-04-01T00:00:00.000Z"
+ */
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {

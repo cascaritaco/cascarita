@@ -1,3 +1,43 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Team:
+ *       type: object
+ *       required:
+ *         - group_id
+ *         - name
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the team.
+ *         group_id:
+ *           type: integer
+ *           description: The id of the group this team belongs to.
+ *         name:
+ *           type: string
+ *           description: The name of the team. Must be between 1 and 30 characters.
+ *         team_logo:
+ *           type: string
+ *           description: The URL of the team's logo.
+ *           nullable: true
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the team was created.
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: A timestamp of when the team was last updated.
+ *       example:
+ *         id: 1
+ *         group_id: 1
+ *         name: "Thunderbolts"
+ *         team_logo: "https://example.com/logo.png"
+ *         created_at: "2023-05-01T00:00:00.000Z"
+ *         updated_at: "2023-05-01T00:00:00.000Z"
+ */
+
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
