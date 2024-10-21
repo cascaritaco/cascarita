@@ -102,7 +102,7 @@ const Users = () => {
       </div>
 
       {filteredUsers == null || filteredUsers.length == 0 ? (
-        <p>No Users to Display</p>
+        <p className={styles.noUsersMessage}>No users to display...</p>
       ) : (
         <DashboardTable
           headers={["Name", "Email", "Role", "Options"]}

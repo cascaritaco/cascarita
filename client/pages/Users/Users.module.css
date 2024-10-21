@@ -51,3 +51,9 @@
   align-items: end;
   flex-wrap: wrap;
 }
+
+.noUsersMessage {
+  text-align: center;
+  margin-top: 200px;
+  font-size: 2rem;
+}
