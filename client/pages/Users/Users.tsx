@@ -179,6 +179,7 @@ const Users = () => {
             afterSave={() => setIsEditOpen(false)}
             requestType="PATCH"
             selectedUserId={selectedUser?.id}
+            parentUserGroupId={groupId}
           />
         </Modal.Content>
       </Modal>

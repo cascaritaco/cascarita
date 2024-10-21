@@ -394,6 +394,14 @@ const UserController = function () {
         throw new Error("user with given id was not found");
       }
 
+      if (req.body?.email) {
+        const { group_id, email } = req.body;
+        const existingUser = await User.findOne({ where: { group_id, email } });
+        if (existingUser) {
+          return res.status(400).json({ error: 'Email already exists within the group' });
+        }
+      }
+
       Object.keys(req.body).forEach((key) => {
         currentUser[key] = req.body[key] ? req.body[key] : currentUser[key];
       });
@@ -408,9 +416,6 @@ const UserController = function () {
   }
 
   var addUser = async function (req, res, next) {
-
-    //TODO: Need to generate random password and email to user
-    //TODO: Need to validate email is unique within group
 
     try {
       const { first_name, last_name, email, role_id, group_id } = req.body;
