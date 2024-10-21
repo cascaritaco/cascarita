@@ -8,6 +8,7 @@ import {
 import DeleteForm from "../DeleteForm/DeleteForm";
 import styles from "../Form.module.css";
 import { useDeleteUser } from "../../../api/users/mutations";
+import Modal from "../../Modal/Modal";
 
 const UserForm: React.FC<UserFormProps> = ({
     afterSave,
@@ -62,7 +63,79 @@ const UserForm: React.FC<UserFormProps> = ({
                     >
                         <p>Are you sure you want to delete?</p>
                     </DeleteForm>
-                ) : (<div />)
+                ) : (
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <div className={styles.inputContainer}>
+                            <label className={styles.label} htmlFor="userFirstName">
+                                First Name
+                            </label>
+                            <input
+                                className={styles.input}
+                                id="userFirstName"
+                                name="userFirstName"
+                                type="text"
+                                value={userFirstName}
+                                onChange={(e) => setUserFirstName(e.target.value)}
+                            />
+                            <span className={styles.spacer} />
+                            <label className={styles.label} htmlFor="userLastName">
+                                Last Name
+                            </label>
+                            <input
+                                className={styles.input}
+                                id="userLastName"
+                                name="userLastName"
+                                type="text"
+                                value={userLastName}
+                                onChange={(e) => setUserLastName(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <label className={styles.label} htmlFor="userEmail">
+                                Email
+                            </label>
+                            <input
+                                className={styles.input}
+                                id="userEmail"
+                                name="userEmail"
+                                type="email"
+                                value={userEmail}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                            />
+                        </div>
+
+                        <div className={styles.inputContainer}>
+                            <label className={styles.label} htmlFor="userRole">
+                                Role
+                            </label>
+                            <select
+                                className={styles.input}
+                                id="userRole"
+                                name="userRole"
+                                value={userRole}
+                                onChange={(e) => setUserRole(e.target.value)}
+                            >
+                                <option value="1">Staff</option>
+                            </select>
+                        </div>
+
+                        <div className={styles.formBtnContainer}>
+                            <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
+                                Cancel
+                            </Modal.Close>
+
+                            <div>
+                                <button
+                                    type="submit"
+                                    className={`${styles.btn} ${styles.submitBtn}`}>
+                                    {requestType === "POST" ? "Add User" : "Update User"}
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                )
             }
         </>
     );
