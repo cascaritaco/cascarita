@@ -1,7 +1,7 @@
 async function getUserInfoFromAuth0(token) {
   try {
     const response = await fetch(
-      "https://dev-2vszya8j41e1n3fe.us.auth0.com/userinfo",
+      `${process.env.REACT_APP_AUTH0_PROVIDER}/userinfo`,
       {
         method: "GET",
         headers: {

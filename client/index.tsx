@@ -4,7 +4,6 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
 import history from "./history";
-import configJson from "./auth_config.json";
 import "./index.css";
 
 const root = ReactDOM.createRoot(
@@ -24,14 +23,17 @@ const onRedirectCallback = (appState: AppState | undefined) => {
 };
 
 const providerConfig = (() => {
-  const audience =
-    configJson.audience && configJson.audience !== "YOUR_API_IDENTIFIER"
-      ? configJson.audience
-      : null;
+  const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
+  const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+
+  if (!domain || !clientId) {
+    throw new Error("Missing Auth0 environment variables");
+  }
 
   return {
-    domain: configJson.domain,
-    clientId: configJson.clientId,
+    domain,
+    clientId,
     onRedirectCallback,
     authorizationParams: {
       redirect_uri: window.location.origin,
