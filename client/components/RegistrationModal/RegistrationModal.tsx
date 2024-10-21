@@ -24,14 +24,14 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
   onOpenChange,
   onRegistrationComplete,
 }) => {
-  const [page, setPage] = useState<number>(1);
-  const [isExistingOrg, setisExistingOrg] = useState<string>("No");
-  const [org, setOrg] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [state, setState] = useState<string>("");
-  const [zipCode, setZipCode] = useState<string>("");
-  const [selectedOrg, setSelectedOrg] = useState<string>("");
+  const [page, setPage] = useState(1);
+  const [isExistingOrg, setisExistingOrg] = useState("No");
+  const [org, setOrg] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [selectedOrg, setSelectedOrg] = useState("");
   const { getAccessTokenSilently } = useAuth0();
 
   const registerUserMutation = useRegisterUser();

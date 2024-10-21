@@ -18,12 +18,7 @@ const Home = () => {
           Cookies.set("email", user.email || "");
           const token = await getAccessTokenSilently();
           const response = await fetchUser(user.email || "", token);
-
-          if (response.isSigningUp) {
-            setRegistered(false);
-          } else {
-            setRegistered(true);
-          }
+          setRegistered(response?.isSigningUp ? false : true);
         } catch (error) {
           console.error("Error checking registration status:", error);
         }

@@ -25,13 +25,7 @@ const updateUsersLanguages = async (
 const registerUser = async (data: RegisterUser) => {
   try {
     const formData = {
-      group_id: data.group_id,
-      name: data.name,
-      streetAddress: data.streetAddress,
-      city: data.city,
-      state: data.state,
-      zipCode: data.zipCode,
-      logoUrl: data.logoUrl,
+      ...data,
     };
 
     const response = await fetch(`/api/users/register`, {

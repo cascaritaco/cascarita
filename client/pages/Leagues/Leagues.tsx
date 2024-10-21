@@ -13,6 +13,9 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../api/leagues/service";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useAuth0 } from "@auth0/auth0-react";
+import { fetchUser } from "../../api/users/service";
 
 const Leagues = () => {
   const { t } = useTranslation("Leagues");
@@ -24,15 +27,24 @@ const Leagues = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
+  const { getAccessTokenSilently } = useAuth0();
+  const [groupId, setGroupId] = useState(null);
+
   // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  // const currentUser = {};
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      const currentUser = await fetchUser(email, token);
+      setGroupId(currentUser.group_id);
+    })();
+  }, []);
 
-  const groupId = 1;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["leagues", groupId ? groupId : 0],
     queryFn: getLeagueByGroupId,

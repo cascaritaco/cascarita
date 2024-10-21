@@ -1,6 +1,6 @@
 import DraggableButton from "../../components/DragAndDropComponents/DraggableButton/DraggableButton";
 import Page from "../../components/Page/Page";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DNDCanvas from "../../components/DragAndDropComponents/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem } from "./types";
@@ -43,15 +43,13 @@ const NewForm = () => {
   const { getAccessTokenSilently } = useAuth0();
   let currentUser: User;
 
-  const emptyUser = {
-    id: 1,
-    email: "t@abc.com",
-    first_name: "string",
-    last_name: "string",
-    group_id: 1,
-    role_id: 1,
-    language_id: 1,
-  } as User;
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      currentUser = await fetchUser(email, token);
+    })();
+  }, []);
 
   const draggableButtons = [
     "Short Text",
@@ -119,7 +117,7 @@ const NewForm = () => {
       formId,
       title,
       description,
-      emptyUser,
+      currentUser,
     );
     setFields(response.fields);
   };

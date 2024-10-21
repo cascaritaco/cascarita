@@ -61,7 +61,7 @@ const SelectMenu: React.FC<SelectMenuProps> & {
       value={value}
       name={name}
       onValueChange={onValueChange}
-      required={required ? true : false}>
+      required={required ?? false}>
       <Select.Trigger className={triggerClassName}>
         <Select.Value
           placeholder={placeholder ? placeholder : "Select a value"}
