@@ -9,7 +9,8 @@ const FieldRoutes = require("../../routes/field.routes");
 const Middlewares = require("../../middlewares.js");
 const app = express();
 app.use(express.json());
-app.use("/fields", FieldRoutes);
+const dummyCheckJwt = (req, res, next) => next();
+app.use("/fields", FieldRoutes(dummyCheckJwt));
 app.use(Middlewares.errorHandler);
 const testDb = require("../../models");
 
@@ -34,7 +35,7 @@ describe("Field Routes", () => {
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
-      expect.objectContaining({ name: "SOMOS Park" })
+      expect.objectContaining({ name: "SOMOS Park" }),
     );
   });
 
@@ -65,7 +66,7 @@ describe("Field Routes", () => {
 
   it("should create a field with the same name from a different group POST /create", async () => {
     const groupUno = await TestDataGenerator.createDummyGroup(
-      "Watsonville Corp."
+      "Watsonville Corp.",
     );
     const groupDos = await TestDataGenerator.createDummyGroup("Salinas Inc.");
 
@@ -87,7 +88,7 @@ describe("Field Routes", () => {
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
-      expect.objectContaining({ name: "SOMOS Park" })
+      expect.objectContaining({ name: "SOMOS Park" }),
     );
   });
 

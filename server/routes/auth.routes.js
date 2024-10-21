@@ -2,25 +2,19 @@
 
 const express = require("express");
 const router = express.Router();
-const { generateToken, doubleCsrfProtection } = require("../csrf");
 
 const passport = require("passport");
 const UserController = require("../controllers/user.controller");
-
-router.get("/csrf-token", (req, res) => {
-  const csrfToken = generateToken(req, res);
-  res.json({ csrfToken });
-});
 
 router.post(
   "/login",
   passport.authenticate("local", {
     failureMessage: true,
   }),
-  UserController.logInUser
+  UserController.logInUser,
 );
 
-router.get("/user", doubleCsrfProtection, (req, res) => {
+router.get("/user", (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json({ user: req.user });
   } else {

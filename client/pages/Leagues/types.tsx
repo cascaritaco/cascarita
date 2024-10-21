@@ -1,4 +1,4 @@
-import { User } from "../../components/AuthContext/types";
+import { User } from "../../api/users/types";
 
 interface LeaguesProps {
   currentUser: User;

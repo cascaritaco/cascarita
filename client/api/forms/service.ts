@@ -1,6 +1,6 @@
 import { Answer, Form, GetFormsParams } from "./types";
 
-import { User } from "../../components/AuthContext/types";
+import { User } from "../../api/users/types";
 
 // TODO: Implement a paginated API to call this for our forms
 // This will include filters, query, and sorting

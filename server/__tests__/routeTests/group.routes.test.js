@@ -8,7 +8,8 @@ const Middlewares = require("../../middlewares");
 const TestDb = require("../../models");
 const app = express();
 app.use(express.json());
-app.use("/groups", GroupRoutes);
+const dummyCheckJwt = (req, res, next) => next();
+app.use("/groups", GroupRoutes(dummyCheckJwt));
 app.use(Middlewares.errorHandler);
 
 const sampleGroup = {

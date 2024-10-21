@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
 import {
@@ -12,8 +12,11 @@ import {
   useUpdateDivision,
   useDeleteDivision,
 } from "../../../api/divisions/mutations";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import DeleteForm from "../DeleteForm/DeleteForm";
+import Cookies from "js-cookie";
+import { fetchUser } from "../../../api/users/service";
+import { User } from "../../../api/users/types";
 
 const DivisionForm: React.FC<DivisionFormProps> = ({
   afterSave,
@@ -23,7 +26,16 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
 }) => {
   const [divisionName, setDivisionName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const { currentUser } = useAuth();
+  const { getAccessTokenSilently } = useAuth0();
+  let currentUser: User;
+
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      currentUser = await fetchUser(email, token);
+    })();
+  }, []);
 
   const createDivisionMutation = useCreateDivision();
   const updateDivisionMutation = useUpdateDivision();

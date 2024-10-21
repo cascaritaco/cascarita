@@ -11,7 +11,8 @@ const { Group, League, Season, sequelize } = require("../../models");
 
 const app = express();
 app.use(express.json());
-app.use("/seasons", SeasonRoutes);
+const dummyCheckJwt = (req, res, next) => next();
+app.use("/seasons", SeasonRoutes(dummyCheckJwt));
 app.use(errorHandler);
 
 describe("Season routes", () => {
@@ -62,7 +63,6 @@ describe("Season routes", () => {
           league_id: league.id,
         },
       ]);
-
       const response = await request(app).get("/seasons");
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveLength(3);
@@ -270,7 +270,9 @@ describe("Season routes", () => {
       });
       const form = { name: "Foo" };
 
-      const response = await request(app).patch(`/seasons/${season.id}`).send(form);
+      const response = await request(app)
+        .patch(`/seasons/${season.id}`)
+        .send(form);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({ name: form.name });
     });
