@@ -161,7 +161,11 @@ const Users = () => {
       </Modal>
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <Modal.Content title={`Delete ${selectedUser ? formatName(selectedUser) : ""}`}>
-          <div></div>
+          <UserForm
+            afterSave={() => setIsDeleteOpen(false)}
+            requestType="DELETE"
+            selectedUserId={selectedUser?.id}
+          />
         </Modal.Content>
       </Modal>
     </Page >

@@ -4,6 +4,12 @@ interface UserFormProps {
     selectedUserId?: number;
 }
 
+interface DeleteUserData {
+    id: number;
+}
+
 export type {
     UserFormProps,
+    DeleteUserData,
+
 };

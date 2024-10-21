@@ -348,7 +348,7 @@ const UserController = function () {
         where: {
           group_id: group_id,
         },
-        attributes: { exclude: ["password", "created_at", "updated_at", "id", "group_id", "language_id"] },
+        attributes: { exclude: ["password", "created_at", "updated_at", "group_id", "language_id"] },
       });
 
       if (!users) {
@@ -361,6 +361,24 @@ const UserController = function () {
     }
   };
 
+  var deleteUserById = async function (req, res, next) {
+    try {
+      let deleteUser = await User.destroy({
+        where: {
+          id: req.params["id"],
+        }
+      })
+
+      if (deleteUser === 0) {
+        throw new Error("no user found with the given id");
+      }
+
+      return res.status(200).json();
+    } catch (error) {
+      next(error)
+    }
+  }
+
   return {
     registerUser,
     logInUser,
@@ -369,7 +387,8 @@ const UserController = function () {
     sendOtpEmail,
     sendFormLinkEmail,
     verifyOTP,
-    getUsersByGroupId
+    getUsersByGroupId,
+    deleteUserById,
   };
 };
 

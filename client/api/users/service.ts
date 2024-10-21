@@ -1,5 +1,6 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import { UserResponse, LanguageCodeToLanguageId } from "./types";
+import { DeleteUserData } from "../../components/Forms/UserForm/types";
 
 const updateUsersLanguages = async (
   user_id: number,
@@ -88,6 +89,29 @@ const getUsersByGroupId = async ({ queryKey }: QueryFunctionContext<UserQueryKey
     return result;
   } catch (error) {
     console.error("Error fetching users:", error);
+    throw error;
+  }
+}
+
+export const deleteUser = async (data: DeleteUserData): Promise<void> => {
+  try {
+    const response = await fetch(`/api/users/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (
+      response.status === 204 ||
+      response.headers.get("Content-Length") === "0"
+    ) {
+      return;
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting user:", error);
     throw error;
   }
 }
