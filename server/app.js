@@ -15,19 +15,6 @@ const app = express();
 app.set("port", process.env.SERVER_PORT || 3001);
 app.use(express.static(path.join(__dirname, "../dist")));
 
-const authConfig = require("./../client/auth_config.json");
-if (
-  !authConfig.domain ||
-  !authConfig.audience ||
-  authConfig.audience === "YOUR_API_IDENTIFIER"
-) {
-  console.log(
-    "Exiting: Please make sure that auth_config.json is in place and populated with valid domain and audience values",
-  );
-
-  process.exit();
-}
-
 app.get("/api/health", (req, res) => res.sendStatus(200));
 
 app.use(cookieParser());
