@@ -1,6 +1,9 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import { UserResponse, LanguageCodeToLanguageId } from "./types";
-import { DeleteUserData } from "../../components/Forms/UserForm/types";
+import {
+  DeleteUserData,
+  UpdateUserData
+ } from "../../components/Forms/UserForm/types";
 
 const updateUsersLanguages = async (
   user_id: number,
@@ -93,7 +96,25 @@ const getUsersByGroupId = async ({ queryKey }: QueryFunctionContext<UserQueryKey
   }
 }
 
-export const deleteUser = async (data: DeleteUserData): Promise<void> => {
+const updateUser = async (data: UpdateUserData): Promise<UserResponse> => {
+  try {
+    const response = await fetch(`/api/users/${data.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data.formData),
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+}
+
+const deleteUser = async (data: DeleteUserData): Promise<void> => {
   try {
     const response = await fetch(`/api/users/${data.id}`, {
       method: "DELETE",
@@ -116,4 +137,10 @@ export const deleteUser = async (data: DeleteUserData): Promise<void> => {
   }
 }
 
-export { updateUsersLanguages, registerUser, getUsersByGroupId };
+export {
+  updateUsersLanguages,
+  registerUser,
+  getUsersByGroupId,
+  deleteUser,
+  updateUser
+};

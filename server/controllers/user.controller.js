@@ -379,6 +379,34 @@ const UserController = function () {
     }
   }
 
+  var updateUserById = async function (req, res, next) {
+    try {
+      let currentUser = await User.findOne({
+        where: {
+          id: req.params["id"],
+        },
+        // Cannot exlude password, created_at, updated_at because of "SequelizeValidationError: notNull Violation: password field is required" comming from "/server/models/user.js"
+        // attributes: { exclude: ["password", "created_at", "updated_at"] },
+      });
+
+      if (!currentUser) {
+        res.status(400);
+        throw new Error("user with given id was not found");
+      }
+
+      Object.keys(req.body).forEach((key) => {
+        currentUser[key] = req.body[key] ? req.body[key] : currentUser[key];
+      });
+
+      await currentUser.validate();
+      await currentUser.save();
+
+      return res.status(200).json(currentUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   return {
     registerUser,
     logInUser,

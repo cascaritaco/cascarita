@@ -3,11 +3,15 @@ import { useState } from "react";
 
 import {
     UserFormProps,
-    DeleteUserData
+    DeleteUserData,
+    UpdateUserData
 } from "./types";
 import DeleteForm from "../DeleteForm/DeleteForm";
 import styles from "../Form.module.css";
-import { useDeleteUser } from "../../../api/users/mutations";
+import {
+    useDeleteUser,
+    useUpdateUser
+} from "../../../api/users/mutations";
 import Modal from "../../Modal/Modal";
 
 const UserForm: React.FC<UserFormProps> = ({
@@ -21,6 +25,7 @@ const UserForm: React.FC<UserFormProps> = ({
     const [userRole, setUserRole] = useState("");
 
     const deleteUserMutation = useDeleteUser();
+    const updateUserMutation = useUpdateUser();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -34,12 +39,20 @@ const UserForm: React.FC<UserFormProps> = ({
         const data = {
             formData: {
                 user_id: selectedUserId,
+                first_name: userFirstName,
+                last_name: userLastName,
+                email: userEmail,
+                role_id: userRole,
             },
         };
 
-        console.log("Selected User Id: " + selectedUserId)
-
         switch (requestType) {
+            case "PATCH":
+                updateUserMutation.mutate({
+                    id: selectedUserId,
+                    ...data,
+                } as UpdateUserData);
+                break;
             case "DELETE":
                 deleteUserMutation.mutate({
                     id: selectedUserId ? selectedUserId : 0,

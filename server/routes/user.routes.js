@@ -23,5 +23,6 @@ router.post("/forms/emails", UserController.sendFormLinkEmail);
 router.post("/otp/verification", UserController.verifyOTP);
 router.get("/group/:group_id", UserController.getUsersByGroupId);
 router.delete("/:id", UserController.deleteUserById);
+router.patch("/:id", UserController.updateUserById);
 
 module.exports = router;
