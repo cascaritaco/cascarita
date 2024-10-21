@@ -413,14 +413,25 @@ const UserController = function () {
     //TODO: Need to validate email is unique within group
 
     try {
+      const { first_name, last_name, email, role_id, group_id } = req.body;
+
+      // Check if email is unique within the group
+      const existingUser = await User.findOne({ where: { email, group_id } });
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already exists within the group' });
+      }
+
+      const randomPassword = crypto.randomBytes(12).toString('base64').slice(0, 12);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
       const newUser = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        password: "123",
-        role_id: req.body.role_id,
+        first_name,
+        last_name,
+        email,
+        password: hashedPassword, // TODO: Generate a random password
+        role_id,
         language_id: 1,
-        group_id: req.body.group_id,
+        group_id,
       };
 
       await User.build(newUser).validate();
