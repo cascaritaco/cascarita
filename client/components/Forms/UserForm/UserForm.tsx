@@ -4,13 +4,15 @@ import { useState } from "react";
 import {
     UserFormProps,
     DeleteUserData,
-    UpdateUserData
+    UpdateUserData,
+    AddUserData
 } from "./types";
 import DeleteForm from "../DeleteForm/DeleteForm";
 import styles from "../Form.module.css";
 import {
     useDeleteUser,
-    useUpdateUser
+    useUpdateUser,
+    useAddUser
 } from "../../../api/users/mutations";
 import Modal from "../../Modal/Modal";
 
@@ -18,6 +20,7 @@ const UserForm: React.FC<UserFormProps> = ({
     afterSave,
     requestType,
     selectedUserId,
+    parentUserGroupId
 }) => {
     const [userFirstName, setUserFirstName] = useState("");
     const [userLastName, setUserLastName] = useState("");
@@ -26,6 +29,7 @@ const UserForm: React.FC<UserFormProps> = ({
 
     const deleteUserMutation = useDeleteUser();
     const updateUserMutation = useUpdateUser();
+    const addUserMutation = useAddUser();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -41,10 +45,14 @@ const UserForm: React.FC<UserFormProps> = ({
                 last_name: userLastName,
                 email: userEmail,
                 role_id: userRole,
+                group_id: parentUserGroupId ? parentUserGroupId : 0,
             },
         };
 
         switch (requestType) {
+            case "POST":
+                addUserMutation.mutate(data as AddUserData);
+                break;
             case "PATCH":
                 updateUserMutation.mutate({
                     id: selectedUserId,
@@ -87,6 +95,7 @@ const UserForm: React.FC<UserFormProps> = ({
                                 type="text"
                                 value={userFirstName}
                                 onChange={(e) => setUserFirstName(e.target.value)}
+                                required={requestType === 'POST'}
                             />
                             <span className={styles.spacer} />
                             <label className={styles.label} htmlFor="userLastName">
@@ -99,6 +108,8 @@ const UserForm: React.FC<UserFormProps> = ({
                                 type="text"
                                 value={userLastName}
                                 onChange={(e) => setUserLastName(e.target.value)}
+                                required={requestType === 'POST'}
+
                             />
                         </div>
                         <div className={styles.inputContainer}>
@@ -112,6 +123,8 @@ const UserForm: React.FC<UserFormProps> = ({
                                 type="email"
                                 value={userEmail}
                                 onChange={(e) => setUserEmail(e.target.value)}
+                                required={requestType === 'POST'}
+
                             />
                         </div>
 
@@ -125,6 +138,8 @@ const UserForm: React.FC<UserFormProps> = ({
                                 name="userRole"
                                 value={userRole}
                                 onChange={(e) => setUserRole(e.target.value)}
+                                required={requestType === 'POST'}
+
                             >
                                 <option value="1">Staff</option>
                             </select>

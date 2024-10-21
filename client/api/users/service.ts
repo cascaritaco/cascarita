@@ -2,7 +2,8 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import { UserResponse, LanguageCodeToLanguageId } from "./types";
 import {
   DeleteUserData,
-  UpdateUserData
+  UpdateUserData,
+  AddUserData,
  } from "../../components/Forms/UserForm/types";
 
 const updateUsersLanguages = async (
@@ -96,6 +97,24 @@ const getUsersByGroupId = async ({ queryKey }: QueryFunctionContext<UserQueryKey
   }
 }
 
+const addUser = async (data: AddUserData): Promise<UserResponse> => {
+  try {
+    const response = await fetch(`/api/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data.formData),
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error adding user:", error);
+    throw error;
+  }
+}
+
 const updateUser = async (data: UpdateUserData): Promise<UserResponse> => {
   try {
     const response = await fetch(`/api/users/${data.id}`, {
@@ -142,5 +161,6 @@ export {
   registerUser,
   getUsersByGroupId,
   deleteUser,
-  updateUser
+  updateUser,
+  addUser,
 };

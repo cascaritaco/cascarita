@@ -2,6 +2,7 @@ interface UserFormProps {
     afterSave: () => void | null;
     requestType?: "POST" | "PATCH" | "DELETE";
     selectedUserId?: number;
+    parentUserGroupId?: number;
 }
 
 interface DeleteUserData {
@@ -14,8 +15,18 @@ interface UpdateUserData {
     };
 }
 
+interface AddUserData {
+    formData: {
+        first_name: string;
+        last_name: string;
+        email: string;
+        role_id: string;
+    };
+}
+
 export type {
     UserFormProps,
     DeleteUserData,
-    UpdateUserData
+    UpdateUserData,
+    AddUserData
 };

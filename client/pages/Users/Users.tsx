@@ -165,7 +165,12 @@ const Users = () => {
 
       <Modal open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
         <Modal.Content title="Add User">
-          <div></div>
+          <UserForm
+            afterSave={() => setIsAddUserOpen(false)}
+            requestType="POST"
+            selectedUserId={selectedUser?.id}
+            parentUserGroupId={groupId}
+          />
         </Modal.Content>
       </Modal>
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>

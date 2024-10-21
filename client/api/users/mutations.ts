@@ -2,12 +2,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
     DeleteUserData,
-    UpdateUserData
+    UpdateUserData,
+    AddUserData
 } from "../../components/Forms/UserForm/types";
 import {
     deleteUser,
-    updateUser
- } from "./service";
+    updateUser,
+    addUser,
+} from "./service";
+
+export const useAddUser = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: AddUserData) => addUser(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["users"],
+            });
+        },
+    });
+}
 
 export const useUpdateUser = () => {
     const queryClient = useQueryClient();

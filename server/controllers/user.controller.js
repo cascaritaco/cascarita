@@ -407,6 +407,31 @@ const UserController = function () {
     }
   }
 
+  var addUser = async function (req, res, next) {
+
+    //TODO: Need to generate random password and email to user
+    //TODO: Need to validate email is unique within group
+
+    try {
+      const newUser = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        password: "123",
+        role_id: req.body.role_id,
+        language_id: 1,
+        group_id: req.body.group_id,
+      };
+
+      await User.build(newUser).validate();
+      const result = await User.create(newUser);
+
+      return res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   return {
     registerUser,
     logInUser,
@@ -417,6 +442,8 @@ const UserController = function () {
     verifyOTP,
     getUsersByGroupId,
     deleteUserById,
+    updateUserById,
+    addUser,
   };
 };
 
