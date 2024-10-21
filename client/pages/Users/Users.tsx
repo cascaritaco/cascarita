@@ -74,7 +74,7 @@ const Users = () => {
       });
       setFilteredUsers(filteredData);
     }
-  }, [debouncedQuery, users]);
+  }, [users, debouncedQuery]);
 
   const handleAddUser = () => {
     setIsAddUserOpen(true);
@@ -100,50 +100,68 @@ const Users = () => {
           {t("addUser")}
         </PrimaryButton>
       </div>
-      <DashboardTable
-        headers={["Name", "Email", "Role", "Options"]}
-        headerColor="light"
-      >
 
-        {filteredUsers?.map((user: User, idx: number) => (
-          <tr key={idx} className={styles.tableRow}>
-            <td className={`${styles.tableData} ${styles.leadingColumn}`}>
-              <Avatar.Root className="AvatarRoot">
-                <Avatar.Image
-                  className={styles.avatar}
-                  src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"
-                  alt={user.first_name + " " + user.last_name}
-                />
-                <Avatar.Fallback className="AvatarFallback" delayMs={600}>
-                  {user.first_name.charAt(0).toUpperCase() + user.last_name.charAt(0).toUpperCase}
-                </Avatar.Fallback>
-              </Avatar.Root>
-              <div className={styles.email}>
-                {user.first_name} {user.last_name}
-              </div>
-            </td>
-            <td className={styles.tableData}>{user.email}</td>
-            <td className={styles.tableData}>{mapRoles(user.role_id)}</td>
-            <td className={styles.tableData}>
-              <DropdownMenuButton>
-                <DropdownMenuButton.Item
-                  onClick={() => handleEditUser(user)}>
-                  Edit
-                </DropdownMenuButton.Item>
+      {filteredUsers == null || filteredUsers.length == 0 ? (
+        <p>No Users to Display</p>
+      ) : (
+        <DashboardTable
+          headers={["Name", "Email", "Role", "Options"]}
+          headerColor="light"
+        >
+          {
+            isLoading ? (
+              <tr>
+                <td>Loading...</td>
+              </tr>
+            ) : isError || !users ? (
+              <tr>
+                <td>Error Fetching Data</td>
+              </tr>
+            ) : (
+              filteredUsers?.map((user: User, idx: number) => (
+                <tr key={idx} className={styles.tableRow}>
+                  <td className={`${styles.tableData} ${styles.leadingColumn}`}>
+                    <Avatar.Root className="AvatarRoot">
+                      <Avatar.Image
+                        className={styles.avatar}
+                        src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"
+                        alt={user.first_name + " " + user.last_name}
+                      />
+                      <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                        {user.first_name.charAt(0).toUpperCase() + user.last_name.charAt(0).toUpperCase}
+                      </Avatar.Fallback>
+                    </Avatar.Root>
+                    <div className={styles.email}>
+                      {user.first_name} {user.last_name}
+                    </div>
+                  </td>
+                  <td className={styles.tableData}>{user.email}</td>
+                  <td className={styles.tableData}>{mapRoles(user.role_id)}</td>
+                  <td className={styles.tableData}>
+                    <DropdownMenuButton>
+                      <DropdownMenuButton.Item
+                        onClick={() => handleEditUser(user)}>
+                        Edit
+                      </DropdownMenuButton.Item>
 
-                <DropdownMenuButton.Separator
-                  className={styles.separator}
-                />
+                      <DropdownMenuButton.Separator
+                        className={styles.separator}
+                      />
 
-                <DropdownMenuButton.Item
-                  onClick={() => handleDeleteUser(user)}>
-                  Delete
-                </DropdownMenuButton.Item>
-              </DropdownMenuButton>
-            </td>
-          </tr>))
-        }
-      </DashboardTable>
+                      <DropdownMenuButton.Item
+                        onClick={() => handleDeleteUser(user)}>
+                        Delete
+                      </DropdownMenuButton.Item>
+                    </DropdownMenuButton>
+                  </td>
+                </tr>
+              ))
+            )
+          }
+        </DashboardTable>
+      )
+      }
+
 
       <Modal open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
         <Modal.Content title="Add User">
