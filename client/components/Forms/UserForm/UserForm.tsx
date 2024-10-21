@@ -30,8 +30,6 @@ const UserForm: React.FC<UserFormProps> = ({
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        console.log(event.currentTarget)
-
         const { userFirstName, userLastName, userEmail, userRole } = Object.fromEntries(
             new FormData(event.currentTarget),
         );
