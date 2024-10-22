@@ -72,6 +72,10 @@
   color: #000;
 }
 
+.finishRegisterBtn {
+  margin-top: "26px";
+}
+
 .backBtn:hover,
 .backBtn:focus {
   outline: 1px solid blue;

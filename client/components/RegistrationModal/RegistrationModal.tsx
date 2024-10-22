@@ -17,7 +17,7 @@ interface RegisterModalProps extends ModalProps {
 
 const initialState = {
   page: 1,
-  isExistingOrg: "No",
+  isExistingOrg: false,
   org: "",
   selectedOrg: "",
   address: "",
@@ -119,10 +119,15 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
               <RadioSelect
                 className={styles.radioContainer}
                 groupName="rd-existingOrg"
-                value={state.isExistingOrg}
-                onValueChange={(value) =>
-                  dispatch({ type: "SET_FIELD", field: "isExistingOrg", value })
-                }
+                value={state.isExistingOrg ? "Yes" : "No"}
+                onValueChange={(value) => {
+                  const updatedValue = value === "Yes";
+                  dispatch({
+                    type: "SET_FIELD",
+                    field: "isExistingOrg",
+                    value: updatedValue,
+                  });
+                }}
                 required>
                 <div>
                   <label htmlFor="rd-Yes">Yes</label>
@@ -135,7 +140,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
                 </div>
               </RadioSelect>
 
-              {state.isExistingOrg === "Yes" && (
+              {state.isExistingOrg && (
                 <SelectMenu
                   placeholder="Select an Organization"
                   value={state.org}
@@ -153,12 +158,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
               )}
             </div>
 
-            {state.isExistingOrg === "Yes" ? (
-              <button style={{ marginTop: "26px" }}>Finish</button>
+            {state.isExistingOrg ? (
+              <button className={styles.finishRegisterBtn}>Finish</button>
             ) : (
               <button
                 onClick={incrementPageNumber}
-                style={{ marginTop: "26px" }}>
+                className={styles.finishRegisterBtn}>
                 Next
               </button>
             )}

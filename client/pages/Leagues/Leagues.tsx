@@ -28,7 +28,7 @@ const Leagues = () => {
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const { getAccessTokenSilently } = useAuth0();
-  const [groupId, setGroupId] = useState(null);
+  const [groupId, setGroupId] = useState<null | number>(null);
 
   // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];

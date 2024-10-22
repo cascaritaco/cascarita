@@ -1,6 +1,6 @@
 export interface State {
   page: number;
-  isExistingOrg: string;
+  isExistingOrg: boolean;
   org: string;
   address: string;
   city: string;
@@ -10,7 +10,7 @@ export interface State {
 }
 
 export type Action =
-  | { type: "SET_FIELD"; field: keyof State; value: string | number }
+  | { type: "SET_FIELD"; field: keyof State; value: State[keyof State] }
   | { type: "NEXT_PAGE" }
   | { type: "PREVIOUS_PAGE" }
   | { type: "RESET_FORM" };

@@ -7,7 +7,6 @@ import LanguagePreferenceButton from "../LanguagePreferenceButton/LanguagePrefer
 
 const SideNav = () => {
   const { user } = useAuth0();
-  const currentUser = user;
 
   return (
     <div className={styles["top-nav"]}>
@@ -32,7 +31,7 @@ const SideNav = () => {
           />
 
           <Text as="div" size="1" weight="bold" className={styles.avatarText}>
-            {currentUser && currentUser.email}
+            {user && user.email}
           </Text>
         </div>
       </div>
