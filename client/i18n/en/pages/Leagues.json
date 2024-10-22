@@ -11,6 +11,8 @@
     "item2": "Date"
   },
   "button": "Add League",
-  "col1": "Name",
-  "col2": "Options"
+  "tableHeaders": {
+    "name": "Name",
+    "options": "Options"
+  }
 }

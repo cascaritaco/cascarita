@@ -13,8 +13,10 @@ import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import { useQuery } from "@tanstack/react-query";
 import { getDivisionsBySeasonId } from "../../api/divisions/service";
 import DivisionForm from "../../components/Forms/DivisionForm/DivisionForm";
+import { useTranslation } from "react-i18next";
 
 const Divisions = () => {
+  const { t } = useTranslation("Divisions");
   const { seasonId } = useParams<{ seasonId: string }>();
   const { seasonName } = useParams<{ seasonName: string }>();
   const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
@@ -119,7 +121,7 @@ const Divisions = () => {
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton onClick={() => setIsCreateOpen(true)}>
-              Add Division
+              {t("addButton")}
             </PrimaryButton>
           </Modal.Button>
           <Modal.Content title="Create Division">
@@ -136,7 +138,7 @@ const Divisions = () => {
         <p className={styles.noLeagueMessage}>No divisions to display...</p>
       ) : (
         <DashboardTable
-          headers={["Division Name", "Options"]}
+          headers={[t("tableHeaders.name"), t("tableHeaders.options")]}
           headerColor="light">
           {isLoading ? (
             <tr>

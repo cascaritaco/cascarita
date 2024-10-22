@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
 import {
@@ -24,16 +24,17 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
   requestType,
   seasonId,
 }) => {
-  const [divisionName, setDivisionName] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [divisionName, setDivisionName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
-  let currentUser: User;
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     (async () => {
       const token = await getAccessTokenSilently();
       const email = Cookies.get("email") || "";
-      currentUser = await fetchUser(email, token);
+      const user = await fetchUser(email, token);
+      setCurrentUser(user);
     })();
   }, []);
 

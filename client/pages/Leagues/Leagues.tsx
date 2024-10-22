@@ -120,7 +120,7 @@ const Leagues = () => {
         <p className={styles.noLeagueMessage}>No leagues to display...</p>
       ) : (
         <DashboardTable
-          headers={["League Name", "Options"]}
+          headers={[t("tableHeaders.name"), t("tableHeaders.options")]}
           headerColor="light">
           {isLoading ? (
             <tr>
