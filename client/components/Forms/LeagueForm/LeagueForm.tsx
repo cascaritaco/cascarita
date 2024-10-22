@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
 import {
@@ -23,9 +23,9 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
   requestType,
   leagueId,
 }) => {
-  const [leagueName, setLeagueName] = React.useState("");
-  const [leagueDesc, setLeagueDesc] = React.useState("");
-  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+  const [leagueName, setLeagueName] = useState("");
+  const [leagueDesc, setLeagueDesc] = useState("");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const { getAccessTokenSilently } = useAuth0();
 
