@@ -20,12 +20,19 @@ const Modal: React.FC<ModalProps> & {
   );
 };
 
-const ModalContent: React.FC<ModalContentProps> = ({ title, children }) => {
+const ModalContent: React.FC<ModalContentProps> = ({
+  title,
+  subtitle,
+  children,
+}) => {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className={styles.overlay} />
       <Dialog.Content className={styles.content}>
         <Dialog.Title className={styles.title}>{title}</Dialog.Title>
+        <Dialog.Description className={styles.subtitle}>
+          {subtitle}
+        </Dialog.Description>
         <Dialog.Close className={`${styles.closeIcon}`}>
           <Cross1Icon />
         </Dialog.Close>

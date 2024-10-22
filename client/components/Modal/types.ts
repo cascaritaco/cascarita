@@ -7,6 +7,7 @@ interface ModalProps {
 
 interface ModalContentProps {
   title?: string;
+  subtitle?: string;
   children: React.ReactNode;
 }
 

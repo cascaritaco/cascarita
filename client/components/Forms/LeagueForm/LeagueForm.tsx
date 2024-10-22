@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Form.module.css";
 import Modal from "../../Modal/Modal";
 import {
@@ -7,26 +7,40 @@ import {
   UpdateLeagueData,
   DeleteLeagueData,
 } from "./types";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import DeleteForm from "../DeleteForm/DeleteForm";
 import {
   useCreateLeague,
   useDeleteLeague,
   useUpdateLeague,
 } from "../../../api/leagues/mutations";
+import Cookies from "js-cookie";
+import { fetchUser } from "../../../api/users/service";
+import { User } from "../../../api/users/types";
 
 const LeagueForm: React.FC<LeagueFormProps> = ({
   afterSave,
   requestType,
   leagueId,
 }) => {
-  const [leagueName, setLeagueName] = React.useState("");
-  const [leagueDesc, setLeagueDesc] = React.useState("");
+  const [leagueName, setLeagueName] = useState("");
+  const [leagueDesc, setLeagueDesc] = useState("");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const { currentUser } = useAuth();
+  const { getAccessTokenSilently } = useAuth0();
+
   const createLeagueMutation = useCreateLeague();
   const updateLeagueMutation = useUpdateLeague();
   const deleteLeagueMutation = useDeleteLeague();
+
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      const currentUser = await fetchUser(email, token);
+      setCurrentUser(currentUser);
+    })();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

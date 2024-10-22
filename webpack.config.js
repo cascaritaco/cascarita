@@ -1,4 +1,5 @@
 const path = require("path");
+const { DefinePlugin } = require("webpack");
 require("dotenv").config();
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -35,6 +36,17 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./client/public/index.html",
+    }),
+    new DefinePlugin({
+      "process.env.REACT_APP_AUTH0_DOMAIN": JSON.stringify(
+        process.env.REACT_APP_AUTH0_DOMAIN,
+      ),
+      "process.env.REACT_APP_AUTH0_CLIENT_ID": JSON.stringify(
+        process.env.REACT_APP_AUTH0_CLIENT_ID,
+      ),
+      "process.env.REACT_APP_AUTH0_AUDIENCE": JSON.stringify(
+        process.env.REACT_APP_AUTH0_AUDIENCE,
+      ),
     }),
   ],
   devServer: {

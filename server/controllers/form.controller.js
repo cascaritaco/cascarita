@@ -49,9 +49,7 @@ const FormController = {
     try {
       const form_data = { title: req.body.title, fields: req.body.fields };
 
-      const user = await User.findByPk(req.params.user_id, {
-        attributes: { exclude: ["password"] },
-      });
+      const user = await User.findByPk(req.params.user_id);
       if (!user) {
         res.status(404);
         throw new Error(`no user was found with id ${req.params.user_id}`);

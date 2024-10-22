@@ -8,16 +8,18 @@ import styles from "./Forms.module.css";
 import ShareButton from "../../components/ShareButton/ShareButton";
 import { useNavigate } from "react-router-dom";
 import { Form } from "./types";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
 import {
   deleteForm,
   getMongoFormById,
   getMongoForms,
 } from "../../api/forms/service";
-import { useAuth } from "../../components/AuthContext/AuthContext";
 import Modal from "../../components/Modal/Modal";
 import React from "react";
 import ShareForm from "../../components/Forms/ShareForm/ShareForm";
+import Cookies from "js-cookie";
+import { fetchUser } from "../../api/users/service";
 
 interface ShareModalProps {
   formLink: string;
@@ -49,10 +51,10 @@ const Forms = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentFormLink, setCurrentFormLink] = useState("");
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
   const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     const handleDebounce = setTimeout(() => {
@@ -66,7 +68,10 @@ const Forms = () => {
 
   useEffect(() => {
     (async () => {
-      const mongoForms = await getMongoForms(currentUser?.group_id ?? -1);
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      const user = await fetchUser(email, token);
+      const mongoForms = await getMongoForms(user?.group_id ?? -1);
       setForms(mongoForms);
     })();
   }, []);
