@@ -44,7 +44,6 @@ const Seasons = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const { i18n } = useTranslation();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["seasons", leagueIdNumber],
