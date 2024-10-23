@@ -44,6 +44,7 @@ const Seasons = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const { i18n } = useTranslation();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["seasons", leagueIdNumber],
@@ -61,12 +62,7 @@ const Seasons = () => {
   }, [searchQuery]);
 
   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return new Date(dateString).toLocaleString();
   };
 
   const handleEdit = (seasonName: string, seasonId: number) => {
@@ -156,18 +152,18 @@ const Seasons = () => {
       </div>
 
       {filteredData == null || filteredData?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>No seasons to display...</p>
+        <p className={styles.noLeagueMessage}>{t("empty")}</p>
       ) : (
         <DashboardTable
           headers={[t("col1"), t("col2"), t("col3"), t("col4")]}
           headerColor="light">
           {isLoading ? (
             <tr>
-              <td>Loading...</td>
+              <td>{t("loading")}</td>
             </tr>
           ) : isError || !data ? (
             <tr>
-              <td>Error Fetching Data</td>
+              <td>{t("error")}</td>
             </tr>
           ) : (
             filteredData?.map((season: SeasonType, idx: number) => (
@@ -207,7 +203,7 @@ const Seasons = () => {
       )}
 
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <Modal.Content title={`Edit ${currentSeasonName}`}>
+        <Modal.Content title={`${t("edit")} ${currentSeasonName}`}>
           <SeasonForm
             afterSave={() => setIsEditOpen(false)}
             requestType="PATCH"
@@ -217,7 +213,7 @@ const Seasons = () => {
       </Modal>
 
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <Modal.Content title={`Delete ${currentSeasonName}`}>
+        <Modal.Content title={`${t("delete")} ${currentSeasonName}`}>
           <SeasonForm
             afterSave={() => setIsDeleteOpen(false)}
             requestType="DELETE"

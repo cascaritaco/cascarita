@@ -17,6 +17,7 @@ import DeleteForm from "../DeleteForm/DeleteForm";
 import Cookies from "js-cookie";
 import { fetchUser } from "../../../api/users/service";
 import { User } from "../../../api/users/types";
+import { useTranslation } from "react-i18next";
 
 const DivisionForm: React.FC<DivisionFormProps> = ({
   afterSave,
@@ -24,6 +25,7 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
   requestType,
   seasonId,
 }) => {
+  const { t } = useTranslation("Divisions");
   const [divisionName, setDivisionName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
@@ -84,20 +86,20 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
       {requestType === "DELETE" ? (
         <DeleteForm
           className={styles.form}
-          destructBtnLabel="Yes, I am sure"
+          destructBtnLabel={t("formContent.delete")}
           onSubmit={handleSubmit}>
-          <p>Are you sure you want to delete this division?</p>
+          <p>{t("formContent.deleteMessage")}</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputContainer}>
             <label className={styles.label} htmlFor="seasonName">
-              Division Name
+              {t("formContent.name")}
             </label>
             <input
               className={styles.input}
               required
-              placeholder="Division Name"
+              placeholder={t("formContent.namePlaceholder")}
               id="divisionName"
               name="divisionName"
               value={divisionName}
@@ -107,13 +109,15 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
 
           <div className={styles.formBtnContainer}>
             <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
-              Cancel
+              {t("formContent.cancel")}
             </Modal.Close>
 
             <button
               type="submit"
               className={`${styles.btn} ${styles.submitBtn}`}>
-              {isLoading === true ? "Saving..." : "Submit"}
+              {isLoading === true
+                ? t("formContent.submitting")
+                : t("formContent.submit")}
             </button>
           </div>
         </form>

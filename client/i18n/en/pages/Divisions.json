@@ -3,5 +3,20 @@
     "name": "Division Name",
     "options": "Options"
   },
-  "addButton": "Add Division"
+  "addButton": "Add Division",
+  "formContent": {
+    "title": "Create Division",
+    "name": "Name",
+    "namePlaceholder": "Division name",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "cancel": "Cancel",
+    "delete": "Yes, I'm sure",
+    "deleteMessage": "Are you sure you want to delete this division?"
+  },
+  "empty": "No divisions to display...",
+  "loading": "Loading...",
+  "error": "Error fetching data",
+  "edit": "Edit",
+  "delete": "Delete"
 }

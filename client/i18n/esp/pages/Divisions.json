@@ -3,5 +3,20 @@
     "name": "Nombre de la División",
     "options": "Opciones"
   },
-  "addButton": "Agregar División"
+  "addButton": "Agregar División",
+  "formContent": {
+    "title": "Crear División",
+    "name": "Nombre",
+    "namePlaceholder": "Nombre de la división",
+    "submit": "Enviar",
+    "submitting": "Enviando...",
+    "cancel": "Cancelar",
+    "delete": "Si, estoy seguro",
+    "deleteMessage": "¿Estás seguro de que deseas eliminar esta división?"
+  },
+  "empty": "No hay divisiones para mostrar...",
+  "loading": "Cargando...",
+  "error": "Error al obtener datos",
+  "edit": "Editar",
+  "delete": "Borrar"
 }

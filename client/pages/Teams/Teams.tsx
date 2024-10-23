@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TeamType } from "./types";
 import DropdownMenuButton from "../../components/DropdownMenuButton/DropdownMenuButton";
 import TeamForm from "../../components/Forms/TeamsForm/TeamForm";
+import { useTranslation } from "react-i18next";
 
 const Teams = () => {
   const { seasonId, divisionId, divisionName } = useParams<{
@@ -19,6 +20,7 @@ const Teams = () => {
     divisionId: string;
     divisionName: string;
   }>();
+  const { t } = useTranslation("Teams");
   const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
   const divisionIdNumber = divisionId ? parseInt(divisionId, 10) : 0;
   // const [sorts, setSorts] = useState("");
@@ -90,11 +92,11 @@ const Teams = () => {
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <Modal.Button asChild className={styles.btn}>
             <PrimaryButton onClick={() => setIsCreateOpen(true)}>
-              Add Team
+              {t("addButton")}
             </PrimaryButton>
           </Modal.Button>
 
-          <Modal.Content title="Create Team">
+          <Modal.Content title={t("formContent.title")}>
             <TeamForm
               afterSave={() => setIsCreateOpen(false)}
               seasonId={seasonIdNumber}
@@ -106,16 +108,18 @@ const Teams = () => {
       </div>
 
       {filteredData == null || filteredData?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>Add a Team to Display...</p>
+        <p className={styles.noLeagueMessage}>{t("empty")}</p>
       ) : (
-        <DashboardTable headers={["Team Name", "Options"]} headerColor="light">
+        <DashboardTable
+          headers={[t("tableHeaders.name"), t("tableHeaders.options")]}
+          headerColor="light">
           {isLoading ? (
             <tr>
-              <td>Loading...</td>
+              <td>{t("loading")}</td>
             </tr>
           ) : isError || !data ? (
             <tr>
-              <td>Error Fetching Data</td>
+              <td>{t("error")}</td>
             </tr>
           ) : (
             data?.map((team: TeamType, idx: number) => (
@@ -135,7 +139,7 @@ const Teams = () => {
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
                       onClick={() => handleEdit(team.name, team.id)}>
-                      Edit
+                      {t("edit")}
                     </DropdownMenuButton.Item>
 
                     <DropdownMenuButton.Separator
@@ -144,7 +148,7 @@ const Teams = () => {
 
                     <DropdownMenuButton.Item
                       onClick={() => handleDelete(team.name, team.id)}>
-                      Delete
+                      {t("delete")}
                     </DropdownMenuButton.Item>
                   </DropdownMenuButton>
                 </td>
@@ -155,7 +159,7 @@ const Teams = () => {
       )}
 
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <Modal.Content title={`Edit ${currentTeamName}`}>
+        <Modal.Content title={`${t("edit")} ${currentTeamName}`}>
           <TeamForm
             afterSave={() => setIsEditOpen(false)}
             requestType="PATCH"
@@ -167,7 +171,7 @@ const Teams = () => {
       </Modal>
 
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <Modal.Content title={`Delete ${currentTeamName}`}>
+        <Modal.Content title={`${t("delete")} ${currentTeamName}`}>
           <TeamForm
             afterSave={() => setIsDeleteOpen(false)}
             requestType="DELETE"

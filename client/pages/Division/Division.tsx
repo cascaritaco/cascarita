@@ -124,7 +124,7 @@ const Divisions = () => {
               {t("addButton")}
             </PrimaryButton>
           </Modal.Button>
-          <Modal.Content title="Create Division">
+          <Modal.Content title={t("formContent.title")}>
             <DivisionForm
               afterSave={() => setIsCreateOpen(false)}
               requestType="POST"
@@ -135,18 +135,18 @@ const Divisions = () => {
       </div>
 
       {filteredData == null || filteredData?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>No divisions to display...</p>
+        <p className={styles.noLeagueMessage}>{t("empty")}</p>
       ) : (
         <DashboardTable
           headers={[t("tableHeaders.name"), t("tableHeaders.options")]}
           headerColor="light">
           {isLoading ? (
             <tr>
-              <td>Loading...</td>
+              <td>{t("loading")}</td>
             </tr>
           ) : isError || !data ? (
             <tr>
-              <td>Error Fetching Data</td>
+              <td>{t("error")}</td>
             </tr>
           ) : (
             data?.map((division: DivisionType, idx: number) => (
@@ -161,7 +161,7 @@ const Divisions = () => {
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
                       onClick={() => handleEdit(division.name, division.id)}>
-                      Edit
+                      {t("edit")}
                     </DropdownMenuButton.Item>
 
                     <DropdownMenuButton.Separator
@@ -170,7 +170,7 @@ const Divisions = () => {
 
                     <DropdownMenuButton.Item
                       onClick={() => handleDelete(division.name, division.id)}>
-                      Delete
+                      {t("delete")}
                     </DropdownMenuButton.Item>
                   </DropdownMenuButton>
                 </td>
@@ -181,7 +181,7 @@ const Divisions = () => {
       )}
 
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <Modal.Content title={`Edit ${currentDivisionName}`}>
+        <Modal.Content title={`${t("edit")} ${currentDivisionName}`}>
           <DivisionForm
             afterSave={() => setIsEditOpen(false)}
             requestType="PATCH"
@@ -191,7 +191,7 @@ const Divisions = () => {
       </Modal>
 
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <Modal.Content title={`Edit ${currentDivisionName}`}>
+        <Modal.Content title={`${t("delete")} ${currentDivisionName}`}>
           <DivisionForm
             afterSave={() => setIsDeleteOpen(false)}
             requestType="DELETE"
