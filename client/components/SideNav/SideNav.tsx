@@ -16,11 +16,9 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("SideNav");
-  const [route, setRoute] = useState("/");
 
   useEffect(() => {
     const currentPath = location.pathname.substring(1); // Remove the leading '/'
-    setRoute(currentPath || "/");
     setSelectedItem(currentPath);
   }, [location.pathname, setSelectedItem]);
 
@@ -42,7 +40,6 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
       default:
         newRoute = "/";
     }
-    setRoute(newRoute);
     setSelectedItem(newRoute);
     navigate(`/${newRoute}`);
   };
