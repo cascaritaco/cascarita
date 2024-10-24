@@ -8,34 +8,40 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import NavItem from "../NavItem/NavItem";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("SideNav");
 
-  const handleItemClick = (labelType: string) => {
-    let route: string;
+  useEffect(() => {
+    const currentPath = location.pathname.substring(1); // Remove the leading '/'
+    setSelectedItem(currentPath);
+  }, [location.pathname, setSelectedItem]);
 
+  const handleItemClick = (labelType: string) => {
+    let newRoute = "/";
     switch (labelType) {
       case "item1":
-        route = "";
+        newRoute = "";
         break;
       case "item2":
-        route = "users";
+        newRoute = "users";
         break;
       case "item4":
-        route = "forms";
+        newRoute = "forms";
         break;
       case "item5":
-        route = "settings";
+        newRoute = "settings";
         break;
       default:
-        route = "/";
+        newRoute = "/";
     }
-    setSelectedItem(route);
-    navigate(`/${route}`);
+    setSelectedItem(newRoute);
+    navigate(`/${newRoute}`);
   };
 
   return (
@@ -45,7 +51,7 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           icon={<RiHomeLine />}
           label={t("item1")}
           labelType="item1"
-          selected={selectedItem === ""}
+          selected={selectedItem === "" || selectedItem.includes("season")}
           onItemClick={handleItemClick}
         />
         <NavItem
@@ -67,14 +73,14 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           icon={<HiOutlinePencilAlt />}
           label={t("item4")}
           labelType="item4"
-          selected={selectedItem === "forms"}
+          selected={selectedItem.includes("forms")}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<IoSettingsOutline />}
           label={t("item5")}
           labelType="item5"
-          selected={selectedItem === "settings"}
+          selected={selectedItem.includes("settings")}
           onItemClick={handleItemClick}
         />
       </ul>
@@ -84,4 +90,5 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
     </nav>
   );
 };
+
 export default SideNav;
