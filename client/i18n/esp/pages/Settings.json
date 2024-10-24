@@ -1,0 +1,61 @@
+{
+  "navBar": {
+    "plan": "Plan",
+    "payment": "Métodos de Pago"
+  },
+  "plan": {
+    "headers": {
+      "membership": "Membresía",
+      "status": "Estado",
+      "renewal": "Fecha de Renovación",
+      "actions": "Acciones"
+    },
+    "title": "Suscripción Actual",
+    "upgrade": "Actualizar",
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "cancel": "Cancelar",
+    "empty": "No hay suscripciones para mostrar...",
+    "details": {
+      "title": "Detalles del Plan",
+      "users": "Usuarios",
+      "of": "de",
+      "used": "usados",
+      "players": "Jugadores",
+      "storage": "Almacenamiento"
+    }
+  },
+  "payment": {
+    "title": "Cuentas de Stripe",
+    "subtitle": "A continuación encontrará detalles sobre las cuentas de Stripe asociadas con su cuenta.",
+    "headers": {
+      "name": "Nombre de la Cuenta",
+      "email": "Correo Electrónico",
+      "date": "Fecha de Envío",
+      "status": "Estado"
+    },
+    "addStripe": "Agregar Cuenta de Stripe",
+    "status": {
+      "complete": "completo",
+      "pending": "pendiente",
+      "restricted": "restringido"
+    },
+    "empty": "No hay suscripciones para mostrar...",
+    "formContent": {
+      "title": "Agregar Cuenta de Stripe",
+      "delete": "Sí, estoy seguro",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar esta cuenta?",
+      "name": "Nombre",
+      "namePlaceholder": "Nombre de la cuenta",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Descripción de la cuenta",
+      "connectStripe": "Conectar con",
+      "noAccount": "¿No tienes una cuenta de Stripe?",
+      "create": "Crear una cuenta",
+      "cancel": "Cancelar",
+      "submit": "Enviar"
+    }
+  }
+}

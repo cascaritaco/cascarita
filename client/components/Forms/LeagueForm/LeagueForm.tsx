@@ -17,12 +17,14 @@ import {
 import Cookies from "js-cookie";
 import { fetchUser } from "../../../api/users/service";
 import { User } from "../../../api/users/types";
+import { useTranslation } from "react-i18next";
 
 const LeagueForm: React.FC<LeagueFormProps> = ({
   afterSave,
   requestType,
   leagueId,
 }) => {
+  const { t } = useTranslation("Leagues");
   const [leagueName, setLeagueName] = useState("");
   const [leagueDesc, setLeagueDesc] = useState("");
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -82,21 +84,21 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
     <>
       {requestType === "DELETE" ? (
         <DeleteForm
-          destructBtnLabel="Yes, I'm sure"
+          destructBtnLabel={t("formContent.delete")}
           onSubmit={handleSubmit}
           className={styles.form}>
-          <p>Are you sure you want to delete?</p>
+          <p>{t("formContent.deleteMessage")}</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputContainer}>
             <label className={styles.label} htmlFor="leagueName">
-              Name
+              {t("formContent.name")}
             </label>
             <input
               className={styles.input}
               required
-              placeholder="League Name"
+              placeholder={t("formContent.namePlaceholder")}
               id="leagueName"
               name="leagueName"
               value={leagueName}
@@ -106,11 +108,11 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
 
           <div className={`${styles.inputContainer} ${styles.halfContainer}`}>
             <label className={styles.label} htmlFor="leagueDesc">
-              Description
+              {t("formContent.description")}
             </label>
             <input
               className={styles.input}
-              placeholder="League Description"
+              placeholder={t("formContent.descriptionPlaceholder")}
               id="leagueDesc"
               name="leagueDescription"
               value={leagueDesc}
@@ -120,14 +122,16 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
 
           <div className={styles.formBtnContainer}>
             <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
-              Cancel
+              {t("formContent.cancel")}
             </Modal.Close>
 
             <div>
               <button
                 type="submit"
                 className={`${styles.btn} ${styles.submitBtn}`}>
-                {requestType === "POST" ? "Create League" : "Update League"}
+                {requestType === "POST"
+                  ? t("formContent.create")
+                  : t("formContent.edit")}
               </button>
             </div>
           </div>

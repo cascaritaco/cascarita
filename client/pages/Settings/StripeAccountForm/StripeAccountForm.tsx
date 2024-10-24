@@ -5,11 +5,13 @@ import StripeLogo from "../../../assets/stripe/stripe_logo_solid.svg";
 import { StripeAccountFormProps } from "./types";
 import DeleteForm from "../../../components/Forms/DeleteForm/DeleteForm";
 import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
+import { useTranslation } from "react-i18next";
 
 const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
   afterSave,
   requestType,
 }) => {
+  const { t } = useTranslation("Settings");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -23,21 +25,21 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
     <>
       {requestType === "DELETE" ? (
         <DeleteForm
-          destructBtnLabel="Yes, I'm sure"
+          destructBtnLabel={t("payment.formContent.delete")}
           onSubmit={handleSubmit}
           className={styles.form}>
-          <p>Are you sure you want to delete?</p>
+          <p>{t("payment.formContent.deleteMessage")}</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputContainer}>
             <label className={styles.label} htmlFor="name">
-              Name
+              {t("payment.formContent.name")}
             </label>
             <input
               className={styles.input}
               required
-              placeholder="Enter Account Name"
+              placeholder={t("payment.formContent.namePlaceholder")}
               id="name"
               name="name"
               value={name}
@@ -47,11 +49,11 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
 
           <div className={`${styles.inputContainer}`}>
             <label className={styles.label} htmlFor="description">
-              Description
+              {t("payment.formContent.description")}
             </label>
             <input
               className={styles.input}
-              placeholder="Description"
+              placeholder={t("payment.formContent.descriptionPlaceholder")}
               id="description"
               name="description"
               value={description}
@@ -65,7 +67,7 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
                 className={styles.stripeBtn}
                 //TODO: We need to hook up with endpoint, temporary console log for now
                 onClick={() => console.log("Stripe Button Pressed")}>
-                Connect with
+                {t("payment.formContent.connectStripe")}
                 <StripeLogo
                   className={styles.stripeLogo}
                   style={{
@@ -76,9 +78,9 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
               </PrimaryButton>
 
               <p>
-                {"Don't have a Stripe Account? "}
+                {t("payment.formContent.noAccount")}{" "}
                 <a href="#" className={styles.link}>
-                  Create an Account
+                  {t("payment.formContent.create")}
                 </a>
               </p>
             </div>
@@ -86,14 +88,14 @@ const StripeAccountForm: React.FC<StripeAccountFormProps> = ({
 
           <div className={styles.formBtnContainer}>
             <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
-              Cancel
+              {t("payment.formContent.cancel")}
             </Modal.Close>
 
             <div>
               <button
                 type="submit"
                 className={`${styles.btn} ${styles.submitBtn}`}>
-                Submit
+                {t("payment.formContent.submit")}
               </button>
             </div>
           </div>
