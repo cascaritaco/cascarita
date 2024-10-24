@@ -8,34 +8,43 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import NavItem from "../NavItem/NavItem";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("SideNav");
+  const [route, setRoute] = useState("/");
+
+  useEffect(() => {
+    const currentPath = location.pathname.substring(1); // Remove the leading '/'
+    setRoute(currentPath || "/");
+    setSelectedItem(currentPath);
+  }, [location.pathname, setSelectedItem]);
 
   const handleItemClick = (labelType: string) => {
-    let route: string;
-
+    let newRoute = "/";
     switch (labelType) {
       case "item1":
-        route = "";
+        newRoute = "";
         break;
       case "item2":
-        route = "users";
+        newRoute = "users";
         break;
       case "item4":
-        route = "forms";
+        newRoute = "forms";
         break;
       case "item5":
-        route = "settings";
+        newRoute = "settings";
         break;
       default:
-        route = "/";
+        newRoute = "/";
     }
-    setSelectedItem(route);
-    navigate(`/${route}`);
+    setRoute(newRoute);
+    setSelectedItem(newRoute);
+    navigate(`/${newRoute}`);
   };
 
   return (
@@ -84,4 +93,5 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
     </nav>
   );
 };
+
 export default SideNav;
