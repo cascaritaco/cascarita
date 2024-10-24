@@ -51,7 +51,7 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           icon={<RiHomeLine />}
           label={t("item1")}
           labelType="item1"
-          selected={selectedItem === ""}
+          selected={selectedItem === "" || selectedItem.includes("season")}
           onItemClick={handleItemClick}
         />
         <NavItem
@@ -73,14 +73,14 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           icon={<HiOutlinePencilAlt />}
           label={t("item4")}
           labelType="item4"
-          selected={selectedItem === "forms"}
+          selected={selectedItem.includes("forms")}
           onItemClick={handleItemClick}
         />
         <NavItem
           icon={<IoSettingsOutline />}
           label={t("item5")}
           labelType="item5"
-          selected={selectedItem === "settings"}
+          selected={selectedItem.includes("settings")}
           onItemClick={handleItemClick}
         />
       </ul>
