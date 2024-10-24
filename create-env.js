@@ -26,21 +26,21 @@ async function createEnvFile() {
 
     const secretString = response.SecretString;
 
-    if (secretString) {
-      const secretObject = JSON.parse(secretString);
-
-      const envFileContent = Object.entries(secretObject)
-        .map(([key, value]) => `${key}=${value}`)
-        .join("\n");
-
-      fs.writeFileSync(envFilePath, envFileContent);
-
-      console.log(
-        `.env file created at ${envFilePath} with secrets from AWS Secrets Manager.`,
-      );
-    } else {
-      throw new Error("SecretString is empty");
+    if (!secretString) {
+      throw new Error("SecretString is Empty");
     }
+    
+    const secretObject = JSON.parse(secretString);
+
+    const envFileContent = Object.entries(secretObject)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("\n");
+
+    fs.writeFileSync(envFilePath, envFileContent);
+
+    console.log(
+      `.env file created at ${envFilePath} with secrets from AWS Secrets Manager.`,
+    );
   } catch (error) {
     console.error("Error fetching secret:", error);
     throw error;
