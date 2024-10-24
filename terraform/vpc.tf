@@ -61,17 +61,29 @@ resource "aws_route_table" "route_table" {
     Project     = var.project_name
     Owner       = var.owner
   }
+
+  depends_on = [
+    aws_autoscaling_group.ecs_asg,
+    aws_internet_gateway.internet_gateway
+  ]
 }
 
 resource "aws_route_table_association" "subnet_route" {
   subnet_id      = aws_subnet.subnet.id
   route_table_id = aws_route_table.route_table.id
-  depends_on = [aws_route_table.route_table]
+  depends_on = [
+    aws_route_table.route_table,
+    aws_internet_gateway.internet_gateway
+  ]
 }
 
 resource "aws_route_table_association" "subnet2_route" {
   subnet_id      = aws_subnet.subnet2.id
   route_table_id = aws_route_table.route_table.id
+  depends_on = [
+    aws_route_table.route_table,
+    aws_internet_gateway.internet_gateway
+  ]
 }
 
 resource "aws_security_group" "security_group" {
@@ -117,6 +129,8 @@ resource "aws_lb" "ecs_alb" {
     Role        = var.role_lb
     Purpose     = var.purpose_lb
   }
+
+  depends_on = [ aws_internet_gateway.internet_gateway ]
 }
 
 resource "aws_lb_target_group" "ecs_tg" {

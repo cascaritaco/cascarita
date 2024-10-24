@@ -59,12 +59,7 @@
 1. If you wish to tear down these cloud resources:
 
    ```
-   # We need to delete the load balancer and autoscaling group to remove EC2 instances to be able to destroy all resources tied to the internet gateway
-
-   terraform destroy -target=aws_lb.ecs_lb -auto-approve
-   terraform destroy -target=aws_autoscaling_group.ecs_asg -auto-approve
-
    terraform destroy -auto-approve
    ```
-
-At times this command can hang and this happens usually when the task definition is stuck running within the ECS Cluster. You may need to enter the AWS console and manually stop this task definition from running. Then it will work as expected.
+It is likely that this command will hang and timeout when destroying the `aws_ecs_service.ecs_service`. This is because terraform is waiting for the state to become **INACTIVE**. I have tested that the ecs_service is destroyed despite terraform not being aware of the state change.
+When this happens just rerung `terraform destroy -auto-approve` and the remaining resources will be destroyed.

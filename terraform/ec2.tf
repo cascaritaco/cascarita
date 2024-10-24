@@ -84,6 +84,8 @@ resource "aws_launch_template" "ecs_lt" {
     }
   }
 
+  depends_on = [aws_iam_instance_profile.ecs_instance_profile]
+
   user_data = filebase64("${path.module}/ecs.sh")
 }
 
@@ -99,7 +101,9 @@ resource "aws_autoscaling_group" "ecs_asg" {
 
   vpc_zone_identifier = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
 
-  depends_on = [aws_lb.ecs_alb]
+  depends_on = [aws_lb.ecs_alb,
+    aws_internet_gateway.internet_gateway
+  ]
 
   tag {
     key                 = "AmazonECSManaged"

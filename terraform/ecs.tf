@@ -106,11 +106,11 @@ resource "aws_ecs_service" "ecs_service" {
     container_port   = var.port
   }
 
-  depends_on = [aws_autoscaling_group.ecs_asg]
-
   tags = {
     Name        = local.service_name
     Environment = var.environment
     Project     = var.project_name
   }
+
+  depends_on = [aws_autoscaling_group.ecs_asg]
 }
