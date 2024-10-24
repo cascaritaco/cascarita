@@ -21,14 +21,15 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   handleSelect,
 }) => {
   const { getAccessTokenSilently } = useAuth0();
-  let currentUser: User;
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     (async () => {
       const token = await getAccessTokenSilently();
       const email = Cookies.get("email") || "";
-      currentUser = await fetchUser(email, token);
+      const user = await fetchUser(email, token);
+      setCurrentUser(user);
     })();
   }, []);
 
