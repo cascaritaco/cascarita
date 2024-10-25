@@ -9,13 +9,15 @@ import DraggableMultipleChoice from "../DraggableMultipleChoice/DraggableMultipl
 import DraggableShortText from "../DraggableShortText/DraggableShortText";
 import DraggableDropdown from "../DraggableDropdown/DraggableDropdown";
 import DraggableLongText from "../DraggableLongText/DraggableLongText";
-import { DNDCanvasProps, Field, Form } from "./types";
+import { DNDCanvasProps } from "./types";
 import { DroppedItem } from "../../../pages/NewForm/types";
 import EmptyDNDCanvas from "../EmptyDNDCanvas/EmptyDNDCanvas";
 import { v4 as uuidv4 } from "uuid";
 import DraggablePhoneNumber from "../DraggablePhoneNumber/DraggablePhoneNumber";
 import DraggableEmail from "../DraggableEmail/DraggableEmail";
 import { StrictModeDroppable } from "../../StrictModeDroppable/StrictModeDroppable";
+import DraggablePayment from "../DraggablePayment/DraggablePayment";
+import { Currency, Field, Form } from "../../../api/forms/types";
 
 const DNDCanvas = forwardRef(
   (
@@ -45,6 +47,7 @@ const DNDCanvas = forwardRef(
       long_text: DraggableLongText,
       email: DraggableEmail,
       phone_number: DraggablePhoneNumber,
+      payment: DraggablePayment,
     };
 
     const appendField = (item: DroppedItem) => {
@@ -94,6 +97,24 @@ const DNDCanvas = forwardRef(
           validations: { required: false },
           type: item.type,
         },
+        payment: {
+          title: "",
+          id: item.id,
+          ref: item.id,
+          properties: {
+            price: {
+              type: "fixed",
+              value: "",
+              feeValue: "",
+              currency: Currency.USD,
+              isCustomerPayingFee: false,
+            },
+            stripe_account: { id: "", stripe_account_id: "" },
+            description: "",
+          },
+          validations: { required: false },
+          type: item.type,
+        },
       };
       append(fieldTemplate[item.type]);
     };
@@ -127,7 +148,6 @@ const DNDCanvas = forwardRef(
 
     const onCopy = (field: Field, index: number) => {
       const newRef = uuidv4();
-      delete field.id;
       insert(index + 1, { ...field, ref: newRef });
       handleCopy(index, {
         id: newRef,
@@ -181,12 +201,8 @@ const DNDCanvas = forwardRef(
                       return (
                         <Component
                           key={field.ref}
-                          id={field.ref}
                           index={index}
-                          title={field.title}
-                          validations={field.validations}
-                          properties={field.properties}
-                          control={control}
+                          formField={field}
                           onDelete={() => onDelete(index, field.ref)}
                           onCopy={() => onCopy(field, index)}
                         />

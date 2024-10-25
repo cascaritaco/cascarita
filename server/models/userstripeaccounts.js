@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
         targetKey: "id",
       });
+      UserStripeAccounts.belongsTo(models.StripeStatus, {
+        foreignKey: "stripe_status_id",
+        targetKey: "id",
+      });
     }
   }
   UserStripeAccounts.init(
@@ -22,6 +26,46 @@ module.exports = (sequelize, DataTypes) => {
       },
       stripe_account_id: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      stripe_account_name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      platform_account_name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      platform_account_description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      account_email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      support_email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      details_submitted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      requires_verification: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      charges_enabled: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      payouts_enabled: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      stripe_status_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

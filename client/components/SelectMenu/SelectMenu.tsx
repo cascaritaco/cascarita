@@ -61,7 +61,7 @@ const SelectMenu: React.FC<SelectMenuProps> & {
       value={value}
       name={name}
       onValueChange={onValueChange}
-      required={required}>
+      required={required ?? false}>
       <Select.Trigger className={triggerClassName}>
         <Select.Value
           placeholder={placeholder ? placeholder : "Select a value"}
@@ -82,7 +82,7 @@ const SelectMenu: React.FC<SelectMenuProps> & {
             {children}
           </Select.Viewport>
 
-          <Select.ScrollDownButton>
+          <Select.ScrollDownButton className={styles.selectScrollButton}>
             <ChevronDownIcon />
           </Select.ScrollDownButton>
         </Select.Content>

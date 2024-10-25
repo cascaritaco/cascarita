@@ -10,14 +10,17 @@
   font-size: 0.8rem;
 }
 
-.selectTrigger:hover,
-.selectTrigger:focus {
+.selectTrigger:hover {
   background-color: #d3d3d3cd;
+}
+.selectTrigger:focus {
+  box-shadow: 0 0 0 2px black;
 }
 
 .selectContent {
   overflow: hidden;
   background-color: white;
+  z-index: 2;
   max-width: 100%;
   border-radius: 6px;
   box-shadow:
@@ -60,6 +63,6 @@
 }
 .selectItem[data-highlighted] {
   outline: none;
-  background-color: lightblue;
-  color: black;
+  background-color: #4238d5;
+  color: #fdfdfd;
 }

@@ -12,7 +12,8 @@ const { errorHandler } = require("../../middlewares.js");
 
 const app = express();
 app.use(express.json());
-app.use("/divisions", DivisionRoutes);
+const dummyCheckJwt = (req, res, next) => next();
+app.use("/divisions", DivisionRoutes(dummyCheckJwt));
 app.use(errorHandler);
 
 describe("Division routes", () => {
@@ -34,7 +35,9 @@ describe("Division routes", () => {
       const response = await request(app).post("/divisions").send(form);
 
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.objectContaining({ name: form.name }));
+      expect(response.body).toEqual(
+        expect.objectContaining({ name: form.name }),
+      );
     });
 
     it("Should fail if division name validation fails", async () => {
@@ -110,7 +113,9 @@ describe("Division routes", () => {
     it("Should fail if division not found", async () => {
       const invalidDivisionId = 29;
 
-      const response = await request(app).delete(`/divisions/${invalidDivisionId}`);
+      const response = await request(app).delete(
+        `/divisions/${invalidDivisionId}`,
+      );
 
       expect(response.status).toBe(404);
     });

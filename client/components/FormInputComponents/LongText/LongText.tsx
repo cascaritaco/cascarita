@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { FieldProps } from "../types";
 import { FieldError, useFormContext } from "react-hook-form";
 import styles from "./LongText.module.css";
+import { useTranslation } from "react-i18next";
 
 const LongText = ({ field, index }: FieldProps) => {
+  const { t } = useTranslation("FormComponents");
   const {
     register,
     formState: { errors },
@@ -18,10 +20,10 @@ const LongText = ({ field, index }: FieldProps) => {
   const { onChange: registerOnChange, ...registerProps } = register(
     `answers.${index}.text`,
     {
-      required: required && "This field is required",
+      required: required && t("required"),
       maxLength: maxLength && {
         value: maxLength,
-        message: `Answer has to be less than ${maxLength} characters`,
+        message: `${t("longText.maxLength")} ${maxLength}`,
       },
     },
   );
@@ -41,7 +43,9 @@ const LongText = ({ field, index }: FieldProps) => {
   return (
     <section className={styles.container}>
       <div className={styles.questionContainer}>
-        <h3 className={styles.question}>Question: {field.title}</h3>
+        <h3 className={styles.question}>
+          {t("question")}: {field.title}
+        </h3>
         {field.validations?.required && (
           <span className={styles.required}>*</span>
         )}
@@ -51,7 +55,7 @@ const LongText = ({ field, index }: FieldProps) => {
       )}
       <textarea
         className={styles.input}
-        placeholder="Type your answer here..."
+        placeholder={t("longText.placeholder")}
         rows={1}
         onChange={(e) => handleTextAreaChange(e, "42px")}
         value={textAreaValue}
@@ -60,7 +64,7 @@ const LongText = ({ field, index }: FieldProps) => {
       <p className={styles.longTextToolTip}>
         <strong>Shift ⇧</strong>
         <strong>Enter ↵</strong>
-        to make a line break
+        {t("longText.break")}
       </p>
     </section>
   );

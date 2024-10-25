@@ -1,0 +1,175 @@
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.inlineFields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.formContainer h2 {
+  margin-bottom: 10px;
+}
+
+.formContainer input {
+  margin-bottom: 15px;
+  padding: 8px 13px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #f4f7fb;
+}
+
+.formContainer > button {
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 90px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.registerBtn,
+.backBtn {
+  background-color: #000;
+  color: #fff;
+  padding: 8px 32px;
+  border-radius: 26px;
+}
+
+.backBtn {
+  outline: 1px solid #000;
+  background-color: transparent;
+  color: #000;
+}
+
+.registerBtn:hover,
+.registerBtn:focus {
+  transition: ease-in 200ms;
+  background-color: transparent;
+  outline: 1px solid black;
+  color: #000;
+}
+
+.finishRegisterBtn {
+  margin-top: "26px";
+}
+
+.backBtn:hover,
+.backBtn:focus {
+  outline: 1px solid blue;
+  color: black;
+}
+
+.heading {
+  text-align: left;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.subheading {
+  color: #666;
+  text-align: left;
+  font-size: 16px;
+  font-weight: light;
+  margin-bottom: 15px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+}
+
+.radioContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.radioContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selectMenu1 {
+  width: 300px;
+  margin-top: 18px;
+}
+
+.selectMenu2 {
+  width: 160px;
+  margin-bottom: 15px;
+}
+
+.errorMessage {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.successMessage {
+  color: green;
+  margin-bottom: 10px;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+
+.logo {
+  margin-top: 35%;
+  /* transform: scale(1.75); Scale the logo to 175% of its original size */
+  height: auto; /* Maintain the aspect ratio */
+  width: auto;
+  margin-bottom: 80%; /* Add margin-bottom if needed */
+  transform: scale(2.2);
+  transition: transform 0.05s ease; /* Add transition for smooth scaling */
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 1200px) {
+  .selectMenu {
+    margin-bottom: 8px;
+  }
+
+  .inlineFields {
+    flex-direction: column;
+  }
+}
+
+/* Adjust scale for smaller viewport widths */
+@media screen and (max-width: 950px) {
+  .logo {
+    transform: scale(1.75); /* Adjust the scale value as needed */
+  }
+}

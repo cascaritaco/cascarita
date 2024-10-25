@@ -1,8 +1,9 @@
 import { Answer, Form, GetFormsParams } from "./types";
 
-// TODO: Create a call to fetch all forms by groupId
-// TODO: Start Routing to forms instead of surveys (this will be editted as more routes are called to the forms endpoint)
+import { User } from "../../api/users/types";
 
+// TODO: Implement a paginated API to call this for our forms
+// This will include filters, query, and sorting
 export const getTypeformForms = async ({
   page = 1,
   page_size = 10,
@@ -35,47 +36,41 @@ export const getTypeformForms = async ({
   }
 };
 
-// fetches form data by endpoint (e.g. fetch form and/or form responses)
-export const fetchTypeformFormData = async (
-  formId: string,
-  endpoint: string,
-) => {
-  try {
-    const response = await fetch(`/api/survey/${formId}${endpoint}`);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (err) {
-    console.error("Error fetching form data:", err);
-    throw err;
-  }
-};
-
-export const updateTypeformForm = async (
+export const updateForm = async (
   data: Form,
   formId: string,
   title: string,
   description: string,
+  user: User | null,
 ) => {
   const formData = {
-    title,
-    welcome_screens: [
-      {
-        title,
-        properties: {
-          description,
+    form_data: {
+      title,
+      ...data,
+    },
+    form_blueprint: {
+      title,
+      welcome_screens: [
+        {
+          title,
+          properties: {
+            description,
+          },
         },
-      },
-    ],
-    ...data,
+      ],
+      ...data,
+    },
+    updated_by: {
+      id: user?.id,
+      first_name: user?.first_name,
+      last_name: user?.last_name,
+      email: user?.email,
+    },
   };
 
   try {
-    const response = await fetch(`/api/survey/${formId}`, {
-      method: "PUT",
+    const response = await fetch(`/api/forms/${formId}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -93,9 +88,9 @@ export const updateTypeformForm = async (
   }
 };
 
-export const deleteTypeformForm = async (id: string) => {
+export const deleteForm = async (id: string) => {
   try {
-    const response = await fetch(`/api/survey/${id}`, {
+    const response = await fetch(`/api/forms/${id}`, {
       method: "DELETE",
     });
 

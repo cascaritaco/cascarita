@@ -8,13 +8,14 @@ import {
 } from "./types";
 import FileUpload from "../../FileUpload/FileUpload";
 import Modal from "../../Modal/Modal";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   useCreateTeam,
   useDeleteTeam,
   useUpdateTeam,
 } from "../../../api/teams/mutations";
 import DeleteForm from "../DeleteForm/DeleteForm";
+import { useTranslation } from "react-i18next";
 
 const TeamForm: React.FC<TeamFormProps> = ({
   afterSave,
@@ -23,8 +24,10 @@ const TeamForm: React.FC<TeamFormProps> = ({
   seasonId,
   divisionId,
 }) => {
+  const { t } = useTranslation("Teams");
   const [teamName, setTeamName] = React.useState("");
-  const currentUser = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
 
   const createTeamMutation = useCreateTeam();
   const updateTeamMutation = useUpdateTeam();
@@ -41,7 +44,7 @@ const TeamForm: React.FC<TeamFormProps> = ({
       formData: {
         name: teamName,
         team_logo: teamLogo,
-        group_id: currentUser.currentUser?.group_id,
+        group_id: currentUser?.currentUser?.group_id,
         division_id: divisionId,
         season_id: seasonId,
       },
@@ -73,22 +76,22 @@ const TeamForm: React.FC<TeamFormProps> = ({
     <>
       {requestType === "DELETE" ? (
         <DeleteForm
-          destructBtnLabel="Yes, I'm Sure"
+          destructBtnLabel={t("formContent.delete")}
           onSubmit={handleSubmit}
           className={styles.form}>
-          <p>Are you sure you want to delete this team?</p>
+          <p>{t("formContent.deleteMessage")}</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputContainer}>
             <label className={styles.label} htmlFor="teamName">
-              Team Name
+              {t("formContent.name")}
             </label>
             <input
               required
               className={styles.input}
               type="text"
-              placeholder="Team Name"
+              placeholder={t("formContent.namePlaceholder")}
               id="teamName"
               name="teamName"
               value={teamName}
@@ -97,21 +100,21 @@ const TeamForm: React.FC<TeamFormProps> = ({
           </div>
 
           <div className={styles.inputContainer}>
-            <label className={styles.label}>Team Logo</label>
+            <label className={styles.label}>{t("formContent.logo")}</label>
 
             <FileUpload className={styles.logoInputContainer} />
           </div>
 
           <div className={styles.formBtnContainer}>
             <Modal.Close className={`${styles.btn} ${styles.cancelBtn}`}>
-              Cancel
+              {t("formContent.cancel")}
             </Modal.Close>
 
             <div>
               <button
                 type="submit"
                 className={`${styles.btn} ${styles.submitBtn}`}>
-                Submit
+                {t("formContent.submit")}
               </button>
             </div>
           </div>

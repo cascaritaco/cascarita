@@ -8,11 +8,12 @@ import SeasonForm from "../../components/Forms/SeasonForm/SeasonForm";
 import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getSeasonsByLeagueId } from "../../api/seasons/services";
 import { SeasonType } from "./types";
 import styles from "../Leagues/Leagues.module.css";
+import { useLocation } from "react-router-dom";
 
 const Seasons = () => {
   const { leagueId, leagueName } = useParams<{
@@ -20,6 +21,14 @@ const Seasons = () => {
     leagueName: string;
   }>();
   const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
+
+  // Check if the current path is the division route
+  const location = useLocation();
+  const isDivisionRoute = location.pathname.includes("division");
+
+  if (isDivisionRoute) {
+    return <Outlet />;
+  }
 
   const { t } = useTranslation("Seasons");
 
@@ -52,12 +61,7 @@ const Seasons = () => {
   }, [searchQuery]);
 
   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return new Date(dateString).toLocaleString();
   };
 
   const handleEdit = (seasonName: string, seasonId: number) => {
@@ -131,10 +135,10 @@ const Seasons = () => {
         </div>
 
         <Modal open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <Modal.Button asChild className={styles.btn}>
-            <PrimaryButton
-              label={t("button")}
-              onClick={() => setIsCreateOpen(true)}></PrimaryButton>
+          <Modal.Button asChild>
+            <PrimaryButton onClick={() => setIsCreateOpen(true)}>
+              {t("button")}
+            </PrimaryButton>
           </Modal.Button>
           <Modal.Content title={t("formContent.title")}>
             <SeasonForm
@@ -147,22 +151,24 @@ const Seasons = () => {
       </div>
 
       {filteredData == null || filteredData?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>No seasons to display...</p>
+        <p className={styles.noLeagueMessage}>{t("empty")}</p>
       ) : (
-        <DashboardTable headers={[t("col1"), t("col2"), t("col3"), t("col4")]}>
+        <DashboardTable
+          headers={[t("col1"), t("col2"), t("col3"), t("col4")]}
+          headerColor="light">
           {isLoading ? (
             <tr>
-              <td>Loading...</td>
+              <td>{t("loading")}</td>
             </tr>
           ) : isError || !data ? (
             <tr>
-              <td>Error Fetching Data</td>
+              <td>{t("error")}</td>
             </tr>
           ) : (
             filteredData?.map((season: SeasonType, idx: number) => (
               <tr key={idx} className={styles.tableRow}>
                 <td className={styles.tableData}>
-                  <Link to={`/division/${season.id}/${season.name}`}>
+                  <Link to={`division/${season.id}/${season.name}`}>
                     {season.name}
                   </Link>
                 </td>
@@ -196,7 +202,7 @@ const Seasons = () => {
       )}
 
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <Modal.Content title={`Edit ${currentSeasonName}`}>
+        <Modal.Content title={`${t("edit")} ${currentSeasonName}`}>
           <SeasonForm
             afterSave={() => setIsEditOpen(false)}
             requestType="PATCH"
@@ -206,7 +212,7 @@ const Seasons = () => {
       </Modal>
 
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <Modal.Content title={`Delete ${currentSeasonName}`}>
+        <Modal.Content title={`${t("delete")} ${currentSeasonName}`}>
           <SeasonForm
             afterSave={() => setIsDeleteOpen(false)}
             requestType="DELETE"

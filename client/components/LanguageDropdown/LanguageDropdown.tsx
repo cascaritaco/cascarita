@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "./LanguageDropdown.module.css";
 import { changeLanguage } from "../../i18n/config";
 import { LanguageDropdownProps } from "./types";
-import { useAuth } from "../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
+import { User } from "../../api/users/types";
+import { fetchUser } from "../../api/users/service";
+import Cookies from "js-cookie";
 
 interface LanguageOption {
   value: string;
@@ -17,8 +20,18 @@ const languages: LanguageOption[] = [
 const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   handleSelect,
 }) => {
-  const { currentUser } = useAuth();
+  const { getAccessTokenSilently } = useAuth0();
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      const user = await fetchUser(email, token);
+      setCurrentUser(user);
+    })();
+  }, []);
 
   useEffect(() => {
     const currLanguage = localStorage.getItem("defaultLanguage");

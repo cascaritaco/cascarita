@@ -2,7 +2,7 @@
   display: flex;
   font-size: 0.8rem;
   gap: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .breadcrumb li:last-child {
@@ -21,6 +21,7 @@
 }
 
 .breadcrumb li:not(:last-child):after {
-  content: " /";
+  content: " >";
+  text-decoration: none;
   pointer-events: none;
 }

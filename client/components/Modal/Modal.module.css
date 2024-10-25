@@ -62,7 +62,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90vw;
-  max-width: 550px;
+  max-width: 650px;
   max-height: 85vh;
   padding: 25px;
 }
@@ -81,10 +81,15 @@
 }
 
 .title {
-  margin-bottom: 16px;
+  margin-bottom: 2px;
   font-weight: 700;
   color: #1e1e1e;
   font-size: 1.7rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #4b4a4a;
 }
 
 .closeIcon {

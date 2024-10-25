@@ -1,20 +1,20 @@
 import DraggableButton from "../../components/DragAndDropComponents/DraggableButton/DraggableButton";
 import Page from "../../components/Page/Page";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DNDCanvas from "../../components/DragAndDropComponents/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
-import { DNDCanvasRef, DroppedItem, DroppedItemType } from "./types";
+import { DNDCanvasRef, DroppedItem } from "./types";
 import { v4 as uuidv4 } from "uuid";
-import {
-  Field,
-  Form,
-} from "../../components/DragAndDropComponents/DNDCanvas/types";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
-import { createMongoForm, updateTypeformForm } from "../../api/forms/service";
+import { createMongoForm, updateForm } from "../../api/forms/service";
+import { User } from "../../api/users/types";
+import { Field, FieldType, Form } from "../../api/forms/types";
+import Cookies from "js-cookie";
+import { fetchUser } from "../../api/users/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -28,7 +28,7 @@ const NewForm = () => {
   const defaultItems = fields
     ? fields.map((field) => ({
         id: field.ref,
-        type: toSnakeCase(field.type) as DroppedItemType,
+        type: toSnakeCase(field.type) as FieldType,
       }))
     : [];
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>(defaultItems);
@@ -40,7 +40,16 @@ const NewForm = () => {
   );
   const [formLink, setFormLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
-  const { currentUser } = useAuth();
+  const { getAccessTokenSilently } = useAuth0();
+  let currentUser: User;
+
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      currentUser = await fetchUser(email, token);
+    })();
+  }, []);
 
   const draggableButtons = [
     "Short Text",
@@ -49,13 +58,14 @@ const NewForm = () => {
     "Multiple Choice",
     "Email",
     "Phone Number",
+    "Payment",
   ];
 
-  const handleDrop = (label: DroppedItemType) => {
+  const handleDrop = (label: FieldType) => {
     const uniqueId = uuidv4();
     const newItem: DroppedItem = {
       id: uniqueId,
-      type: toSnakeCase(label) as DroppedItemType,
+      type: toSnakeCase(label) as FieldType,
     };
     setDroppedItems([...droppedItems, newItem]);
   };
@@ -81,6 +91,10 @@ const NewForm = () => {
   };
 
   const onCreate = async (data: Form) => {
+    const token = await getAccessTokenSilently();
+    const email = Cookies.get("email") || "";
+    currentUser = await fetchUser(email, token);
+
     const response = await createMongoForm(
       data,
       title,
@@ -95,10 +109,16 @@ const NewForm = () => {
 
   // TODO: save by mongo form ID
   const onSave = async (data: Form) => {
-    if (formId == null || formId === undefined) {
+    if (formId == null) {
       throw new Error("Form ID is undefined");
     }
-    const response = await updateTypeformForm(data, formId, title, description);
+    const response = await updateForm(
+      data,
+      formId,
+      title,
+      description,
+      currentUser,
+    );
     setFields(response.fields);
   };
 
@@ -165,7 +185,7 @@ const NewForm = () => {
                 <DraggableButton
                   key={index}
                   label={label}
-                  onDrop={() => handleDrop(label as DroppedItemType)}
+                  onDrop={() => handleDrop(label as FieldType)}
                 />
               ))}
             </div>

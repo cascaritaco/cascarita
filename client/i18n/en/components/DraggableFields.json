@@ -8,5 +8,14 @@
   "questionPlaceholder": "Question",
   "requiredText": "Required",
   "multipleSelection": "Multiple Selection",
-  "maxCharacters": "Max Characters"
+  "maxCharacters": "Max Characters",
+  "payment": "Payment",
+  "title": "Title",
+  "description": "Description",
+  "paymentAmount": "Payment Amount",
+  "feeAmount": "Fee Amount",
+  "stripeAccount": "Account",
+  "feeResponsible": "Fee Responsibility",
+  "organization": "Organization",
+  "customer": "Customer"
 }

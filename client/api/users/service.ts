@@ -1,4 +1,4 @@
-import { UserResponse, LanguageCodeToLanguageId } from "./types";
+import { UserResponse, LanguageCodeToLanguageId, RegisterUser } from "./types";
 
 const updateUsersLanguages = async (
   user_id: number,
@@ -22,44 +22,19 @@ const updateUsersLanguages = async (
   }
 };
 
-const registerUser = async (
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  roleId: number,
-  languageId: number,
-  groupId: number | null, // they might be joining an existing group
-  name: string | null,
-  streetAddress: string | null,
-  city: string | null,
-  state: string | null,
-  zipCode: string | null,
-  logoUrl: string | null, // still need to set up s3 buckets for images so for now we wont collect this and just set it to null
-) => {
+const registerUser = async (data: RegisterUser) => {
   try {
-    const registerData = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-      role_id: roleId ? roleId : 1,
-      language_id: 1,
-      group_id: groupId,
-      name: name,
-      street_address: streetAddress,
-      city: city,
-      state: state,
-      zip_code: zipCode,
-      logo_url: logoUrl,
+    const formData = {
+      ...data,
     };
 
     const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
       },
-      body: JSON.stringify(registerData),
+      body: JSON.stringify(formData),
     });
 
     const result = await response.json();
@@ -70,4 +45,31 @@ const registerUser = async (
   }
 };
 
-export { updateUsersLanguages, registerUser };
+const fetchUser = async (email: string, token: string) => {
+  try {
+    // Encode the email to ensure it's safe for use in a URL
+    const response = await fetch(
+      `/api/users?email=${encodeURIComponent(email)}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
+
+export { updateUsersLanguages, registerUser, fetchUser };
