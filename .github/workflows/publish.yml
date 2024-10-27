@@ -1,66 +1,68 @@
-  name: Publish Images
-  on:
-    pull_request:
-      types: [closed]
-      branches:
-        - main
-  jobs:
-    publish:
-        runs-on: ubuntu-latest
-        if: github.event.pull_request.merged
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+name: Publish Images
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-        - name: Copy .env.example to .env
-          run: cp .env.example .env
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
 
-        - name: Set up node
-          uses: actions/setup-node@v4
-          with:
-            node-version: 18
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-        - name: Install dependencies
-          run: npm install
+      - name: Install dependencies
+        run: npm install
 
-        - name: build
-          run: npm run build
+      - name: build
+        run: npm run build
 
-        - name: Get commit hash
-          id: get-commit-hash
-          run: echo "::set-output name=commit-hash::$(git rev-parse --short HEAD)"
-        - name: Get timestamp
-          id: get-timestamp
-          run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
+      - name: Get commit hash
+        id: get-commit-hash
+        run: echo "::set-output name=commit-hash::$(git rev-parse --short HEAD)"
+      - name: Get timestamp
+        id: get-timestamp
+        run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
 
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ECR_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_ECR_SECRET_ACCESS_KEY }}
-            aws-region: us-east-1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ECR_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-        - name: Login to Amazon ECR
-          id: login-ecr
-          uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-        - name: setup docker buildx
-          uses: docker/setup-buildx-action@v2
+      - name: setup docker buildx
+        uses: docker/setup-buildx-action@v2
 
-        - name: docker compose build
-          run: docker compose build
+      - name: docker compose build
+        run: docker compose build
 
-        - name: tag and push images
-          env:
-            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-            ECR_SERVER_REPOSITORY: ${{ secrets.SERVER_REPO_NAME }}
-            ECR_CLIENT_REPOSITORY: ${{ secrets.CLIENT_REPO_NAME }}
-            IMAGE_TAG: ${{ steps.get-commit-hash.outputs.commit-hash }}-${{ steps.get-timestamp.outputs.timestamp }}
-          run: |
-            docker tag cascarita-server:latest ${{ env.ECR_REGISTRY }}/${{ env.ECR_SERVER_REPOSITORY }}:${{ env.IMAGE_TAG }}
-            docker tag cascarita-client:latest ${{ env.ECR_REGISTRY }}/${{ env.ECR_CLIENT_REPOSITORY }}:${{ env.IMAGE_TAG }}
-            docker push $ECR_REGISTRY/$ECR_SERVER_REPOSITORY:$IMAGE_TAG
-            docker push $ECR_REGISTRY/$ECR_CLIENT_REPOSITORY:$IMAGE_TAG
+      - name: tag and push images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_SERVER_REPOSITORY: ${{ secrets.SERVER_REPO_NAME }}
+          ECR_CLIENT_REPOSITORY: ${{ secrets.CLIENT_REPO_NAME }}
+          IMAGE_TAG: ${{ steps.get-commit-hash.outputs.commit-hash }}-${{ steps.get-timestamp.outputs.timestamp }}
+        run: |
+          docker tag cascarita-server:latest ${{ env.ECR_REGISTRY }}/${{ env.ECR_SERVER_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker push $ECR_REGISTRY/$ECR_SERVER_REPOSITORY:$IMAGE_TAG
 
-        - name: list docker images
-          run: docker images
+          # commenting this out until reverse-proxy solution made
+          # docker tag cascarita-client:latest ${{ env.ECR_REGISTRY }}/${{ env.ECR_CLIENT_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          # docker push $ECR_REGISTRY/$ECR_CLIENT_REPOSITORY:$IMAGE_TAG
+
+      - name: list docker images
+        run: docker images
