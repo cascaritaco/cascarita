@@ -9,6 +9,6 @@ COPY ./dist /app/dist
 
 RUN npm clean-install
 
-EXPOSE 3001
+EXPOSE 80
 
 CMD ["npm", "run", "server"]

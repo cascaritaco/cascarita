@@ -1,3 +1,8 @@
+variable "aws_profile" {
+  description = "value for aws profile"
+  default     = "cascarita"
+}
+
 variable "aws_region" {
   description = "value for aws_region"
   default     = "us-west-1"
@@ -96,12 +101,12 @@ variable "port" {
 
 variable "container_name" {
   description = "The name of the container in the task definition."
-  default     = "casc-server"
+  default     = "cascarita-server"
 }
 
 variable "container_image" {
   description = "The container image to be used in the task definition."
-  default     = "public.ecr.aws/nginx/nginx:latest"
+  default     = "658488939163.dkr.ecr.us-west-1.amazonaws.com/cascarita-server"
 }
 
 variable "cpu_allocation" {

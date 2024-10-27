@@ -14,7 +14,7 @@ services:
     # NOTE, if you change the .env SERVER_PORT, please update here to match
     # Please update in the corresponding Dockerfile as well
     ports:
-      - "3001:3001"
+      - "80:80"
     command: npm run server
 
   # NOTE: server will out monolith app, client will be activated once
