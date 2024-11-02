@@ -3,6 +3,11 @@ variable "aws_profile" {
   default     = "cascarita"
 }
 
+variable "nat_gateway_name" {
+  description = "The name of the NAT gateway."
+  default     = "ecs-nat-gateway"
+}
+
 variable "aws_region" {
   description = "value for aws_region"
   default     = "us-west-1"

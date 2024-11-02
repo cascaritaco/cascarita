@@ -39,7 +39,6 @@ resource "aws_subnet" "subnet2" {
     Owner       = var.owner
   }
 }
-
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.main.id
   tags = {
