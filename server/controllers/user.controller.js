@@ -1,10 +1,7 @@
 "use strict";
 
 const { User, AuthCode } = require("../models");
-const passport = require("passport");
 const GroupController = require("./group.controller");
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
 const { request } = require("http");
 const { group } = require("console");
 const getUserInfoFromAuth0 = require("../utilityFunctions/auth0");
