@@ -195,3 +195,10 @@ locals {
 locals {
   route_table_name = "${var.environment}-route-table"
 }
+
+# Define ACM certificate ARN variable with the specific ARN
+variable "acm_certificate_arn" {
+  description = "ARN of the ACM certificate for HTTPS"
+  type        = string
+  default     = "arn:aws:acm:us-west-1:658488939163:certificate/1a163a09-441d-4700-8127-4c166f8bf87a"
+}

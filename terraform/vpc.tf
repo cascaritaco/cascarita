@@ -163,7 +163,26 @@ resource "aws_lb_listener" "ecs_alb_listener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ecs_tg.arn
   }
+  tags = {
+    Name        = local.alb_listener_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
+    Role        = var.role_listener
+    Purpose     = var.purpose_listener
+  }
+}
 
+resource "aws_lb_listener" "ecs_alb_https_listener" {
+  load_balancer_arn = aws_lb.ecs_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
+  }
   tags = {
     Name        = local.alb_listener_name
     Environment = var.environment
