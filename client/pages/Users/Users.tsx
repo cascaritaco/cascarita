@@ -17,7 +17,6 @@ import { User } from "./types";
 import Search from "../../components/Search/Search";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 import Modal from "../../components/Modal/Modal";
-import { set } from "react-hook-form";
 import UserForm from "../../components/Forms/UserForm/UserForm";
 
 const mapRoles = (role_id: number) => {
