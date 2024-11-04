@@ -420,9 +420,11 @@ const UserController = function () {
     try {
       const { first_name, last_name, email, role_id, group_id } = req.body;
 
-      // Check if email is unique within the group
+      // Check if email is unique within the group, so email can appear once per group but can appear across multiple groups
       const existingUser = await User.findOne({ where: { email, group_id } });
       if (existingUser) {
+        // TODO: Give client feedback that email already exists within the group
+
         return res.status(400).json({ error: 'Email already exists within the group' });
       }
 
