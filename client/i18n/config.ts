@@ -22,6 +22,8 @@ import DraggableButtonsEn from "./en/components/DraggableButtons.json";
 import DraggableButtonsEsp from "./esp/components/DraggableButtons.json";
 import DraggableFieldsEn from "./en/components/DraggableFields.json";
 import DraggableFieldsEsp from "./esp/components/DraggableFields.json";
+import UsersEn from "./en/pages/Users.json";
+import UsersEsp from "./esp/pages/Users.json";
 import RoutesEn from "./en/pages/Routes.json";
 import RoutesEsp from "./esp/pages/Routes.json";
 import DivisionsEn from "./en/pages/Divisions.json";
@@ -55,6 +57,7 @@ i18next.use(initReactI18next).init({
       DraggableButtons: DraggableButtonsEn,
       FormResponses: FormResponsesEn,
       DraggableFields: DraggableFieldsEn,
+      Users: UsersEn,
       Routes: RoutesEn,
       Divisions: DivisionsEn,
       DeleteForm: DeleteFormEn,
@@ -74,6 +77,7 @@ i18next.use(initReactI18next).init({
       DraggableButtons: DraggableButtonsEsp,
       FormResponses: FormResponsesEsp,
       DraggableFields: DraggableFieldsEsp,
+      Users: UsersEsp,
       Routes: RoutesEsp,
       Divisions: DivisionsEsp,
       DeleteForm: DeleteFormEsp,
@@ -94,6 +98,7 @@ i18next.use(initReactI18next).init({
     "DraggableButtons",
     "FormResponses",
     "DraggableFields",
+    "Users",
     "Routes",
     "Divisions",
     "DeleteForm",

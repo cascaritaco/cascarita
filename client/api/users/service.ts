@@ -1,3 +1,9 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
+import {
+  DeleteUserData,
+  UpdateUserData,
+  AddUserData,
+} from "../../components/Forms/UserForm/types";
 import { UserResponse, LanguageCodeToLanguageId, RegisterUser } from "./types";
 
 const updateUsersLanguages = async (
@@ -45,6 +51,87 @@ const registerUser = async (data: RegisterUser) => {
   }
 };
 
+type UserQueryKey = [string, number];
+
+const getUsersByGroupId = async ({
+  queryKey,
+}: QueryFunctionContext<UserQueryKey>) => {
+  const [, groupId] = queryKey;
+  try {
+    const response = await fetch(`/api/users/group/${groupId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};
+
+const addUser = async (data: AddUserData): Promise<UserResponse> => {
+  try {
+    const response = await fetch(`/api/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data.formData),
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error adding user:", error);
+    throw error;
+  }
+};
+
+const updateUser = async (data: UpdateUserData): Promise<UserResponse> => {
+  try {
+    const response = await fetch(`/api/users/${data.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data.formData),
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};
+
+const deleteUser = async (data: DeleteUserData): Promise<void> => {
+  try {
+    const response = await fetch(`/api/users/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (
+      response.status === 204 ||
+      response.headers.get("Content-Length") === "0"
+    ) {
+      return;
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
+
 const fetchUser = async (email: string, token: string) => {
   try {
     // Encode the email to ensure it's safe for use in a URL
@@ -72,4 +159,12 @@ const fetchUser = async (email: string, token: string) => {
   }
 };
 
-export { updateUsersLanguages, registerUser, fetchUser };
+export {
+  updateUsersLanguages,
+  registerUser,
+  getUsersByGroupId,
+  deleteUser,
+  updateUser,
+  addUser,
+  fetchUser,
+};

@@ -1,6 +1,6 @@
 "use strict";
 
-const { User, AuthCode } = require("../models");
+const { User } = require("../models");
 const GroupController = require("./group.controller");
 const getUserInfoFromAuth0 = require("../utilityFunctions/auth0");
 
@@ -168,11 +168,147 @@ const UserController = function () {
     }
   };
 
+  var getUsersByGroupId = async function (req, res, next) {
+    try {
+      const { group_id } = req.params;
+
+      if (isNaN(group_id)) {
+        res.status(400);
+        throw new Error("group id must be an integer");
+      }
+
+      const users = await User.findAll({
+        where: {
+          group_id: group_id,
+        },
+        attributes: {
+          exclude: [
+            "password",
+            "created_at",
+            "updated_at",
+            "group_id",
+            "language_id",
+          ],
+        },
+      });
+
+      if (!users) {
+        res.status(404);
+        throw new Error(`no users were found with group id ${group_id}`);
+      }
+      return res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var deleteUserById = async function (req, res, next) {
+    try {
+      let deleteUser = await User.destroy({
+        where: {
+          id: req.params["id"],
+        },
+      });
+
+      if (deleteUser === 0) {
+        throw new Error("no user found with the given id");
+      }
+
+      return res.status(200).json();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var updateUserById = async function (req, res, next) {
+    try {
+      let currentUser = await User.findOne({
+        where: {
+          id: req.params["id"],
+        },
+        // Cannot exlude password, created_at, updated_at because of "SequelizeValidationError: notNull Violation: password field is required" comming from "/server/models/user.js"
+        // attributes: { exclude: ["password", "created_at", "updated_at"] },
+      });
+
+      if (!currentUser) {
+        res.status(400);
+        throw new Error("user with given id was not found");
+      }
+
+      if (req.body?.email) {
+        const { group_id, email } = req.body;
+        const existingUser = await User.findOne({ where: { group_id, email } });
+        if (existingUser) {
+          return res
+            .status(400)
+            .json({ error: "Email already exists within the group" });
+        }
+      }
+
+      Object.keys(req.body).forEach((key) => {
+        currentUser[key] = req.body[key] ? req.body[key] : currentUser[key];
+      });
+
+      await currentUser.validate();
+      await currentUser.save();
+
+      return res.status(200).json(currentUser);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  var addUser = async function (req, res, next) {
+    try {
+      const { first_name, last_name, email, role_id, group_id } = req.body;
+
+      // Check if email is unique within the group, so email can appear once per group but can appear across multiple groups
+      const existingUser = await User.findOne({ where: { email, group_id } });
+      if (existingUser) {
+        // TODO: Give client feedback that email already exists within the group
+
+        return res
+          .status(400)
+          .json({ error: "Email already exists within the group" });
+      }
+
+      const randomPassword = crypto
+        .randomBytes(12)
+        .toString("base64")
+        .slice(0, 12);
+
+      // TODO: Send email to new user with password
+
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      const newUser = {
+        first_name,
+        last_name,
+        email,
+        password: hashedPassword,
+        role_id,
+        language_id: 1,
+        group_id,
+      };
+
+      await User.build(newUser).validate();
+      const result = await User.create(newUser);
+
+      return res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     registerUser,
     logInUser,
     getUserByUserId,
     updateUserById,
+    getUsersByGroupId,
+    deleteUserById,
+    updateUserById,
+    addUser,
     fetchUser,
   };
 };
