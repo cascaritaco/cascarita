@@ -137,7 +137,7 @@ resource "aws_lb_target_group" "ecs_tg" {
   name        = local.alb_lb_target_group_name
   port        = var.port
   protocol    = "HTTP"
-  target_type = "ip"
+  target_type = "instance"
   vpc_id      = aws_vpc.main.id
 
   health_check {
@@ -160,8 +160,12 @@ resource "aws_lb_listener" "ecs_alb_listener" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
   tags = {
     Name        = local.alb_listener_name

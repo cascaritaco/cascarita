@@ -10,5 +10,6 @@ COPY ./dist /app/dist
 RUN npm clean-install
 
 EXPOSE 80
+EXPOSE 443
 
 CMD ["npm", "run", "server"]

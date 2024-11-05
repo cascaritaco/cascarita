@@ -15,6 +15,7 @@ services:
     # Please update in the corresponding Dockerfile as well
     ports:
       - "80:80"
+      - "443:443"
     command: npm run server
 
   # NOTE: server will out monolith app, client will be activated once

@@ -87,14 +87,20 @@ module.exports = {
         { transaction },
       );
 
-      // Step 4: Remove any existing foreign key constraints on 'league_id'
-      await queryInterface.removeConstraint(
-        "Seasons",
-        "Seasons_league_id_foreign_idx",
-        {
-          transaction,
-        },
-      );
+      // Step 4: Attempt to remove the foreign key constraint if it exists
+      try {
+        await queryInterface.removeConstraint(
+          "Seasons",
+          "Seasons_league_id_foreign_idx",
+          {
+            transaction,
+          },
+        );
+      } catch (error) {
+        console.warn(
+          "Constraint Seasons_league_id_foreign_idx does not exist, skipping removal.",
+        );
+      }
 
       // Step 5: Modify 'league_id' column with new constraints
       await queryInterface.changeColumn(

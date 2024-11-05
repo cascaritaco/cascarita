@@ -131,7 +131,7 @@ variable "desired_count" {
 
 variable "target_capacity" {
   description = "The target capacity for the auto-scaling group provider."
-  default     = 3
+  default     = 1
 }
 
 variable "availability_zones" {
