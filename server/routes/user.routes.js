@@ -11,11 +11,10 @@ module.exports = (checkJwt) => {
   router.get("/:id", UserController.getUserByUserId);
   router.patch("/:id", UserController.updateUserById);
   router.post("/register", UserController.registerUser);
-
-  // router.post("/otp/emails", UserController.sendOtpEmail);
-  // router.post("/forms/emails", UserController.sendFormLinkEmail);
-  // router.post("/otp/verification", UserController.verifyOTP);
   router.get("/", checkJwt, UserController.fetchUser);
-
+  router.get("/group/:group_id", UserController.getUsersByGroupId);
+  router.delete("/:id", UserController.deleteUserById);
+  router.patch("/:id", UserController.updateUserById);
+  router.post("/", UserController.addUser);
   return router;
 };

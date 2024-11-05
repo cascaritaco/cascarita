@@ -9,6 +9,7 @@ import EmptyDNDCanvas from "../i18n/en/components/EmptyDNDCanvas.json";
 import DraggableButtons from "../i18n/en/components/DraggableButtons.json";
 import DraggableFields from "../i18n/en/components/DraggableFields.json";
 import FormResponses from "../i18n/en/components/FormResponses.json";
+import Users from "../i18n/en/pages/Users.json";
 import Routes from "../i18n/en/pages/Routes.json";
 import Divisions from "../i18n/en/pages/Divisions.json";
 import DeleteForm from "../i18n/en/components/DeleteForm.json";
@@ -28,6 +29,7 @@ const resources = {
   DraggableButtons,
   FormResponses,
   DraggableFields,
+  Users,
   Routes,
   Divisions,
   DeleteForm,
