@@ -2,11 +2,11 @@ import Logo from "../../assets/logo.svg";
 import styles from "./TopNav.module.css";
 import { Text } from "@radix-ui/themes";
 import { Avatar } from "@radix-ui/themes";
-import { useAuth } from "../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import LanguagePreferenceButton from "../LanguagePreferenceButton/LanguagePreferenceButton";
 
 const SideNav = () => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
 
   return (
     <div className={styles["top-nav"]}>
@@ -31,7 +31,7 @@ const SideNav = () => {
           />
 
           <Text as="div" size="1" weight="bold" className={styles.avatarText}>
-            {currentUser && currentUser.email}
+            {user && user.email}
           </Text>
         </div>
       </div>

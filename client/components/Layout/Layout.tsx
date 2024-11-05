@@ -4,12 +4,13 @@ import TopNav from "../TopNav/TopNav";
 import SideNav from "../SideNav/SideNav";
 import { useState } from "react";
 import { blackListRoutes } from "./blacklist";
-import { useAuth } from "../AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import { matchPath } from "../../util/matchPath";
 import { Outlet } from "react-router-dom";
 
 const Layout: React.FC<LayoutProps> = () => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth0();
+  const currentUser = user;
   const [selectedItem, setSelectedItem] = useState("");
 
   const isBlacklisted = blackListRoutes.some((pattern) =>

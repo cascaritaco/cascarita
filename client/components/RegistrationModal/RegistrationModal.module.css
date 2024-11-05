@@ -8,12 +8,13 @@
 
 .inlineFields {
   display: flex;
+  justify-content: space-between;
 }
 
 .formContainer {
   display: flex;
   flex-direction: column;
-  width: 450px;
+  width: 100%;
   padding: 20px;
   border-radius: 8px;
   background-color: #fff;
@@ -40,7 +41,45 @@
   background-color: #000;
   color: #fff;
   cursor: pointer;
-  font-weight: 900;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.registerBtn,
+.backBtn {
+  background-color: #000;
+  color: #fff;
+  padding: 8px 32px;
+  border-radius: 26px;
+}
+
+.backBtn {
+  outline: 1px solid #000;
+  background-color: transparent;
+  color: #000;
+}
+
+.registerBtn:hover,
+.registerBtn:focus {
+  transition: ease-in 200ms;
+  background-color: transparent;
+  outline: 1px solid black;
+  color: #000;
+}
+
+.finishRegisterBtn {
+  margin-top: "26px";
+}
+
+.backBtn:hover,
+.backBtn:focus {
+  outline: 1px solid blue;
+  color: black;
 }
 
 .heading {
@@ -64,9 +103,26 @@
   gap: 4px;
 }
 
-.selectMenu {
-  margin-right: 24px;
-  width: 180px;
+.radioContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.radioContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selectMenu1 {
+  width: 300px;
+  margin-top: 18px;
+}
+
+.selectMenu2 {
+  width: 160px;
+  margin-bottom: 15px;
 }
 
 .errorMessage {
@@ -99,80 +155,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.left {
-  background: linear-gradient(to top, #830aaf, #4238d5);
-  height: 100vh; /* Full height of the viewport */
-  width: 50%; /* 50% width of the viewport */
-  display: flex;
-  flex-direction: column; /* Make it a column */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-}
-
-.left > h1 {
-  padding-left: 10%;
-  padding-right: 10%;
-  margin-top: 5%;
-  color: white;
-  font-size: 40px;
-  font-weight: 500;
-  overflow-wrap: break-word;
-  display: inline-block; /* Allow the text to wrap */
-  text-align: center;
-}
-
-.left > p {
-  color: white;
-}
-
-.right {
-  display: flex;
-  justify-content: center;
-  width: 50%;
-  text-align: center;
-  padding: 0 80px;
-}
-
-.right > p {
-  text-align: left;
-  margin-bottom: 5px;
-  color: #495a6b;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.right > input {
-  min-width: 200px;
-  min-width: 200px;
-  width: calc(100% - 20px);
-  margin-bottom: 10px;
-  padding: 5px;
-  color: #7e878f;
-  box-sizing: border-box;
-  border-radius: 8px;
-  background-color: #f5f7fb;
-}
-
-.right > button {
-  min-width: 200px;
-  max-width: 500px;
-  width: calc(100% - 100px);
-  margin-top: 30px;
-  margin-bottom: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-  border-radius: 30px;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  background-color: #000;
-}
-
-.right > button:hover {
-  background-color: #808080;
 }
 
 @media screen and (max-width: 1200px) {

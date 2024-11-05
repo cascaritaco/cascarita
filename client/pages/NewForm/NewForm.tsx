@@ -1,17 +1,20 @@
 import DraggableButton from "../../components/DragAndDropComponents/DraggableButton/DraggableButton";
 import Page from "../../components/Page/Page";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DNDCanvas from "../../components/DragAndDropComponents/DNDCanvas/DNDCanvas";
 import styles from "./NewForm.module.css";
 import { DNDCanvasRef, DroppedItem } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../components/AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
 import FormResponses from "../../components/FormResponses/FormResponses";
 import { toSnakeCase } from "../../util/toSnakeCase";
 import { createMongoForm, updateForm } from "../../api/forms/service";
+import { User } from "../../api/users/types";
 import { Field, FieldType, Form } from "../../api/forms/types";
+import Cookies from "js-cookie";
+import { fetchUser } from "../../api/users/service";
 
 const NewForm = () => {
   const { t } = useTranslation("NewForms");
@@ -37,7 +40,16 @@ const NewForm = () => {
   );
   const [formLink, setFormLink] = useState(location.state?.link ?? null);
   const canvasRef = useRef<DNDCanvasRef>(null);
-  const { currentUser } = useAuth();
+  const { getAccessTokenSilently } = useAuth0();
+  let currentUser: User;
+
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessTokenSilently();
+      const email = Cookies.get("email") || "";
+      currentUser = await fetchUser(email, token);
+    })();
+  }, []);
 
   const draggableButtons = [
     "Short Text",
@@ -79,6 +91,10 @@ const NewForm = () => {
   };
 
   const onCreate = async (data: Form) => {
+    const token = await getAccessTokenSilently();
+    const email = Cookies.get("email") || "";
+    currentUser = await fetchUser(email, token);
+
     const response = await createMongoForm(
       data,
       title,

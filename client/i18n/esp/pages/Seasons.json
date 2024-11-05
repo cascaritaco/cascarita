@@ -22,8 +22,13 @@
     "end": "Fecha Final",
     "submit": "Entregar",
     "submitting": "Entregando...",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "delete": "Sí, estoy seguro",
+    "deleteMessage": "¿Estás seguro de que deseas eliminar esta temporada?"
   },
   "edit": "Editar",
-  "delete": "Borrar"
+  "delete": "Borrar",
+  "empty": "No hay temporadas para mostrar...",
+  "loading": "Cargando...",
+  "error": "Error al obtener datos"
 }

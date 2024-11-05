@@ -1,16 +1,35 @@
 {
-    "title": "Ligas",
-    "filter": "Filtro",
-    "filterOptions": {
-        "item1": "Activo",
-        "item2": "Inactivo"
-    },
-    "sort": "Ordenar Por",
-    "sortOptions": {
-        "item1": "Alfabético",
-        "item2": "Fecha"
-    },
-    "button": "Agregar Liga",
-    "col1": "Nombre",
-    "col2": "Opciones"
+  "title": "Ligas",
+  "filter": "Filtro",
+  "filterOptions": {
+    "item1": "Activo",
+    "item2": "Inactivo"
+  },
+  "sort": "Ordenar Por",
+  "sortOptions": {
+    "item1": "Alfabético",
+    "item2": "Fecha"
+  },
+  "button": "Agregar Liga",
+  "tableHeaders": {
+    "name": "Nombre de la Liga",
+    "options": "Opciones"
+  },
+  "edit": "Editar",
+  "delete": "Borrar",
+  "formContent": {
+    "title": "Crear Liga",
+    "cancel": "Cancelar",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Descripción de la liga",
+    "name": "Nombre",
+    "namePlaceholder": "Nombre de la liga",
+    "delete": "Si estoy seguro",
+    "deleteMessage": "¿Estás seguro de que deseas eliminar esta liga?",
+    "create": "Crear liga",
+    "edit": "Editar liga"
+  },
+  "empty": "No hay ligas para mostrar...",
+  "loading": "Cargando...",
+  "error": "Error al obtener datos"
 }
