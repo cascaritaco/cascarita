@@ -272,20 +272,10 @@ const UserController = function () {
           .json({ error: "Email already exists within the group" });
       }
 
-      const randomPassword = crypto
-        .randomBytes(12)
-        .toString("base64")
-        .slice(0, 12);
-
-      // TODO: Send email to new user with password
-
-      const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
       const newUser = {
         first_name,
         last_name,
         email,
-        password: hashedPassword,
         role_id,
         language_id: 1,
         group_id,
