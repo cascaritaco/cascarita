@@ -29,7 +29,7 @@ const resources = {
   DraggableButtons,
   FormResponses,
   DraggableFields,
-  Users
+  Users,
   Routes,
   Divisions,
   DeleteForm,
