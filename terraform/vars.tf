@@ -202,3 +202,8 @@ variable "acm_certificate_arn" {
   type        = string
   default     = "arn:aws:acm:us-west-1:658488939163:certificate/1a163a09-441d-4700-8127-4c166f8bf87a"
 }
+
+variable "subdomain" {
+  description = "The subdomain for the application."
+  default     = "app.cascarita.io"
+}

@@ -177,6 +177,26 @@ resource "aws_lb_listener" "ecs_alb_listener" {
   }
 }
 
+resource "aws_lb_listener_rule" "redirect_to_https_for_subdomain" {
+  listener_arn = aws_lb_listener.ecs_alb_listener.arn
+  priority     = 1
+
+  condition {
+    host_header {
+      values = [var.subdomain]
+    }
+  }
+
+  action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
 resource "aws_lb_listener" "ecs_alb_https_listener" {
   load_balancer_arn = aws_lb.ecs_alb.arn
   port              = 443
@@ -194,5 +214,19 @@ resource "aws_lb_listener" "ecs_alb_https_listener" {
     Owner       = var.owner
     Role        = var.role_listener
     Purpose     = var.purpose_listener
+  }
+}
+
+resource "aws_lb_listener_rule" "redirect_to_target_group_for_subdomain" {
+  listener_arn = aws_lb_listener.ecs_alb_https_listener.arn
+  priority     = 1
+  condition {
+    host_header {
+      values = [var.subdomain]
+    }
+  }
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
   }
 }

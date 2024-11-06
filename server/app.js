@@ -21,7 +21,13 @@ app.use(cookieParser());
 
 // Enable CORS before using the router
 app.use(morgan("dev"));
-app.use(helmet());
+// NOTE: BETTER SOLUTION BUT WE NEED TO NOT DISABLE
+// CSP TO PREVENT XSS ATTACKS
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 app.use(
   cors({
     origin: `http://localhost:${app.get("port")}`,
