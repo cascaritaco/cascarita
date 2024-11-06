@@ -1,4 +1,5 @@
 provider "aws" {
+  profile = var.aws_profile
   region = var.aws_region
 }
 
@@ -38,7 +39,6 @@ resource "aws_subnet" "subnet2" {
     Owner       = var.owner
   }
 }
-
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -137,7 +137,7 @@ resource "aws_lb_target_group" "ecs_tg" {
   name        = local.alb_lb_target_group_name
   port        = var.port
   protocol    = "HTTP"
-  target_type = "ip"
+  target_type = "instance"
   vpc_id      = aws_vpc.main.id
 
   health_check {
@@ -160,10 +160,13 @@ resource "aws_lb_listener" "ecs_alb_listener" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
-
   tags = {
     Name        = local.alb_listener_name
     Environment = var.environment
@@ -171,5 +174,59 @@ resource "aws_lb_listener" "ecs_alb_listener" {
     Owner       = var.owner
     Role        = var.role_listener
     Purpose     = var.purpose_listener
+  }
+}
+
+resource "aws_lb_listener_rule" "redirect_to_https_for_subdomain" {
+  listener_arn = aws_lb_listener.ecs_alb_listener.arn
+  priority     = 1
+
+  condition {
+    host_header {
+      values = [var.subdomain]
+    }
+  }
+
+  action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "ecs_alb_https_listener" {
+  load_balancer_arn = aws_lb.ecs_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
+  }
+  tags = {
+    Name        = local.alb_listener_name
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
+    Role        = var.role_listener
+    Purpose     = var.purpose_listener
+  }
+}
+
+resource "aws_lb_listener_rule" "redirect_to_target_group_for_subdomain" {
+  listener_arn = aws_lb_listener.ecs_alb_https_listener.arn
+  priority     = 1
+  condition {
+    host_header {
+      values = [var.subdomain]
+    }
+  }
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
   }
 }

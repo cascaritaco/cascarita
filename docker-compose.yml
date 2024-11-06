@@ -14,21 +14,25 @@ services:
     # NOTE, if you change the .env SERVER_PORT, please update here to match
     # Please update in the corresponding Dockerfile as well
     ports:
-      - "3001:3001"
+      - "80:80"
+      - "443:443"
     command: npm run server
 
-  client:
-    platform: linux/arm64
-    restart: unless-stopped
-    image: cascarita-client
-    build:
-      context: .
-      dockerfile: client/Dockerfile
-    # NOTE, if you change the .env CLIENT_PORT, please update here to match
-    # Please update in the corresponding Dockerfile as well
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/app/client
-      - ./dist:/app/dist
-    command: npm run client
+  # NOTE: server will out monolith app, client will be activated once
+  # reverse proxy solution has been implemented
+
+  # client:
+  #   platform: linux/arm64
+  #   restart: unless-stopped
+  #   image: cascarita-client
+  #   build:
+  #     context: .
+  #     dockerfile: client/Dockerfile
+  #   # NOTE, if you change the .env CLIENT_PORT, please update here to match
+  #   # Please update in the corresponding Dockerfile as well
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client:/app/client
+  #     - ./dist:/app/dist
+  #   command: npm run client

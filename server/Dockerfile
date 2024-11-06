@@ -1,4 +1,4 @@
-FROM node:21-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -9,11 +9,7 @@ COPY ./dist /app/dist
 
 RUN npm clean-install
 
-# Needed for the bcrypt dependency
-RUN apk add --no-cache make gcc g++ python3 && \
-    npm rebuild bcrypt --build-from-source && \
-    apk del make gcc g++ python3
-
-EXPOSE 3001
+EXPOSE 80
+EXPOSE 443
 
 CMD ["npm", "run", "server"]

@@ -43,7 +43,7 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family       = local.task_family_name
-  network_mode = "awsvpc"
+  network_mode = "host"
   cpu          = var.cpu_allocation
   runtime_platform {
     operating_system_family = "LINUX"
@@ -60,6 +60,11 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         {
           containerPort = var.port
           hostPort      = var.port
+          protocol      = "tcp"
+        },
+        {
+          containerPort = 443            # HTTPS port
+          hostPort      = 443            # HTTPS port
           protocol      = "tcp"
         }
       ]
@@ -80,11 +85,6 @@ resource "aws_ecs_service" "ecs_service" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
   desired_count   = var.desired_count
-
-  network_configuration {
-    subnets         = [aws_subnet.subnet.id, aws_subnet.subnet2.id]
-    security_groups = [aws_security_group.security_group.id]
-  }
 
   force_new_deployment = true
   placement_constraints {

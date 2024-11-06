@@ -1,3 +1,13 @@
+variable "aws_profile" {
+  description = "value for aws profile"
+  default     = "cascarita"
+}
+
+variable "nat_gateway_name" {
+  description = "The name of the NAT gateway."
+  default     = "ecs-nat-gateway"
+}
+
 variable "aws_region" {
   description = "value for aws_region"
   default     = "us-west-1"
@@ -96,12 +106,12 @@ variable "port" {
 
 variable "container_name" {
   description = "The name of the container in the task definition."
-  default     = "casc-server"
+  default     = "cascarita-server"
 }
 
 variable "container_image" {
   description = "The container image to be used in the task definition."
-  default     = "public.ecr.aws/nginx/nginx:latest"
+  default     = "658488939163.dkr.ecr.us-west-1.amazonaws.com/cascarita-server"
 }
 
 variable "cpu_allocation" {
@@ -121,7 +131,7 @@ variable "desired_count" {
 
 variable "target_capacity" {
   description = "The target capacity for the auto-scaling group provider."
-  default     = 3
+  default     = 1
 }
 
 variable "availability_zones" {
@@ -184,4 +194,16 @@ locals {
 }
 locals {
   route_table_name = "${var.environment}-route-table"
+}
+
+# Define ACM certificate ARN variable with the specific ARN
+variable "acm_certificate_arn" {
+  description = "ARN of the ACM certificate for HTTPS"
+  type        = string
+  default     = "arn:aws:acm:us-west-1:658488939163:certificate/1a163a09-441d-4700-8127-4c166f8bf87a"
+}
+
+variable "subdomain" {
+  description = "The subdomain for the application."
+  default     = "app.cascarita.io"
 }
