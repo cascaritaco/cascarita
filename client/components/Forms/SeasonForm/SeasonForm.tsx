@@ -77,10 +77,10 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
     <>
       {requestType === "DELETE" ? (
         <DeleteForm
-          destructBtnLabel="Yes, I'm Sure"
+          destructBtnLabel={t("formContent.delete")}
           onSubmit={handleSubmit}
           className={styles.form}>
-          <p>Are you sure you want to delete this season?</p>
+          <p>{t("formContent.deleteMessage")}</p>
         </DeleteForm>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>

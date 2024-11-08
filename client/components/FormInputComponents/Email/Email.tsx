@@ -2,8 +2,10 @@ import React from "react";
 import { FieldProps } from "../types";
 import { FieldError, useFormContext } from "react-hook-form";
 import styles from "./Email.module.css";
+import { useTranslation } from "react-i18next";
 
 const Email = ({ field, index }: FieldProps) => {
+  const { t } = useTranslation("FormComponents");
   const {
     register,
     formState: { errors },
@@ -18,7 +20,9 @@ const Email = ({ field, index }: FieldProps) => {
   return (
     <section className={styles.container}>
       <div className={styles.questionContainer}>
-        <h3 className={styles.question}>Question: {field.title}</h3>
+        <h3 className={styles.question}>
+          {t("question")}: {field.title}
+        </h3>
         {field.validations?.required && (
           <span className={styles.required}>*</span>
         )}
@@ -31,10 +35,10 @@ const Email = ({ field, index }: FieldProps) => {
         type="email"
         placeholder="name@example.com"
         {...register(`answers.${index}.email`, {
-          required: required && "This field is required",
+          required: required && t("required"),
           pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: "Please enter a valid email address",
+            message: t("email.invalid"),
           },
         })}
       />

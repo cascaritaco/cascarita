@@ -1,0 +1,26 @@
+{
+  "question": "Question",
+  "required": "This field is required",
+  "shortText": {
+    "placeholder": "Type your answer here...",
+    "minLength": "This field must be at least these many characters:"
+  },
+  "longText": {
+    "placeholder": "Type your answer here...",
+    "maxLength": "Answer has to be less than these many characters:",
+    "break": "to make a line break"
+  },
+  "email": {
+    "invalid": "Please enter a valid email address"
+  },
+  "dropdown": {
+    "placeholder": "Select an option..."
+  },
+  "phoneNumber": {
+    "invalid": "Please enter a valid phone number"
+  },
+  "stripe": {
+    "price": "Price",
+    "fee": "Fee"
+  }
+}

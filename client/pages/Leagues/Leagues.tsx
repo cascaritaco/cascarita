@@ -115,7 +115,7 @@ const Leagues = () => {
               {t("button")}
             </PrimaryButton>
           </Modal.Button>
-          <Modal.Content title="Create League">
+          <Modal.Content title={t("formContent.title")}>
             <LeagueForm
               afterSave={() => setIsCreateOpen(false)}
               requestType="POST"
@@ -125,18 +125,18 @@ const Leagues = () => {
       </div>
 
       {filteredData == null || filteredData?.length === 0 ? (
-        <p className={styles.noLeagueMessage}>No leagues to display...</p>
+        <p className={styles.noLeagueMessage}>{t("empty")}</p>
       ) : (
         <DashboardTable
-          headers={["League Name", "Options"]}
+          headers={[t("tableHeaders.name"), t("tableHeaders.options")]}
           headerColor="light">
           {isLoading ? (
             <tr>
-              <td>Loading...</td>
+              <td>{t("loading")}</td>
             </tr>
           ) : isError || !data ? (
             <tr>
-              <td>Error Fetching Data</td>
+              <td>{t("error")}</td>
             </tr>
           ) : (
             filteredData?.map((league: LeagueType, idx: number) => (
@@ -150,7 +150,7 @@ const Leagues = () => {
                   <DropdownMenuButton>
                     <DropdownMenuButton.Item
                       onClick={() => handleEdit(league.name, league.id)}>
-                      Edit
+                      {t("edit")}
                     </DropdownMenuButton.Item>
 
                     <DropdownMenuButton.Separator
@@ -159,7 +159,7 @@ const Leagues = () => {
 
                     <DropdownMenuButton.Item
                       onClick={() => handleDelete(league.name, league.id)}>
-                      Delete
+                      {t("delete")}
                     </DropdownMenuButton.Item>
                   </DropdownMenuButton>
                 </td>
@@ -170,7 +170,7 @@ const Leagues = () => {
       )}
 
       <Modal open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <Modal.Content title={`Edit ${currentLeagueName}`}>
+        <Modal.Content title={`${t("edit")} ${currentLeagueName}`}>
           <LeagueForm
             afterSave={() => setIsEditOpen(false)}
             requestType="PATCH"
@@ -180,7 +180,7 @@ const Leagues = () => {
       </Modal>
 
       <Modal open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <Modal.Content title={`Delete ${currentLeagueName}`}>
+        <Modal.Content title={`${t("delete")} ${currentLeagueName}`}>
           <LeagueForm
             afterSave={() => setIsDeleteOpen(false)}
             requestType="DELETE"
