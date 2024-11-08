@@ -1,4 +1,3 @@
-import { QueryFunctionContext } from "@tanstack/react-query";
 import {
   LeagueResponse,
   CreateNewLeagueData,
