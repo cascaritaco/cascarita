@@ -1,5 +1,12 @@
 name: Publish Images
 on:
+  # Trigger manually via GitHub UI button
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy (e.g., staging, production)"
+        default: "staging"
+        required: true
   pull_request:
     types: [closed]
     branches:
