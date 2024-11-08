@@ -12,16 +12,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Copy .env.example to .env
-        run: cp .env.example .env
-
       - name: Set up node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ECR_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
       - name: Install dependencies
         run: npm install
+
+      - name: create env file
+        run: npm run create-staging-env
 
       - name: build
         run: npm run build
@@ -32,13 +39,6 @@ jobs:
       - name: Get timestamp
         id: get-timestamp
         run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ECR_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_ECR_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: login-ecr
