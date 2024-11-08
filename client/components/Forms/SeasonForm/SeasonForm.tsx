@@ -49,6 +49,8 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
       },
     };
 
+    console.log(data.formData);
+
     switch (requestType) {
       case "POST":
         createSeasonMutation.mutate(data as CreateNewSeasonData);

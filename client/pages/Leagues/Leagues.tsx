@@ -12,7 +12,7 @@ import DashboardTable from "../../components/DashboardTable/DashboardTable";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getLeagueByGroupId } from "../../api/leagues/service";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useAuth0 } from "@auth0/auth0-react";
 import { fetchUser } from "../../api/users/service";
@@ -75,6 +75,14 @@ const Leagues = () => {
   const filteredData = data?.filter((league: LeagueType) =>
     league.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
+
+  // Check if the current path is the division route
+  const location = useLocation();
+  const isLeagueRoute = location.pathname.includes("league");
+
+  if (isLeagueRoute) {
+    return <Outlet />;
+  }
 
   return (
     <Page title={t("title")}>
