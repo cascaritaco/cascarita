@@ -31,11 +31,19 @@ module.exports = {
         enforce: "pre",
         loader: require.resolve("@svgr/webpack"),
       },
+      {
+        test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
+        loader: "file-loader",
+        options: {
+          name: "[name].[ext]",
+        },
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./client/public/index.html",
+      favicon: "./server/images/favicon.ico",
     }),
     new DefinePlugin({
       "process.env.REACT_APP_AUTH0_DOMAIN": JSON.stringify(

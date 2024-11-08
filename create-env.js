@@ -5,7 +5,10 @@ const {
 const { fromIni } = require("@aws-sdk/credential-provider-ini");
 const fs = require("fs");
 
-const secretName = "dev/env";
+// const secretName = "dev/env";
+const environment = process.argv[2] || "dev";
+console.log(`Creating .env file for environment: ${environment}`);
+const secretName = `${environment}/env`;
 const region = "us-west-1";
 const envFilePath = ".env";
 const profile = "cascarita";

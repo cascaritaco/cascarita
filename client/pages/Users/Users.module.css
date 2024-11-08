@@ -1,0 +1,59 @@
+.tableRow {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+
+}
+
+.tableData {
+    padding: 12px 10px;
+}
+
+.leadingColumn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.avatar {
+    z-index: -1;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.email {
+    flex-grow: 1;
+    overflow:hidden;
+}
+
+.separator {
+    border-bottom: 1px solid #c8cbd0;
+    margin-bottom: 3px;
+    margin-top: 3px;
+}
+
+.filterSearch {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filterSearch > button {
+  margin-right: 50px;
+}
+
+.dropdown {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.noUsersMessage {
+  text-align: center;
+  margin-top: 200px;
+  font-size: 2rem;
+}

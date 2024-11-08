@@ -20,6 +20,17 @@ import FormPage from "./FormPage/FormPage";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import Plan from "./Settings/Plan/Plan";
 import Payment from "./Settings/Payment/Payment";
+import { useTranslation } from "react-i18next";
+
+const HomeCrumb = () => {
+  const { t } = useTranslation("Routes");
+  return <Link to="/">{t("breadcrumb.home")}</Link>;
+};
+
+const UserCrumb = () => {
+  const { t } = useTranslation("Routes");
+  return <Link to="/users">{t("breadcrumb.users")}</Link>;
+};
 
 export const useRouter = () =>
   createBrowserRouter(
@@ -30,7 +41,7 @@ export const useRouter = () =>
           <Route
             path="/"
             element={<Home />}
-            handle={{ crumb: () => <Link to="/">Home</Link> }}>
+            handle={{ crumb: () => <HomeCrumb /> }}>
             <Route
               path="season/:leagueId/:leagueName"
               element={<Seasons />}
@@ -100,17 +111,17 @@ export const useRouter = () =>
               </Route>
             </Route>
           </Route>
-        </Route>
-        <Route
-          path="users"
-          element={<Users />}
-          handle={{ crumb: () => <Link to={"/users"}>Users</Link> }}
-        />
-        <Route path="forms" element={<Forms />} />
-        <Route path="forms/check" element={<NewForm />} />
-        <Route path="settings" element={<Settings />}>
-          <Route index element={<Plan />} />
-          <Route path="payment" element={<Payment />} />
+          <Route
+            path="users"
+            element={<Users />}
+            handle={{ crumb: () => <UserCrumb /> }}
+          />
+          <Route path="forms" element={<Forms />} />
+          <Route path="forms/check" element={<NewForm />} />
+          <Route path="settings" element={<Settings />}>
+            <Route index element={<Plan />} />
+            <Route path="payment" element={<Payment />} />
+          </Route>
         </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />

@@ -2,8 +2,10 @@ import React from "react";
 import { FieldProps } from "../types";
 import { FieldError, useFormContext } from "react-hook-form";
 import styles from "./MultipleChoice.module.css";
+import { useTranslation } from "react-i18next";
 
 const MultipleChoice = ({ field, index }: FieldProps) => {
+  const { t } = useTranslation("FormComponents");
   const {
     register,
     formState: { errors },
@@ -27,7 +29,9 @@ const MultipleChoice = ({ field, index }: FieldProps) => {
   return (
     <section className={styles.container}>
       <div className={styles.questionContainer}>
-        <h3 className={styles.question}>Question: {field.title}</h3>
+        <h3 className={styles.question}>
+          {t("question")}: {field.title}
+        </h3>
         {field.validations?.required && (
           <span className={styles.required}>*</span>
         )}
@@ -50,7 +54,7 @@ const MultipleChoice = ({ field, index }: FieldProps) => {
                   ? `answers.${index}.choices.labels`
                   : `answers.${index}.choice.label`,
                 {
-                  required: required && "This field is required",
+                  required: required && t("required"),
                 },
               )}
             />

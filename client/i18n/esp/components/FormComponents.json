@@ -1,0 +1,26 @@
+{
+  "question": "Pregunta",
+  "required": "Este campo es obligatorio",
+  "shortText": {
+    "placeholder": "Escribe tu respuesta aquí...",
+    "minLength": "Este campo debe tener al menos estos caracteres: "
+  },
+  "longText": {
+    "placeholder": "Escribe tu respuesta aquí...",
+    "maxLength": "La respuesta debe tener menos de estos caracteres: ",
+    "break": "para hacer un salto de línea"
+  },
+  "email": {
+    "invalid": "Por favor, introduce una dirección de correo electrónico válida"
+  },
+  "dropdown": {
+    "placeholder": "Selecciona una opción..."
+  },
+  "phoneNumber": {
+    "invalid": "Por favor, introduce un número de teléfono válido"
+  },
+  "stripe": {
+    "price": "Precio",
+    "fee": "Tarifa"
+  }
+}

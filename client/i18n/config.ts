@@ -22,6 +22,20 @@ import DraggableButtonsEn from "./en/components/DraggableButtons.json";
 import DraggableButtonsEsp from "./esp/components/DraggableButtons.json";
 import DraggableFieldsEn from "./en/components/DraggableFields.json";
 import DraggableFieldsEsp from "./esp/components/DraggableFields.json";
+import UsersEn from "./en/pages/Users.json";
+import UsersEsp from "./esp/pages/Users.json";
+import RoutesEn from "./en/pages/Routes.json";
+import RoutesEsp from "./esp/pages/Routes.json";
+import DivisionsEn from "./en/pages/Divisions.json";
+import DivisionsEsp from "./esp/pages/Divisions.json";
+import DeleteFormEn from "./en/components/DeleteForm.json";
+import DeleteFormEsp from "./esp/components/DeleteForm.json";
+import TeamsEn from "./en/pages/Teams.json";
+import TeamsEsp from "./esp/pages/Teams.json";
+import SettingsEn from "./en/pages/Settings.json";
+import SettingsEsp from "./esp/pages/Settings.json";
+import FormComponentsEn from "./en/components/FormComponents.json";
+import FormComponentsEsp from "./esp/components/FormComponents.json";
 import { updateUsersLanguages } from "../api/users/service";
 
 i18next.use(initReactI18next).init({
@@ -43,6 +57,13 @@ i18next.use(initReactI18next).init({
       DraggableButtons: DraggableButtonsEn,
       FormResponses: FormResponsesEn,
       DraggableFields: DraggableFieldsEn,
+      Users: UsersEn,
+      Routes: RoutesEn,
+      Divisions: DivisionsEn,
+      DeleteForm: DeleteFormEn,
+      Teams: TeamsEn,
+      Settings: SettingsEn,
+      FormComponents: FormComponentsEn,
     },
     esp: {
       DropdownMenuButton: DropdownMenuButtonEsp,
@@ -56,6 +77,13 @@ i18next.use(initReactI18next).init({
       DraggableButtons: DraggableButtonsEsp,
       FormResponses: FormResponsesEsp,
       DraggableFields: DraggableFieldsEsp,
+      Users: UsersEsp,
+      Routes: RoutesEsp,
+      Divisions: DivisionsEsp,
+      DeleteForm: DeleteFormEsp,
+      Teams: TeamsEsp,
+      Settings: SettingsEsp,
+      FormComponents: FormComponentsEsp,
     },
   },
   ns: [
@@ -70,6 +98,13 @@ i18next.use(initReactI18next).init({
     "DraggableButtons",
     "FormResponses",
     "DraggableFields",
+    "Users",
+    "Routes",
+    "Divisions",
+    "DeleteForm",
+    "Teams",
+    "Settings",
+    "FormComponents",
   ],
 });
 

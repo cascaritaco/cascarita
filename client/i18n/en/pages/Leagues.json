@@ -11,6 +11,25 @@
     "item2": "Date"
   },
   "button": "Add League",
-  "col1": "Name",
-  "col2": "Options"
+  "tableHeaders": {
+    "name": "Name",
+    "options": "Options"
+  },
+  "edit": "Edit",
+  "delete": "Delete",
+  "formContent": {
+    "title": "Create League",
+    "cancel": "Cancel",
+    "description": "Description",
+    "descriptionPlaceholder": "League description",
+    "name": "Name",
+    "namePlaceholder": "League name",
+    "delete": "Yes, I'm sure",
+    "deleteMessage": "Are you sure you want to delete this league?",
+    "create": "Create league",
+    "edit": "Edit league"
+  },
+  "empty": "No leagues to display...",
+  "loading": "Loading...",
+  "error": "Error fetching data"
 }
