@@ -60,10 +60,6 @@ jobs:
       - name: docker compose build
         run: docker compose build
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: tag and push images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
