@@ -5,7 +5,7 @@ const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
-    return <div>Loading...</div>; // Add a loading spinner if desired
+    return <></>; // Add a loading spinner if desired
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;

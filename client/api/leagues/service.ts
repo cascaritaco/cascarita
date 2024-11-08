@@ -6,12 +6,7 @@ import {
   DeleteLeagueData,
 } from "../../components/Forms/LeagueForm/types";
 
-type UserQueryKey = [string, number];
-
-const getLeagueByGroupId = async ({
-  queryKey,
-}: QueryFunctionContext<UserQueryKey>) => {
-  const [, groupId] = queryKey;
+const getLeagueByGroupId = async (groupId: number) => {
   try {
     const response = await fetch(`/api/groups/${groupId}/leagues`, {
       method: "GET",
