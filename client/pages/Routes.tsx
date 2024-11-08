@@ -111,17 +111,17 @@ export const useRouter = () =>
               </Route>
             </Route>
           </Route>
-        </Route>
-        <Route
-          path="users"
-          element={<Users />}
-          handle={{ crumb: () => <UserCrumb /> }}
-        />
-        <Route path="forms" element={<Forms />} />
-        <Route path="forms/check" element={<NewForm />} />
-        <Route path="settings" element={<Settings />}>
-          <Route index element={<Plan />} />
-          <Route path="payment" element={<Payment />} />
+          <Route
+            path="users"
+            element={<Users />}
+            handle={{ crumb: () => <UserCrumb /> }}
+          />
+          <Route path="forms" element={<Forms />} />
+          <Route path="forms/check" element={<NewForm />} />
+          <Route path="settings" element={<Settings />}>
+            <Route index element={<Plan />} />
+            <Route path="payment" element={<Payment />} />
+          </Route>
         </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
