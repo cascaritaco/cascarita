@@ -1,6 +1,6 @@
 import { Params, useMatches } from "react-router-dom";
 import styles from "./BreadCrumb.module.css";
-import React from "react";
+import React, { useMemo } from "react";
 
 interface IMatches {
   id: string;
@@ -11,22 +11,19 @@ interface IMatches {
 }
 
 type HandleType = {
-  crumb: (param?: string) => React.ReactNode;
+  crumb: React.ReactNode;
 };
 
 function Breadcrumbs() {
   const matches: IMatches[] = useMatches();
 
-  const crumbs = matches
-    .filter((match) =>
-      Boolean(match.handle && (match.handle as HandleType).crumb),
-    )
-    .map((match) => {
-      const crumb = (match.handle as HandleType).crumb(
-        match.data as string | undefined,
-      );
-      return crumb as React.ReactNode;
-    });
+  const crumbs = useMemo(() => {
+    return matches
+      .filter((match) =>
+        Boolean(match.handle && (match.handle as HandleType).crumb),
+      )
+      .map((match) => (match.handle as HandleType).crumb);
+  }, [matches]);
 
   return (
     <nav>
@@ -39,4 +36,4 @@ function Breadcrumbs() {
   );
 }
 
-export default Breadcrumbs;
+export default React.memo(Breadcrumbs);
