@@ -83,7 +83,6 @@ const Seasons = () => {
       return 0;
     });
 
-  // Check if the current path is the division route
   const location = useLocation();
   const isDivisionRoute = location.pathname.includes("division");
 

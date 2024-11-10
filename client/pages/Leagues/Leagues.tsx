@@ -76,7 +76,6 @@ const Leagues = () => {
     league.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
 
-  // Check if the current path is the division route
   const location = useLocation();
   const isLeagueRoute = location.pathname.includes("league");
 
