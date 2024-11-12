@@ -7,27 +7,34 @@ const Login = () => {
 
   return (
     <div className={styles.login} data-name="login">
-      <div className={styles.left}>
-        <div className={styles.logoContainer}>
-          <LogoWhite className={styles.logo} />
-        </div>
+      <div className={styles.heroContainer}>
+        <LogoWhite className={styles.logo} />
+
         <h1>Welcome to cascarita!</h1>
       </div>
-      <div className={styles.right}>
+
+      <div className={styles.loginContainer}>
         <h3 className={styles.loginHeader}>Welcome back!</h3>
         {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
-        <button
-          onClick={() => {
-            loginWithRedirect();
-          }}>
-          Sign in
-        </button>
-        <button
-          onClick={() => {
-            loginWithRedirect();
-          }}>
-          Do not have an account?
-        </button>
+        <div className={styles.authContainer}>
+          <button
+            className={styles.btn}
+            onClick={() => {
+              loginWithRedirect();
+            }}>
+            Sign in
+          </button>
+          <p>
+            Don't have an account?{" "}
+            <button
+              className={styles.signUpBtn}
+              onClick={() => {
+                loginWithRedirect();
+              }}>
+              Sign Up
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
