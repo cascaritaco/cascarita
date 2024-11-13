@@ -95,7 +95,9 @@ const TeamForm: React.FC<TeamFormProps> = ({
               id="teamName"
               name="teamName"
               value={teamName}
-              onChange={(event) => setTeamName(event.target.value)}
+              onChange={(event) =>
+                setTeamName(event.target.value.replaceAll("/", ""))
+              }
             />
           </div>
 
