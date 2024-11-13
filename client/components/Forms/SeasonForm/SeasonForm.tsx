@@ -93,7 +93,9 @@ const SeasonForm: React.FC<SeasonFormProps> = ({
               id="seasonName"
               name="seasonName"
               value={seasonName}
-              onChange={(event) => setSeasonName(event.target.value)}
+              onChange={(event) =>
+                setSeasonName(event.target.value.replaceAll("/", ""))
+              }
             />
           </div>
 

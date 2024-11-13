@@ -22,14 +22,6 @@ const Seasons = () => {
   }>();
   const leagueIdNumber = leagueId ? parseInt(leagueId, 10) : 0;
 
-  // Check if the current path is the division route
-  const location = useLocation();
-  const isDivisionRoute = location.pathname.includes("division");
-
-  if (isDivisionRoute) {
-    return <Outlet />;
-  }
-
   const { t } = useTranslation("Seasons");
 
   // const [filter, setFilter] = useState("");
@@ -90,6 +82,13 @@ const Seasons = () => {
       }
       return 0;
     });
+
+  const location = useLocation();
+  const isDivisionRoute = location.pathname.includes("division");
+
+  if (isDivisionRoute) {
+    return <Outlet />;
+  }
 
   return (
     <Page>

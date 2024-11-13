@@ -21,14 +21,6 @@ const Divisions = () => {
   const { seasonName } = useParams<{ seasonName: string }>();
   const seasonIdNumber = seasonId ? parseInt(seasonId, 10) : 0;
 
-  // Check if the current path is the division route
-  const location = useLocation();
-  const isTeamRoute = location.pathname.includes("team");
-
-  if (isTeamRoute) {
-    return <Outlet />;
-  }
-
   // const { t } = useTranslation("Leagues");
 
   // const [filter, setFilter] = useState("");
@@ -74,6 +66,12 @@ const Divisions = () => {
   const filteredData = data?.filter((division: DivisionType) =>
     division.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
+
+  const location = useLocation();
+  const isTeamRoute = location.pathname.includes("team");
+  if (isTeamRoute) {
+    return <Outlet />;
+  }
 
   return (
     <Page>
