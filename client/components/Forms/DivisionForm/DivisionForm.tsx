@@ -103,7 +103,9 @@ const DivisionForm: React.FC<DivisionFormProps> = ({
               id="divisionName"
               name="divisionName"
               value={divisionName}
-              onChange={(event) => setDivisionName(event.target.value)}
+              onChange={(event) =>
+                setDivisionName(event.target.value.replaceAll("/", ""))
+              }
             />
           </div>
 

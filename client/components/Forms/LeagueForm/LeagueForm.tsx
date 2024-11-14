@@ -102,7 +102,9 @@ const LeagueForm: React.FC<LeagueFormProps> = ({
               id="leagueName"
               name="leagueName"
               value={leagueName}
-              onChange={(event) => setLeagueName(event.target.value)}
+              onChange={(event) =>
+                setLeagueName(event.target.value.replaceAll("/", ""))
+              }
             />
           </div>
 

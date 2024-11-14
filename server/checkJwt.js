@@ -1,7 +1,9 @@
 const { auth } = require("express-oauth2-jwt-bearer");
+require("dotenv").config();
+
 const checkJwt = auth({
-  audience: "https://dev-2vszya8j41e1n3fe.us.auth0.com/api/v2/", // Ensure this matches the value in your Auth0 application
-  issuerBaseURL: "https://dev-2vszya8j41e1n3fe.us.auth0.com/",
+  audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+  issuerBaseURL: process.env.REACT_APP_AUTH0_PROVIDER,
   algorithms: ["RS256"], // Ensure you're using RS256
 });
 
