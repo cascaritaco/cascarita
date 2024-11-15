@@ -1,14 +1,20 @@
 import React, { StrictMode } from "react";
 import App from "./App";
-import ReactDOM from "react-dom/client";
-import reportWebVitals from "./reportWebVitals";
+import { createRoot } from "react-dom/client";
+// import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
 import history from "./history";
-import "./index.css";
+// import "./index.css"
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement,
-);
+interface ImportMetaEnv {
+  REACT_APP_AUTH0_DOMAIN: string;
+  REACT_APP_AUTH0_CLIENT_ID: string;
+  REACT_APP_AUTH0_AUDIENCE?: string;
+}
+
+interface ImportMeta {
+  env: ImportMetaEnv;
+}
 
 type AppState = {
   returnTo?: string;
@@ -23,9 +29,9 @@ const onRedirectCallback = (appState: AppState | undefined) => {
 };
 
 const providerConfig = (() => {
-  const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
-  const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+  const domain = import.meta.env.VITE_APP_AUTH0_DOMAIN;
+  const clientId = import.meta.env.VITE_APP_AUTH0_CLIENT_ID;
+  const audience = import.meta.env.VITE_APP_AUTH0_AUDIENCE;
 
   if (!domain || !clientId) {
     throw new Error("Missing Auth0 environment variables");
@@ -42,7 +48,7 @@ const providerConfig = (() => {
   };
 })();
 
-root.render(
+createRoot(document.getElementById("root")!).render(
   <Auth0Provider {...providerConfig}>
     <StrictMode>
       <App />
@@ -53,4 +59,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals();

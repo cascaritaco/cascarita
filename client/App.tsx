@@ -5,13 +5,13 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useRouter } from "./pages/Routes";
 
 const queryClient = new QueryClient();
-const routes = useRouter();
+const router = useRouter();
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18next}>
-        <RouterProvider router={routes} />
+        <RouterProvider router={router} />
       </I18nextProvider>
     </QueryClientProvider>
   );
