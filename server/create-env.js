@@ -2,20 +2,19 @@ const {
   SecretsManagerClient,
   GetSecretValueCommand,
 } = require("@aws-sdk/client-secrets-manager");
-// const { fromIni } = require("@aws-sdk/credential-provider-ini");
+const { fromIni } = require("@aws-sdk/credential-provider-ini");
 const fs = require("fs");
 
-// const secretName = "dev/env";
 const environment = process.argv[2] || "dev";
 console.log(`Creating .env file for environment: ${environment}`);
-const secretName = `${environment}/env`;
+const secretName = `${environment}/env/server`;
 const region = "us-west-1";
 const envFilePath = ".env";
-// const profile = "cascarita";
+const profile = "cascarita";
 
 const client = new SecretsManagerClient({
   region,
-  // credentials: fromIni({ profile }),
+  credentials: fromIni({ profile }),
 });
 
 async function createEnvFile() {
