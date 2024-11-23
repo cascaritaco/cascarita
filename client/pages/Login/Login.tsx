@@ -34,7 +34,7 @@ const Login = () => {
             Sign in
           </button>
           <p>
-            Don't have an account?{" "}
+            {"Don't have an account? "}
             <button
               className={styles.signUpBtn}
               onClick={() => {
