@@ -1,5 +1,5 @@
 import styles from "./Login.module.css";
-import LogoWhite from "../../assets/logoWhite.svg";
+import LogoGradient from "../../assets/logo.svg";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Login = () => {
@@ -7,15 +7,24 @@ const Login = () => {
 
   return (
     <div className={styles.login} data-name="login">
-      <div className={styles.heroContainer}>
-        <LogoWhite className={styles.logo} />
+      <div className={styles.circle}></div>
+      <div className={styles.circle}></div>
 
-        <h1>Welcome to cascarita!</h1>
+      <div className={styles.heroContainer}>
+        <LogoGradient className={styles.logo} />
+
+        <h1>cascarita</h1>
       </div>
 
       <div className={styles.loginContainer}>
-        <h3 className={styles.loginHeader}>Welcome back!</h3>
-        {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
+        <h3 className={styles.loginHeader}>Welcome to cascarita</h3>
+        <div>
+          <p className={styles.loginSubheading}>
+            Please sign up or login below to get started
+          </p>
+          {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
+        </div>
+
         <div className={styles.authContainer}>
           <button
             className={styles.btn}

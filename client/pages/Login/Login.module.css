@@ -1,23 +1,52 @@
 .login {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 16px;
   min-height: 100vh;
+  background-color: #ffffff;
+  padding: 24px 32px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.circle {
+  position: absolute;
+  z-index: 0;
   background: linear-gradient(to top, #830aaf, #4238d5);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0.4;
+  filter: blur(0.2rem);
+}
+
+.circle:first-child {
+  top: -50px;
+  right: -50px;
+}
+
+.circle:nth-child(2) {
+  width: 250px;
+  height: 250px;
+  top: 75%;
+  left: -75px;
 }
 
 .heroContainer {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 24px;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  z-index: 1;
 }
 
 .heroContainer > h1 {
-  color: white;
-  font-size: 1.2rem;
+  background: linear-gradient(to top, #830aaf, #4238d5);
+  background-clip: padding-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem;
   font-weight: 500;
 }
 
@@ -29,13 +58,18 @@
 .loginContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  min-height: 54vh;
+  min-height: 35vh;
   background-color: #ffffff;
   border-radius: 7px;
-  margin: 0 24px;
   padding: 24px 18px;
+}
+
+.loginSubheading {
+  font-size: 1.1rem;
+  text-align: center;
+  color: #667085;
+  margin-bottom: 8px;
 }
 
 .btn {
@@ -48,11 +82,7 @@
   color: #fff;
   font-size: 18px;
   font-weight: 700;
-  background-color: #000;
-}
-
-.authContainer > p {
-  font-size: 0.925rem;
+  background: linear-gradient(to top, #830aaf, #4238d5);
 }
 
 .signUpBtn {
@@ -62,9 +92,11 @@
 }
 
 .loginHeader {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 800;
   padding-bottom: 16px;
+  color: #212636;
+  text-align: center;
 }
 
 .authContainer {
@@ -73,23 +105,54 @@
   align-items: center;
   width: 100%;
   padding: 0 18px;
+  margin-top: 32px;
   margin-bottom: 16px;
 }
 
+.authContainer > p {
+  font-size: 0.925rem;
+  text-align: center;
+}
+
+.previewContainer {
+  background: linear-gradient(to top, #830aaf, #4238d5);
+  max-width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  padding: 12px;
+}
+
 /* Styles for views between 481px and 769px (Tablets) */
-@media screen and (min-width: 481px) {
+@media screen and (min-width: 740px) {
+  .login {
+    gap: 0;
+  }
+
+  .circle:first-child {
+    width: 350px;
+    height: 350px;
+    top: -100px;
+    right: -100px;
+  }
+
+  .circle:nth-child(2) {
+    width: 350px;
+    height: 350px;
+    top: 75%;
+    left: -100px;
+  }
+
   .heroContainer {
-    margin-top: 32px;
     margin-bottom: 32px;
   }
 
   .logo {
-    min-height: 190px;
-    min-width: 190px;
+    min-height: 230px;
+    min-width: 230px;
   }
 
   .heroContainer > h1 {
-    font-size: 1.9rem;
+    font-size: 3rem;
     font-weight: 500;
   }
 
@@ -98,7 +161,7 @@
   }
 
   .loginHeader {
-    font-size: 2.1rem;
+    font-size: 2.3rem;
   }
 
   .authContainer > p,
@@ -108,5 +171,18 @@
 }
 
 /* Styles for views above 770px (Desktop) */
-@media screen and (min-width: 770px) {
+@media screen and (min-width: 890px) {
+  .circle:first-child {
+    width: 450px;
+    height: 450px;
+  }
+
+  .circle:nth-child(2) {
+    width: 450px;
+    height: 450px;
+  }
+
+  .loginSubheading {
+    font-size: 1.3rem;
+  }
 }
