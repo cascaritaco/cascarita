@@ -7,27 +7,42 @@ const Login = () => {
 
   return (
     <div className={styles.login} data-name="login">
-      <div className={styles.left}>
-        <div className={styles.logoContainer}>
-          <LoginPageLogoIcon className={styles.logo} />
-        </div>
-        <h1>Welcome to cascarita!</h1>
+      <div className={styles.circle}></div>
+      <div className={styles.circle}></div>
+      <div className={styles.heroContainer}>
+        <LoginPageLogoIcon className={styles.logo} />
+        <h1>cascarita</h1>
       </div>
-      <div className={styles.right}>
-        <h3 className={styles.loginHeader}>Welcome back!</h3>
-        {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
-        <button
-          onClick={() => {
-            loginWithRedirect();
-          }}>
-          Sign in
-        </button>
-        <button
-          onClick={() => {
-            loginWithRedirect();
-          }}>
-          Do not have an account?
-        </button>
+      <div className={styles.loginContainer}>
+        <h3 className={styles.loginHeader}>Welcome to cascarita</h3>
+        <div>
+          <p className={styles.loginSubheading}>
+            Please sign up or login below to get started
+          </p>
+          {/* {fail ? <p>Login failed, please try again.</p> : <></>} */}
+        </div>
+
+        <div className={styles.authContainer}>
+          <button
+            className={styles.btn}
+            onClick={() => {
+              loginWithRedirect();
+            }}
+          >
+            Sign in
+          </button>
+          <p>
+            {"Don't have an account? "}
+            <button
+              className={styles.signUpBtn}
+              onClick={() => {
+                loginWithRedirect();
+              }}
+            >
+              Sign Up
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

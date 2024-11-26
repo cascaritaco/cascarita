@@ -1,112 +1,188 @@
 .login {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 24px 32px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.circle {
+  position: absolute;
+  z-index: 0;
+  background: linear-gradient(to top, #830aaf, #4238d5);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0.4;
+  filter: blur(0.2rem);
+}
+
+.circle:first-child {
+  top: -50px;
+  right: -50px;
+}
+
+.circle:nth-child(2) {
+  width: 250px;
+  height: 250px;
+  top: 75%;
+  left: -75px;
+}
+
+.heroContainer {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  background-color: #fff;
+  gap: 24px;
+  z-index: 1;
+}
+
+.heroContainer > h1 {
+  background: linear-gradient(to top, #830aaf, #4238d5);
+  background-clip: padding-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
 .logo {
-  margin-top: 35%;
-  /* transform: scale(1.75); Scale the logo to 175% of its original size */
-  height: auto; /* Maintain the aspect ratio */
-  width: auto;
-  margin-bottom: 80%; /* Add margin-bottom if needed */
-  transform: scale(2.2);
-  transition: transform 0.05s ease; /* Add transition for smooth scaling */
+  min-height: 140px;
+  min-width: 140px;
 }
 
-/* Adjust scale for smaller viewport widths */
-@media screen and (max-width: 950px) {
-  .logo {
-    transform: scale(1.75); /* Adjust the scale value as needed */
-  }
-}
-
-.left {
-  background: linear-gradient(to top, #830aaf, #4238d5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh; /* Full height of the viewport */
-  width: 50%; /* 50% width of the viewport */
+.loginContainer {
   display: flex;
-  flex-direction: column; /* Make it a column */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  flex-direction: column;
+  align-items: center;
+  min-height: 35vh;
+  background-color: #ffffff;
+  border-radius: 7px;
+  padding: 24px 18px;
 }
 
-.left > h1 {
-  padding-left: 10%;
-  padding-right: 10%;
-  margin-top: 5%;
-  color: white;
-  font-size: 40px;
-  font-weight: 500;
-  overflow-wrap: break-word;
-  display: inline-block; /* Allow the text to wrap */
+.loginSubheading {
+  font-size: 1.1rem;
   text-align: center;
+  color: #667085;
+  margin-bottom: 8px;
 }
 
-.right {
-  position: fixed;
-  top: 45%;
-  transform: translateY(-50%);
-  right: 0;
-  width: 50%;
-  text-align: center;
-  padding-left: 125px;
-  padding-right: 100px;
-  /* padding: 0 200px; */
-}
-
-.loginHeader {
-  text-align: left;
-  font-size: 36px;
-  font-weight: 800;
-  padding-bottom: 30px;
-}
-
-.right > p {
-  text-align: left;
-  margin-bottom: 5px;
-  color: #495a6b;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.right > input {
-  min-width: 200px;
-  min-width: 200px;
-  width: calc(100% - 20px);
-  margin-bottom: 10px;
-  padding: 5px;
-  color: #7e878f;
-  box-sizing: border-box;
-  border-radius: 8px;
-  background-color: #f5f7fb;
-}
-
-.right > button {
-  min-width: 200px;
+.btn {
+  display: block;
   max-width: 500px;
-  width: calc(100% - 100px);
-  margin-top: 30px;
-  margin-bottom: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px 0;
   border-radius: 30px;
   color: #fff;
   font-size: 18px;
   font-weight: 700;
-  background-color: #000;
+  background: linear-gradient(to top, #830aaf, #4238d5);
 }
 
-.right > button:hover {
-  background-color: #808080;
+.signUpBtn {
+  color: #4238d5;
+  font-size: 0.925rem;
+  font-weight: 600;
 }
 
-.divider {
+.loginHeader {
+  font-size: 1.3rem;
+  font-weight: 800;
+  padding-bottom: 16px;
+  color: #212636;
+  text-align: center;
+}
+
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  border-top: 1px solid #ccc; /* Adjust color and thickness as needed */
-  margin-bottom: 20px;
+  padding: 0 18px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.authContainer > p {
+  font-size: 0.925rem;
+  text-align: center;
+}
+
+.previewContainer {
+  background: linear-gradient(to top, #830aaf, #4238d5);
+  max-width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+/* Styles for views between 481px and 769px (Tablets) */
+@media screen and (min-width: 740px) {
+  .login {
+    gap: 0;
+  }
+
+  .circle:first-child {
+    width: 350px;
+    height: 350px;
+    top: -100px;
+    right: -100px;
+  }
+
+  .circle:nth-child(2) {
+    width: 350px;
+    height: 350px;
+    top: 75%;
+    left: -100px;
+  }
+
+  .heroContainer {
+    margin-bottom: 32px;
+  }
+
+  .logo {
+    min-height: 230px;
+    min-width: 230px;
+  }
+
+  .heroContainer > h1 {
+    font-size: 3rem;
+    font-weight: 500;
+  }
+
+  .loginContainer {
+    margin: 0 120px;
+  }
+
+  .loginHeader {
+    font-size: 2.3rem;
+  }
+
+  .authContainer > p,
+  .signUpBtn {
+    font-size: 1.1rem;
+  }
+}
+
+/* Styles for views above 770px (Desktop) */
+@media screen and (min-width: 890px) {
+  .circle:first-child {
+    width: 450px;
+    height: 450px;
+  }
+
+  .circle:nth-child(2) {
+    width: 450px;
+    height: 450px;
+  }
+
+  .loginSubheading {
+    font-size: 1.3rem;
+  }
 }
