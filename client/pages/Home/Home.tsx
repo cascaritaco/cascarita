@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 
 const Home = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-  const [registered, setRegistered] = useState(false);
+  const [registered, setRegistered] = useState<boolean | null>(null);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   useEffect(() => {
@@ -21,25 +21,36 @@ const Home = () => {
           setRegistered(response?.isSigningUp ? false : true);
         } catch (error) {
           console.error("Error checking registration status:", error);
+          setRegistered(false);
         }
+      } else {
+        setRegistered(false);
       }
     };
 
     checkRegistrationStatus();
   }, [isAuthenticated, user, getAccessTokenSilently]);
 
-  // Move the modal opening logic to a useEffect hook to avoid triggering re-renders
   useEffect(() => {
-    if (!registered && isAuthenticated) {
+    if (registered === false && isAuthenticated) {
       setIsRegisterModalOpen(true);
     }
-  }, [registered, isAuthenticated, isRegisterModalOpen]);
+  }, [registered, isAuthenticated]);
 
-  // Function to handle registration completion
+  useEffect(() => {
+    if (!isRegisterModalOpen && (registered === null || registered === false)) {
+      setIsRegisterModalOpen(true);
+    }
+  }, [isRegisterModalOpen, registered]);
+
   const handleRegistrationComplete = () => {
     setRegistered(true);
     setIsRegisterModalOpen(false);
   };
+
+  if (registered === null) {
+    return <></>;
+  }
 
   return (
     <>

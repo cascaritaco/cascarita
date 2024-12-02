@@ -28,7 +28,7 @@ const Leagues = () => {
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const { getAccessTokenSilently } = useAuth0();
-  const [groupId, setGroupId] = useState<null | number>(null);
+  const [groupId, setGroupId] = useState<undefined | number>(undefined);
 
   // const filterStatuses = [t("filterOptions.item1"), t("filterOptions.item2")];
   // const sortStatuses = [t("sortOptions.item1"), t("sortOptions.item2")];
@@ -45,10 +45,19 @@ const Leagues = () => {
     })();
   }, []);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["leagues", groupId ? groupId : 0],
-    queryFn: getLeagueByGroupId,
-  });
+  const useLeagueQuery = (groupId: number | undefined) => {
+    return useQuery({
+      queryKey: ["leagues", groupId],
+      queryFn: (groupId) => {
+        return typeof groupId === "number"
+          ? getLeagueByGroupId(groupId)
+          : Promise.resolve([]);
+      },
+      enabled: typeof groupId === "number",
+    });
+  };
+
+  const { data, isLoading, isError } = useLeagueQuery(groupId);
 
   useEffect(() => {
     const handleDebounce = setTimeout(() => {
