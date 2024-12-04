@@ -20,7 +20,7 @@ module.exports = {
     try {
       await queryInterface.addColumn("Users", "role_id", {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Roles",
           key: "id",
