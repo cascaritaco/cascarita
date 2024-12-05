@@ -57,7 +57,6 @@ const UserController = function () {
       last_name: last_name,
       email: userBasicInfo.email,
       picture: userBasicInfo.picture,
-      role_id: 1,
       language_id: 1,
       group_id: groupId,
     };
@@ -260,7 +259,7 @@ const UserController = function () {
 
   var addUser = async function (req, res, next) {
     try {
-      const { first_name, last_name, email, role_id, group_id } = req.body;
+      const { first_name, last_name, email, group_id } = req.body;
 
       // Check if email is unique within the group, so email can appear once per group but can appear across multiple groups
       const existingUser = await User.findOne({ where: { email, group_id } });
@@ -276,7 +275,6 @@ const UserController = function () {
         first_name,
         last_name,
         email,
-        role_id,
         language_id: 1,
         group_id,
       };
