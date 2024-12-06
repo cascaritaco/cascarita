@@ -46,7 +46,7 @@
 
 .overlay[data-state="open"] {
   animation: dialog-overlay-show 200ms;
-  z-index: 2;
+  /* z-index: 1; */
 }
 
 .overlay[data-state="closed"] {
@@ -69,7 +69,7 @@
 
 .content[data-state="open"] {
   animation: dialog-content-show 200ms;
-  z-index: 2;
+  /* z-index: 1; */
 }
 
 .content[data-state="closed"] {

@@ -77,7 +77,8 @@ const Forms = () => {
   }, []);
 
   const handleNewFormClick = () => {
-    navigate("/forms/check");
+    // navigate("/forms/check");
+    navigate("/forms/new");
   };
 
   const handleShareClick = (formLink: string) => {
@@ -108,7 +109,7 @@ const Forms = () => {
 
   const filteredData = forms
     ?.filter((form: Form) =>
-      form.form_data.title.toLowerCase().includes(debouncedQuery.toLowerCase()),
+      form.form_data.title.toLowerCase().includes(debouncedQuery.toLowerCase())
     )
     ?.sort((a: Form, b: Form) => {
       if (sorts === t("sortOptions.item1")) {
@@ -132,7 +133,8 @@ const Forms = () => {
               placeholder={t("sortOptions.item1")}
               name="sorts"
               value={sorts}
-              onValueChange={(value) => setSorts(value)}>
+              onValueChange={(value) => setSorts(value)}
+            >
               <SelectMenu.Group>
                 {sortStatuses.map((status, idx) => (
                   <SelectMenu.Item key={idx} value={status}>
@@ -175,9 +177,10 @@ const Forms = () => {
                 <button
                   onClick={() =>
                     handleShareClick(
-                      `${window.location.origin}/forms/${form._id}`,
+                      `${window.location.origin}/forms/${form._id}`
                     )
-                  }>
+                  }
+                >
                   <ShareButton />
                 </button>
               </div>

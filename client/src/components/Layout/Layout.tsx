@@ -14,14 +14,15 @@ const Layout: React.FC<LayoutProps> = () => {
   const [selectedItem, setSelectedItem] = useState("");
 
   const isBlacklisted = blackListRoutes.some((pattern) =>
-    matchPath(window.location.pathname, pattern, blackListExceptions),
+    matchPath(window.location.pathname, pattern, blackListExceptions)
   );
-
+  console.log("isBlacklisted", isBlacklisted);
+  console.log("currentUser", currentUser);
   return (
     <div>
       {!isBlacklisted && currentUser ? (
         <div>
-          <TopNav />
+          {/* <TopNav /> */}
           <SideNav
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
