@@ -27,7 +27,7 @@ const DraggableShortText: React.FC<DraggableProps> = ({
     const handleResize = () => {
       if (containerRef.current) {
         setIsContainerWidthMaxed(
-          containerRef.current.offsetWidth < SMALL_DRAGGABLE_CONTAINER_WIDTH,
+          containerRef.current.offsetWidth < SMALL_DRAGGABLE_CONTAINER_WIDTH
         );
       }
     };
@@ -52,7 +52,8 @@ const DraggableShortText: React.FC<DraggableProps> = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           style={provided.draggableProps.style}
-          onClick={handleClick}>
+          onClick={handleClick}
+        >
           <div style={{ position: "relative" }} ref={containerRef}>
             <p className={styles.textElementTypeText}>{t("shortText")}</p>
             <div className={styles.draggableContainer}>
@@ -75,7 +76,8 @@ const DraggableShortText: React.FC<DraggableProps> = ({
               <div
                 className={`${styles.extraOptions} ${
                   isContainerWidthMaxed ? styles.containerSmall : ""
-                }`}>
+                }`}
+              >
                 {formField.validations?.max_length != null && (
                   <>
                     <p className={styles.requiredText}>{t("maxCharacters")}</p>

@@ -11,11 +11,17 @@ import NavItem from "../NavItem/NavItem";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Avatar } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
+import { useAuth0 } from "@auth0/auth0-react";
+import { HomePageLogoIcon } from "../../assets/Icons";
+import AvatarMenu from "../AvatarMenu/AvatarMenu";
 
 const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("SideNav");
+  const { user } = useAuth0();
 
   useEffect(() => {
     const currentPath = location.pathname.substring(1); // Remove the leading '/'
@@ -46,6 +52,14 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
 
   return (
     <nav className={styles.sidenav}>
+      <div className={styles["logo-con"]}>
+        <span className={styles.logo}>
+          <HomePageLogoIcon />
+        </span>
+        <span className={styles["logo-text"]}>
+          <Text>cascarita</Text>
+        </span>
+      </div>
       <ul>
         <NavItem
           icon={<RiHomeLine />}
@@ -84,9 +98,12 @@ const SideNav: React.FC<SideNavProps> = ({ selectedItem, setSelectedItem }) => {
           onItemClick={handleItemClick}
         />
       </ul>
-      <div>
-        <LogoutButton icon={<TbLogout />} label={t("item6")} />
+      <div className={styles.avatarCard}>
+        <AvatarMenu />
       </div>
+      {/* <div>
+        <LogoutButton icon={<TbLogout />} label={t("item6")} />
+      </div> */}
     </nav>
   );
 };

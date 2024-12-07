@@ -1,9 +1,10 @@
 .main {
   flex-grow: 1;
-  padding: 20px;
+  /* padding: 20px; */
   box-sizing: border-box;
-  margin-left: 225px;
-  margin-right: 100px;
-  padding-top: 95px;
+  margin-left: 205px;
   position: fixed;
+  box-shadow: 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  /* z-index: 0; */
 }

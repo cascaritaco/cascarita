@@ -13,6 +13,7 @@ import Divisions from "./Division/Division";
 import Teams from "./Teams/Teams";
 import Forms from "./Forms/Forms";
 import NewForm from "./NewForm/NewForm";
+import { NewFormUpdated } from "./NewFormUpdated/NewFormUpdated";
 import Settings from "./Settings/Settings";
 import FormPage from "./FormPage/FormPage";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
@@ -36,12 +37,14 @@ export const useRouter = () =>
             <Route
               path="season/:leagueId/:leagueName"
               element={<Seasons />}
-              handle={{ crumb: <SeasonBreadcrumb /> }}>
+              handle={{ crumb: <SeasonBreadcrumb /> }}
+            >
               <Route
                 path="division/:seasonId/:seasonName"
                 element={<Divisions />}
                 id="division"
-                handle={{ crumb: <DivisionBreadcrumb /> }}>
+                handle={{ crumb: <DivisionBreadcrumb /> }}
+              >
                 <Route
                   path="teams/seasons/:seasonId/division/:divisionId/:divisionName"
                   element={<Teams />}
@@ -58,6 +61,7 @@ export const useRouter = () =>
           />
           <Route path="forms" element={<Forms />} />
           <Route path="forms/check" element={<NewForm />} />
+          <Route path="forms/new" element={<NewFormUpdated />} />
           <Route path="settings" element={<Settings />}>
             <Route index element={<Plan />} />
             <Route path="payment" element={<Payment />} />
@@ -65,6 +69,6 @@ export const useRouter = () =>
         </Route>
         <Route path="forms/:formId" element={<FormPage />} />
         <Route path="login" element={<Login />} />
-      </Route>,
-    ),
+      </Route>
+    )
   );

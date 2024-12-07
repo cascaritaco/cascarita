@@ -14,19 +14,18 @@ const NavItem: React.FC<NavButtonProps> = ({
   };
 
   return (
-    <li className={styles.li}>
-      <Button
-        onClick={handleClick}
+    <li className={styles.li} onClick={handleClick}>
+      {/* <Button
         variant="soft"
         className={selected ? styles["button-selected"] : styles.button}
-      >
-        <span className={selected ? styles["icon-selected"] : styles.icon}>
-          {icon}
-        </span>
-        <span className={selected ? styles["label-selected"] : styles.label}>
-          {label}
-        </span>
-      </Button>
+      > */}
+      <span className={selected ? styles["icon-selected"] : styles.icon}>
+        {icon}
+      </span>
+      <span className={selected ? styles["label-selected"] : styles.label}>
+        {label}
+      </span>
+      {/* </Button> */}
     </li>
   );
 };
