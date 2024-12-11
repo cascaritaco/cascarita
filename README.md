@@ -159,7 +159,7 @@ To run any Sequalize migrations:
 ```bash
 npm run sequelize:migrate
 ```
-###  Copyright
+###  License
 Copyright (c) 2024 Cascarita.io
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use the Software for personal or academic purposes only, subject to the following conditions:
