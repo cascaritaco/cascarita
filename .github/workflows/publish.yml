@@ -47,8 +47,13 @@ jobs:
         id: get-timestamp
         run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
 
-      - name: Set up QEMU (for cross-platform builds)
-        uses: docker/setup-qemu-action@v3
+      # - name: Set up QEMU (for cross-platform builds)
+      #   uses: docker/setup-qemu-action@v3
+
+      # note: Docker is not available out of the box on macOS runners
+      - name: install Docker
+        run: |
+          brew install docker docker-compose
 
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v3
